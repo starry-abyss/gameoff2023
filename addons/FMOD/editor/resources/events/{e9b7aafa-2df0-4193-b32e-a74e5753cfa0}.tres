@@ -1,0 +1,28 @@
+[gd_resource type="EventAsset" load_steps=4 format=3 uid="uid://dcfhcyf3oj6o3"]
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_kogd5"]
+data1 = 1447942350
+data2 = 3927362759
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_28ruw"]
+name = "Auto-Stop"
+id = SubResource("FMOD_STUDIO_PARAMETER_ID_kogd5")
+maximum = 1.0
+guid = "{aebab073-cbb9-4b10-a724-9daa6698a7cd}"
+
+[sub_resource type="ParameterAsset" id="ParameterAsset_joqh1"]
+parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_28ruw")
+path = "parameter:/Weapons/Auto-Stop"
+guid = "{aebab073-cbb9-4b10-a724-9daa6698a7cd}"
+name = "Auto-Stop"
+
+[resource]
+is_3d = true
+min_distance = 1.0
+max_distance = 20.0
+parameters = {
+"{aebab073-cbb9-4b10-a724-9daa6698a7cd}": SubResource("ParameterAsset_joqh1")
+}
+path = "event:/Weapons/Machine Gun"
+guid = "{e9b7aafa-2df0-4193-b32e-a74e5753cfa0}"
+name = "Machine Gun"

@@ -1,0 +1,28 @@
+[gd_resource type="EventAsset" load_steps=4 format=3 uid="uid://c04s642od7kkq"]
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_7ddiu"]
+data1 = 195928810
+data2 = 2580599302
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_823ks"]
+name = "Speed"
+id = SubResource("FMOD_STUDIO_PARAMETER_ID_7ddiu")
+maximum = 8.0
+guid = "{6fbe4ad6-7ed5-43c8-94ac-fe278fcdbe03}"
+
+[sub_resource type="ParameterAsset" id="ParameterAsset_uldm3"]
+parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_823ks")
+path = "parameter:/Interactables/Speed"
+guid = "{6fbe4ad6-7ed5-43c8-94ac-fe278fcdbe03}"
+name = "Speed"
+
+[resource]
+is_3d = true
+min_distance = 1.0
+max_distance = 20.0
+parameters = {
+"{6fbe4ad6-7ed5-43c8-94ac-fe278fcdbe03}": SubResource("ParameterAsset_uldm3")
+}
+path = "event:/Interactables/Barrel Roll"
+guid = "{c42c2240-c4b6-42ed-a473-1a47f19945ea}"
+name = "Barrel Roll"

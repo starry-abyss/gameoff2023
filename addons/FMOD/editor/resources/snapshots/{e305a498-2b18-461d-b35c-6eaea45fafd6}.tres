@@ -1,0 +1,7 @@
+[gd_resource type="EventAsset" format=3 uid="uid://uix45u6d7akk"]
+
+[resource]
+is_snapshot = true
+path = "snapshot:/Pause"
+guid = "{e305a498-2b18-461d-b35c-6eaea45fafd6}"
+name = "Pause"

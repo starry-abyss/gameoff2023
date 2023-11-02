@@ -1,2 +1,9 @@
 # Godot 4+ specific ignores
 .godot/
+
+# exclude FMOD proprietary libs
+# macOS
+addons/FMOD/native/lib/**/libfmod*dylib
+# Windows
+addons/FMOD/native/lib/**/fmod*dll
+

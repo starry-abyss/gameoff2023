@@ -1,0 +1,29 @@
+[gd_resource type="EventAsset" load_steps=4 format=3 uid="uid://dailjiq25yilf"]
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_kneim"]
+data1 = 1494634397
+data2 = 1834780554
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_71w52"]
+name = "Size"
+id = SubResource("FMOD_STUDIO_PARAMETER_ID_kneim")
+maximum = 3.0
+guid = "{2860903d-d2a5-4ff6-826d-77426e47a44f}"
+
+[sub_resource type="ParameterAsset" id="ParameterAsset_ge2n4"]
+parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_71w52")
+path = "parameter:/Weapons/Size"
+guid = "{2860903d-d2a5-4ff6-826d-77426e47a44f}"
+name = "Size"
+
+[resource]
+is_3d = true
+is_oneshot = true
+min_distance = 1.0
+max_distance = 100.0
+parameters = {
+"{2860903d-d2a5-4ff6-826d-77426e47a44f}": SubResource("ParameterAsset_ge2n4")
+}
+path = "event:/Weapons/Explosion"
+guid = "{1f687138-e06c-40f5-9bac-57f84bbcedd3}"
+name = "Explosion"

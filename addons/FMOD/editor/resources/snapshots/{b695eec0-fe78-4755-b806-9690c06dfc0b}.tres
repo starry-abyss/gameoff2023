@@ -1,0 +1,7 @@
+[gd_resource type="EventAsset" format=3 uid="uid://bp7videppxp1n"]
+
+[resource]
+is_snapshot = true
+path = "snapshot:/Reverb/Cave Reverb"
+guid = "{b695eec0-fe78-4755-b806-9690c06dfc0b}"
+name = "Cave Reverb"

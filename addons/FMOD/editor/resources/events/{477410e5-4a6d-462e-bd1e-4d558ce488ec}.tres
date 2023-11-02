@@ -1,0 +1,61 @@
+[gd_resource type="EventAsset" load_steps=10 format=3 uid="uid://ceie35nk8iodf"]
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_6sea6"]
+data1 = 183230778
+data2 = 398621196
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_p2wid"]
+name = "Cover"
+id = SubResource("FMOD_STUDIO_PARAMETER_ID_6sea6")
+maximum = 1.0
+guid = "{362127ac-a587-47da-868a-fc86d66a6677}"
+
+[sub_resource type="ParameterAsset" id="ParameterAsset_b2r7a"]
+parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_p2wid")
+path = "parameter:/Ambience/Cover"
+guid = "{362127ac-a587-47da-868a-fc86d66a6677}"
+name = "Cover"
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_0t20j"]
+data1 = 3727696508
+data2 = 3861323375
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_fshkb"]
+name = "Rain"
+id = SubResource("FMOD_STUDIO_PARAMETER_ID_0t20j")
+maximum = 1.0
+guid = "{4ad59307-2c9a-498d-b318-3a35d01c3b9c}"
+
+[sub_resource type="ParameterAsset" id="ParameterAsset_n2ls1"]
+parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_fshkb")
+path = "parameter:/Ambience/Rain"
+guid = "{4ad59307-2c9a-498d-b318-3a35d01c3b9c}"
+name = "Rain"
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_qir5f"]
+data1 = 1071329013
+data2 = 3631439134
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_45kl8"]
+name = "Wind"
+id = SubResource("FMOD_STUDIO_PARAMETER_ID_qir5f")
+maximum = 1.0
+guid = "{aa37dcda-6161-459d-bdf5-9400828f7ed3}"
+
+[sub_resource type="ParameterAsset" id="ParameterAsset_q3g7i"]
+parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_45kl8")
+path = "parameter:/Ambience/Wind"
+guid = "{aa37dcda-6161-459d-bdf5-9400828f7ed3}"
+name = "Wind"
+
+[resource]
+min_distance = 1.0
+max_distance = 20.0
+parameters = {
+"{362127ac-a587-47da-868a-fc86d66a6677}": SubResource("ParameterAsset_b2r7a"),
+"{4ad59307-2c9a-498d-b318-3a35d01c3b9c}": SubResource("ParameterAsset_n2ls1"),
+"{aa37dcda-6161-459d-bdf5-9400828f7ed3}": SubResource("ParameterAsset_q3g7i")
+}
+path = "event:/Ambience/Forest"
+guid = "{477410e5-4a6d-462e-bd1e-4d558ce488ec}"
+name = "Forest"

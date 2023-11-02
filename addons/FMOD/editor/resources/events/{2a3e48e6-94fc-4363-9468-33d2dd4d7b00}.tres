@@ -1,0 +1,9 @@
+[gd_resource type="EventAsset" format=3 uid="uid://djy2hs2e7ouno"]
+
+[resource]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/UI/Cancel"
+guid = "{2a3e48e6-94fc-4363-9468-33d2dd4d7b00}"
+name = "Cancel"

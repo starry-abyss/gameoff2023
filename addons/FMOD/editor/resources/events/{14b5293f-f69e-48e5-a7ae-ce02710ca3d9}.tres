@@ -1,0 +1,10 @@
+[gd_resource type="EventAsset" format=3 uid="uid://cl6gt2lnjlbg1"]
+
+[resource]
+is_3d = true
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/Character/Enemy Footsteps"
+guid = "{14b5293f-f69e-48e5-a7ae-ce02710ca3d9}"
+name = "Enemy Footsteps"

@@ -1,0 +1,29 @@
+[gd_resource type="EventAsset" load_steps=4 format=3 uid="uid://fopi2513ctoe"]
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_ip6am"]
+data1 = 1388502169
+data2 = 1929384269
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_4x6vg"]
+name = "Hour"
+id = SubResource("FMOD_STUDIO_PARAMETER_ID_ip6am")
+maximum = 3.0
+flags = 24
+guid = "{c5f5903c-d11f-4e44-8f2a-5563c7ed0f20}"
+
+[sub_resource type="ParameterAsset" id="ParameterAsset_um54h"]
+parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_4x6vg")
+labels = ["Night", "Morning", "Noon", "Evening"]
+path = "parameter:/Ambience/Hour"
+guid = "{c5f5903c-d11f-4e44-8f2a-5563c7ed0f20}"
+name = "Hour"
+
+[resource]
+min_distance = 1.0
+max_distance = 20.0
+parameters = {
+"{c5f5903c-d11f-4e44-8f2a-5563c7ed0f20}": SubResource("ParameterAsset_um54h")
+}
+path = "event:/Ambience/Country"
+guid = "{249ac74e-6ea4-4648-81da-206c4e22b801}"
+name = "Country"

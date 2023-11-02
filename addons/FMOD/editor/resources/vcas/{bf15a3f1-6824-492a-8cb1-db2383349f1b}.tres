@@ -1,0 +1,6 @@
+[gd_resource type="VCAAsset" format=3 uid="uid://bvxxtwojg1a5h"]
+
+[resource]
+path = "vca:/Equipment"
+guid = "{bf15a3f1-6824-492a-8cb1-db2383349f1b}"
+name = "Equipment"

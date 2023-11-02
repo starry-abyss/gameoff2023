@@ -1,0 +1,29 @@
+[gd_resource type="EventAsset" load_steps=4 format=3 uid="uid://2hgj53ymy2fr"]
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_lyeyv"]
+data1 = 195928810
+data2 = 2580599302
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_1021u"]
+name = "Speed"
+id = SubResource("FMOD_STUDIO_PARAMETER_ID_lyeyv")
+maximum = 8.0
+guid = "{6fbe4ad6-7ed5-43c8-94ac-fe278fcdbe03}"
+
+[sub_resource type="ParameterAsset" id="ParameterAsset_bfc1t"]
+parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_1021u")
+path = "parameter:/Interactables/Speed"
+guid = "{6fbe4ad6-7ed5-43c8-94ac-fe278fcdbe03}"
+name = "Speed"
+
+[resource]
+is_3d = true
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+parameters = {
+"{6fbe4ad6-7ed5-43c8-94ac-fe278fcdbe03}": SubResource("ParameterAsset_bfc1t")
+}
+path = "event:/Interactables/Wooden Collision"
+guid = "{be6203d8-c8d8-41c5-8ce6-bce0de95807b}"
+name = "Wooden Collision"

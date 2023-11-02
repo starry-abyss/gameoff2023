@@ -1,0 +1,28 @@
+[gd_resource type="EventAsset" load_steps=4 format=3 uid="uid://m22b6x0wvmd1"]
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_vylpu"]
+data1 = 1427404727
+data2 = 1388265268
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_8nqbj"]
+name = "Health"
+id = SubResource("FMOD_STUDIO_PARAMETER_ID_vylpu")
+maximum = 100.0
+default_value = 100.0
+guid = "{b1dc55b5-1863-4645-a918-a52d80cb9c65}"
+
+[sub_resource type="ParameterAsset" id="ParameterAsset_k53n6"]
+parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_8nqbj")
+path = "parameter:/Character/Health"
+guid = "{b1dc55b5-1863-4645-a918-a52d80cb9c65}"
+name = "Health"
+
+[resource]
+min_distance = 1.0
+max_distance = 20.0
+parameters = {
+"{b1dc55b5-1863-4645-a918-a52d80cb9c65}": SubResource("ParameterAsset_k53n6")
+}
+path = "event:/Character/Health"
+guid = "{22f3fed6-2b45-4fff-aa85-5351bc5fe9cd}"
+name = "Health"

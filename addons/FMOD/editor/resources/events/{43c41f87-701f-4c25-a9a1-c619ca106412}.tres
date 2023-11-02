@@ -1,0 +1,27 @@
+[gd_resource type="EventAsset" load_steps=4 format=3 uid="uid://ccnynppvivjxo"]
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_8rnwu"]
+data1 = 4135641038
+data2 = 716951279
+
+[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_k26ci"]
+name = "VO Sidechain"
+id = SubResource("FMOD_STUDIO_PARAMETER_ID_8rnwu")
+maximum = 1.0
+guid = "{b7450daa-aea2-40e5-9aec-40ae4936a328}"
+
+[sub_resource type="ParameterAsset" id="ParameterAsset_lnx20"]
+parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_k26ci")
+path = "parameter:/Character/VO Sidechain"
+guid = "{b7450daa-aea2-40e5-9aec-40ae4936a328}"
+name = "VO Sidechain"
+
+[resource]
+min_distance = 1.0
+max_distance = 20.0
+parameters = {
+"{b7450daa-aea2-40e5-9aec-40ae4936a328}": SubResource("ParameterAsset_lnx20")
+}
+path = "event:/Character/Radio Dialogue"
+guid = "{43c41f87-701f-4c25-a9a1-c619ca106412}"
+name = "Radio Dialogue"

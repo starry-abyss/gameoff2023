@@ -1,0 +1,10 @@
+[gd_resource type="EventAsset" format=3 uid="uid://dxarsi68ff7qw"]
+
+[resource]
+is_3d = true
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/Character/Dialogue"
+guid = "{9aa2ecc5-ea4b-4ebe-85c3-054b11b21dcd}"
+name = "Dialogue"

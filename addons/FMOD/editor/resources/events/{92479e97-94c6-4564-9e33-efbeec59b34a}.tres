@@ -1,0 +1,9 @@
+[gd_resource type="EventAsset" format=3 uid="uid://cf1q42fma63x3"]
+
+[resource]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/UI/Okay"
+guid = "{92479e97-94c6-4564-9e33-efbeec59b34a}"
+name = "Okay"

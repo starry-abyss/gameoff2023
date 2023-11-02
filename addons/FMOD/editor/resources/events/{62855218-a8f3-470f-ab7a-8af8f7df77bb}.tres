@@ -1,0 +1,10 @@
+[gd_resource type="EventAsset" format=3 uid="uid://wtnsu2qicb3r"]
+
+[resource]
+is_3d = true
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/Character/Door Open"
+guid = "{62855218-a8f3-470f-ab7a-8af8f7df77bb}"
+name = "Door Open"

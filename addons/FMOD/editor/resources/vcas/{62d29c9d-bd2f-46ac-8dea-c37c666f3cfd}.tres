@@ -1,0 +1,6 @@
+[gd_resource type="VCAAsset" format=3 uid="uid://b40whd3wo6ykr"]
+
+[resource]
+path = "vca:/Player"
+guid = "{62d29c9d-bd2f-46ac-8dea-c37c666f3cfd}"
+name = "Player"
