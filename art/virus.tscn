@@ -5,3 +5,4 @@
 [node name="virus" type="Node3D"]
 
 [node name="pixispider" parent="." instance=ExtResource("1_2ivii")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)

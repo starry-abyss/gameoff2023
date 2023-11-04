@@ -5,4 +5,5 @@
 [node name="trojan" type="Node3D"]
 
 [node name="horse" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 mesh = ExtResource("1_u542o")
