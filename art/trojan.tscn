@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccgj0dggb6gwa"]
+
+[ext_resource type="ArrayMesh" uid="uid://dwx4graaykj66" path="res://art/models/animals/LD_HorseRtime02.obj" id="1_u542o"]
+
+[node name="trojan" type="Node3D"]
+
+[node name="horse" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_u542o")

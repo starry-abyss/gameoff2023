@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://b830ach63gj40"]
+
+[ext_resource type="PackedScene" uid="uid://p4mctrmw4k8r" path="res://art/models/animals/pixispider.blend" id="1_2ivii"]
+
+[node name="virus" type="Node3D"]
+
+[node name="pixispider" parent="." instance=ExtResource("1_2ivii")]

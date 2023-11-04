@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjcf8204sou6"]
+
+[ext_resource type="PackedScene" uid="uid://cersqle8rtsjd" path="res://art/models/animals/cobra.blend" id="1_57bei"]
+
+[node name="worm" type="Node3D"]
+
+[node name="cobra" parent="." instance=ExtResource("1_57bei")]

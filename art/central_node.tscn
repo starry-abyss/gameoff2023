@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://34e3uaaiwuej"]
+
+[ext_resource type="PackedScene" uid="uid://dlo11ov1xe8ri" path="res://art/models/kenney-hex/stone_mountain.glb" id="1_kmakw"]
+
+[node name="central_node" type="Node3D"]
+
+[node name="stone_mountain" parent="." instance=ExtResource("1_kmakw")]

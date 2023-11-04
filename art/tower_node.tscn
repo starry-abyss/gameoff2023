@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0528if1rt1s"]
+
+[ext_resource type="PackedScene" uid="uid://3f5gynme3eeu" path="res://art/models/kenney-hex/stone_hill.glb" id="1_ytxah"]
+
+[node name="tower_node" type="Node3D"]
+
+[node name="stone_hill" parent="." instance=ExtResource("1_ytxah")]
