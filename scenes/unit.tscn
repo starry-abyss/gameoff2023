@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://cjufk4uan3ouy"]
+[gd_scene load_steps=3 format=3 uid="uid://cjufk4uan3ouy"]
 
 [ext_resource type="Script" path="res://scripts/unit.gd" id="1_s7oy4"]
+[ext_resource type="PackedScene" uid="uid://ciwv1a203lwby" path="res://scenes/components/clickable_component.tscn" id="2_i2p8p"]
 
 [node name="unit" type="Node3D"]
 script = ExtResource("1_s7oy4")
+
+[node name="ClickableComponent" parent="." instance=ExtResource("2_i2p8p")]

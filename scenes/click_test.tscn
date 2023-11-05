@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjn1r45r7stqb"]
+
+[ext_resource type="Script" path="res://scenes/click_test.gd" id="1_1w7u6"]
+[ext_resource type="PackedScene" uid="uid://bbpqmtalxqd5i" path="res://scenes/menu/selected_unit_stats.tscn" id="3_q4x1c"]
+
+[node name="ClickTest" type="Node3D"]
+script = ExtResource("1_1w7u6")
+
+[node name="UnitContainer" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.816057, 0.577972, 0, -0.577972, 0.816057, 0, 3.85647, 5.83395)
+current = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="SelectedUnitStats" parent="CanvasLayer" instance=ExtResource("3_q4x1c")]
+visible = false
+offset_left = 30.0
+offset_top = 125.0
+offset_right = 330.0
+offset_bottom = 525.0
+
+[node name="SelectedUnitIndicator" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.2, 2.08165e-12)
+visible = false
+modulate = Color(1, 0, 1, 1)
+outline_modulate = Color(0, 0, 1, 1)
+text = "▽"
+font_size = 60
+outline_size = 20
