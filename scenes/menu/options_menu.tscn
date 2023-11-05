@@ -7,49 +7,83 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mumff")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 0
-offset_left = 476.0
-offset_top = 250.0
-offset_right = 676.0
-offset_bottom = 350.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -217.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_bottom = 10
-
-[node name="Volumn" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer"]
-layout_mode = 2
-step = 10.0
-value = 50.0
-
-[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_bottom = 10
-
-[node name="Volumn" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer2"]
-layout_mode = 2
-step = 10.0
-value = 50.0
-
-[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_bottom = 10
-
-[node name="Volumn" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer3"]
-layout_mode = 2
-step = 10.0
-value = 50.0
-
 [node name="Back" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Back"
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 50
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HSplitContainer" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(70, 2.08165e-12)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Control"]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 56.0
+offset_bottom = 19.0
+size_flags_horizontal = 0
+text = "music"
+
+[node name="Volumn" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+step = 10.0
+value = 50.0
+
+[node name="HSplitContainer2" type="HSplitContainer" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer2"]
+custom_minimum_size = Vector2(70, 2.08165e-12)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer2/Control"]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 56.0
+offset_bottom = 19.0
+size_flags_horizontal = 0
+text = "sounds"
+
+[node name="Volumn" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer2"]
+layout_mode = 2
+step = 10.0
+value = 50.0
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Back" to="." method="_on_back_pressed"]
