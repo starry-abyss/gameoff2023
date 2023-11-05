@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 FMODRuntime="*res://addons/FMOD/runtime/fmod_runtime_manager.gd"
 StaticData="*res://scripts/static_data.gd"
+UIHelpers="*res://scripts/ui_helpers.gd"
 
 [fmod]
 
