@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://cb3uqsoio4rkb"]
+
+[ext_resource type="Script" path="res://scenes/menu/main_menu_3d.gd" id="1_a3f1n"]
+[ext_resource type="PackedScene" uid="uid://d0psqdiovqmy8" path="res://scenes/menu/main_menu.tscn" id="1_a3sli"]
+[ext_resource type="PackedScene" uid="uid://chr8t35qwnt7j" path="res://scenes/menu/options_menu.tscn" id="3_fxltc"]
+
+[sub_resource type="GDScript" id="GDScript_chp1w"]
+script/source = "extends Label3D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	rotate_y(delta)
+"
+
+[node name="MainMenu3d" type="CanvasLayer"]
+script = ExtResource("1_a3f1n")
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="Label3D" type="Label3D" parent="Node3D"]
+modulate = Color(0.870588, 0.615686, 0.92549, 1)
+outline_modulate = Color(0.282353, 0.423529, 0.819608, 1)
+text = "This is a placeholder"
+script = SubResource("GDScript_chp1w")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Node3D"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="Node3D/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Node3D/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.953832, 0.30034, 0, -0.30034, 0.953832, 0.446378, 0.956758, 2.20498)
+
+[node name="MainMenu" parent="." instance=ExtResource("1_a3sli")]
+
+[node name="OptionsMenu" parent="." instance=ExtResource("3_fxltc")]
+visible = false

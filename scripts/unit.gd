@@ -1,4 +1,5 @@
 @tool
+class_name Unit
 extends Node3D
 
 @export var type: StaticData.UnitTypes = StaticData.UnitTypes.TOWER_NODE:
@@ -20,6 +21,12 @@ extends Node3D
 @export var attack_extra: int = 0
 @export var ap: int = 3
 @export var ap_max: int = 3
+
+@onready var clickable_component = $ClickableComponent
+
+
+signal on_click(node: Node3D)
+
 
 var model = null
 var material = null
@@ -77,3 +84,9 @@ func _ready():
 	load_model(type_to_model_scene_name(type))
 	set_tint(group_to_color(group))
 	#type = Types.TROJAN
+	
+	clickable_component.on_click.connect(_on_click)
+	
+	
+func _on_click():
+	on_click.emit(self)
