@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="gameoff2023"
-run/main_scene="res://audio.tscn"
+run/main_scene="res://scenes/menu/main_menu_3d.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
 
@@ -41,6 +41,10 @@ settings/enable_memory_tracking=false
 settings/encryption_key=""
 settings/distance_scale_2d=1.0
 settings/init_with_3d_righthanded=true
+
+[gui]
+
+theme/custom_font="res://assets/fonts/ShareTechMono-Regular.ttf"
 
 [rendering]
 
