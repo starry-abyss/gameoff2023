@@ -10,16 +10,11 @@
 
 [node name="unit" parent="battle_area" instance=ExtResource("2_m4hso")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.321054, 0, 0)
-type = 0
 group = 0
-hp = 200
-hp_max = 200
-ap = 20
-ap_max = 20
 
 [node name="unit2" parent="battle_area" instance=ExtResource("2_m4hso")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.712806, 2.08165e-12, 2.08165e-12)
-type = 3
+type = 2
 group = 0
 
 [node name="unit3" parent="battle_area" instance=ExtResource("2_m4hso")]
