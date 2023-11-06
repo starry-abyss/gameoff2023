@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cp1ta1mvpvrpk"]
+
+[ext_resource type="Shader" uid="uid://cp6br63jv8s4k" path="res://shaders/glowing_outline_shader.tres" id="1_up8a2"]
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_up8a2")
+shader_parameter/emission_color = Color(0, 0.33799, 0.214952, 1)
+shader_parameter/emission_amount = 5.0
+shader_parameter/rim_sharpness = 3.0

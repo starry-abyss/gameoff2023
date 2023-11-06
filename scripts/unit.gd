@@ -27,13 +27,14 @@ var tile_pos: Vector2i = Vector2i(0, 0):
 		#update_model_pos()
 
 @onready var clickable_component = $ClickableComponent
+@onready var glowing_outline_shader: VisualShader = preload("res://shaders/glowing_outline_shader.tres")
 
 
 signal on_click(node: Node3D)
 
 
 var model = null
-var material = null
+var material: ShaderMaterial = null
 
 func update_model_pos():
 	var pos = UIHelpers.tile_pos_to_world_pos(tile_pos)
@@ -68,8 +69,10 @@ func load_model(model_scene_name: String):
 	#model.set_meta("_edit_lock_", true)
 	
 	var mesh_instances = model.find_children("", "MeshInstance3D")
-	var mesh_instance = mesh_instances[-1]
-	material = StandardMaterial3D.new()
+	var mesh_instance: MeshInstance3D = mesh_instances[-1]
+	
+	material = ShaderMaterial.new()
+	material.shader = glowing_outline_shader
 	mesh_instance.material_override = material
 	
 	#var lights = model.find_children("", "Light3D")
@@ -111,12 +114,12 @@ func load_stats(which_type: Gameplay.UnitTypes):
 	else:
 		attack_extra = 0
 	
-func set_tint(color: Color):
-	#print(material)
 	
+func set_tint(color: Color):
 	if material != null:
-		material.albedo_color = color
+		material.set_shader_parameter("emission_color", color)
 	pass
+	
 
 func type_changed_set_up(new_type: Gameplay.UnitTypes):
 	load_stats(new_type)
