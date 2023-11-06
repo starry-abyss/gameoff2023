@@ -1,7 +1,8 @@
 class_name Gameplay
 extends Node3D
 
-@onready var battle_area = $battle_area
+@onready var battle_area = %battle_area
+@onready var battle_ui = %battle_ui
 
 enum UnitTypes { CENTRAL_NODE, TOWER_NODE, WORM, TROJAN, VIRUS }
 enum HackingGroups { PINK, BLUE, NEUTRAL }
@@ -17,6 +18,13 @@ var selected_unit = null
 
 var map_size: Vector2i = Vector2i(10, 10)
 var tiles = []
+
+func is_ai_turn() -> bool:
+	if current_turn_group == HackingGroups.BLUE && who_controls_blue == ControllerType.AI:
+		return true
+	if current_turn_group == HackingGroups.PINK && who_controls_pink == ControllerType.AI:
+		return true
+	return false
 
 func tile_index_to_tile_pos(index: int) -> Vector2i:
 	return Vector2i(index % map_size.x, index / map_size.y)
@@ -41,7 +49,7 @@ func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups, imagi
 		return false
 	
 	if !imaginary:
-		var unit = load("res://unit.tscn").instantiate()
+		var unit = preload("res://scenes/unit.tscn").instantiate()
 		unit.type = type
 		unit.group = group
 		unit.tile_pos = tile_pos
@@ -50,6 +58,8 @@ func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups, imagi
 		units.append(unit)
 		
 		unit.update_model_pos()
+		
+		unit.on_click.connect(click_unit)
 	
 	return true
 
@@ -60,12 +70,21 @@ func find_unit_by_tile_pos(tile_pos: Vector2i):
 	
 	return null
 
+func click_unit(unit_to_select):
+	if unit_to_select.group == current_turn_group && !is_ai_turn():
+		if selected_unit == unit_to_select:
+			select_unit(null)
+		else:
+			select_unit(unit_to_select)
+
 func select_unit(unit_to_select):
 	for unit in units:
 		#unit.selected = (unit == unit_to_select)
 		pass
 	
 	selected_unit = unit_to_select
+	
+	battle_ui._on_unit_selection_changed(selected_unit)
 
 func select_next_unit():
 	var units_with_spare_ap = []
@@ -122,9 +141,12 @@ func end_turn():
 			unit.ap = unit.ap_max
 
 func _ready():
+	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", end_turn)
+	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", select_next_unit)
+	
 	for x in range(map_size.x):
 		for y in range(map_size.y):
-			var tile = load("res://art/tile.tscn").instantiate()
+			var tile = preload("res://art/tile.tscn").instantiate()
 			tiles.append(tile)
 			battle_area.add_child(tile)
 			
@@ -132,7 +154,15 @@ func _ready():
 			tile.transform.origin = Vector3(pos.x, 0.0, pos.y)
 	
 	spawn_unit(Vector2i(0, 1), UnitTypes.WORM, HackingGroups.BLUE)
-	spawn_unit(Vector2i(1, 3), UnitTypes.TROJAN, HackingGroups.PINK)
+	spawn_unit(Vector2i(6, 3), UnitTypes.TROJAN, HackingGroups.PINK)
+	
+	spawn_unit(Vector2i(3, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
+	spawn_unit(Vector2i(3, 7), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(Vector2i(3, 3), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(Vector2i(1, 4), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(Vector2i(1, 6), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(Vector2i(4, 4), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	spawn_unit(Vector2i(4, 6), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
 	
 	pass
 

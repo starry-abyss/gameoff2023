@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cwliog3ple6dh"]
 
-[ext_resource type="Script" path="res://scripts/audio.gd" id="1_13gjq"]
+[ext_resource type="Script" path="res://scenes/audio.gd" id="1_13gjq"]
 [ext_resource type="EventAsset" uid="uid://djy2hs2e7ouno" path="res://addons/FMOD/editor/resources/events/{2a3e48e6-94fc-4363-9468-33d2dd4d7b00}.tres" id="2_lvsvk"]
 
 [node name="audio" type="Node"]

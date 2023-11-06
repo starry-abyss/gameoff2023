@@ -40,11 +40,11 @@ func _input(event):
 	if event is InputEventMouseButton:
 		print("Mouse Click/Unclick at: ", event.position)
 	elif event is InputEventMouseMotion:
-		print("Mouse Motion at: ", event.position)
+		#print("Mouse Motion at: ", event.position)
 		
 		var world_pos = mouse_pos_to_world_pos(event.position)
-		print("world pos: ", world_pos)
+		#print("world pos: ", world_pos)
 		
 		var tile_pos = world_pos_to_tile_pos(world_pos)
-		print("tile pos: ", tile_pos)
+		#print("tile pos: ", tile_pos)
 		
