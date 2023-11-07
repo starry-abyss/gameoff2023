@@ -20,6 +20,8 @@ var map_size: Vector2i = Vector2i(10, 10)
 var tiles = []
 
 var distances = []
+var cached_path = []
+var destination_for_cached_path = Vector2i(-1, -1)
 
 const NotCalculated = -1
 const Tile_neighbors_even_row = [ Vector2i(-1, 0), Vector2i(0, -1), Vector2i(1, -1), \
@@ -32,6 +34,9 @@ func get_neighbor_list(tile_pos: Vector2i):
 	return Tile_neighbors_even_row if tile_pos.y % 2 == 0 else Tile_neighbors_odd_row
 
 func calculate_distances():
+	# invalidate the path cache
+	destination_for_cached_path = Vector2i(-1, -1)
+	
 	if selected_unit == null:
 		for tile in tiles:
 			if tile != null:
@@ -43,23 +48,25 @@ func calculate_distances():
 		var tile_pos = selected_unit.tile_pos
 		
 		distances[tile_pos_to_tile_index(tile_pos)] = 0
-		var pos_to_explore_stack = [ tile_pos ]
-		while pos_to_explore_stack.size() > 0:
-			var pos_to_explore = pos_to_explore_stack.pop_front()
-			
-			var current_distance = distances[tile_pos_to_tile_index(pos_to_explore)]
-			
-			var tile_neighbors = get_neighbor_list(pos_to_explore)
-			for adj_tile_pos in tile_neighbors:
-				var pos_to_explore_next = pos_to_explore + adj_tile_pos
+		#if selected_unit.can_move():
+		if !selected_unit.is_static():
+			var pos_to_explore_stack = [ tile_pos ]
+			while pos_to_explore_stack.size() > 0:
+				var pos_to_explore = pos_to_explore_stack.pop_front()
 				
-				if is_tile_walkable(pos_to_explore_next):
-					var neighbor_distance_old = distances[tile_pos_to_tile_index(pos_to_explore_next)]
-					if neighbor_distance_old == NotCalculated: # || neighbor_distance_old > current_distance + 1:
-						#pos_to_explore_array.append(pos_to_explore)
-						distances[tile_pos_to_tile_index(pos_to_explore_next)] = current_distance + 1
-						pos_to_explore_stack.append(pos_to_explore_next)
-			
+				var current_distance = distances[tile_pos_to_tile_index(pos_to_explore)]
+				
+				var tile_neighbors = get_neighbor_list(pos_to_explore)
+				for adj_tile_pos in tile_neighbors:
+					var pos_to_explore_next = pos_to_explore + adj_tile_pos
+					
+					if is_tile_walkable(pos_to_explore_next):
+						var neighbor_distance_old = distances[tile_pos_to_tile_index(pos_to_explore_next)]
+						if neighbor_distance_old == NotCalculated: # || neighbor_distance_old > current_distance + 1:
+							#pos_to_explore_array.append(pos_to_explore)
+							distances[tile_pos_to_tile_index(pos_to_explore_next)] = current_distance + 1
+							pos_to_explore_stack.append(pos_to_explore_next)
+				
 		for i in range(tiles.size()):
 			if tiles[i] != null:
 				tiles[i]._on_show_debug_distance(distances[i])
@@ -163,6 +170,17 @@ func find_unit_by_tile_pos(tile_pos: Vector2i):
 	
 	return null
 
+func hover_tile(tile_pos: Vector2i):
+	if !is_tile_pos_out_of_bounds(tile_pos):
+		# TODO: make order_move support reporting not enough AP reason
+		if order_move(tile_pos, true):
+			var path = get_path_to_tile_pos(tile_pos)
+			battle_ui._on_show_path(selected_unit, path)
+		else:
+			battle_ui._on_hide_path()
+	else:
+		battle_ui._on_hide_path()
+
 func click_tile(tile_pos: Vector2i):
 	# TODO: also select units by clicking tiles
 	
@@ -215,42 +233,75 @@ func select_next_unit():
 
 func teleport_unit(unit: Unit, new_tile_pos: Vector2i):
 	selected_unit.tile_pos = new_tile_pos
-	selected_unit.update_model_pos()
+	#unit.update_model_pos()
+	
+	things_have_updated()
 
 func order_move(new_tile_pos: Vector2i, imaginary = false) -> bool:
-	if selected_unit == null || !selected_unit.can_move():
+	if selected_unit == null: #|| !selected_unit.can_move():
 		return false
 	
-	if !is_tile_walkable(new_tile_pos):
+	#if !is_tile_walkable(new_tile_pos):
+	if is_tile_pos_out_of_bounds(new_tile_pos):
 		return false
 	
 	var distance = distances[tile_pos_to_tile_index(new_tile_pos)]
-	#var path = get_path_to_tile_pos(new_tile_pos)
 	#var distance = path.size()
 	if distance > 0:
 		if selected_unit.ap >= distance:
 			if !imaginary:
 				selected_unit.ap -= distance
+				
+				# the order is important here!
+				var path = get_path_to_tile_pos(new_tile_pos)
 				teleport_unit(selected_unit, new_tile_pos)
+				battle_ui._on_unit_move(selected_unit, path)
 			
 			return true
+		#else:
+		#	if imaginary:
+		#		battle_ui._on_show_path_not_enough_ap(selected_unit, path)
 		
 	return false
 	
 func get_path_to_tile_pos(tile_pos: Vector2i):
-	var tile_neighbors = get_neighbor_list(tile_pos)
+	#if destination_for_cached_path == tile_pos:
+	#	return cached_path
 	
 	var distance = distances[tile_pos_to_tile_index(tile_pos)]
+	var path = []
 	
-	while distance > 1:
-		var min_distance = [9999999, Vector2i(0, 0)]
-		for adj_tile_pos in tile_neighbors:
-			var pos_to_explore_next = tile_pos + adj_tile_pos
-			
-			#var distance = distances[tile_pos_to_tile_index(tile_pos)]
+	if distance > 0:
+		path.push_front(tile_pos)
 		
-	return 
-	
+		while distance > 0:
+			var tile_neighbors = get_neighbor_list(tile_pos)
+			for adj_tile_pos in tile_neighbors:
+				var pos_to_explore_next = tile_pos + adj_tile_pos
+				
+				if !is_tile_pos_out_of_bounds(pos_to_explore_next):
+					var next_distance = distances[tile_pos_to_tile_index(pos_to_explore_next)]
+					if next_distance < distance && next_distance != NotCalculated:
+						path.push_front(pos_to_explore_next)
+						tile_pos = pos_to_explore_next
+						distance = next_distance
+			
+			# const NotInitialized = 9999999
+			#var min_distance_with_pos = [NotInitialized, Vector2i(0, 0)]
+			#for adj_tile_pos in tile_neighbors:
+			#	var pos_to_explore_next = tile_pos + adj_tile_pos
+			#	var next_distance = distances[tile_pos_to_tile_index(pos_to_explore_next)]
+			#	if min_distance_with_pos[0] > next_distance:
+			#		min_distance_with_pos = [next_distance, pos_to_explore_next]
+			#	
+			#	path.push_front(pos_to_explore_next)
+			#	tile_pos = pos_to_explore_next
+			
+	return path
+
+func things_have_updated():
+	calculate_distances()
+
 func end_turn():
 	select_unit(null)
 	
@@ -267,6 +318,7 @@ func _ready():
 	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", end_turn)
 	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", select_next_unit)
 	battle_ui.connect("tile_clicked", click_tile)
+	battle_ui.connect("tile_hovered", hover_tile)
 	
 	tiles.resize(map_size.x * map_size.y)
 	distances.resize(tiles.size())

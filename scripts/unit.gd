@@ -18,6 +18,7 @@ var hp: int = 8
 var hp_max: int = 8
 var attack: int = 0
 var attack_extra: int = 0
+var ap_cost_of_attack: int = 1
 var ap: int = 3
 var ap_max: int = 3
 

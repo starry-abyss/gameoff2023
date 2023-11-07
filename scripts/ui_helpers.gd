@@ -26,8 +26,11 @@ const Origin = Vector2(1.0, 1.0)
 func world_pos_to_tile_pos(world_pos: Vector2) -> Vector2i:
 	var tile_pos = Vector2i(0, 0)
 	
-	tile_pos.y = floori((world_pos.y - Origin.y + Size.y * 0.5) / Size.y)
-	tile_pos.x = floori((world_pos.x - Origin.x + Size.x * 0.5 - (Size.x * 0.5 if tile_pos.y % 2 == 0 else 0.0)) / Size.x)
+	# + Size.y * 0.5
+	# + Size.x * 0.5
+	
+	tile_pos.y = floori((world_pos.y - Origin.y) / Size.y)
+	tile_pos.x = floori((world_pos.x - Origin.x - (Size.x * 0.5 if tile_pos.y % 2 == 0 else 0.0)) / Size.x)
 	
 	return tile_pos
 
@@ -39,3 +42,6 @@ func tile_pos_to_world_pos(tile_pos: Vector2i) -> Vector2:
 
 func snap_world_pos_to_tile_center(world_pos: Vector2) -> Vector2:
 	return tile_pos_to_world_pos(world_pos_to_tile_pos(world_pos))
+
+func audio_event(event_name: String):
+	FMODRuntime.play_one_shot_path("event:/" + event_name)

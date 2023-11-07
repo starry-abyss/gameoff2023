@@ -1,10 +1,11 @@
 extends Node
 
-@export var event: EventAsset
+#@export var event: EventAsset
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	FMODRuntime.play_one_shot(event)
+	#FMODRuntime.play_one_shot(event)
+	UIHelpers.audio_event("MusicPlaylist")
 	pass # Replace with function body.
 
 

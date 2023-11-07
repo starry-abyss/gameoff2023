@@ -1,14 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cwliog3ple6dh"]
+[gd_scene load_steps=2 format=3 uid="uid://cwliog3ple6dh"]
 
 [ext_resource type="Script" path="res://scenes/audio.gd" id="1_13gjq"]
 
-[sub_resource type="EventAsset" id="EventAsset_2eo7t"]
-min_distance = 1.0
-max_distance = 20.0
-path = "event:/MusicPlaylist"
-guid = "{5335d2d5-6192-4f27-8b9c-2f03acf58a1e}"
-name = "MusicPlaylist"
-
 [node name="audio" type="Node"]
 script = ExtResource("1_13gjq")
-event = SubResource("EventAsset_2eo7t")

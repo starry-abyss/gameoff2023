@@ -4,6 +4,8 @@ extends Node
 @export var color_blue: Color = Color.BLUE
 @export var color_neutral: Color = Color.GRAY
 
+@export var turn_animation_duration: float = 2.0
+
 @export var unit_stats = { 
 	Gameplay.UnitTypes.CENTRAL_NODE: { "hp_max": 200, "ap_max": 20 },
 	Gameplay.UnitTypes.TOWER_NODE: { "hp_max": 50, "ap_max": 10, "attack": 10, "attack_extra": 5 },
