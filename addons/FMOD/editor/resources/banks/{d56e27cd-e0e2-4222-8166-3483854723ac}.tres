@@ -1,0 +1,8 @@
+[gd_resource type="BankAsset" format=3 uid="uid://50ir213qxasn"]
+
+[resource]
+file_path = "res://audio/banks/Master.bank"
+modified_time = 1699254822
+path = "bank:/Master"
+guid = "{d56e27cd-e0e2-4222-8166-3483854723ac}"
+name = "Master"

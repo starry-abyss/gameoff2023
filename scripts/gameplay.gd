@@ -8,16 +8,74 @@ enum UnitTypes { CENTRAL_NODE, TOWER_NODE, WORM, TROJAN, VIRUS }
 enum HackingGroups { PINK, BLUE, NEUTRAL }
 enum ControllerType { PLAYER, AI }
 
-var current_turn_group: HackingGroups = HackingGroups.BLUE
+var current_turn_group: HackingGroups = HackingGroups.PINK
 
 var who_controls_blue: ControllerType = ControllerType.PLAYER
 var who_controls_pink: ControllerType = ControllerType.PLAYER
 
 var units = []
-var selected_unit = null
+var selected_unit: Unit = null
 
 var map_size: Vector2i = Vector2i(10, 10)
 var tiles = []
+
+var distances = []
+
+const NotCalculated = -1
+const Tile_neighbors_even_row = [ Vector2i(-1, 0), Vector2i(0, -1), Vector2i(1, -1), \
+	Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1) ]
+
+const Tile_neighbors_odd_row = [ Vector2i(-1, 0), Vector2i(-1, -1), Vector2i(0, -1), \
+	Vector2i(1, 0), Vector2i(-1, 1), Vector2i(0, 1) ]
+
+func get_neighbor_list(tile_pos: Vector2i):
+	return Tile_neighbors_even_row if tile_pos.y % 2 == 0 else Tile_neighbors_odd_row
+
+func calculate_distances():
+	if selected_unit == null:
+		for tile in tiles:
+			if tile != null:
+				tile._on_hide_debug_distance()
+	else:
+		for i in range(distances.size()):
+			distances[i] = NotCalculated
+		
+		var tile_pos = selected_unit.tile_pos
+		
+		distances[tile_pos_to_tile_index(tile_pos)] = 0
+		var pos_to_explore_stack = [ tile_pos ]
+		while pos_to_explore_stack.size() > 0:
+			var pos_to_explore = pos_to_explore_stack.pop_front()
+			
+			var current_distance = distances[tile_pos_to_tile_index(pos_to_explore)]
+			
+			var tile_neighbors = get_neighbor_list(pos_to_explore)
+			for adj_tile_pos in tile_neighbors:
+				var pos_to_explore_next = pos_to_explore + adj_tile_pos
+				
+				if is_tile_walkable(pos_to_explore_next):
+					var neighbor_distance_old = distances[tile_pos_to_tile_index(pos_to_explore_next)]
+					if neighbor_distance_old == NotCalculated: # || neighbor_distance_old > current_distance + 1:
+						#pos_to_explore_array.append(pos_to_explore)
+						distances[tile_pos_to_tile_index(pos_to_explore_next)] = current_distance + 1
+						pos_to_explore_stack.append(pos_to_explore_next)
+			
+		for i in range(tiles.size()):
+			if tiles[i] != null:
+				tiles[i]._on_show_debug_distance(distances[i])
+	pass
+
+func is_tile_walkable(tile_pos: Vector2i):
+	# there is no tile even
+	if is_tile_pos_out_of_bounds(tile_pos):
+		return false
+	
+	# there is a tile, but no unit is standing on it
+	if tiles[tile_pos_to_tile_index(tile_pos)] != null:
+		if find_unit_by_tile_pos(tile_pos) == null:
+			return true
+	
+	return false
 
 func is_ai_turn() -> bool:
 	if current_turn_group == HackingGroups.BLUE && who_controls_blue == ControllerType.AI:
@@ -42,6 +100,41 @@ func is_tile_pos_out_of_bounds(tile_pos: Vector2i):
 	# for hexagons all even rows are shorter by 1
 	#if tile_pos.y % 2 == 0 && tile_pos.x >= map_size.x - 1:
 	#	return true
+
+func add_tile(tile_pos: Vector2i):
+	if !is_tile_pos_out_of_bounds(tile_pos):
+		var current_tile = tiles[tile_pos_to_tile_index(tile_pos)]
+		if current_tile == null:
+			var tile = preload("res://art/tile.tscn").instantiate()
+			
+			#tiles.append(tile)
+			tiles[tile_pos_to_tile_index(tile_pos)] = tile
+			battle_area.add_child(tile)
+			
+			var pos = UIHelpers.tile_pos_to_world_pos(tile_pos)
+			tile.transform.origin = Vector3(pos.x, 0.0, pos.y)
+			
+			tile.set_script(preload("res://scripts/tile.gd"))
+			tile._on_ready()
+
+# TODO: don't remove right away, first play an animation
+func remove_tile(tile_pos: Vector2i):
+	if !is_tile_pos_out_of_bounds(tile_pos):
+		var current_tile = tiles[tile_pos_to_tile_index(tile_pos)]
+		if current_tile != null:
+			current_tile.queue_free()
+			
+			tiles[tile_pos_to_tile_index(tile_pos)] = null
+		
+		var unit = find_unit_by_tile_pos(tile_pos)
+		if unit != null:
+			remove_unit(unit)
+
+# TODO: don't remove right away, first play an animation
+func remove_unit(unit: Unit):
+	units.erase(unit)
+	unit.on_click.disconnect(click_unit)
+	unit.queue_free()
 
 func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups, imaginary = false) -> bool:
 	var old_unit = find_unit_by_tile_pos(tile_pos)
@@ -70,21 +163,31 @@ func find_unit_by_tile_pos(tile_pos: Vector2i):
 	
 	return null
 
-func click_unit(unit_to_select):
+func click_tile(tile_pos: Vector2i):
+	# TODO: also select units by clicking tiles
+	
+	if !is_tile_pos_out_of_bounds(tile_pos):
+		order_move(tile_pos)
+
+func click_unit(unit_to_select: Unit):
 	if unit_to_select.group == current_turn_group && !is_ai_turn():
 		if selected_unit == unit_to_select:
 			select_unit(null)
 		else:
 			select_unit(unit_to_select)
 
-func select_unit(unit_to_select):
+func select_unit(unit_to_select: Unit, no_ui = false):
 	for unit in units:
 		#unit.selected = (unit == unit_to_select)
 		pass
 	
 	selected_unit = unit_to_select
+	calculate_distances()
 	
-	battle_ui._on_unit_selection_changed(selected_unit)
+	if no_ui:
+		battle_ui._on_unit_selection_changed(null)
+	else:
+		battle_ui._on_unit_selection_changed(selected_unit)
 
 func select_next_unit():
 	var units_with_spare_ap = []
@@ -109,24 +212,44 @@ func select_next_unit():
 			pass
 	else:
 		select_unit(null)
-	
+
+func teleport_unit(unit: Unit, new_tile_pos: Vector2i):
+	selected_unit.tile_pos = new_tile_pos
+	selected_unit.update_model_pos()
+
 func order_move(new_tile_pos: Vector2i, imaginary = false) -> bool:
-	if selected_unit == null:
+	if selected_unit == null || !selected_unit.can_move():
 		return false
 	
-	var path = get_path_to_tile_pos()
-	if path.size() > 0:
-		if selected_unit.ap >= path.size():
+	if !is_tile_walkable(new_tile_pos):
+		return false
+	
+	var distance = distances[tile_pos_to_tile_index(new_tile_pos)]
+	#var path = get_path_to_tile_pos(new_tile_pos)
+	#var distance = path.size()
+	if distance > 0:
+		if selected_unit.ap >= distance:
 			if !imaginary:
-				selected_unit.ap -= path.size()
-				selected_unit.tile_pos = new_tile_pos
+				selected_unit.ap -= distance
+				teleport_unit(selected_unit, new_tile_pos)
 			
 			return true
 		
 	return false
 	
-func get_path_to_tile_pos():
-	return []
+func get_path_to_tile_pos(tile_pos: Vector2i):
+	var tile_neighbors = get_neighbor_list(tile_pos)
+	
+	var distance = distances[tile_pos_to_tile_index(tile_pos)]
+	
+	while distance > 1:
+		var min_distance = [9999999, Vector2i(0, 0)]
+		for adj_tile_pos in tile_neighbors:
+			var pos_to_explore_next = tile_pos + adj_tile_pos
+			
+			#var distance = distances[tile_pos_to_tile_index(tile_pos)]
+		
+	return 
 	
 func end_turn():
 	select_unit(null)
@@ -143,15 +266,15 @@ func end_turn():
 func _ready():
 	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", end_turn)
 	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", select_next_unit)
+	battle_ui.connect("tile_clicked", click_tile)
 	
+	tiles.resize(map_size.x * map_size.y)
+	distances.resize(tiles.size())
 	for x in range(map_size.x):
 		for y in range(map_size.y):
-			var tile = preload("res://art/tile.tscn").instantiate()
-			tiles.append(tile)
-			battle_area.add_child(tile)
-			
-			var pos = UIHelpers.tile_pos_to_world_pos(Vector2i(x, y))
-			tile.transform.origin = Vector3(pos.x, 0.0, pos.y)
+			add_tile(Vector2i(x, y))
+	
+	remove_tile(Vector2i(5, 6))
 	
 	spawn_unit(Vector2i(0, 1), UnitTypes.WORM, HackingGroups.BLUE)
 	spawn_unit(Vector2i(6, 3), UnitTypes.TROJAN, HackingGroups.PINK)
@@ -170,3 +293,7 @@ func _ready():
 func _process(delta):
 	
 	pass
+
+#func _input(event):
+#	if event is InputEventMouseButton:
+#		print("testete Mouse Click/Unclick at: ", event.position)
