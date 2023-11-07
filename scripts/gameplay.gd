@@ -208,27 +208,36 @@ func select_unit(unit_to_select: Unit, no_ui = false):
 		battle_ui._on_unit_selection_changed(selected_unit)
 
 func select_next_unit():
-	var units_with_spare_ap = []
+	var units_in_the_same_group_before_selected_unit = []
+	var units_in_the_same_group_after_selected_unit = []
+	var amount_of_other_units_with_spare_ap = 0
 	
-	# TODO: select next unit after currently selected one (cycle)
-	
-	#var selected_unit_id = 0
+	var found_selected_unit = false
 	for unit in units:
-		if unit.group == current_turn_group && unit.ap > 0:
-			units_with_spare_ap.append(unit)
-		#if unit.selected:
-		#	selected_unit_id
-	
-	if units_with_spare_ap.size() > 0:
-		if selected_unit == null:
-			select_unit(units_with_spare_ap[0])
-		else:
-			select_unit(units_with_spare_ap[0])
+		if unit.group == current_turn_group: # && 
+			if unit == selected_unit:
+				found_selected_unit = true
+			else:
+				if found_selected_unit:
+					units_in_the_same_group_after_selected_unit.append(unit)
+				else:
+					units_in_the_same_group_before_selected_unit.append(unit)
 			
-			#for i in units_with_spare_ap.size():
-			#	if unit.selected:
-			pass
-	else:
+				if unit.ap > 0:
+					amount_of_other_units_with_spare_ap += 1
+	
+	if amount_of_other_units_with_spare_ap > 0:
+		# cycle - first after, then before
+		for unit in units_in_the_same_group_after_selected_unit:
+			if unit.ap > 0:
+				select_unit(unit)
+				return
+		
+		for unit in units_in_the_same_group_before_selected_unit:
+			if unit.ap > 0:
+				select_unit(unit)
+				return
+	elif selected_unit.ap == 0:
 		select_unit(null)
 
 func teleport_unit(unit: Unit, new_tile_pos: Vector2i):
