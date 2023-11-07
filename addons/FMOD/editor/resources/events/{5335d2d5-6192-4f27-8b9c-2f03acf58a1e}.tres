@@ -1,0 +1,8 @@
+[gd_resource type="EventAsset" format=3 uid="uid://c8v61cq5hpm6x"]
+
+[resource]
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/MusicPlaylist"
+guid = "{5335d2d5-6192-4f27-8b9c-2f03acf58a1e}"
+name = "MusicPlaylist"
