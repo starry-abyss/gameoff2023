@@ -136,6 +136,13 @@ func remove_unit(unit: Unit):
 	unit.queue_free()
 
 func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups, imaginary = false) -> bool:
+	if is_tile_pos_out_of_bounds(tile_pos):
+		return false
+	
+	var tile = tiles[tile_pos_to_tile_index(tile_pos)]
+	if tile == null:
+		return false
+	
 	var old_unit = find_unit_by_tile_pos(tile_pos)
 	if old_unit != null:
 		return false
@@ -145,6 +152,9 @@ func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups, imagi
 		unit.type = type
 		unit.group = group
 		unit.tile_pos = tile_pos
+		
+		if unit.is_static():
+			tile.group = group
 		
 		battle_area.add_child(unit)
 		units.append(unit)
@@ -314,6 +324,34 @@ func end_turn():
 	for unit in units:
 		if unit.group == current_turn_group:
 			unit.ap = unit.ap_max
+		
+			if unit.type == UnitTypes.CENTRAL_NODE:
+				for_all_tile_pos_around(unit.tile_pos, \
+					func(tile_pos): spawn_unit(tile_pos, UnitTypes.WORM, unit.group))
+	
+	battle_ui._on_playing_group_changed(current_turn_group, is_ai_turn())
+
+func get_tile(tile_pos: Vector2i) -> Tile:
+	if is_tile_pos_out_of_bounds(tile_pos):
+		return null
+	
+	return tiles[tile_pos_to_tile_index(tile_pos)]
+
+func for_all_tiles_around(tile_pos: Vector2i, f: Callable):
+	var tile_neighbors = UIHelpers.get_tile_neighbor_list(tile_pos)
+	for adj_tile_pos in tile_neighbors:
+		var adj_tile_pos_absolute = tile_pos + adj_tile_pos
+		var tile = get_tile(adj_tile_pos_absolute)
+		if tile != null:
+			f.call(tile)
+
+func for_all_tile_pos_around(tile_pos: Vector2i, f: Callable):
+	var tile_neighbors = UIHelpers.get_tile_neighbor_list(tile_pos)
+	for adj_tile_pos in tile_neighbors:
+		var adj_tile_pos_absolute = tile_pos + adj_tile_pos
+		var tile = get_tile(adj_tile_pos_absolute)
+		if tile != null:
+			f.call(adj_tile_pos_absolute)
 
 func _ready():
 	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", end_turn)
@@ -340,6 +378,16 @@ func _ready():
 	spawn_unit(Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
 	spawn_unit(Vector2i(8, 5), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
 	
+	#tiles[tile_pos_to_tile_index(Vector2i(4, 5))].group = HackingGroups.PINK
+	#UIHelpers.for_all_tiles_in_radius(Vector2i(5, 5), 3, func(tile): tile.group = HackingGroups.PINK)
+	
+	#UIHelpers.for_all_tile_pos_in_radius
+	
+	# contains some init code that otherwise will be called only starting the next turn
+	# for first group to init
+	end_turn()
+	# for second group to init
+	end_turn()
 	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

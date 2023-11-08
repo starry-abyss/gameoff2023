@@ -48,5 +48,12 @@ const Tile_neighbors_odd_row = [ Vector2i(-1, 0), Vector2i(-1, -1), Vector2i(0, 
 func get_tile_neighbor_list(tile_pos: Vector2i):
 	return Tile_neighbors_even_row if tile_pos.y % 2 == 0 else Tile_neighbors_odd_row
 
+func group_to_color(which_group: Gameplay.HackingGroups) -> Color:
+	if which_group == Gameplay.HackingGroups.PINK:
+		return StaticData.color_pink
+	if which_group == Gameplay.HackingGroups.BLUE:
+		return StaticData.color_blue
+	return StaticData.color_neutral
+
 func audio_event(event_name: String):
 	FMODRuntime.play_one_shot_path("event:/" + event_name)

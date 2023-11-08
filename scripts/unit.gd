@@ -11,7 +11,7 @@ extends Node3D
 @export var group: Gameplay.HackingGroups = Gameplay.HackingGroups.NEUTRAL:
 	set(new_value):
 		if group != new_value:
-			set_tint(group_to_color(new_value))
+			set_tint(UIHelpers.group_to_color(new_value))
 		group = new_value
 
 var hp: int = 8
@@ -53,13 +53,6 @@ func can_move() -> bool:
 func type_to_model_scene_name(which_type: Gameplay.UnitTypes) -> String:
 	return Gameplay.UnitTypes.keys()[which_type].to_lower()
 
-func group_to_color(which_group: Gameplay.HackingGroups) -> Color:
-	if which_group == Gameplay.HackingGroups.PINK:
-		return StaticData.color_pink
-	if which_group == Gameplay.HackingGroups.BLUE:
-		return StaticData.color_blue
-	return StaticData.color_neutral
-
 func load_model(model_scene_name: String):
 	if model != null:
 		model.queue_free()
@@ -84,7 +77,7 @@ func load_model(model_scene_name: String):
 	#for camera in cameras:
 	#	camera.queue_free()
 	
-	set_tint(group_to_color(group))
+	set_tint(UIHelpers.group_to_color(group))
 	
 	pass
 	

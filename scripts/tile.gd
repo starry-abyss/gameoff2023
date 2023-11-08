@@ -1,8 +1,13 @@
+class_name Tile
 extends Node3D
 
-var group: Gameplay.HackingGroups = Gameplay.HackingGroups.NEUTRAL
+var group: Gameplay.HackingGroups = Gameplay.HackingGroups.NEUTRAL:
+	set(new_value):
+		group = new_value
+		set_tint(UIHelpers.group_to_color(new_value))
 
 var debug_distance: Label3D = Label3D.new()
+var material = null
 
 func _on_ready():
 	debug_distance.font = preload("res://assets/fonts/ShareTechMono-Regular.ttf")
@@ -15,7 +20,18 @@ func _on_ready():
 	
 	debug_distance.position.y += 0.1
 	
+	var mesh_instances = find_children("", "MeshInstance3D")
+	var mesh_instance: MeshInstance3D = mesh_instances[-1]
+	
+	material = StandardMaterial3D.new()
+	mesh_instance.material_override = material
+	
 	#debug_distance.text = "123"
+	pass
+
+func set_tint(color: Color):
+	if material != null:
+		material.albedo_color = color
 	pass
 
 func _on_hide_debug_distance():
