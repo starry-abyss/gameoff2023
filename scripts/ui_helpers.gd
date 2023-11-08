@@ -20,28 +20,33 @@ func screen_pos_to_world_pos(screen_pos: Vector2) -> Vector2:
 func world_pos_to_screen_pos(mouse_pos: Vector2) -> Vector2:
 	return Vector2(0, 0)
 
-const Size = Vector2(1.2, 1.2)
-const Origin = Vector2(1.0, 1.0)
-
 func world_pos_to_tile_pos(world_pos: Vector2) -> Vector2i:
 	var tile_pos = Vector2i(0, 0)
 	
 	# + Size.y * 0.5
 	# + Size.x * 0.5
 	
-	tile_pos.y = floori((world_pos.y - Origin.y) / Size.y)
-	tile_pos.x = floori((world_pos.x - Origin.x - (Size.x * 0.5 if tile_pos.y % 2 == 0 else 0.0)) / Size.x)
+	tile_pos.y = floori((world_pos.y - StaticData.map_origin.y) / StaticData.tile_size.y)
+	tile_pos.x = floori((world_pos.x - StaticData.map_origin.x - (StaticData.tile_size.x * 0.5 if tile_pos.y % 2 == 0 else 0.0)) / StaticData.tile_size.x)
 	
 	return tile_pos
 
 func tile_pos_to_world_pos(tile_pos: Vector2i) -> Vector2:
-	var x = (tile_pos.x * Size.x) + (Size.x * 0.5 if tile_pos.y % 2 == 0 else 0.0)
-	var y = tile_pos.y * Size.y
+	var x = (tile_pos.x * StaticData.tile_size.x) + (StaticData.tile_size.x * 0.5 if tile_pos.y % 2 == 0 else 0.0)
+	var y = tile_pos.y * StaticData.tile_size.y
 	
-	return Vector2(Origin.x + x, Origin.y + y)
+	return Vector2(StaticData.map_origin.x + x, StaticData.map_origin.y + y)
 
 func snap_world_pos_to_tile_center(world_pos: Vector2) -> Vector2:
 	return tile_pos_to_world_pos(world_pos_to_tile_pos(world_pos))
+	
+const Tile_neighbors_even_row = [ Vector2i(-1, 0), Vector2i(0, -1), Vector2i(1, -1), \
+	Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1) ]
+const Tile_neighbors_odd_row = [ Vector2i(-1, 0), Vector2i(-1, -1), Vector2i(0, -1), \
+	Vector2i(1, 0), Vector2i(-1, 1), Vector2i(0, 1) ]
+
+func get_tile_neighbor_list(tile_pos: Vector2i):
+	return Tile_neighbors_even_row if tile_pos.y % 2 == 0 else Tile_neighbors_odd_row
 
 func audio_event(event_name: String):
 	FMODRuntime.play_one_shot_path("event:/" + event_name)

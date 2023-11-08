@@ -46,6 +46,8 @@ func _input(event):
 		#print("world pos: ", world_pos)
 		
 		var tile_pos = UIHelpers.world_pos_to_tile_pos(world_pos)
+		print("tile_pos: ", tile_pos)
+		
 		tile_clicked.emit(tile_pos)
 		
 	elif event is InputEventMouseMotion:

@@ -15,4 +15,6 @@ extends Node
 	Gameplay.UnitTypes.VIRUS: { "hp_max": 30, "ap_max": 10, "attack": 3, "attack_extra": 2 },
 	}
 	
-	
+@export var tile_size = Vector2(1.2, 1.2)
+@export var map_origin = Vector2(1.0, 1.0)
+

@@ -24,14 +24,6 @@ var cached_path = []
 var destination_for_cached_path = Vector2i(-1, -1)
 
 const NotCalculated = -1
-const Tile_neighbors_even_row = [ Vector2i(-1, 0), Vector2i(0, -1), Vector2i(1, -1), \
-	Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1) ]
-
-const Tile_neighbors_odd_row = [ Vector2i(-1, 0), Vector2i(-1, -1), Vector2i(0, -1), \
-	Vector2i(1, 0), Vector2i(-1, 1), Vector2i(0, 1) ]
-
-func get_neighbor_list(tile_pos: Vector2i):
-	return Tile_neighbors_even_row if tile_pos.y % 2 == 0 else Tile_neighbors_odd_row
 
 func calculate_distances():
 	# invalidate the path cache
@@ -56,7 +48,7 @@ func calculate_distances():
 				
 				var current_distance = distances[tile_pos_to_tile_index(pos_to_explore)]
 				
-				var tile_neighbors = get_neighbor_list(pos_to_explore)
+				var tile_neighbors = UIHelpers.get_tile_neighbor_list(pos_to_explore)
 				for adj_tile_pos in tile_neighbors:
 					var pos_to_explore_next = pos_to_explore + adj_tile_pos
 					
@@ -284,7 +276,7 @@ func get_path_to_tile_pos(tile_pos: Vector2i):
 		path.push_front(tile_pos)
 		
 		while distance > 0:
-			var tile_neighbors = get_neighbor_list(tile_pos)
+			var tile_neighbors = UIHelpers.get_tile_neighbor_list(tile_pos)
 			for adj_tile_pos in tile_neighbors:
 				var pos_to_explore_next = tile_pos + adj_tile_pos
 				
@@ -340,13 +332,13 @@ func _ready():
 	spawn_unit(Vector2i(0, 1), UnitTypes.WORM, HackingGroups.BLUE)
 	spawn_unit(Vector2i(6, 3), UnitTypes.TROJAN, HackingGroups.PINK)
 	
-	spawn_unit(Vector2i(3, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(3, 7), UnitTypes.TOWER_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(3, 3), UnitTypes.TOWER_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(1, 4), UnitTypes.TOWER_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(1, 6), UnitTypes.TOWER_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(4, 4), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
-	spawn_unit(Vector2i(4, 6), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	spawn_unit(Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
+	spawn_unit(Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(Vector2i(3, 2), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(Vector2i(2, 5), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(Vector2i(3, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	spawn_unit(Vector2i(8, 5), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
 	
 	pass
 
