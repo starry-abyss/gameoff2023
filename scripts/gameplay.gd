@@ -129,11 +129,12 @@ func remove_tile(tile_pos: Vector2i):
 		if unit != null:
 			remove_unit(unit)
 
-# TODO: don't remove right away, first play an animation
 func remove_unit(unit: Unit):
 	units.erase(unit)
 	unit.on_click.disconnect(click_unit)
-	unit.queue_free()
+	unit.to_be_removed = true
+	
+	battle_ui._on_unit_destroy(unit)
 
 func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups, imaginary = false) -> bool:
 	if is_tile_pos_out_of_bounds(tile_pos):
@@ -187,7 +188,15 @@ func click_tile(tile_pos: Vector2i):
 	# TODO: also select units by clicking tiles
 	
 	if !is_tile_pos_out_of_bounds(tile_pos):
-		order_move(tile_pos)
+		var unit_at_pos: Unit = find_unit_by_tile_pos(tile_pos)
+		if unit_at_pos == null:
+			order_move(tile_pos)
+		else:
+			if unit_at_pos.group == current_turn_group:
+				#click_unit(unit_at_pos)
+				pass
+			else: # unit_at_pos.can_attack():
+				order_attack(unit_at_pos)
 
 func click_unit(unit_to_select: Unit):
 	if unit_to_select.group == current_turn_group && !is_ai_turn():
@@ -247,6 +256,40 @@ func teleport_unit(unit: Unit, new_tile_pos: Vector2i):
 	#unit.update_model_pos()
 	
 	things_have_updated()
+
+func hurt_unit(target: Unit, amount: int):
+	target.hp = max(target.hp - amount, 0)
+	
+	if target.hp == 0:
+		if target.can_be_destroyed():
+			remove_unit(target)
+
+func order_attack(target: Unit, imaginary = false) -> bool:
+	if selected_unit == null || !selected_unit.can_attack():
+		return false
+	
+	if target.hp == 0:
+		return false
+	
+	var target_is_neighbor = false
+	
+	# TODO: calculate distance function and ranged attacks
+	var tile_neighbors = UIHelpers.get_tile_neighbor_list(selected_unit.tile_pos)
+	for adj_tile_pos in tile_neighbors:
+		var adj_tile_pos_absolute = selected_unit.tile_pos + adj_tile_pos
+		if target.tile_pos == adj_tile_pos_absolute:
+			target_is_neighbor = true
+			break
+	
+	#var distance = distances[tile_pos_to_tile_index(target.tile_pos)]
+	if target_is_neighbor:
+		if selected_unit.ap >= selected_unit.ap_cost_of_attack:
+			selected_unit.ap -= selected_unit.ap_cost_of_attack
+			
+			var attack_power = selected_unit.attack + randi_range(0, selected_unit.attack_extra)
+			hurt_unit(target, attack_power)
+	
+	return false
 
 func order_move(new_tile_pos: Vector2i, imaginary = false) -> bool:
 	if selected_unit == null: #|| !selected_unit.can_move():
@@ -368,6 +411,9 @@ func _ready():
 	remove_tile(Vector2i(5, 6))
 	
 	spawn_unit(Vector2i(0, 1), UnitTypes.WORM, HackingGroups.BLUE)
+	spawn_unit(Vector2i(0, 2), UnitTypes.TROJAN, HackingGroups.BLUE)
+	spawn_unit(Vector2i(0, 3), UnitTypes.VIRUS, HackingGroups.PINK)
+	
 	spawn_unit(Vector2i(6, 3), UnitTypes.TROJAN, HackingGroups.PINK)
 	
 	spawn_unit(Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
@@ -377,6 +423,8 @@ func _ready():
 	spawn_unit(Vector2i(3, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
 	spawn_unit(Vector2i(8, 5), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	
+	#remove_unit(find_unit_by_tile_pos(Vector2i(6, 2)))
 	
 	#tiles[tile_pos_to_tile_index(Vector2i(4, 5))].group = HackingGroups.PINK
 	#UIHelpers.for_all_tiles_in_radius(Vector2i(5, 5), 3, func(tile): tile.group = HackingGroups.PINK)

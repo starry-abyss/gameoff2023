@@ -38,6 +38,9 @@ func _on_unit_selection_changed(unit: Unit):
 		selected_unit_indicator.visible = true
 		selected_unit_stats._display_unit_stats(unit)
 
+func _on_unit_destroy(unit: Unit):
+	pass
+	
 func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn: bool):
 	var group_color = UIHelpers.group_to_color(current_group)
 	pass

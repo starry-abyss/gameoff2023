@@ -14,6 +14,9 @@ extends Node3D
 			set_tint(UIHelpers.group_to_color(new_value))
 		group = new_value
 
+var destroy_timer = 0.0
+var to_be_removed = false
+
 var hp: int = 8
 var hp_max: int = 8
 var attack: int = 0
@@ -49,7 +52,10 @@ func can_attack() -> bool:
 
 func can_move() -> bool:
 	return !is_static() && ap > 0
-	
+
+func can_be_destroyed() -> bool:
+	return type != Gameplay.UnitTypes.TOWER_NODE
+
 func type_to_model_scene_name(which_type: Gameplay.UnitTypes) -> String:
 	return Gameplay.UnitTypes.keys()[which_type].to_lower()
 
@@ -127,3 +133,13 @@ func _ready():
 	
 func _on_click():
 	on_click.emit(self)
+	
+func _process(delta):
+	if to_be_removed:
+		destroy_timer += delta
+		
+		var new_scale = max(0.0, StaticData.turn_animation_duration - destroy_timer * 5.0) / StaticData.turn_animation_duration
+		scale = Vector3(new_scale, new_scale, new_scale)
+		
+		if destroy_timer >= StaticData.turn_animation_duration:
+			queue_free()
