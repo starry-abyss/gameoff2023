@@ -42,7 +42,14 @@ func _on_unit_destroy(unit: Unit):
 	pass
 	
 func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn: bool):
-	var group_color = UIHelpers.group_to_color(current_group)
+	#var group_color = UIHelpers.group_to_color(current_group)
+	
+	if current_group == Gameplay.HackingGroups.PINK:
+		$CanvasLayer/end_turn.theme = preload("res://themes/pink.tres")
+		$CanvasLayer/select_idle_unit.theme = preload("res://themes/pink.tres")
+	else:
+		$CanvasLayer/end_turn.theme = preload("res://themes/blue.tres")
+		$CanvasLayer/select_idle_unit.theme = preload("res://themes/blue.tres")
 	pass
 
 func _input(event):

@@ -257,6 +257,104 @@ func teleport_unit(unit: Unit, new_tile_pos: Vector2i):
 	
 	things_have_updated()
 
+func order_ability_self_modify(new_type: UnitTypes):
+	if selected_unit == null:
+		return false
+	
+	selected_unit.type = new_type
+	selected_unit.ap = 0
+	return true
+	
+func order_ability_repair(target: Unit):
+	if selected_unit == null || target == selected_unit:
+		return false
+	
+	if target.group != selected_unit.group:
+		return false
+	
+	if target.hp == target.hp_max:
+		return false
+	
+	target.hp = target.hp_max
+	return true
+
+func order_ability_scale(target_tile_pos: Vector2i, imaginary = false):
+	if selected_unit == null:
+		return false
+	
+	if !is_tile_walkable(target_tile_pos):
+		return false
+	
+	var target_is_neighbor = false
+	
+	# TODO: calculate distance function and ranged attacks
+	var tile_neighbors = UIHelpers.get_tile_neighbor_list(selected_unit.tile_pos)
+	for adj_tile_pos in tile_neighbors:
+		var adj_tile_pos_absolute = selected_unit.tile_pos + adj_tile_pos
+		if target_tile_pos == adj_tile_pos_absolute:
+			target_is_neighbor = true
+			break
+	
+	if !target_is_neighbor:
+		return false
+	
+	if !imaginary:
+		spawn_unit(target_tile_pos, UnitTypes.WORM, selected_unit.group)
+		var new_worm = find_unit_by_tile_pos(target_tile_pos)
+		
+		new_worm.ap = 0
+		selected_unit.ap = 0
+	
+	return true
+
+func order_ability_reset(target_tile_pos: Vector2i, imaginary = false):
+	if selected_unit == null:
+		return false
+	
+	var tile = get_tile(target_tile_pos)
+	if tile == null || tile.group != selected_unit.group:
+		return false
+	
+	if !imaginary:
+		var apply_reset = func(tile_pos):
+			var unit = find_unit_by_tile_pos(tile_pos)
+			if unit != null && !unit.is_static():
+				remove_unit(unit)
+		
+		apply_reset.call(target_tile_pos)
+		for_all_tile_pos_around(target_tile_pos, apply_reset)
+	
+	return true
+
+func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false):
+	if selected_unit == null:
+		return false
+	
+	if !imaginary:
+		var tile_neighbors_from = UIHelpers.get_tile_neighbor_list(target_tile_pos)
+		var tile_neighbors_to = UIHelpers.get_tile_neighbor_list(selected_unit.tile_pos)
+		for i in range(tile_neighbors_from.size()):
+			var tile_pos_from = target_tile_pos + tile_neighbors_from[i]
+			var tile_pos_to = selected_unit.tile_pos + tile_neighbors_to[i]
+			
+			var unit_from = find_unit_by_tile_pos(tile_pos_from)
+			
+			if unit_from != null && !unit_from.is_static() && is_tile_walkable(tile_pos_to):
+				teleport_unit(unit_from, tile_pos_to)
+				unit_from.update_model_pos()
+		
+		#var apply_backdoor = func(tile_pos):
+		#	var unit = find_unit_by_tile_pos(tile_pos)
+		#	if unit != null && !unit.is_static():
+		#		pass
+		
+		# won't teleport from the center or cursor, 
+		# because can't teleport on the same tile as Trojan
+		#apply_backdoor.call(target_tile_pos)
+		#for_all_tile_pos_around(target_tile_pos, apply_backdoor)
+	
+	return true
+
 func hurt_unit(target: Unit, amount: int):
 	target.hp = max(target.hp - amount, 0)
 	
@@ -265,7 +363,7 @@ func hurt_unit(target: Unit, amount: int):
 			remove_unit(target)
 
 func order_attack(target: Unit, imaginary = false) -> bool:
-	if selected_unit == null || !selected_unit.can_attack():
+	if selected_unit == null || target == selected_unit || !selected_unit.can_attack():
 		return false
 	
 	if target.hp == 0:
@@ -284,10 +382,13 @@ func order_attack(target: Unit, imaginary = false) -> bool:
 	#var distance = distances[tile_pos_to_tile_index(target.tile_pos)]
 	if target_is_neighbor:
 		if selected_unit.ap >= selected_unit.ap_cost_of_attack:
-			selected_unit.ap -= selected_unit.ap_cost_of_attack
+			if !imaginary:
+				selected_unit.ap -= selected_unit.ap_cost_of_attack
+				
+				var attack_power = selected_unit.attack + randi_range(0, selected_unit.attack_extra)
+				hurt_unit(target, attack_power)
 			
-			var attack_power = selected_unit.attack + randi_range(0, selected_unit.attack_extra)
-			hurt_unit(target, attack_power)
+			return true
 	
 	return false
 

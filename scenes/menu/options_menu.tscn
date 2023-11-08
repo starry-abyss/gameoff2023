@@ -60,7 +60,7 @@ offset_bottom = 19.0
 size_flags_horizontal = 0
 text = "music"
 
-[node name="Volumn" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Volume" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
 step = 10.0
@@ -81,9 +81,10 @@ offset_bottom = 19.0
 size_flags_horizontal = 0
 text = "sounds"
 
-[node name="Volumn" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer2"]
+[node name="Volume" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/HSplitContainer2"]
 layout_mode = 2
 step = 10.0
 value = 50.0
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Back" to="." method="_on_back_pressed"]
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/Volume" to="." method="_on_volume_value_changed"]
