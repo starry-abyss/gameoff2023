@@ -52,6 +52,9 @@ func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn
 		$CanvasLayer/select_idle_unit.theme = preload("res://themes/blue.tres")
 	pass
 
+func _on_battle_end(who_won: Gameplay.HackingGroups):
+	pass
+
 func _input(event):
 	if event is InputEventMouseButton && event.pressed:
 		#print("Mouse Click/Unclick at: ", event.position)

@@ -130,6 +130,9 @@ func remove_tile(tile_pos: Vector2i):
 			remove_unit(unit)
 
 func remove_unit(unit: Unit):
+	if unit == selected_unit:
+		select_unit(null)
+	
 	units.erase(unit)
 	unit.on_click.disconnect(click_unit)
 	unit.to_be_removed = true
@@ -285,9 +288,12 @@ func order_ability_scale(target_tile_pos: Vector2i, imaginary = false):
 	if !is_tile_walkable(target_tile_pos):
 		return false
 	
+	var distance = distances[tile_pos_to_tile_index(target_tile_pos)]
+	if distance <= 0:
+		return false
+	
 	var target_is_neighbor = false
 	
-	# TODO: calculate distance function and ranged attacks
 	var tile_neighbors = UIHelpers.get_tile_neighbor_list(selected_unit.tile_pos)
 	for adj_tile_pos in tile_neighbors:
 		var adj_tile_pos_absolute = selected_unit.tile_pos + adj_tile_pos
@@ -326,8 +332,39 @@ func order_ability_reset(target_tile_pos: Vector2i, imaginary = false):
 	
 	return true
 
+func order_ability_capture_tower(target: Unit, imaginary = false):
+	if selected_unit == null:
+		return false
+	
+	if target.type != UnitTypes.TOWER_NODE || target.group != HackingGroups.NEUTRAL:
+		return false
+	
+	var target_is_neighbor = false
+	
+	var tile_neighbors = UIHelpers.get_tile_neighbor_list(selected_unit.tile_pos)
+	for adj_tile_pos in tile_neighbors:
+		var adj_tile_pos_absolute = selected_unit.tile_pos + adj_tile_pos
+		if target.tile_pos == adj_tile_pos_absolute:
+			target_is_neighbor = true
+			break
+	
+	if !target_is_neighbor:
+		return false
+	
+	if !imaginary:
+		target.group = selected_unit.group
+		
+		remove_unit(selected_unit)
+	
+	return true
+
 func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false):
 	if selected_unit == null:
+		return false
+	
+	# doesn't make sense for Trojan to target precisely itself
+	var distance = distances[tile_pos_to_tile_index(target_tile_pos)]
+	if distance == 0:
 		return false
 	
 	if !imaginary:
@@ -339,9 +376,11 @@ func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false):
 			
 			var unit_from = find_unit_by_tile_pos(tile_pos_from)
 			
-			if unit_from != null && !unit_from.is_static() && is_tile_walkable(tile_pos_to):
-				teleport_unit(unit_from, tile_pos_to)
-				unit_from.update_model_pos()
+			if unit_from != null && !unit_from.is_static() \
+				&& unit_from.group == selected_unit.group \
+				&& is_tile_walkable(tile_pos_to):
+					teleport_unit(unit_from, tile_pos_to)
+					unit_from.update_model_pos()
 		
 		#var apply_backdoor = func(tile_pos):
 		#	var unit = find_unit_by_tile_pos(tile_pos)
@@ -359,8 +398,24 @@ func hurt_unit(target: Unit, amount: int):
 	target.hp = max(target.hp - amount, 0)
 	
 	if target.hp == 0:
+		var this_is_the_end = (target.type == UnitTypes.CENTRAL_NODE)
+		var unit_group_originally = target.group
+		
 		if target.can_be_destroyed():
 			remove_unit(target)
+		else:
+			target.group = HackingGroups.NEUTRAL
+		
+		if this_is_the_end:
+			end_battle(unit_group_originally)
+
+func end_battle(who_lost: HackingGroups):
+	for unit in units:
+		if unit.group == who_lost:
+			unit.group = HackingGroups.NEUTRAL
+	
+	var who_won = flip_group(who_lost)
+	battle_ui._on_battle_end(who_won)
 
 func order_attack(target: Unit, imaginary = false) -> bool:
 	if selected_unit == null || target == selected_unit || !selected_unit.can_attack():
@@ -457,13 +512,16 @@ func get_path_to_tile_pos(tile_pos: Vector2i):
 func things_have_updated():
 	calculate_distances()
 
+func flip_group(group: HackingGroups) -> HackingGroups:
+	if group == HackingGroups.BLUE:
+		return HackingGroups.PINK
+	else:
+		return HackingGroups.BLUE
+
 func end_turn():
 	select_unit(null)
 	
-	if current_turn_group == HackingGroups.BLUE:
-		current_turn_group = HackingGroups.PINK
-	else:
-		current_turn_group = HackingGroups.BLUE
+	current_turn_group = flip_group(current_turn_group)
 	
 	for unit in units:
 		if unit.group == current_turn_group:
