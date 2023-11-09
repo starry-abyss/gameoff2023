@@ -5,8 +5,48 @@ extends Node3D
 
 signal tile_clicked
 signal tile_hovered
+signal unit_clicked
+signal order_given
 
 signal animation_finished
+
+var in_select_target_mode = false:
+	set(new_value):
+		in_select_target_mode = new_value
+		
+		update_abilities_buttons()
+		
+var order_parameters = {}
+
+func _ready():
+	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)
+	
+	add_ability_button("Scale", "scale", Gameplay.TargetTypes.TILE)
+	add_ability_button("Self-modify to Virus", "self_modify_to_virus", Gameplay.TargetTypes.SELF)
+	add_ability_button("Self-modify to Trojan", "self_modify_to_trojan", Gameplay.TargetTypes.SELF)
+	
+	add_ability_button("Repair", "repair", Gameplay.TargetTypes.UNIT)
+	add_ability_button("Reset", "reset", Gameplay.TargetTypes.TILE)
+	
+	add_ability_button("Capture a tower", "capture_tower", Gameplay.TargetTypes.UNIT)
+	add_ability_button("Open the backdoor", "backdoor", Gameplay.TargetTypes.TILE)
+	
+	in_select_target_mode = false
+
+func update_abilities_buttons():
+	$CanvasLayer/cancel_select_target.visible = in_select_target_mode && selected_unit_indicator.visible
+	%ability_buttons.visible = !in_select_target_mode && selected_unit_indicator.visible
+
+func add_ability_button(button_text: String, ability_id: String, target_type: Gameplay.TargetTypes):
+	var button = Button.new()
+	
+	button.name = ability_id
+	button.text = button_text + "\n(target: " + Gameplay.TargetTypes.keys()[target_type] + ")"
+	button.position.x = %ability_buttons.get_children().size() * 100
+	button.custom_minimum_size = Vector2(100, 100)
+	
+	%ability_buttons.add_child(button)
+	button.pressed.connect(_on_ability_button_clicked.bind(ability_id, target_type))
 
 func _on_show_path(unit: Unit, path: Array):
 	#print("show ", path)
@@ -32,11 +72,15 @@ func _on_unit_selection_changed(unit: Unit):
 	if unit == null:
 		selected_unit_indicator.visible = false
 		selected_unit_stats.visible = false
+		
+		in_select_target_mode = false
 	else:
 		selected_unit_stats.visible = true
 		selected_unit_indicator.position = unit.position + Vector3(0, 1.5, 0) 
 		selected_unit_indicator.visible = true
 		selected_unit_stats._display_unit_stats(unit)
+	
+	update_abilities_buttons()
 
 func _on_unit_destroy(unit: Unit):
 	pass
@@ -54,8 +98,30 @@ func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn
 
 func _on_battle_end(who_won: Gameplay.HackingGroups):
 	pass
+	
+func _on_unit_click(unit: Unit):
+	if !in_select_target_mode:
+		unit_clicked.emit(unit)
+	elif order_parameters.target_type == Gameplay.TargetTypes.UNIT:
+		order_given.emit(order_parameters.ability_id, unit)
 
-func _input(event):
+func _on_ability_button_clicked(ability_id: String, target_type: Gameplay.TargetTypes):
+	if target_type == Gameplay.TargetTypes.SELF:
+		order_given.emit(ability_id, null)
+	else:
+		in_select_target_mode = true
+		
+		order_parameters.ability_id = ability_id
+		order_parameters.target_type = target_type
+
+func _on_cancel_select_target_button_clicked():
+	in_select_target_mode = false
+
+func _on_order_processed(success: bool):
+	if success:
+		in_select_target_mode = false
+
+func _unhandled_input(event):
 	if event is InputEventMouseButton && event.pressed:
 		#print("Mouse Click/Unclick at: ", event.position)
 
@@ -65,7 +131,10 @@ func _input(event):
 		var tile_pos = UIHelpers.world_pos_to_tile_pos(world_pos)
 		print("tile_pos: ", tile_pos)
 		
-		tile_clicked.emit(tile_pos)
+		if !in_select_target_mode:
+			tile_clicked.emit(tile_pos)
+		elif order_parameters.target_type == Gameplay.TargetTypes.TILE:
+			order_given.emit(order_parameters.ability_id, tile_pos)
 		
 	elif event is InputEventMouseMotion:
 		#print("Mouse Motion at: ", event.position)
@@ -74,5 +143,7 @@ func _input(event):
 		#print("world pos: ", world_pos)
 		
 		var tile_pos = UIHelpers.world_pos_to_tile_pos(world_pos)
-		tile_hovered.emit(tile_pos)
+		
+		if !in_select_target_mode:
+			tile_hovered.emit(tile_pos)
 		

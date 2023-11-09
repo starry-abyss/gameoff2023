@@ -5,6 +5,7 @@ extends Node3D
 @onready var battle_ui = %battle_ui
 
 enum UnitTypes { CENTRAL_NODE, TOWER_NODE, WORM, TROJAN, VIRUS }
+enum TargetTypes { UNIT, TILE, SELF }
 enum HackingGroups { PINK, BLUE, NEUTRAL }
 enum ControllerType { PLAYER, AI }
 
@@ -134,7 +135,7 @@ func remove_unit(unit: Unit):
 		select_unit(null)
 	
 	units.erase(unit)
-	unit.on_click.disconnect(click_unit)
+	unit.on_click.disconnect(battle_ui._on_unit_click)
 	unit.to_be_removed = true
 	
 	battle_ui._on_unit_destroy(unit)
@@ -165,7 +166,9 @@ func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups, imagi
 		
 		unit.update_model_pos()
 		
-		unit.on_click.connect(click_unit)
+		unit.on_click.connect(battle_ui._on_unit_click)
+		
+		#unit.hp = 1
 	
 	return true
 
@@ -207,6 +210,11 @@ func click_unit(unit_to_select: Unit):
 			select_unit(null)
 		else:
 			select_unit(unit_to_select)
+
+func give_order(ability_id: String, target):
+	var order_callable = Callable(self, "order_ability_" + ability_id)
+	var result = order_callable.call(target, false)
+	battle_ui._on_order_processed(result)
 
 func select_unit(unit_to_select: Unit, no_ui = false):
 	for unit in units:
@@ -260,15 +268,23 @@ func teleport_unit(unit: Unit, new_tile_pos: Vector2i):
 	
 	things_have_updated()
 
-func order_ability_self_modify(new_type: UnitTypes):
+func order_ability_self_modify(new_type: UnitTypes, imaginary = false) -> bool:
 	if selected_unit == null:
 		return false
 	
-	selected_unit.type = new_type
-	selected_unit.ap = 0
-	return true
+	if !imaginary:
+		selected_unit.type = new_type
+		selected_unit.ap = 0
 	
-func order_ability_repair(target: Unit):
+	return true
+
+func order_ability_self_modify_to_trojan(target_not_used, imaginary = false) -> bool:
+	return order_ability_self_modify(UnitTypes.TROJAN, imaginary)
+
+func order_ability_self_modify_to_virus(target_not_used, imaginary = false) -> bool:
+	return order_ability_self_modify(UnitTypes.VIRUS, imaginary)
+
+func order_ability_repair(target: Unit, imaginary = false) -> bool:
 	if selected_unit == null || target == selected_unit:
 		return false
 	
@@ -278,10 +294,12 @@ func order_ability_repair(target: Unit):
 	if target.hp == target.hp_max:
 		return false
 	
-	target.hp = target.hp_max
+	if !imaginary:
+		target.hp = target.hp_max
+	
 	return true
 
-func order_ability_scale(target_tile_pos: Vector2i, imaginary = false):
+func order_ability_scale(target_tile_pos: Vector2i, imaginary = false) -> bool:
 	if selected_unit == null:
 		return false
 	
@@ -313,7 +331,7 @@ func order_ability_scale(target_tile_pos: Vector2i, imaginary = false):
 	
 	return true
 
-func order_ability_reset(target_tile_pos: Vector2i, imaginary = false):
+func order_ability_reset(target_tile_pos: Vector2i, imaginary = false) -> bool:
 	if selected_unit == null:
 		return false
 	
@@ -332,7 +350,7 @@ func order_ability_reset(target_tile_pos: Vector2i, imaginary = false):
 	
 	return true
 
-func order_ability_capture_tower(target: Unit, imaginary = false):
+func order_ability_capture_tower(target: Unit, imaginary = false) -> bool:
 	if selected_unit == null:
 		return false
 	
@@ -358,7 +376,7 @@ func order_ability_capture_tower(target: Unit, imaginary = false):
 	
 	return true
 
-func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false):
+func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> bool:
 	if selected_unit == null:
 		return false
 	
@@ -560,6 +578,8 @@ func _ready():
 	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", select_next_unit)
 	battle_ui.connect("tile_clicked", click_tile)
 	battle_ui.connect("tile_hovered", hover_tile)
+	battle_ui.connect("unit_clicked", click_unit)
+	battle_ui.connect("order_given", give_order)
 	
 	tiles.resize(map_size.x * map_size.y)
 	distances.resize(tiles.size())
@@ -579,8 +599,8 @@ func _ready():
 	spawn_unit(Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(3, 2), UnitTypes.TOWER_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(2, 5), UnitTypes.TOWER_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(3, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	spawn_unit(Vector2i(3, 8), UnitTypes.TOWER_NODE, HackingGroups.NEUTRAL)
+	spawn_unit(Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.NEUTRAL)
 	spawn_unit(Vector2i(8, 5), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
 	
 	#remove_unit(find_unit_by_tile_pos(Vector2i(6, 2)))
