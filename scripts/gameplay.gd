@@ -311,7 +311,12 @@ func order_ability_repair(target: Unit, imaginary = false) -> bool:
 		return false
 	
 	if !imaginary:
+		var hp_before = target.hp
 		target.hp = target.hp_max
+		
+		var hp_delta = target.hp - hp_before
+		if hp_delta > 0:
+			battle_ui._on_unit_hp_change(target, hp_delta)
 	
 	return true
 
@@ -353,7 +358,9 @@ func order_ability_reset(target_tile_pos: Vector2i, imaginary = false) -> bool:
 		var apply_reset = func(tile_pos):
 			var unit = find_unit_by_tile_pos(tile_pos)
 			if unit != null && !unit.is_static():
-				remove_unit(unit)
+				#remove_unit(unit)
+				# same as remove, but should trigger the damage visualization
+				hurt_unit(unit, 99999999)
 		
 		apply_reset.call(target_tile_pos)
 		for_all_tile_pos_around(target_tile_pos, apply_reset)
@@ -416,7 +423,15 @@ func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> boo
 	return true
 
 func hurt_unit(target: Unit, amount: int):
+	if amount <= 0:
+		return
+	
+	var hp_before = target.hp
 	target.hp = max(target.hp - amount, 0)
+	
+	var damage = hp_before - target.hp
+	if damage > 0:
+		battle_ui._on_unit_hp_change(target, -damage)
 	
 	if target.hp == 0:
 		var this_is_the_end = (target.type == UnitTypes.CENTRAL_NODE)

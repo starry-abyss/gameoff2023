@@ -103,6 +103,9 @@ func _on_unit_selection_changed(unit: Unit):
 func _on_unit_destroy(unit: Unit):
 	pass
 	
+func _on_unit_hp_change(unit: Unit, delta_hp: int):
+	pass
+	
 func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn: bool):
 	#var group_color = UIHelpers.group_to_color(current_group)
 	
