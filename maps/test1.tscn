@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cxaqvfti58xoq"]
+[gd_scene load_steps=7 format=3 uid="uid://cxaqvfti58xoq"]
 
 [ext_resource type="PackedScene" uid="uid://c7k4uu8silsa6" path="res://scenes/battle_area.tscn" id="1_mgdil"]
 [ext_resource type="Script" path="res://scripts/gameplay.gd" id="1_nrikt"]
 [ext_resource type="PackedScene" uid="uid://khbj7vpou3mu" path="res://scenes/battle_ui.tscn" id="3_iddt0"]
 [ext_resource type="FontFile" uid="uid://ckdo8mgv1ag2i" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="4_uy1sx"]
+[ext_resource type="PackedScene" uid="uid://cvvm6puvfa4gf" path="res://art/firewall.tscn" id="5_ey2ky"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_uuila"]
 
@@ -36,3 +37,6 @@ billboard = 2
 text = "TEST "
 font = ExtResource("4_uy1sx")
 font_size = 128
+
+[node name="Firewall" parent="." instance=ExtResource("5_ey2ky")]
+transform = Transform3D(4.03506, 0, 0, 0, 1, 0, 0, 0, 1, 3.36333, 0, 6.06799)
