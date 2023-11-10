@@ -24,6 +24,7 @@ var attack_extra: int = 0
 var ap_cost_of_attack: int = 1
 var ap: int = 3
 var ap_max: int = 3
+var cooldowns = {}
 
 var tile_pos: Vector2i = Vector2i(0, 0):
 	set(new_value):
@@ -49,6 +50,11 @@ func is_static() -> bool:
 
 func can_attack() -> bool:
 	return attack > 0 || attack_extra > 0
+
+func get_cooldown(ability_id: String) -> int:
+	if cooldowns.has(ability_id):
+		return cooldowns[ability_id]
+	return 0
 
 func can_move() -> bool:
 	return !is_static() && ap > 0

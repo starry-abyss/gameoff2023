@@ -213,7 +213,21 @@ func click_unit(unit_to_select: Unit):
 
 func give_order(ability_id: String, target):
 	var order_callable = Callable(self, "order_ability_" + ability_id)
-	var result = order_callable.call(target, false)
+	var result = false
+	
+	var stats = StaticData.ability_stats[ability_id]
+	if selected_unit.ap >= stats.ap && selected_unit.get_cooldown(ability_id) == 0:
+		
+		result = order_callable.call(target, false)
+		
+		if result:
+			# if the selected unit wasn't removed during the order execution
+			if selected_unit != null:
+				# need to prevent AP from going below zero,
+				# if during the order execution AP already became zero
+				selected_unit.ap = max(0, selected_unit.ap - stats.ap)
+				selected_unit.cooldowns[ability_id] = stats.cooldown
+	
 	battle_ui._on_order_processed(result)
 
 func select_unit(unit_to_select: Unit, no_ui = false):
@@ -263,7 +277,7 @@ func select_next_unit():
 		select_unit(null)
 
 func teleport_unit(unit: Unit, new_tile_pos: Vector2i):
-	selected_unit.tile_pos = new_tile_pos
+	unit.tile_pos = new_tile_pos
 	#unit.update_model_pos()
 	
 	things_have_updated()
@@ -312,14 +326,8 @@ func order_ability_scale(target_tile_pos: Vector2i, imaginary = false) -> bool:
 	if distance <= 0:
 		return false
 	
-	var target_is_neighbor = false
-	
-	var tile_neighbors = UIHelpers.get_tile_neighbor_list(selected_unit.tile_pos)
-	for adj_tile_pos in tile_neighbors:
-		var adj_tile_pos_absolute = selected_unit.tile_pos + adj_tile_pos
-		if target_tile_pos == adj_tile_pos_absolute:
-			target_is_neighbor = true
-			break
+	var target_is_neighbor = \
+		UIHelpers.tile_pos_distance(selected_unit.tile_pos, target_tile_pos) == 1
 	
 	if !target_is_neighbor:
 		return false
@@ -359,14 +367,8 @@ func order_ability_capture_tower(target: Unit, imaginary = false) -> bool:
 	if target.type != UnitTypes.TOWER_NODE || target.group != HackingGroups.NEUTRAL:
 		return false
 	
-	var target_is_neighbor = false
-	
-	var tile_neighbors = UIHelpers.get_tile_neighbor_list(selected_unit.tile_pos)
-	for adj_tile_pos in tile_neighbors:
-		var adj_tile_pos_absolute = selected_unit.tile_pos + adj_tile_pos
-		if target.tile_pos == adj_tile_pos_absolute:
-			target_is_neighbor = true
-			break
+	var target_is_neighbor = \
+		UIHelpers.tile_pos_distance(selected_unit.tile_pos, target.tile_pos) == 1
 	
 	if !target_is_neighbor:
 		return false
@@ -544,6 +546,9 @@ func end_turn():
 	
 	for unit in units:
 		if unit.group == current_turn_group:
+			for cd in unit.cooldowns.keys():
+				unit.cooldowns[cd] = max(0, unit.cooldowns[cd] - 1)
+			
 			unit.ap = unit.ap_max
 		
 			if unit.type == UnitTypes.CENTRAL_NODE:

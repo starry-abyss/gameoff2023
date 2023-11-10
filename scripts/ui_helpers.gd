@@ -27,12 +27,12 @@ func world_pos_to_tile_pos(world_pos: Vector2) -> Vector2i:
 	# + Size.x * 0.5
 	
 	tile_pos.y = floori((world_pos.y - StaticData.map_origin.y) / StaticData.tile_size.y)
-	tile_pos.x = floori((world_pos.x - StaticData.map_origin.x - (StaticData.tile_size.x * 0.5 if tile_pos.y % 2 == 0 else 0.0)) / StaticData.tile_size.x)
+	tile_pos.x = floori((world_pos.x - StaticData.map_origin.x - (StaticData.tile_size.x * 0.5 if tile_pos.y & 1 == 0 else 0.0)) / StaticData.tile_size.x)
 	
 	return tile_pos
 
 func tile_pos_to_world_pos(tile_pos: Vector2i) -> Vector2:
-	var x = (tile_pos.x * StaticData.tile_size.x) + (StaticData.tile_size.x * 0.5 if tile_pos.y % 2 == 0 else 0.0)
+	var x = (tile_pos.x * StaticData.tile_size.x) + (StaticData.tile_size.x * 0.5 if tile_pos.y & 1 == 0 else 0.0)
 	var y = tile_pos.y * StaticData.tile_size.y
 	
 	return Vector2(StaticData.map_origin.x + x, StaticData.map_origin.y + y)
@@ -46,7 +46,23 @@ const Tile_neighbors_odd_row = [ Vector2i(-1, 0), Vector2i(-1, -1), Vector2i(0, 
 	Vector2i(1, 0), Vector2i(-1, 1), Vector2i(0, 1) ]
 
 func get_tile_neighbor_list(tile_pos: Vector2i):
-	return Tile_neighbors_even_row if tile_pos.y % 2 == 0 else Tile_neighbors_odd_row
+	return Tile_neighbors_even_row if tile_pos.y & 1 == 0 else Tile_neighbors_odd_row
+
+# https://www.redblobgames.com/grids/hexagons
+func tile_pos_distance(tile_pos1: Vector2i, tile_pos2: Vector2i) -> int:
+	var cube_distance = func (a, b) -> int:
+		return (abs(a.q - b.q) + abs(a.r - b.r) + abs(a.s - b.s)) / 2
+
+	var evenr_to_cube = func (hex):
+		var cube = {}
+		cube["q"] = hex.x - (hex.y + (hex.y & 1)) / 2
+		cube["r"] = hex.y
+		cube["s"] = -cube.q - cube.r
+		return cube
+	
+	var cube1 = evenr_to_cube.call(tile_pos1)
+	var cube2 = evenr_to_cube.call(tile_pos2)
+	return cube_distance.call(cube1, cube2)
 
 func group_to_color(which_group: Gameplay.HackingGroups) -> Color:
 	if which_group == Gameplay.HackingGroups.PINK:

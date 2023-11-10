@@ -18,11 +18,12 @@ var in_select_target_mode = false:
 		
 var order_parameters = {}
 var selected_unit_type
+#var selected_unit_cooldowns
 
 func _ready():
 	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)
 	
-	add_ability_button("Scale", "scale", Gameplay.TargetTypes.TILE)
+	add_ability_button("Double", "scale", Gameplay.TargetTypes.TILE)
 	add_ability_button("Self-modify to Virus", "self_modify_to_virus", Gameplay.TargetTypes.SELF)
 	add_ability_button("Self-modify to Trojan", "self_modify_to_trojan", Gameplay.TargetTypes.SELF)
 	
@@ -47,10 +48,16 @@ func update_abilities_buttons():
 				button.visible = false
 
 func add_ability_button(button_text: String, ability_id: String, target_type: Gameplay.TargetTypes):
+	var stats = StaticData.ability_stats[ability_id]
+	
 	var button = Button.new()
 	
+	var cooldown_text = (", CD: " + str(stats.cooldown)) if stats.cooldown > 0 else ""
+	
 	button.name = ability_id
-	button.text = button_text + "\n(target: " + Gameplay.TargetTypes.keys()[target_type] + ")"
+	button.text = button_text \
+		+ "\ntarget: " + Gameplay.TargetTypes.keys()[target_type] \
+		+ "\nAP: " + str(stats.ap) + cooldown_text
 	#button.position.x = %ability_buttons.get_children().size() * 100
 	button.custom_minimum_size = Vector2(100, 100)
 	
@@ -131,6 +138,8 @@ func _on_cancel_select_target_button_clicked():
 func _on_order_processed(success: bool):
 	if success:
 		in_select_target_mode = false
+	
+	update_abilities_buttons()
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton && event.pressed:
@@ -141,6 +150,9 @@ func _unhandled_input(event):
 		
 		var tile_pos = UIHelpers.world_pos_to_tile_pos(world_pos)
 		print("tile_pos: ", tile_pos)
+		
+		var test_distance = UIHelpers.tile_pos_distance(Vector2i(5, 5), tile_pos)		
+		print("distance: ", test_distance)
 		
 		if !in_select_target_mode:
 			tile_clicked.emit(tile_pos)

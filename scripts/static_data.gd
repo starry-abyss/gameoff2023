@@ -14,6 +14,19 @@ extends Node
 	Gameplay.UnitTypes.TROJAN: { "hp_max": 12, "ap_max": 10, "abilities": ["capture_tower","backdoor"] },
 	Gameplay.UnitTypes.VIRUS: { "hp_max": 30, "ap_max": 10, "attack": 3, "attack_extra": 2 },
 	}
+
+# sometimes abilities make AP drop right to zero, this table only shows the minimum AP cost
+@export var ability_stats = {
+	"scale": { "ap": 1, "cooldown": 0 },
+	"self_modify_to_virus": { "ap": 1, "cooldown": 0 },
+	"self_modify_to_trojan": { "ap": 1, "cooldown": 0 },
+	
+	"repair": { "ap": 1, "cooldown": 3 },
+	"reset": { "ap": 1, "cooldown": 3 },
+	
+	"capture_tower": { "ap": 1, "cooldown": 0 },
+	"backdoor": { "ap": 1, "cooldown": 0 },
+	}
 	
 @export var tile_size = Vector2(1.2, 1.2)
 @export var map_origin = Vector2(1.0, 1.0)
