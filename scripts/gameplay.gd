@@ -275,6 +275,8 @@ func order_ability_self_modify(new_type: UnitTypes, imaginary = false) -> bool:
 	if !imaginary:
 		selected_unit.type = new_type
 		selected_unit.ap = 0
+		
+		select_unit(null)
 	
 	return true
 
@@ -381,8 +383,7 @@ func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> boo
 		return false
 	
 	# doesn't make sense for Trojan to target precisely itself
-	var distance = distances[tile_pos_to_tile_index(target_tile_pos)]
-	if distance == 0:
+	if selected_unit.tile_pos == target_tile_pos:
 		return false
 	
 	if !imaginary:
@@ -602,6 +603,11 @@ func _ready():
 	spawn_unit(Vector2i(3, 8), UnitTypes.TOWER_NODE, HackingGroups.NEUTRAL)
 	spawn_unit(Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.NEUTRAL)
 	spawn_unit(Vector2i(8, 5), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	
+	for_all_tile_pos_around(Vector2i(5, 5), func(tile1): \
+		for_all_tile_pos_around(tile1, func(tile2): \
+			for_all_tile_pos_around(tile2, func(tile3): \
+				get_tile(tile3).group = HackingGroups.PINK)))
 	
 	#remove_unit(find_unit_by_tile_pos(Vector2i(6, 2)))
 	

@@ -17,6 +17,7 @@ var in_select_target_mode = false:
 		update_abilities_buttons()
 		
 var order_parameters = {}
+var selected_unit_type
 
 func _ready():
 	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)
@@ -36,13 +37,21 @@ func _ready():
 func update_abilities_buttons():
 	$CanvasLayer/cancel_select_target.visible = in_select_target_mode && selected_unit_indicator.visible
 	%ability_buttons.visible = !in_select_target_mode && selected_unit_indicator.visible
+	
+	if %ability_buttons.visible:
+		var stats = StaticData.unit_stats[selected_unit_type]
+		for button in %ability_buttons.get_children():
+			if stats.has("abilities"):
+				button.visible = stats.abilities.has(button.name)
+			else:
+				button.visible = false
 
 func add_ability_button(button_text: String, ability_id: String, target_type: Gameplay.TargetTypes):
 	var button = Button.new()
 	
 	button.name = ability_id
 	button.text = button_text + "\n(target: " + Gameplay.TargetTypes.keys()[target_type] + ")"
-	button.position.x = %ability_buttons.get_children().size() * 100
+	#button.position.x = %ability_buttons.get_children().size() * 100
 	button.custom_minimum_size = Vector2(100, 100)
 	
 	%ability_buttons.add_child(button)
@@ -79,6 +88,8 @@ func _on_unit_selection_changed(unit: Unit):
 		selected_unit_indicator.position = unit.position + Vector3(0, 1.5, 0) 
 		selected_unit_indicator.visible = true
 		selected_unit_stats._display_unit_stats(unit)
+		
+		selected_unit_type = unit.type
 	
 	update_abilities_buttons()
 

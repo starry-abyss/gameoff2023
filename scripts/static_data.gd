@@ -7,11 +7,11 @@ extends Node
 @export var turn_animation_duration: float = 2.0
 
 @export var unit_stats = { 
-	Gameplay.UnitTypes.CENTRAL_NODE: { "hp_max": 200, "ap_max": 20 },
+	Gameplay.UnitTypes.CENTRAL_NODE: { "hp_max": 200, "ap_max": 20, "abilities": ["repair","reset"] },
 	Gameplay.UnitTypes.TOWER_NODE: { "hp_max": 50, "ap_max": 10, "attack": 10, "attack_extra": 5 },
 	
-	Gameplay.UnitTypes.WORM: { "hp_max": 5, "ap_max": 3 },
-	Gameplay.UnitTypes.TROJAN: { "hp_max": 12, "ap_max": 10 },
+	Gameplay.UnitTypes.WORM: { "hp_max": 5, "ap_max": 3, "abilities": ["scale","self_modify_to_virus","self_modify_to_trojan"] },
+	Gameplay.UnitTypes.TROJAN: { "hp_max": 12, "ap_max": 10, "abilities": ["capture_tower","backdoor"] },
 	Gameplay.UnitTypes.VIRUS: { "hp_max": 30, "ap_max": 10, "attack": 3, "attack_extra": 2 },
 	}
 	
