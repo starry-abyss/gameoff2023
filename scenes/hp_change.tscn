@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://dkqghffuw0o23"]
+
+[ext_resource type="FontFile" uid="uid://ckdo8mgv1ag2i" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="1_gr7dt"]
+[ext_resource type="Script" path="res://scenes/hp_change.gd" id="1_jec03"]
+
+[node name="HpChange" type="Node3D"]
+script = ExtResource("1_jec03")
+
+[node name="Label" type="Label3D" parent="."]
+billboard = 2
+double_sided = false
+font = ExtResource("1_gr7dt")
+font_size = 64
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="queue_free"]

@@ -104,7 +104,15 @@ func _on_unit_destroy(unit: Unit):
 	pass
 	
 func _on_unit_hp_change(unit: Unit, delta_hp: int):
-	pass
+	var label = preload("res://scenes/hp_change.tscn").instantiate()
+	add_child(label)
+	
+	if delta_hp > 0:
+		label.get_node("Label").text = "+" + str(delta_hp)
+	else:
+		label.get_node("Label").text = str(delta_hp)
+	
+	label.global_position = unit.global_position + Vector3(0.0, 2.0, 0.0)
 	
 func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn: bool):
 	#var group_color = UIHelpers.group_to_color(current_group)
@@ -154,8 +162,8 @@ func _unhandled_input(event):
 		var tile_pos = UIHelpers.world_pos_to_tile_pos(world_pos)
 		print("tile_pos: ", tile_pos)
 		
-		var test_distance = UIHelpers.tile_pos_distance(Vector2i(5, 5), tile_pos)		
-		print("distance: ", test_distance)
+		#var test_distance = UIHelpers.tile_pos_distance(Vector2i(5, 5), tile_pos)		
+		#print("distance: ", test_distance)
 		
 		if !in_select_target_mode:
 			tile_clicked.emit(tile_pos)
