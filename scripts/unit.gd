@@ -21,6 +21,7 @@ var hp: int = 8
 var hp_max: int = 8
 var attack: int = 0
 var attack_extra: int = 0
+var attack_range: int = 0
 var ap_cost_of_attack: int = 1
 var ap: int = 3
 var ap_max: int = 3
@@ -120,6 +121,13 @@ func load_stats(which_type: Gameplay.UnitTypes):
 	else:
 		attack_extra = 0
 	
+	if stats.has("attack_range"):
+		attack_range = stats.attack_range
+	else:
+		if attack > 0 || attack_range > 0:
+			attack_range = 1
+		else:
+			attack_range = 0
 	
 func set_tint(color: Color):
 	if material != null:

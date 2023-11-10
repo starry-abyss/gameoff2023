@@ -445,18 +445,7 @@ func order_attack(target: Unit, imaginary = false) -> bool:
 	if target.hp == 0:
 		return false
 	
-	var target_is_neighbor = false
-	
-	# TODO: calculate distance function and ranged attacks
-	var tile_neighbors = UIHelpers.get_tile_neighbor_list(selected_unit.tile_pos)
-	for adj_tile_pos in tile_neighbors:
-		var adj_tile_pos_absolute = selected_unit.tile_pos + adj_tile_pos
-		if target.tile_pos == adj_tile_pos_absolute:
-			target_is_neighbor = true
-			break
-	
-	#var distance = distances[tile_pos_to_tile_index(target.tile_pos)]
-	if target_is_neighbor:
+	if UIHelpers.tile_pos_distance(selected_unit.tile_pos, target.tile_pos) <= selected_unit.attack_range:
 		if selected_unit.ap >= selected_unit.ap_cost_of_attack:
 			if !imaginary:
 				selected_unit.ap -= selected_unit.ap_cost_of_attack

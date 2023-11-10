@@ -12,5 +12,5 @@ func _display_unit_stats(unit: Unit):
 	type_label.text = "TYPE %s" % [unit.type]
 	group_label.text = "GROUP %s" % [unit.group]
 	hp_label.text = "HP %s / %s" % [unit.hp, unit.hp_max]
-	attack_label.text = "ATTACK %s - %s" % [unit.attack, unit.attack + unit.attack_extra]
+	attack_label.text = "ATTACK %s - %s, RANGE %s" % [unit.attack, unit.attack + unit.attack_extra, unit.attack_range]
 	ap_label.text = "AP %s / %s" % [unit.ap, unit.ap_max]
