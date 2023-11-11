@@ -23,15 +23,8 @@ var selected_unit_type
 func _ready():
 	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)
 	
-	add_ability_button("Double", "scale", Gameplay.TargetTypes.TILE)
-	add_ability_button("Self-modify to Virus", "self_modify_to_virus", Gameplay.TargetTypes.SELF)
-	add_ability_button("Self-modify to Trojan", "self_modify_to_trojan", Gameplay.TargetTypes.SELF)
-	
-	add_ability_button("Repair", "repair", Gameplay.TargetTypes.UNIT)
-	add_ability_button("Reset", "reset", Gameplay.TargetTypes.TILE)
-	
-	add_ability_button("Capture a tower", "capture_tower", Gameplay.TargetTypes.UNIT)
-	add_ability_button("Open the backdoor", "backdoor", Gameplay.TargetTypes.TILE)
+	for ability_id in StaticData.ability_stats.keys():
+		add_ability_button(ability_id)
 	
 	in_select_target_mode = false
 
@@ -47,10 +40,13 @@ func update_abilities_buttons():
 			else:
 				button.visible = false
 
-func add_ability_button(button_text: String, ability_id: String, target_type: Gameplay.TargetTypes):
+func add_ability_button(ability_id: String):
 	var stats = StaticData.ability_stats[ability_id]
 	
 	var button = Button.new()
+	
+	var button_text = stats.name
+	var target_type = stats.target
 	
 	var cooldown_text = (", CD: " + str(stats.cooldown)) if stats.cooldown > 0 else ""
 	
@@ -164,7 +160,7 @@ func _unhandled_input(event):
 		#print("world pos: ", world_pos)
 		
 		var tile_pos = UIHelpers.world_pos_to_tile_pos(world_pos)
-		print("tile_pos: ", tile_pos)
+		#print("tile_pos: ", tile_pos)
 		
 		#var test_distance = UIHelpers.tile_pos_distance(Vector2i(5, 5), tile_pos)		
 		#print("distance: ", test_distance)

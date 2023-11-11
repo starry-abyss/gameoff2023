@@ -17,15 +17,15 @@ extends Node
 
 # sometimes abilities make AP drop right to zero, this table only shows the minimum AP cost
 @export var ability_stats = {
-	"scale": { "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 0 },
-	"self_modify_to_virus": { "target": Gameplay.TargetTypes.SELF, "ap": 1, "cooldown": 0 },
-	"self_modify_to_trojan": { "target": Gameplay.TargetTypes.SELF, "ap": 1, "cooldown": 0 },
+	"scale": { "name": "Double", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 0 },
+	"self_modify_to_virus": { "name": "Self-modify to Virus", "target": Gameplay.TargetTypes.SELF, "ap": 1, "cooldown": 0 },
+	"self_modify_to_trojan": { "name": "Self-modify to Trojan", "target": Gameplay.TargetTypes.SELF, "ap": 1, "cooldown": 0 },
 	
-	"repair": { "target": Gameplay.TargetTypes.UNIT, "ap": 1, "cooldown": 3 },
-	"reset": { "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 3 },
+	"repair": { "name": "Repair", "target": Gameplay.TargetTypes.UNIT, "ap": 1, "cooldown": 3 },
+	"reset": { "name": "Reset", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 3 },
 	
-	"capture_tower": { "target": Gameplay.TargetTypes.UNIT, "ap": 1, "cooldown": 0 },
-	"backdoor": { "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 0 },
+	"capture_tower": { "name": "Capture a node", "target": Gameplay.TargetTypes.UNIT, "ap": 1, "cooldown": 0 },
+	"backdoor": { "name": "Open a backdoor", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 0 },
 	}
 	
 @export var tile_size = Vector2(1.2, 1.2)
