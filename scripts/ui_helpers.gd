@@ -8,7 +8,7 @@ func screen_pos_to_world_pos(screen_pos: Vector2) -> Vector2:
 		return Vector2(-99999.0, -99999.0)
 	
 	var from = camera.project_ray_origin(screen_pos)
-	var to = from + camera.project_ray_normal(screen_pos) * 100
+	var to = from + camera.project_ray_normal(screen_pos) * 10000
 	var world_pos = Plane(Vector3.UP, 0.0).intersects_ray(from, to)
 	
 	if world_pos == null:
@@ -28,6 +28,24 @@ func world_pos_to_tile_pos(world_pos: Vector2) -> Vector2i:
 	
 	tile_pos.y = floori((world_pos.y - StaticData.map_origin.y) / StaticData.tile_size.y)
 	tile_pos.x = floori((world_pos.x - StaticData.map_origin.x - (StaticData.tile_size.x * 0.5 if tile_pos.y & 1 == 0 else 0.0)) / StaticData.tile_size.x)
+	
+	var tile_pos_first_try: Vector2i = tile_pos
+	
+	var min_distance = world_pos.distance_to(tile_pos_to_world_pos(tile_pos_first_try))
+	var tile_neighbors = UIHelpers.get_tile_neighbor_list(tile_pos_first_try)
+	
+	#print("=======")
+	#print("click world_pos: ", world_pos)
+	#print("distance 1st: ", min_distance, " tile_pos: ", tile_pos_first_try, " world_pos: ", tile_pos_to_world_pos(tile_pos_first_try))
+	for adj_tile_pos in tile_neighbors:
+		var adj_tile_pos_absolute = tile_pos_first_try + adj_tile_pos
+		var distance = world_pos.distance_to(tile_pos_to_world_pos(adj_tile_pos_absolute))
+		#print("distance: ", distance, " tile_pos: ", adj_tile_pos_absolute, " world_pos: ", tile_pos_to_world_pos(adj_tile_pos_absolute))
+		if distance < min_distance:
+			min_distance = distance
+			tile_pos = adj_tile_pos_absolute
+	
+	#print("result: ", tile_pos)
 	
 	return tile_pos
 

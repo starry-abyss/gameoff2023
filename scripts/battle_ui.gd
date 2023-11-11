@@ -129,6 +129,9 @@ func _on_battle_end(who_won: Gameplay.HackingGroups):
 	pass
 	
 func _on_unit_click(unit: Unit):
+	# for now we'll use tile click for this purpose
+	return
+	
 	if !in_select_target_mode:
 		unit_clicked.emit(unit)
 	elif order_parameters.target_type == Gameplay.TargetTypes.UNIT:
@@ -168,8 +171,11 @@ func _unhandled_input(event):
 		
 		if !in_select_target_mode:
 			tile_clicked.emit(tile_pos)
-		elif order_parameters.target_type == Gameplay.TargetTypes.TILE:
-			order_given.emit(order_parameters.ability_id, tile_pos)
+		else:
+			if order_parameters.target_type == Gameplay.TargetTypes.TILE:
+				order_given.emit(order_parameters.ability_id, tile_pos)
+			elif order_parameters.target_type == Gameplay.TargetTypes.UNIT:
+				order_given.emit(order_parameters.ability_id, tile_pos)
 		
 	elif event is InputEventMouseMotion:
 		#print("Mouse Motion at: ", event.position)

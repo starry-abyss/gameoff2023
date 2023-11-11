@@ -17,15 +17,15 @@ extends Node
 
 # sometimes abilities make AP drop right to zero, this table only shows the minimum AP cost
 @export var ability_stats = {
-	"scale": { "ap": 1, "cooldown": 0 },
-	"self_modify_to_virus": { "ap": 1, "cooldown": 0 },
-	"self_modify_to_trojan": { "ap": 1, "cooldown": 0 },
+	"scale": { "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 0 },
+	"self_modify_to_virus": { "target": Gameplay.TargetTypes.SELF, "ap": 1, "cooldown": 0 },
+	"self_modify_to_trojan": { "target": Gameplay.TargetTypes.SELF, "ap": 1, "cooldown": 0 },
 	
-	"repair": { "ap": 1, "cooldown": 3 },
-	"reset": { "ap": 1, "cooldown": 3 },
+	"repair": { "target": Gameplay.TargetTypes.UNIT, "ap": 1, "cooldown": 3 },
+	"reset": { "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 3 },
 	
-	"capture_tower": { "ap": 1, "cooldown": 0 },
-	"backdoor": { "ap": 1, "cooldown": 0 },
+	"capture_tower": { "target": Gameplay.TargetTypes.UNIT, "ap": 1, "cooldown": 0 },
+	"backdoor": { "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 0 },
 	}
 	
 @export var tile_size = Vector2(1.2, 1.2)

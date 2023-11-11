@@ -112,7 +112,7 @@ func add_tile(tile_pos: Vector2i):
 			battle_area.add_child(tile)
 			
 			var pos = UIHelpers.tile_pos_to_world_pos(tile_pos)
-			tile.transform.origin = Vector3(pos.x, 0.0, pos.y)
+			tile.global_transform.origin = Vector3(pos.x, 0.0, pos.y)
 			
 			tile.set_script(preload("res://scripts/tile.gd"))
 			tile._on_ready()
@@ -200,7 +200,7 @@ func click_tile(tile_pos: Vector2i):
 			battle_ui._on_order_processed(result, selected_unit)
 		else:
 			if unit_at_pos.group == current_turn_group:
-				#click_unit(unit_at_pos)
+				click_unit(unit_at_pos)
 				pass
 			else: # unit_at_pos.can_attack():
 				var result = order_attack(unit_at_pos)
@@ -216,6 +216,12 @@ func click_unit(unit_to_select: Unit):
 func give_order(ability_id: String, target):
 	var order_callable = Callable(self, "order_ability_" + ability_id)
 	var result = false
+	
+	if StaticData.ability_stats[ability_id].target == Gameplay.TargetTypes.UNIT && target is Vector2i:
+		target = find_unit_by_tile_pos(target)
+		if target == null:
+			battle_ui._on_order_processed(result, selected_unit)
+			return
 	
 	var stats = StaticData.ability_stats[ability_id]
 	if selected_unit.ap >= stats.ap && selected_unit.get_cooldown(ability_id) == 0:
