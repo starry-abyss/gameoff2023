@@ -163,7 +163,7 @@ func _unhandled_input(event):
 		#print("world pos: ", world_pos)
 		
 		var tile_pos = UIHelpers.world_pos_to_tile_pos(world_pos)
-		#print("tile_pos: ", tile_pos)
+		print("tile_pos: ", tile_pos)
 		
 		#var test_distance = UIHelpers.tile_pos_distance(Vector2i(5, 5), tile_pos)		
 		#print("distance: ", test_distance)

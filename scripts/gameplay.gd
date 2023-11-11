@@ -17,7 +17,7 @@ var who_controls_pink: ControllerType = ControllerType.PLAYER
 var units = []
 var selected_unit: Unit = null
 
-var map_size: Vector2i = Vector2i(10, 10)
+var map_size: Vector2i = Vector2i(20, 11)
 var tiles = []
 
 var distances = []
@@ -552,8 +552,9 @@ func flip_group(group: HackingGroups) -> HackingGroups:
 	else:
 		return HackingGroups.BLUE
 
-func end_turn():
-	select_unit(null)
+func end_turn(silent = false):
+	if !silent:
+		select_unit(null)
 	
 	current_turn_group = flip_group(current_turn_group)
 	
@@ -568,7 +569,8 @@ func end_turn():
 				for_all_tile_pos_around(unit.tile_pos, \
 					func(tile_pos): spawn_unit(tile_pos, UnitTypes.WORM, unit.group))
 	
-	battle_ui._on_playing_group_changed(current_turn_group, is_ai_turn())
+	if !silent:
+		battle_ui._on_playing_group_changed(current_turn_group, is_ai_turn())
 
 func get_tile(tile_pos: Vector2i) -> Tile:
 	if is_tile_pos_out_of_bounds(tile_pos):
@@ -606,26 +608,46 @@ func _ready():
 		for y in range(map_size.y):
 			add_tile(Vector2i(x, y))
 	
-	remove_tile(Vector2i(5, 6))
+	remove_tile(Vector2i(19, 0))
+	remove_tile(Vector2i(19, 2))
+	remove_tile(Vector2i(19, 4))
+	remove_tile(Vector2i(19, 6))
+	remove_tile(Vector2i(19, 8))
+	remove_tile(Vector2i(19, 10))
 	
-	spawn_unit(Vector2i(0, 1), UnitTypes.WORM, HackingGroups.BLUE)
-	spawn_unit(Vector2i(0, 2), UnitTypes.TROJAN, HackingGroups.BLUE)
-	spawn_unit(Vector2i(0, 3), UnitTypes.VIRUS, HackingGroups.PINK)
+	#spawn_unit(Vector2i(0, 1), UnitTypes.WORM, HackingGroups.BLUE)
+	#spawn_unit(Vector2i(0, 2), UnitTypes.TROJAN, HackingGroups.BLUE)
+	#spawn_unit(Vector2i(0, 3), UnitTypes.VIRUS, HackingGroups.PINK)
 	
-	spawn_unit(Vector2i(6, 3), UnitTypes.TROJAN, HackingGroups.PINK)
+	#spawn_unit(Vector2i(6, 3), UnitTypes.TROJAN, HackingGroups.PINK)
 	
 	spawn_unit(Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(3, 2), UnitTypes.TOWER_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(2, 5), UnitTypes.TOWER_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(3, 8), UnitTypes.TOWER_NODE, HackingGroups.NEUTRAL)
-	spawn_unit(Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.NEUTRAL)
-	spawn_unit(Vector2i(8, 5), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	spawn_unit(Vector2i(3, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(Vector2i(8, 5), UnitTypes.TOWER_NODE, HackingGroups.PINK)
 	
 	for_all_tile_pos_around(Vector2i(5, 5), func(tile1): \
 		for_all_tile_pos_around(tile1, func(tile2): \
 			for_all_tile_pos_around(tile2, func(tile3): \
 				get_tile(tile3).group = HackingGroups.PINK)))
+	
+	var blue_offset = Vector2i(9, 0)
+	
+	spawn_unit(blue_offset + Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.BLUE)
+	spawn_unit(blue_offset + Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	spawn_unit(blue_offset + Vector2i(3, 2), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	spawn_unit(blue_offset + Vector2i(2, 5), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	spawn_unit(blue_offset + Vector2i(3, 8), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	spawn_unit(blue_offset + Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	spawn_unit(blue_offset + Vector2i(8, 5), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	
+	for_all_tile_pos_around(blue_offset + Vector2i(5, 5), func(tile1): \
+		for_all_tile_pos_around(tile1, func(tile2): \
+			for_all_tile_pos_around(tile2, func(tile3): \
+				get_tile(tile3).group = HackingGroups.BLUE)))
 	
 	#remove_unit(find_unit_by_tile_pos(Vector2i(6, 2)))
 	
@@ -636,7 +658,7 @@ func _ready():
 	
 	# contains some init code that otherwise will be called only starting the next turn
 	# for first group to init
-	end_turn()
+	end_turn(true)
 	# for second group to init
 	end_turn()
 	pass

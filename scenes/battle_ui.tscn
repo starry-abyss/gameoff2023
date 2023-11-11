@@ -9,10 +9,11 @@ script = ExtResource("1_wpfyh")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="SelectedUnitStats" parent="CanvasLayer" instance=ExtResource("2_y7wbv")]
+visible = false
 offset_left = 30.0
 offset_top = 125.0
-offset_right = 330.0
-offset_bottom = 525.0
+offset_right = 251.0
+offset_bottom = 344.0
 
 [node name="select_idle_unit" type="Button" parent="CanvasLayer"]
 offset_right = 8.0

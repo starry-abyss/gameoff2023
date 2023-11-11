@@ -26,6 +26,8 @@ func _on_ready():
 	material = StandardMaterial3D.new()
 	mesh_instance.material_override = material
 	
+	group = Gameplay.HackingGroups.NEUTRAL
+	
 	#debug_distance.text = "123"
 	pass
 
