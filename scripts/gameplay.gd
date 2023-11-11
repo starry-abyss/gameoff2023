@@ -414,6 +414,7 @@ func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> boo
 			
 			if unit_from != null && !unit_from.is_static() \
 				&& unit_from.group == selected_unit.group \
+				&& unit_from != selected_unit \
 				&& is_tile_walkable(tile_pos_to):
 					teleport_unit(unit_from, tile_pos_to)
 					unit_from.update_model_pos()
