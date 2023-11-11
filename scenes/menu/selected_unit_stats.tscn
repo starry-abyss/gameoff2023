@@ -28,16 +28,17 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="Title" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Unit Stats"
 horizontal_alignment = 1
 
-[node name="Type" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Group" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "hp placeholder"
 
-[node name="Group" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Type" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "hp placeholder"
 

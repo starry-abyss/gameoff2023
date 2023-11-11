@@ -11,7 +11,7 @@
 [node name="Test1" type="Node3D"]
 script = ExtResource("1_nrikt")
 
-[node name="plane" type="MeshInstance3D" parent="."]
+[node name="camera_bounds" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("PlaneMesh_uuila")
 
@@ -22,7 +22,7 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.866025, -0.353553, 0.353553, 2.4663e-16, 0.707107, 0.707107, -0.5, -0.612373, 0.612373, 5.5143, 4.029, 10.8541)
+transform = Transform3D(1, -5.95417e-16, 2.4663e-16, 2.4663e-16, 0.707107, 0.707107, -5.95416e-16, -0.707107, 0.707107, 5.5143, 4.029, 10.8541)
 projection = 1
 current = true
 size = 10.0

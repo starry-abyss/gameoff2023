@@ -196,13 +196,15 @@ func click_tile(tile_pos: Vector2i):
 	if !is_tile_pos_out_of_bounds(tile_pos):
 		var unit_at_pos: Unit = find_unit_by_tile_pos(tile_pos)
 		if unit_at_pos == null:
-			order_move(tile_pos)
+			var result = order_move(tile_pos)
+			battle_ui._on_order_processed(result, selected_unit)
 		else:
 			if unit_at_pos.group == current_turn_group:
 				#click_unit(unit_at_pos)
 				pass
 			else: # unit_at_pos.can_attack():
-				order_attack(unit_at_pos)
+				var result = order_attack(unit_at_pos)
+				battle_ui._on_order_processed(result, selected_unit)
 
 func click_unit(unit_to_select: Unit):
 	if unit_to_select.group == current_turn_group && !is_ai_turn():
@@ -228,7 +230,7 @@ func give_order(ability_id: String, target):
 				selected_unit.ap = max(0, selected_unit.ap - stats.ap)
 				selected_unit.cooldowns[ability_id] = stats.cooldown
 	
-	battle_ui._on_order_processed(result)
+	battle_ui._on_order_processed(result, selected_unit)
 
 func select_unit(unit_to_select: Unit, no_ui = false):
 	for unit in units:

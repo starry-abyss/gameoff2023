@@ -146,10 +146,11 @@ func _on_ability_button_clicked(ability_id: String, target_type: Gameplay.Target
 func _on_cancel_select_target_button_clicked():
 	in_select_target_mode = false
 
-func _on_order_processed(success: bool):
+func _on_order_processed(success: bool, selected_unit: Unit):
 	if success:
 		in_select_target_mode = false
 	
+	_on_unit_selection_changed(selected_unit)
 	update_abilities_buttons()
 
 func _unhandled_input(event):
