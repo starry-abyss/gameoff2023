@@ -14,11 +14,9 @@ var in_select_target_mode = false:
 	set(new_value):
 		in_select_target_mode = new_value
 		
-		update_abilities_buttons()
+		update_abilities_buttons_general_visibility()
 		
 var order_parameters = {}
-var selected_unit_type
-#var selected_unit_cooldowns
 
 func _ready():
 	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)
@@ -28,15 +26,22 @@ func _ready():
 	
 	in_select_target_mode = false
 
-func update_abilities_buttons():
+func update_abilities_buttons_general_visibility():
 	$CanvasLayer/cancel_select_target.visible = in_select_target_mode && selected_unit_indicator.visible
 	%ability_buttons.visible = !in_select_target_mode && selected_unit_indicator.visible
+
+func update_abilities_buttons(selected_unit: Unit):
+	update_abilities_buttons_general_visibility()
 	
-	if %ability_buttons.visible:
-		var stats = StaticData.unit_stats[selected_unit_type]
+	if selected_unit != null:
+		var stats = StaticData.unit_stats[selected_unit.type]
 		for button in %ability_buttons.get_children():
+			var ability_id = button.name
+			var ability_stats = StaticData.ability_stats[ability_id]
 			if stats.has("abilities"):
-				button.visible = stats.abilities.has(button.name)
+				button.visible = stats.abilities.has(ability_id)
+				button.disabled = selected_unit.ap < ability_stats.ap \
+					|| selected_unit.get_cooldown(ability_id) > 0
 			else:
 				button.visible = false
 
@@ -91,10 +96,8 @@ func _on_unit_selection_changed(unit: Unit):
 		selected_unit_indicator.position = unit.position + Vector3(0, 1.5, 0) 
 		selected_unit_indicator.visible = true
 		selected_unit_stats._display_unit_stats(unit)
-		
-		selected_unit_type = unit.type
 	
-	update_abilities_buttons()
+	update_abilities_buttons(unit)
 
 func _on_unit_destroy(unit: Unit):
 	pass
@@ -150,7 +153,7 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 		in_select_target_mode = false
 	
 	_on_unit_selection_changed(selected_unit)
-	update_abilities_buttons()
+	#update_abilities_buttons(selected_unit)
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton && event.pressed:
