@@ -6,6 +6,11 @@ extends Node3D
 @onready var end_turn = $CanvasLayer/end_turn
 @onready var draw_3d = $Draw3d
 
+@onready var movement_path: Path3D = $Path3D
+@onready var movement_path_follow: PathFollow3D = $Path3D/PathFollow3D
+@onready var movement_path_timer: Timer = $Path3D/Timer
+@onready var movement_path_follow_node: Node3D = $Path3D/PathFollow3D/Node3D
+
 signal tile_clicked
 signal tile_hovered
 signal unit_clicked
@@ -13,6 +18,13 @@ signal order_given
 
 signal animation_finished
 
+var is_selected_unit_moving = false:
+	set(new_value):
+		is_selected_unit_moving = new_value
+		
+		change_actions_disabled(is_selected_unit_moving)
+		update_abilities_buttons_general_visibility()
+	
 var in_select_target_mode = false:
 	set(new_value):
 		in_select_target_mode = new_value
@@ -21,6 +33,8 @@ var in_select_target_mode = false:
 		
 var order_parameters = {}
 var selected_unit: Unit
+var selected_unit_start_pos: Vector3
+
 
 func _ready():
 	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)
@@ -29,7 +43,9 @@ func _ready():
 		add_ability_button(ability_id)
 	
 	in_select_target_mode = false
-
+	
+	movement_path_timer.timeout.connect(_on_timer_timeout)
+	movement_path_timer.wait_time = StaticData.turn_animation_duration
 
 func change_actions_disabled(disable: bool):
 	select_idle_unit.disabled = disable
@@ -37,8 +53,8 @@ func change_actions_disabled(disable: bool):
 	
 
 func update_abilities_buttons_general_visibility():
-	$CanvasLayer/cancel_select_target.visible = in_select_target_mode && selected_unit_indicator.visible
-	%ability_buttons.visible = !in_select_target_mode && selected_unit_indicator.visible
+	$CanvasLayer/cancel_select_target.visible = !is_selected_unit_moving && in_select_target_mode && selected_unit_indicator.visible
+	%ability_buttons.visible = !is_selected_unit_moving && !in_select_target_mode && selected_unit_indicator.visible
 
 func update_abilities_buttons(selected_unit: Unit):
 	update_abilities_buttons_general_visibility()
@@ -97,10 +113,21 @@ func _on_hide_path():
 func _on_unit_move(unit: Unit, path: Array):
 	#print("move ", path)
 	
+	selected_unit_start_pos = unit.position
+	var new_curve = Curve3D.new()
+	for point in path:
+		var pos = UIHelpers.tile_pos_to_world_pos(point)
+		var pos_offset = Vector3(pos.x, 0.0, pos.y) - unit.position
+		new_curve.add_point(pos_offset)
+	movement_path.curve = new_curve
+	movement_path_timer.start()
+	
+	is_selected_unit_moving = true
+	
 	# TODO: not needed when the function is implemented
 	# immediately moves the unit model to the final tile
 	# (to unit.tile_pos, gameplay-wise the actual unit is already there)
-	unit.update_model_pos()
+	#unit.update_model_pos()
 	pass
 
 func _on_unit_selection_changed(unit: Unit):
@@ -149,10 +176,11 @@ func _on_unit_click(unit: Unit):
 	# for now we'll use tile click for this purpose
 	return
 	
-	if !in_select_target_mode:
-		unit_clicked.emit(unit)
-	elif order_parameters.target_type == Gameplay.TargetTypes.UNIT:
-		order_given.emit(order_parameters.ability_id, unit)
+	if !is_selected_unit_moving:
+		if !in_select_target_mode:
+			unit_clicked.emit(unit)
+		elif order_parameters.target_type == Gameplay.TargetTypes.UNIT:
+			order_given.emit(order_parameters.ability_id, unit)
 
 func _on_ability_button_clicked(ability_id: String, target_type: Gameplay.TargetTypes):
 	if target_type == Gameplay.TargetTypes.SELF:
@@ -186,13 +214,14 @@ func _unhandled_input(event):
 		#var test_distance = UIHelpers.tile_pos_distance(Vector2i(5, 5), tile_pos)		
 		#print("distance: ", test_distance)
 		
-		if !in_select_target_mode:
-			tile_clicked.emit(tile_pos)
-		else:
-			if order_parameters.target_type == Gameplay.TargetTypes.TILE:
-				order_given.emit(order_parameters.ability_id, tile_pos)
-			elif order_parameters.target_type == Gameplay.TargetTypes.UNIT:
-				order_given.emit(order_parameters.ability_id, tile_pos)
+		if !is_selected_unit_moving:
+			if !in_select_target_mode:
+				tile_clicked.emit(tile_pos)
+			else:
+				if order_parameters.target_type == Gameplay.TargetTypes.TILE:
+					order_given.emit(order_parameters.ability_id, tile_pos)
+				elif order_parameters.target_type == Gameplay.TargetTypes.UNIT:
+					order_given.emit(order_parameters.ability_id, tile_pos)
 		
 	elif event is InputEventMouseMotion:
 		#print("Mouse Motion at: ", event.position)
@@ -202,7 +231,7 @@ func _unhandled_input(event):
 		
 		var tile_pos = UIHelpers.world_pos_to_tile_pos(world_pos)
 		
-		if !in_select_target_mode:
+		if !in_select_target_mode and !is_selected_unit_moving:
 			tile_hovered.emit(tile_pos)
 		
 		
@@ -210,4 +239,10 @@ func _process(delta):
 	if selected_unit != null:
 		selected_unit_indicator.position = selected_unit.position + Vector3(0, 1.5, 0)
 	
+	if !movement_path_timer.is_stopped():
+		movement_path_follow.progress_ratio = (movement_path_timer.wait_time - movement_path_timer.time_left) / movement_path_timer.wait_time
+		selected_unit.position = selected_unit_start_pos + movement_path_follow_node.global_position
+	pass
 	
+func _on_timer_timeout():
+	is_selected_unit_moving = false

@@ -86,15 +86,3 @@ visible = false
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_mk85x")
-
-[node name="Path3D" type="Path3D" parent="."]
-
-[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
-transform = Transform3D(-4.37114e-08, -2.08165e-13, -1, 0, 1, -2.08165e-13, 1, -9.09917e-21, -4.37114e-08, 0, 0, 0)
-
-[node name="Node3D" type="Node3D" parent="Path3D/PathFollow3D"]
-
-[node name="Timer" type="Timer" parent="Path3D"]
-one_shot = true
-
-[connection signal="timeout" from="Path3D/Timer" to="." method="_on_timer_timeout"]

@@ -3,10 +3,6 @@ extends Node3D
 
 @onready var battle_area = %battle_area
 @onready var battle_ui = %battle_ui
-@onready var movement_path: Path3D = $Path3D
-@onready var movement_path_follow: PathFollow3D = $Path3D/PathFollow3D
-@onready var movement_path_timer: Timer = $Path3D/Timer
-@onready var movement_path_follow_node: Node3D = $Path3D/PathFollow3D/Node3D
 
 enum UnitTypes { CENTRAL_NODE, TOWER_NODE, WORM, TROJAN, VIRUS }
 enum TargetTypes { UNIT, TILE, SELF }
@@ -21,8 +17,6 @@ var who_controls_pink: ControllerType = ControllerType.PLAYER
 var units = []
 var firewalls = {}
 var selected_unit: Unit = null
-var selected_unit_start_pos: Vector3
-var is_selected_unit_moving = false
 
 var map_size: Vector2i = Vector2i(20, 11)
 var tiles = []
@@ -258,13 +252,12 @@ func find_unit_by_tile_pos(tile_pos: Vector2i):
 	return null
 
 func hover_tile(tile_pos: Vector2i):
-	if !is_tile_pos_out_of_bounds(tile_pos) and !is_selected_unit_moving:
+	if !is_tile_pos_out_of_bounds(tile_pos):
 		# TODO: make order_move support reporting not enough AP reason
 		if order_move(tile_pos, true):
 			var path = get_path_to_tile_pos(tile_pos)
 			battle_ui._on_show_path(selected_unit, path)
 		else:
-			print('hide')
 			battle_ui._on_hide_path()
 	else:
 		battle_ui._on_hide_path()
@@ -286,8 +279,6 @@ func click_tile(tile_pos: Vector2i):
 				battle_ui._on_order_processed(result, selected_unit)
 
 func click_unit(unit_to_select: Unit):
-	if is_selected_unit_moving:
-		return
 	if unit_to_select.group == current_turn_group && !is_ai_turn():
 		if selected_unit == unit_to_select:
 			select_unit(null)
@@ -586,18 +577,7 @@ func order_move(new_tile_pos: Vector2i, imaginary = false) -> bool:
 				# the order is important here!
 				var path = get_path_to_tile_pos(new_tile_pos)
 				teleport_unit(selected_unit, new_tile_pos)
-				
-				selected_unit_start_pos = selected_unit.position
-				var new_curve = Curve3D.new()
-				for point in path:
-					var pos = UIHelpers.tile_pos_to_world_pos(point)
-					var pos_offset = Vector3(pos.x, 0.0, pos.y) - selected_unit.position
-					new_curve.add_point(pos_offset)
-				movement_path.curve = new_curve
-				movement_path_timer.start()
 				battle_ui._on_unit_move(selected_unit, path)
-				is_selected_unit_moving = true
-				disable_actions(true)
 				battle_ui._on_hide_path()
 			
 			return true
@@ -695,9 +675,6 @@ func for_all_tile_pos_around(tile_pos: Vector2i, f: Callable):
 		if tile != null:
 			f.call(adj_tile_pos_absolute)
 
-func disable_actions(disable: bool):
-	battle_ui.change_actions_disabled(disable)
-
 func _ready():
 	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", end_turn)
 	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", select_next_unit)
@@ -767,22 +744,4 @@ func _ready():
 	end_turn(true)
 	# for second group to init
 	end_turn()
-	
-	movement_path_timer.wait_time = StaticData.turn_animation_duration
 	pass
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	if !movement_path_timer.is_stopped():
-		movement_path_follow.progress_ratio = (movement_path_timer.wait_time - movement_path_timer.time_left) / movement_path_timer.wait_time
-		selected_unit.position = selected_unit_start_pos + movement_path_follow_node.global_position
-	pass
-
-#func _input(event):
-#	if event is InputEventMouseButton:
-#		print("testete Mouse Click/Unclick at: ", event.position)
-
-
-func _on_timer_timeout():
-	disable_actions(false)
-	is_selected_unit_moving = false
