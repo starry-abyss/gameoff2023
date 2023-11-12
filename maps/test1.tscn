@@ -13,6 +13,9 @@ script/source = "extends Camera3D
 
 
 const CAMERA_SCROLL_SPEED = 5
+const CAMERA_SIZE_MIN = 10
+const CAMERA_SIZE_MAX = 30
+const CAMERA_SIZE_ZOOM_STEP = 2
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -27,6 +30,11 @@ func _process(delta):
 		movement.z += CAMERA_SCROLL_SPEED * delta
 	if Input.is_action_pressed(\"Scroll Left\"):
 		movement.x -= CAMERA_SCROLL_SPEED * delta
+		
+	if Input.is_action_just_pressed(\"Zoom In\"):
+		size = clamp(size - CAMERA_SIZE_ZOOM_STEP, CAMERA_SIZE_MIN, CAMERA_SIZE_MAX)
+	if Input.is_action_just_pressed(\"Zoom Out\"):
+		size = clamp(size + CAMERA_SIZE_ZOOM_STEP, CAMERA_SIZE_MIN, CAMERA_SIZE_MAX)
 		
 	position += movement
 "
