@@ -18,11 +18,11 @@ signal order_given
 
 signal animation_finished
 
-var is_selected_unit_moving = false:
+var in_unit_animation_mode = false:
 	set(new_value):
-		is_selected_unit_moving = new_value
+		in_unit_animation_mode = new_value
 		
-		change_actions_disabled(is_selected_unit_moving)
+		change_actions_disabled(in_unit_animation_mode)
 		update_abilities_buttons_general_visibility()
 	
 var in_select_target_mode = false:
@@ -53,8 +53,8 @@ func change_actions_disabled(disable: bool):
 	
 
 func update_abilities_buttons_general_visibility():
-	$CanvasLayer/cancel_select_target.visible = !is_selected_unit_moving && in_select_target_mode && selected_unit_indicator.visible
-	%ability_buttons.visible = !is_selected_unit_moving && !in_select_target_mode && selected_unit_indicator.visible
+	$CanvasLayer/cancel_select_target.visible = !in_unit_animation_mode && in_select_target_mode && selected_unit_indicator.visible
+	%ability_buttons.visible = !in_unit_animation_mode && !in_select_target_mode && selected_unit_indicator.visible
 
 func update_abilities_buttons(selected_unit: Unit):
 	update_abilities_buttons_general_visibility()
@@ -122,7 +122,7 @@ func _on_unit_move(unit: Unit, path: Array):
 	movement_path.curve = new_curve
 	movement_path_timer.start()
 	
-	is_selected_unit_moving = true
+	in_unit_animation_mode = true
 	
 	# TODO: not needed when the function is implemented
 	# immediately moves the unit model to the final tile
@@ -176,7 +176,7 @@ func _on_unit_click(unit: Unit):
 	# for now we'll use tile click for this purpose
 	return
 	
-	if !is_selected_unit_moving:
+	if !in_unit_animation_mode:
 		if !in_select_target_mode:
 			unit_clicked.emit(unit)
 		elif order_parameters.target_type == Gameplay.TargetTypes.UNIT:
@@ -214,7 +214,7 @@ func _unhandled_input(event):
 		#var test_distance = UIHelpers.tile_pos_distance(Vector2i(5, 5), tile_pos)		
 		#print("distance: ", test_distance)
 		
-		if !is_selected_unit_moving:
+		if !in_unit_animation_mode:
 			if !in_select_target_mode:
 				tile_clicked.emit(tile_pos)
 			else:
@@ -231,7 +231,7 @@ func _unhandled_input(event):
 		
 		var tile_pos = UIHelpers.world_pos_to_tile_pos(world_pos)
 		
-		if !in_select_target_mode and !is_selected_unit_moving:
+		if !in_select_target_mode and !in_unit_animation_mode:
 			tile_hovered.emit(tile_pos)
 		
 		
@@ -245,4 +245,4 @@ func _process(delta):
 	pass
 	
 func _on_timer_timeout():
-	is_selected_unit_moving = false
+	in_unit_animation_mode = false
