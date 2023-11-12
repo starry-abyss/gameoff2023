@@ -63,6 +63,7 @@ const Tile_neighbors_even_row = [ Vector2i(-1, 0), Vector2i(0, -1), Vector2i(1, 
 const Tile_neighbors_odd_row = [ Vector2i(-1, 0), Vector2i(-1, -1), Vector2i(0, -1), \
 	Vector2i(1, 0), Vector2i(-1, 1), Vector2i(0, 1) ]
 
+# coordinates relative to tile_pos
 func get_tile_neighbor_list(tile_pos: Vector2i):
 	return Tile_neighbors_even_row if tile_pos.y & 1 == 0 else Tile_neighbors_odd_row
 

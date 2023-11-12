@@ -5,5 +5,6 @@
 
 [node name="unit" type="Node3D"]
 script = ExtResource("1_s7oy4")
+type = 2
 
 [node name="ClickableComponent" parent="." instance=ExtResource("2_i2p8p")]

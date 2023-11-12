@@ -15,16 +15,19 @@ var who_controls_blue: ControllerType = ControllerType.PLAYER
 var who_controls_pink: ControllerType = ControllerType.PLAYER
 
 var units = []
+var firewalls = {}
 var selected_unit: Unit = null
 
 var map_size: Vector2i = Vector2i(20, 11)
 var tiles = []
 
 var distances = []
+
 var cached_path = []
 var destination_for_cached_path = Vector2i(-1, -1)
 
 const NotCalculated = -1
+const Unreachable = -2 # for blocking attacks through firewalls
 
 func calculate_distances():
 	# invalidate the path cache
@@ -64,6 +67,75 @@ func calculate_distances():
 			if tiles[i] != null:
 				tiles[i]._on_show_debug_distance(distances[i])
 	pass
+
+func tower_pos_to_firewall_index(tile_pos1: Vector2i, tile_pos2: Vector2i) -> int:
+	var index1 = tile_pos_to_tile_index(tile_pos1)
+	var index2 = tile_pos_to_tile_index(tile_pos2)
+	
+	const multiplier = 256 * 256
+	if index1 > index2:
+		return index2 * multiplier + index1
+	else:
+		return index1 * multiplier + index2
+
+func init_firewall(index: int):
+	var firewall = preload("res://art/firewall.tscn").instantiate()
+	firewalls[index] = firewall
+	
+	var material = StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	
+	var mesh_instances = find_children("", "MeshInstance3D")
+	for mi in mesh_instances:
+		mi.material_override = material
+	
+	battle_area.add_child(firewall)
+	
+	# TODO: position, rotate and scale properly
+
+func firewall_set_tint(index: int):
+	# TODO: set tint
+	pass
+
+func update_firewalls(init = false):
+	var towers_already_updated = []
+	for unit in units:
+		if unit.type == UnitTypes.TOWER_NODE:
+			var neighbor_towers = get_neighbor_towers(unit)
+			for nt in neighbor_towers:
+				if !towers_already_updated.has(nt):
+					var firewall_index = tower_pos_to_firewall_index(unit.tile_pos, nt.tile_pos)
+					if init:
+						init_firewall(firewall_index)
+					else:
+						if unit.group == nt.group:
+							firewalls[firewall_index].visible = true
+							
+							firewall_set_tint(firewall_index)
+						else:
+							firewalls[firewall_index].visible = false
+			
+			towers_already_updated.append(unit)
+
+func get_neighbor_towers(starting_unit: Unit):
+	var towers = []
+	
+	var tile_neighbors = UIHelpers.get_tile_neighbor_list(starting_unit.tile_pos)
+	for direction in tile_neighbors:
+		var tile_pos = starting_unit.tile_pos
+		while true:
+			tile_pos += direction
+			if is_tile_pos_out_of_bounds(tile_pos):
+				break
+			
+			var unit_found = find_unit_by_tile_pos(tile_pos)
+			if unit_found != null && unit_found.is_static():
+				if unit_found.type == UnitTypes.TOWER_NODE:
+					towers.append(unit_found)
+				
+				break
+	
+	return towers
 
 func is_tile_walkable(tile_pos: Vector2i):
 	# there is no tile even
@@ -469,6 +541,12 @@ func order_attack(target: Unit, imaginary = false) -> bool:
 	if target.hp == 0:
 		return false
 	
+	# to block attack through firewalls, but it only works with range 1 attacks
+	# TODO: for range 2+ attacks need to cast rays as an extra step
+	var distance = distances[tile_pos_to_tile_index(target.tile_pos)]
+	if distance == Unreachable:
+		return false
+	
 	if UIHelpers.tile_pos_distance(selected_unit.tile_pos, target.tile_pos) <= selected_unit.attack_range:
 		if selected_unit.ap >= selected_unit.ap_cost_of_attack:
 			if !imaginary:
@@ -569,6 +647,8 @@ func end_turn(silent = false):
 				for_all_tile_pos_around(unit.tile_pos, \
 					func(tile_pos): spawn_unit(tile_pos, UnitTypes.WORM, unit.group))
 	
+	update_firewalls()
+	
 	if !silent:
 		battle_ui._on_playing_group_changed(current_turn_group, is_ai_turn())
 
@@ -655,6 +735,8 @@ func _ready():
 	#UIHelpers.for_all_tiles_in_radius(Vector2i(5, 5), 3, func(tile): tile.group = HackingGroups.PINK)
 	
 	#UIHelpers.for_all_tile_pos_in_radius
+	
+	update_firewalls(true)
 	
 	# contains some init code that otherwise will be called only starting the next turn
 	# for first group to init
