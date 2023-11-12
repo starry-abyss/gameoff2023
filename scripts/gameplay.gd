@@ -240,6 +240,8 @@ func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups, imagi
 		
 		unit.on_click.connect(battle_ui._on_unit_click)
 		
+		battle_ui._on_unit_spawn(unit)
+		
 		#unit.hp = 1
 	
 	return true

@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://cjcf8204sou6"]
 
-[ext_resource type="PackedScene" uid="uid://cersqle8rtsjd" path="res://art/models/animals/cobra.blend" id="1_57bei"]
+[ext_resource type="PackedScene" uid="uid://cwwnfihstl01k" path="res://art/models/worm.blend" id="1_g1gdy"]
 
 [node name="worm" type="Node3D"]
 
-[node name="cobra" parent="." instance=ExtResource("1_57bei")]
-transform = Transform3D(0.1, -3.48787e-17, 3.48787e-17, 3.48787e-17, 0.1, -3.48787e-17, -3.48787e-17, 3.48787e-17, 0.1, 0.175192, 0, 0.667915)
+[node name="worm-09922db77abfdf07e106cd1c2caf928d" parent="." instance=ExtResource("1_g1gdy")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.0470459, 0.177044, 0)

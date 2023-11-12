@@ -75,12 +75,13 @@ func load_model(model_scene_name: String):
 	
 	#model.set_meta("_edit_lock_", true)
 	
-	var mesh_instances = model.find_children("", "MeshInstance3D")
-	var mesh_instance: MeshInstance3D = mesh_instances[-1]
-	
 	material = ShaderMaterial.new()
 	material.shader = glowing_outline_shader
-	mesh_instance.material_override = material
+	
+	var mesh_instances = model.find_children("", "MeshInstance3D")
+	#var mesh_instance: MeshInstance3D = mesh_instances[-1]
+	for mi in mesh_instances:
+		mi.material_override = material
 	
 	#var lights = model.find_children("", "Light3D")
 	#for light in lights:

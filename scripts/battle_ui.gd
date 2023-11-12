@@ -144,7 +144,10 @@ func _on_unit_selection_changed(unit: Unit):
 
 func _on_unit_destroy(unit: Unit):
 	pass
-	
+
+func _on_unit_spawn(unit: Unit):
+	pass
+
 func _on_unit_hp_change(unit: Unit, delta_hp: int):
 	var label = preload("res://scenes/hp_change.tscn").instantiate()
 	add_child(label)
@@ -244,3 +247,4 @@ func _process(delta):
 	
 func _on_timer_timeout():
 	in_unit_animation_mode = false
+	animated_unit = null
