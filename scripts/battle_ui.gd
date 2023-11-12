@@ -80,7 +80,12 @@ func _on_show_path(unit: Unit, path: Array):
 	for index in range(len(path) - 1):
 		var pos_1 = UIHelpers.tile_pos_to_world_pos(path[index])
 		var pos_2 = UIHelpers.tile_pos_to_world_pos(path[index + 1])
-		draw_3d.draw_line(Vector3(pos_1.x, 0.1, pos_1.y), Vector3(pos_2.x, 0.1, pos_2.y))
+		var world_pos_1 = Vector3(pos_1.x, 0.05, pos_1.y)
+		var world_pos_2 = Vector3(pos_2.x, 0.05, pos_2.y)
+		if index == 0:
+			draw_3d.draw_point(world_pos_1)
+		draw_3d.draw_point(world_pos_2)
+		draw_3d.draw_line(world_pos_1, world_pos_2, Color.GREEN)
 
 # doesn't work and not needed at the moment
 func _on_show_path_not_enough_ap(unit: Unit, path: Array):
