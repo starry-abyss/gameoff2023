@@ -2,6 +2,9 @@ extends Node3D
 
 @onready var selected_unit_stats = $CanvasLayer/SelectedUnitStats
 @onready var selected_unit_indicator = $SelectedUnitIndicator
+@onready var select_idle_unit = $CanvasLayer/select_idle_unit
+@onready var end_turn = $CanvasLayer/end_turn
+@onready var draw_3d = $Draw3d
 
 signal tile_clicked
 signal tile_hovered
@@ -17,6 +20,7 @@ var in_select_target_mode = false:
 		update_abilities_buttons_general_visibility()
 		
 var order_parameters = {}
+var selected_unit: Unit
 
 func _ready():
 	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)
@@ -25,6 +29,12 @@ func _ready():
 		add_ability_button(ability_id)
 	
 	in_select_target_mode = false
+
+
+func change_actions_disabled(disable: bool):
+	select_idle_unit.disabled = disable
+	end_turn.disabled = disable
+	
 
 func update_abilities_buttons_general_visibility():
 	$CanvasLayer/cancel_select_target.visible = in_select_target_mode && selected_unit_indicator.visible
@@ -66,15 +76,18 @@ func add_ability_button(ability_id: String):
 	button.pressed.connect(_on_ability_button_clicked.bind(ability_id, target_type))
 
 func _on_show_path(unit: Unit, path: Array):
-	#print("show ", path)
-	pass
+	draw_3d.clear_all()
+	for index in range(len(path) - 1):
+		var pos_1 = UIHelpers.tile_pos_to_world_pos(path[index])
+		var pos_2 = UIHelpers.tile_pos_to_world_pos(path[index + 1])
+		draw_3d.draw_line(Vector3(pos_1.x, 0.1, pos_1.y), Vector3(pos_2.x, 0.1, pos_2.y))
 
 # doesn't work and not needed at the moment
 func _on_show_path_not_enough_ap(unit: Unit, path: Array):
 	pass
 
 func _on_hide_path():
-	pass
+	draw_3d.clear_all()
 	
 func _on_unit_move(unit: Unit, path: Array):
 	#print("move ", path)
@@ -86,14 +99,14 @@ func _on_unit_move(unit: Unit, path: Array):
 	pass
 
 func _on_unit_selection_changed(unit: Unit):
+	selected_unit = unit
 	if unit == null:
 		selected_unit_indicator.visible = false
 		selected_unit_stats.visible = false
 		
 		in_select_target_mode = false
 	else:
-		selected_unit_stats.visible = true
-		selected_unit_indicator.position = unit.position + Vector3(0, 1.5, 0) 
+		selected_unit_stats.visible = true 
 		selected_unit_indicator.visible = true
 		selected_unit_stats._display_unit_stats(unit)
 	
@@ -187,3 +200,9 @@ func _unhandled_input(event):
 		if !in_select_target_mode:
 			tile_hovered.emit(tile_pos)
 		
+		
+func _process(delta):
+	if selected_unit != null:
+		selected_unit_indicator.position = selected_unit.position + Vector3(0, 1.5, 0)
+	
+	
