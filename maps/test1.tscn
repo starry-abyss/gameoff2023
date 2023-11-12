@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cxaqvfti58xoq"]
+[gd_scene load_steps=9 format=3 uid="uid://cxaqvfti58xoq"]
 
 [ext_resource type="PackedScene" uid="uid://c7k4uu8silsa6" path="res://scenes/battle_area.tscn" id="1_mgdil"]
 [ext_resource type="Script" path="res://scripts/gameplay.gd" id="1_nrikt"]
@@ -7,6 +7,45 @@
 [ext_resource type="PackedScene" uid="uid://cvvm6puvfa4gf" path="res://art/firewall.tscn" id="5_ey2ky"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_uuila"]
+
+[sub_resource type="GDScript" id="GDScript_bx5im"]
+script/source = "extends Camera3D
+
+
+const CAMERA_SCROLL_SPEED = 5
+const CAMERA_SIZE_MIN = 10
+const CAMERA_SIZE_MAX = 30
+const CAMERA_SIZE_ZOOM_STEP = 2
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	var movement = Vector3.ZERO
+	
+	if Input.is_action_pressed(\"Scroll Up\"):
+		movement.z -= CAMERA_SCROLL_SPEED * delta
+	if Input.is_action_pressed(\"Scroll Right\"):
+		movement.x += CAMERA_SCROLL_SPEED * delta
+	if Input.is_action_pressed(\"Scroll Down\"):
+		movement.z += CAMERA_SCROLL_SPEED * delta
+	if Input.is_action_pressed(\"Scroll Left\"):
+		movement.x -= CAMERA_SCROLL_SPEED * delta
+		
+	if Input.is_action_just_pressed(\"Zoom In\"):
+		size = clamp(size - CAMERA_SIZE_ZOOM_STEP, CAMERA_SIZE_MIN, CAMERA_SIZE_MAX)
+	if Input.is_action_just_pressed(\"Zoom Out\"):
+		size = clamp(size + CAMERA_SIZE_ZOOM_STEP, CAMERA_SIZE_MIN, CAMERA_SIZE_MAX)
+		
+	position += movement
+"
+
+[sub_resource type="Environment" id="Environment_mk85x"]
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 2.0
+glow_strength = 1.5
+glow_bloom = 0.05
+glow_blend_mode = 1
 
 [node name="Test1" type="Node3D"]
 script = ExtResource("1_nrikt")
@@ -27,6 +66,7 @@ transform = Transform3D(1, -5.95417e-16, 2.4663e-16, 2.4663e-16, 0.707107, 0.707
 projection = 1
 current = true
 size = 20.0
+script = SubResource("GDScript_bx5im")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.76873, 0.165534, -0.61778, -6.24119e-09, 0.965926, 0.258819, 0.639573, -0.198962, 0.742536, 0, 0, 0)
@@ -43,3 +83,18 @@ font_size = 128
 [node name="Firewall" parent="." instance=ExtResource("5_ey2ky")]
 transform = Transform3D(4.03506, 0, 0, 0, 1, 0, 0, 0, 1, 3.36333, 0, 6.06799)
 visible = false
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_mk85x")
+
+[node name="Path3D" type="Path3D" parent="."]
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+transform = Transform3D(-4.37114e-08, -2.08165e-13, -1, 0, 1, -2.08165e-13, 1, -9.09917e-21, -4.37114e-08, 0, 0, 0)
+
+[node name="Node3D" type="Node3D" parent="Path3D/PathFollow3D"]
+
+[node name="Timer" type="Timer" parent="Path3D"]
+one_shot = true
+
+[connection signal="timeout" from="Path3D/Timer" to="." method="_on_timer_timeout"]
