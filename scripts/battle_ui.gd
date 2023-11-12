@@ -32,8 +32,8 @@ var in_select_target_mode = false:
 		update_abilities_buttons_general_visibility()
 		
 var order_parameters = {}
-var selected_unit: Unit
-var selected_unit_start_pos: Vector3
+var animated_unit: Unit
+var animated_unit_start_pos: Vector3
 
 
 func _ready():
@@ -50,7 +50,12 @@ func _ready():
 func change_actions_disabled(disable: bool):
 	select_idle_unit.disabled = disable
 	end_turn.disabled = disable
+
+func update_selection_indicator(unit: Unit):
+	selected_unit_indicator.visible = (unit != null)
 	
+	if unit != null:
+		selected_unit_indicator.position = unit.position + Vector3(0, 1.5, 0)
 
 func update_abilities_buttons_general_visibility():
 	$CanvasLayer/cancel_select_target.visible = !in_unit_animation_mode && in_select_target_mode && selected_unit_indicator.visible
@@ -113,7 +118,7 @@ func _on_hide_path():
 func _on_unit_move(unit: Unit, path: Array):
 	#print("move ", path)
 	
-	selected_unit_start_pos = unit.position
+	animated_unit_start_pos = unit.position
 	var new_curve = Curve3D.new()
 	for point in path:
 		var pos = UIHelpers.tile_pos_to_world_pos(point)
@@ -123,19 +128,18 @@ func _on_unit_move(unit: Unit, path: Array):
 	movement_path_timer.start()
 	
 	in_unit_animation_mode = true
+	animated_unit = unit
 
 func _on_unit_selection_changed(unit: Unit):
-	selected_unit = unit
 	if unit == null:
-		selected_unit_indicator.visible = false
 		selected_unit_stats.visible = false
 		
 		in_select_target_mode = false
 	else:
 		selected_unit_stats.visible = true 
-		selected_unit_indicator.visible = true
 		selected_unit_stats._display_unit_stats(unit)
 	
+	update_selection_indicator(unit)
 	update_abilities_buttons(unit)
 
 func _on_unit_destroy(unit: Unit):
@@ -230,12 +234,12 @@ func _unhandled_input(event):
 		
 		
 func _process(delta):
-	if selected_unit != null:
-		selected_unit_indicator.position = selected_unit.position + Vector3(0, 1.5, 0)
+	if animated_unit != null:
+		update_selection_indicator(animated_unit)
 	
 	if !movement_path_timer.is_stopped():
 		movement_path_follow.progress_ratio = (movement_path_timer.wait_time - movement_path_timer.time_left) / movement_path_timer.wait_time
-		selected_unit.position = selected_unit_start_pos + movement_path_follow_node.global_position
+		animated_unit.position = animated_unit_start_pos + movement_path_follow_node.global_position
 	pass
 	
 func _on_timer_timeout():
