@@ -12,6 +12,7 @@
 script = ExtResource("1_nrikt")
 
 [node name="camera_bounds" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.82016, 0, 0.658081)
 visible = false
 mesh = SubResource("PlaneMesh_uuila")
 
@@ -28,7 +29,8 @@ current = true
 size = 20.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866025, 0.12941, -0.482963, 0, 0.965926, 0.258819, 0.5, -0.224144, 0.836516, 0, 0, 0)
+transform = Transform3D(0.76873, 0.165534, -0.61778, -6.24119e-09, 0.965926, 0.258819, 0.639573, -0.198962, 0.742536, 0, 0, 0)
+sky_mode = 1
 
 [node name="Label3D" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.68768, 2.08165e-12, 2.43311)

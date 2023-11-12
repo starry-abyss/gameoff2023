@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqeemyrkr6c6e"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m5dby"]
+shading_mode = 0
+
+[sub_resource type="PrismMesh" id="PrismMesh_hj722"]
+material = SubResource("StandardMaterial3D_m5dby")
+
+[node name="3dTest" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PrismMesh_hj722")

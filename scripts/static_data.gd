@@ -1,8 +1,8 @@
 extends Node
 
-@export var color_pink: Color = Color.DEEP_PINK
-@export var color_blue: Color = Color.DARK_BLUE
-@export var color_neutral: Color = Color.DARK_GRAY
+@export var color_pink: Color = Color("#ff1493")
+@export var color_blue: Color = Color("#0051ff")
+@export var color_neutral: Color = Color("#606060")
 
 @export var turn_animation_duration: float = 2.0
 

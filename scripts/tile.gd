@@ -26,6 +26,8 @@ func _on_ready():
 	material = StandardMaterial3D.new()
 	mesh_instance.material_override = material
 	
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	
 	group = Gameplay.HackingGroups.NEUTRAL
 	
 	#debug_distance.text = "123"
@@ -33,6 +35,7 @@ func _on_ready():
 
 func set_tint(color: Color):
 	if material != null:
+		color.v *= 0.35
 		material.albedo_color = color
 	pass
 
