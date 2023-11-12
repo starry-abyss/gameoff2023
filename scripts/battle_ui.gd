@@ -123,12 +123,6 @@ func _on_unit_move(unit: Unit, path: Array):
 	movement_path_timer.start()
 	
 	in_unit_animation_mode = true
-	
-	# TODO: not needed when the function is implemented
-	# immediately moves the unit model to the final tile
-	# (to unit.tile_pos, gameplay-wise the actual unit is already there)
-	#unit.update_model_pos()
-	pass
 
 func _on_unit_selection_changed(unit: Unit):
 	selected_unit = unit
