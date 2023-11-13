@@ -68,15 +68,30 @@ func calculate_distances():
 				tiles[i]._on_show_debug_distance(distances[i])
 	pass
 
+const firewall_index_multiplier: int = 256 * 256
 func tower_pos_to_firewall_index(tile_pos1: Vector2i, tile_pos2: Vector2i) -> int:
+	#print("to index: ", tile_pos1, tile_pos2)
+	
 	var index1 = tile_pos_to_tile_index(tile_pos1)
 	var index2 = tile_pos_to_tile_index(tile_pos2)
 	
-	const multiplier = 256 * 256
+	#print("sub-index: ", index1, ", ", index2)
+	
+	# if we swap start and end tower positions for a firewall, the index should be the same
 	if index1 > index2:
-		return index2 * multiplier + index1
+		return index2 * firewall_index_multiplier + index1
 	else:
-		return index1 * multiplier + index2
+		return index1 * firewall_index_multiplier + index2
+
+func firewall_index_to_tile_pos(index: int) -> Vector4i:
+	#print("fw index to sub-index: ", index, " ", index % firewall_index_multiplier, " ", index / firewall_index_multiplier)
+	
+	var tile_pos1 = tile_index_to_tile_pos(index % firewall_index_multiplier)
+	var tile_pos2 = tile_index_to_tile_pos(index / firewall_index_multiplier)
+	
+	#print("fw tile pos: ", tile_pos1, tile_pos2)
+	
+	return Vector4i(tile_pos1.x, tile_pos1.y, tile_pos2.x, tile_pos2.y)
 
 func init_firewall(index: int):
 	var firewall = preload("res://art/firewall.tscn").instantiate()
@@ -85,16 +100,31 @@ func init_firewall(index: int):
 	var material = StandardMaterial3D.new()
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	
-	var mesh_instances = find_children("", "MeshInstance3D")
+	var mesh_instances = firewall.find_children("", "MeshInstance3D")
 	for mi in mesh_instances:
 		mi.material_override = material
 	
 	battle_area.add_child(firewall)
 	
+	var tile_pos_start_end = firewall_index_to_tile_pos(index)
+	
+	var start_pos = UIHelpers.tile_pos_to_world_pos(Vector2i(tile_pos_start_end.x, tile_pos_start_end.y))
+	var end_pos = UIHelpers.tile_pos_to_world_pos(Vector2i(tile_pos_start_end.z, tile_pos_start_end.w))
+	
+	firewall.position = Vector3(start_pos.x, 0.0, start_pos.y)
+	
+	var angle = start_pos.angle_to(end_pos)
+	firewall.rotation = Vector3(0, angle, 0)
+	
+	print("fw index: ", index)
+	print("firewall init: ", tile_pos_start_end)
+	
 	# TODO: position, rotate and scale properly
 
-func firewall_set_tint(index: int):
-	# TODO: set tint
+func firewall_set_tint(index: int, color: Color):
+	var mesh_instances = firewalls[index].find_children("", "MeshInstance3D")
+	for mi in mesh_instances:
+		mi.material_override.albedo_color = color
 	pass
 
 func update_firewalls(init = false):
@@ -107,24 +137,27 @@ func update_firewalls(init = false):
 					var firewall_index = tower_pos_to_firewall_index(unit.tile_pos, nt.tile_pos)
 					if init:
 						init_firewall(firewall_index)
+					
+					if unit.group == nt.group:
+						firewalls[firewall_index].visible = true
+						
+						firewall_set_tint(firewall_index, UIHelpers.group_to_color(unit.group))
 					else:
-						if unit.group == nt.group:
-							firewalls[firewall_index].visible = true
-							
-							firewall_set_tint(firewall_index)
-						else:
-							firewalls[firewall_index].visible = false
+						firewalls[firewall_index].visible = false
 			
 			towers_already_updated.append(unit)
+	
+	if !init:
+		calculate_distances()
 
 func get_neighbor_towers(starting_unit: Unit):
 	var towers = []
 	
-	var tile_neighbors = UIHelpers.get_tile_neighbor_list(starting_unit.tile_pos)
-	for direction in tile_neighbors:
+	for i in range(6):
 		var tile_pos = starting_unit.tile_pos
 		while true:
-			tile_pos += direction
+			var tile_neighbors = UIHelpers.get_tile_neighbor_list(tile_pos)
+			tile_pos += tile_neighbors[i]
 			if is_tile_pos_out_of_bounds(tile_pos):
 				break
 			
@@ -157,7 +190,7 @@ func is_ai_turn() -> bool:
 	return false
 
 func tile_index_to_tile_pos(index: int) -> Vector2i:
-	return Vector2i(index % map_size.x, index / map_size.y)
+	return Vector2i(index % map_size.x, index / map_size.x)
 
 func tile_pos_to_tile_index(tile_pos: Vector2i) -> int:
 	return tile_pos.y * map_size.x + tile_pos.x
@@ -466,6 +499,8 @@ func order_ability_capture_tower(target: Unit, imaginary = false) -> bool:
 		target.group = selected_unit.group
 		
 		remove_unit(selected_unit)
+		
+		update_firewalls()
 	
 	return true
 
@@ -524,6 +559,7 @@ func hurt_unit(target: Unit, amount: int):
 			remove_unit(target)
 		else:
 			target.group = HackingGroups.NEUTRAL
+			update_firewalls()
 		
 		if this_is_the_end:
 			end_battle(unit_group_originally)
@@ -650,7 +686,7 @@ func end_turn(silent = false):
 				for_all_tile_pos_around(unit.tile_pos, \
 					func(tile_pos): spawn_unit(tile_pos, UnitTypes.WORM, unit.group))
 	
-	update_firewalls()
+	#update_firewalls()
 	
 	if !silent:
 		battle_ui._on_playing_group_changed(current_turn_group, is_ai_turn())
