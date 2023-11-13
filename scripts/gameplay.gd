@@ -209,6 +209,10 @@ func firewall_set_tint(index: int, color: Color):
 	pass
 
 func update_firewalls(init = false):
+	# not sure if this is needed
+	for fw in firewalls:
+		firewalls[fw].visible = false
+	
 	var towers_already_updated = []
 	for unit in units:
 		if unit.type == UnitTypes.TOWER_NODE:
@@ -425,6 +429,8 @@ func give_order(ability_id: String, target):
 				selected_unit.ap = max(0, selected_unit.ap - stats.ap)
 				selected_unit.cooldowns[ability_id] = stats.cooldown
 	
+	if result:
+		calculate_distances()
 	battle_ui._on_order_processed(result, selected_unit)
 
 func select_unit(unit_to_select: Unit, no_ui = false):
@@ -645,11 +651,19 @@ func hurt_unit(target: Unit, amount: int):
 		
 		if this_is_the_end:
 			end_battle(unit_group_originally)
+	
+	calculate_distances()
 
 func end_battle(who_lost: HackingGroups):
 	for unit in units:
 		if unit.group == who_lost:
 			unit.group = HackingGroups.NEUTRAL
+	
+	for tile in tiles:
+		if tile != null && tile.group == who_lost:
+			tile.group = HackingGroups.NEUTRAL
+	
+	update_firewalls()
 	
 	var who_won = flip_group(who_lost)
 	battle_ui._on_battle_end(who_won)

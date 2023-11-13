@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://khbj7vpou3mu"]
+[gd_scene load_steps=5 format=3 uid="uid://khbj7vpou3mu"]
 
 [ext_resource type="Script" path="res://scripts/battle_ui.gd" id="1_wpfyh"]
 [ext_resource type="PackedScene" uid="uid://bbpqmtalxqd5i" path="res://scenes/menu/selected_unit_stats.tscn" id="2_y7wbv"]
 [ext_resource type="PackedScene" uid="uid://b41dl1bx7tp07" path="res://scenes/draw_3d.tscn" id="3_ji5a4"]
+[ext_resource type="FontFile" uid="uid://ckdo8mgv1ag2i" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="3_x7kol"]
 
 [node name="battle_ui" type="Node3D"]
 script = ExtResource("1_wpfyh")
@@ -38,6 +39,16 @@ unique_name_in_owner = true
 offset_top = 550.0
 offset_right = 40.0
 offset_bottom = 590.0
+
+[node name="end_game_message" type="Label" parent="CanvasLayer"]
+visible = false
+offset_left = 388.0
+offset_top = 16.0
+offset_right = 528.0
+offset_bottom = 89.0
+theme_override_fonts/font = ExtResource("3_x7kol")
+theme_override_font_sizes/font_size = 64
+text = "TEST"
 
 [node name="SelectedUnitIndicator" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.2, 2.08165e-12)

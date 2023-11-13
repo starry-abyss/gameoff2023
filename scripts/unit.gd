@@ -61,7 +61,8 @@ func can_move() -> bool:
 	return !is_static() && ap > 0
 
 func can_be_destroyed() -> bool:
-	return type != Gameplay.UnitTypes.TOWER_NODE
+	# if Central node is destroyed then game might crash due to firewalls trying to make a connection :'D
+	return type != Gameplay.UnitTypes.TOWER_NODE && type != Gameplay.UnitTypes.CENTRAL_NODE
 
 func type_to_model_scene_name(which_type: Gameplay.UnitTypes) -> String:
 	return Gameplay.UnitTypes.keys()[which_type].to_lower()

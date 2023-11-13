@@ -171,7 +171,12 @@ func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn
 	pass
 
 func _on_battle_end(who_won: Gameplay.HackingGroups):
-	pass
+	$CanvasLayer/end_game_message.visible = true
+	
+	if who_won == Gameplay.HackingGroups.PINK:
+		$CanvasLayer/end_game_message.text = "Rebels win!"
+	else:
+		$CanvasLayer/end_game_message.text = "Cyber police wins!"
 	
 func _on_unit_click(unit: Unit):
 	# for now we'll use tile click for this purpose
