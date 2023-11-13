@@ -23,6 +23,7 @@ var tiles = []
 
 var distances = []
 
+# aren't used actually
 var cached_path = []
 var destination_for_cached_path = Vector2i(-1, -1)
 
@@ -40,6 +41,70 @@ func calculate_distances():
 	else:
 		for i in range(distances.size()):
 			distances[i] = NotCalculated
+		
+		# let's assume static units' abilities aren't blocked by firewalls in any way
+		if !selected_unit.is_static():
+			var inside_an_enemy_firewall = false
+			for fw_index in firewalls.keys():
+				if firewalls[fw_index].visible:
+					var start_end_tile_pos = firewall_index_to_tile_pos(fw_index)
+					var start_tile_pos = Vector2i(start_end_tile_pos.x, start_end_tile_pos.y)
+					var end_tile_pos = Vector2i(start_end_tile_pos.z, start_end_tile_pos.w)
+					
+					var tower = find_unit_by_tile_pos(start_tile_pos)
+					assert(tower != null)
+					# neutral can't have firewalls, so it's an enemy's one
+					if tower.group != selected_unit.group:
+						# if tile_pos is on a firewall line, 
+						# then dy_to_tile_pos/dx_to_tile_pos == dy_to_end_pos/dx_to_end_pos
+						# which means that dy_to_tile_pos * dx_to_end_pos == dy_to_end_pos * dx_to_tile_pos
+						# and we can perform a check for that
+						if (selected_unit.tile_pos.y - start_tile_pos.y) * (end_tile_pos.x - start_tile_pos.x) \
+							== (end_tile_pos.y - start_tile_pos.y) * (selected_unit.tile_pos.x - start_tile_pos.x):
+							inside_an_enemy_firewall = true
+							# mark two lines parallel to the firewall as Unreachable to trap the unit
+							# 1) find the direction to the second tower
+							var i = find_direction_for_tower_tile_pos(start_tile_pos, end_tile_pos)
+							# 2) find neighbor tiles, between which lies this direction (left and right ones)
+							var neighbors = [(i - 1 + 6) % 6, (i + 1) % 6]
+							# 3) get the length of the firewall
+							var distance = UIHelpers.tile_pos_distance(start_tile_pos, end_tile_pos)
+							for n in neighbors:
+								var tile_pos = start_tile_pos + UIHelpers.get_tile_neighbor_list(start_tile_pos)[n]
+								# mark all line Unreachable
+								for j in range(distance):
+									# start marking from the first tile
+									distances[tile_pos_to_tile_index(tile_pos)] = Unreachable
+									
+									var direction = UIHelpers.get_tile_neighbor_list(tile_pos)[i]
+									tile_pos += direction
+							
+							break
+				
+			if !inside_an_enemy_firewall:
+				# mark all enemy firewalls as obstacles
+				for fw_index in firewalls.keys():
+					if firewalls[fw_index].visible:
+						var start_end_tile_pos = firewall_index_to_tile_pos(fw_index)
+						var start_tile_pos = Vector2i(start_end_tile_pos.x, start_end_tile_pos.y)
+						var end_tile_pos = Vector2i(start_end_tile_pos.z, start_end_tile_pos.w)
+						
+						var tower = find_unit_by_tile_pos(start_tile_pos)
+						assert(tower != null)
+						# neutral can't have firewalls, so it's an enemy's one
+						if tower.group != selected_unit.group:
+							var distance = UIHelpers.tile_pos_distance(start_tile_pos, end_tile_pos)
+							var i = find_direction_for_tower_tile_pos(start_tile_pos, end_tile_pos)
+							var tile_pos = start_tile_pos
+							# mark all line Unreachable except tower positions (start and end)
+							for j in range(distance-1):
+								var direction = UIHelpers.get_tile_neighbor_list(tile_pos)[i]
+								tile_pos += direction
+								
+								# start marking from the second tile
+								distances[tile_pos_to_tile_index(tile_pos)] = Unreachable
+						
+		# end of firewalls-related pre-processing
 		
 		var tile_pos = selected_unit.tile_pos
 		
@@ -67,6 +132,21 @@ func calculate_distances():
 			if tiles[i] != null:
 				tiles[i]._on_show_debug_distance(distances[i])
 	pass
+
+# return an index to be used with the array returned from UIHelpers.get_tile_neighbor_list()
+func find_direction_for_tower_tile_pos(tile_pos1: Vector2i, tile_pos2: Vector2i) -> int:
+	var distance = UIHelpers.tile_pos_distance(tile_pos1, tile_pos2)
+	for i in range(6):
+		var tile_pos = tile_pos1
+		for j in range(distance):
+			var direction = UIHelpers.get_tile_neighbor_list(tile_pos)[i]
+			tile_pos += direction
+		
+		if tile_pos == tile_pos2:
+			return i
+	
+	assert(false)
+	return 0
 
 const firewall_index_multiplier: int = 256 * 256
 func tower_pos_to_firewall_index(tile_pos1: Vector2i, tile_pos2: Vector2i) -> int:
@@ -111,10 +191,11 @@ func init_firewall(index: int):
 	var start_pos = UIHelpers.tile_pos_to_world_pos(Vector2i(tile_pos_start_end.x, tile_pos_start_end.y))
 	var end_pos = UIHelpers.tile_pos_to_world_pos(Vector2i(tile_pos_start_end.z, tile_pos_start_end.w))
 	
+	var vector: Vector2 = end_pos - start_pos
+	
 	firewall.position = Vector3(start_pos.x, 0.0, start_pos.y)
 	
-	var angle = start_pos.angle_to(end_pos)
-	firewall.rotation = Vector3(0, angle, 0)
+	firewall.rotation = Vector3(0, vector.angle(), 0)
 	
 	print("fw index: ", index)
 	print("firewall init: ", tile_pos_start_end)
@@ -144,6 +225,7 @@ func update_firewalls(init = false):
 						firewall_set_tint(firewall_index, UIHelpers.group_to_color(unit.group))
 					else:
 						firewalls[firewall_index].visible = false
+						pass
 			
 			towers_already_updated.append(unit)
 	
@@ -642,7 +724,7 @@ func get_path_to_tile_pos(tile_pos: Vector2i):
 				
 				if !is_tile_pos_out_of_bounds(pos_to_explore_next):
 					var next_distance = distances[tile_pos_to_tile_index(pos_to_explore_next)]
-					if next_distance < distance && next_distance != NotCalculated:
+					if next_distance < distance && next_distance != NotCalculated && next_distance != Unreachable:
 						path.push_front(pos_to_explore_next)
 						tile_pos = pos_to_explore_next
 						distance = next_distance
@@ -735,10 +817,10 @@ func _ready():
 	remove_tile(Vector2i(19, 10))
 	
 	#spawn_unit(Vector2i(0, 1), UnitTypes.WORM, HackingGroups.BLUE)
-	#spawn_unit(Vector2i(0, 2), UnitTypes.TROJAN, HackingGroups.BLUE)
+	spawn_unit(Vector2i(13, 3), UnitTypes.TROJAN, HackingGroups.BLUE)
 	#spawn_unit(Vector2i(0, 3), UnitTypes.VIRUS, HackingGroups.PINK)
 	
-	#spawn_unit(Vector2i(6, 3), UnitTypes.TROJAN, HackingGroups.PINK)
+	spawn_unit(Vector2i(13, 2), UnitTypes.TROJAN, HackingGroups.PINK)
 	
 	spawn_unit(Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
@@ -760,7 +842,7 @@ func _ready():
 	spawn_unit(blue_offset + Vector2i(3, 2), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
 	spawn_unit(blue_offset + Vector2i(2, 5), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
 	spawn_unit(blue_offset + Vector2i(3, 8), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
-	spawn_unit(blue_offset + Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
+	spawn_unit(blue_offset + Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.NEUTRAL)
 	spawn_unit(blue_offset + Vector2i(8, 5), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
 	
 	for_all_tile_pos_around(blue_offset + Vector2i(5, 5), func(tile1): \

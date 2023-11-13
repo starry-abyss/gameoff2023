@@ -16,7 +16,8 @@ func _on_ready():
 	
 	debug_distance.rotate_x(-PI / 2.0)
 	
-	####### add_child(debug_distance)
+	####### 
+	add_child(debug_distance)
 	
 	debug_distance.position.y += 0.1
 	

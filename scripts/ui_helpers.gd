@@ -59,9 +59,9 @@ func snap_world_pos_to_tile_center(world_pos: Vector2) -> Vector2:
 	return tile_pos_to_world_pos(world_pos_to_tile_pos(world_pos))
 	
 const Tile_neighbors_even_row = [ Vector2i(-1, 0), Vector2i(0, -1), Vector2i(1, -1), \
-	Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1) ]
+	Vector2i(1, 0), Vector2i(1, 1), Vector2i(0, 1) ]
 const Tile_neighbors_odd_row = [ Vector2i(-1, 0), Vector2i(-1, -1), Vector2i(0, -1), \
-	Vector2i(1, 0), Vector2i(-1, 1), Vector2i(0, 1) ]
+	Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 1) ]
 
 # coordinates relative to tile_pos
 func get_tile_neighbor_list(tile_pos: Vector2i):
