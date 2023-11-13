@@ -223,7 +223,7 @@ func update_firewalls(init = false):
 					if init:
 						init_firewall(firewall_index)
 					
-					if unit.group == nt.group:
+					if unit.group == nt.group && unit.group != HackingGroups.NEUTRAL:
 						firewalls[firewall_index].visible = true
 						
 						firewall_set_tint(firewall_index, UIHelpers.group_to_color(unit.group))
@@ -574,7 +574,8 @@ func order_ability_capture_tower(target: Unit, imaginary = false) -> bool:
 	if selected_unit == null:
 		return false
 	
-	if target.type != UnitTypes.TOWER_NODE || target.group != HackingGroups.NEUTRAL:
+	if (target.type != UnitTypes.TOWER_NODE && target.type != UnitTypes.CENTRAL_NODE) \
+		|| target.group != HackingGroups.NEUTRAL:
 		return false
 	
 	var target_is_neighbor = \
@@ -658,6 +659,9 @@ func end_battle(who_lost: HackingGroups):
 	for unit in units:
 		if unit.group == who_lost:
 			unit.group = HackingGroups.NEUTRAL
+		
+			if unit.type == UnitTypes.TOWER_NODE:
+				unit.hp = 0
 	
 	for tile in tiles:
 		if tile != null && tile.group == who_lost:

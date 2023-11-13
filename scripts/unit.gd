@@ -27,6 +27,9 @@ var ap: int = 3
 var ap_max: int = 3
 var cooldowns = {}
 
+# TODO: add this for Central nodes to restore tile coloring after capture
+@export var tile_ownership_radius = 0
+
 var tile_pos: Vector2i = Vector2i(0, 0):
 	set(new_value):
 		tile_pos = new_value
