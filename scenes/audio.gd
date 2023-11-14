@@ -6,7 +6,7 @@ extends Node
 func _ready():
 	#FMODRuntime.play_one_shot(event)
 	
-	#UIHelpers.audio_event("Music/MusicPlaylist")
+	UIHelpers.audio_event("Music/MusicPlaylist")
 	pass # Replace with function body.
 
 

@@ -520,6 +520,10 @@ func order_ability_repair(target: Unit, imaginary = false) -> bool:
 	if target.hp == target.hp_max:
 		return false
 	
+	var tile = get_tile(target.tile_pos)
+	if tile == null || tile.group != selected_unit.group:
+		return false
+	
 	if !imaginary:
 		var hp_before = target.hp
 		target.hp = target.hp_max
@@ -551,8 +555,12 @@ func order_ability_scale(target_tile_pos: Vector2i, imaginary = false) -> bool:
 		spawn_unit(target_tile_pos, UnitTypes.WORM, selected_unit.group)
 		var new_worm = find_unit_by_tile_pos(target_tile_pos)
 		
-		new_worm.ap = 0
 		selected_unit.ap = 0
+		
+		# copy some stats from the parent Worm
+		new_worm.ap = 0
+		new_worm.hp = selected_unit.hp
+		new_worm.cooldowns["scale"] = StaticData.ability_stats["scale"].cooldown
 	
 	return true
 
@@ -622,6 +630,11 @@ func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> boo
 				&& unit_from != selected_unit \
 				&& is_tile_walkable(tile_pos_to):
 					teleport_unit(unit_from, tile_pos_to)
+					
+					# after teleporting each unit will have only 1 AP at max to re-group
+					if unit_from.ap > 1:
+						unit_from.ap = 1
+					
 					unit_from.update_model_pos()
 		
 		#var apply_backdoor = func(tile_pos):

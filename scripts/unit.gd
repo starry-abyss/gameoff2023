@@ -126,6 +126,11 @@ func load_stats(which_type: Gameplay.UnitTypes):
 	else:
 		attack_extra = 0
 	
+	if stats.has("ap_cost_of_attack"):
+		ap_cost_of_attack = stats.ap_cost_of_attack
+	else:
+		ap_cost_of_attack = 1
+	
 	if stats.has("attack_range"):
 		attack_range = stats.attack_range
 	else:
