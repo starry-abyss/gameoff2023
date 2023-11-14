@@ -650,6 +650,8 @@ func heal_unit(target: Unit, amount: int):
 	
 	var hp_before = target.hp
 	
+	target.hp += amount
+	
 	if target.hp > target.hp_max:
 		target.hp = target.hp_max
 	
@@ -869,10 +871,10 @@ func _ready():
 	remove_tile(Vector2i(19, 10))
 	
 	#spawn_unit(Vector2i(0, 1), UnitTypes.WORM, HackingGroups.BLUE)
-	spawn_unit(Vector2i(13, 3), UnitTypes.TROJAN, HackingGroups.BLUE)
+	#spawn_unit(Vector2i(13, 3), UnitTypes.TROJAN, HackingGroups.BLUE)
 	#spawn_unit(Vector2i(0, 3), UnitTypes.VIRUS, HackingGroups.PINK)
 	
-	spawn_unit(Vector2i(13, 2), UnitTypes.TROJAN, HackingGroups.PINK)
+	#spawn_unit(Vector2i(13, 2), UnitTypes.TROJAN, HackingGroups.PINK)
 	
 	spawn_unit(Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
@@ -894,7 +896,7 @@ func _ready():
 	spawn_unit(blue_offset + Vector2i(3, 2), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
 	spawn_unit(blue_offset + Vector2i(2, 5), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
 	spawn_unit(blue_offset + Vector2i(3, 8), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
-	spawn_unit(blue_offset + Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.NEUTRAL)
+	spawn_unit(blue_offset + Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
 	spawn_unit(blue_offset + Vector2i(8, 5), UnitTypes.TOWER_NODE, HackingGroups.BLUE)
 	
 	for_all_tile_pos_around(blue_offset + Vector2i(5, 5), func(tile1): \
