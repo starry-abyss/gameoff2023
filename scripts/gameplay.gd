@@ -791,7 +791,9 @@ func end_turn(silent = false):
 			
 			unit.ap = unit.ap_max
 		
-			if unit.type == UnitTypes.CENTRAL_NODE:
+			if unit.type == UnitTypes.CENTRAL_NODE \
+				&& (!unit.cooldowns.has("spawn_worms") || unit.cooldowns["spawn_worms"] <= 0):
+				unit.cooldowns["spawn_worms"] = 3
 				for_all_tile_pos_around(unit.tile_pos, \
 					func(tile_pos): spawn_unit(tile_pos, UnitTypes.WORM, unit.group))
 	

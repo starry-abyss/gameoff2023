@@ -23,6 +23,7 @@ extends Node
 	
 	"repair": { "name": "Repair", "target": Gameplay.TargetTypes.UNIT, "ap": 1, "cooldown": 3 },
 	"reset": { "name": "Reset", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 3 },
+	"spawn_worms": { "name": "Spawn Worms", "target": Gameplay.TargetTypes.SELF, "ap": 0, "cooldown": 3 },
 	
 	"capture_tower": { "name": "Capture a node", "target": Gameplay.TargetTypes.UNIT, "ap": 1, "cooldown": 0 },
 	"backdoor": { "name": "Open a backdoor", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 0 },
