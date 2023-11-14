@@ -179,6 +179,8 @@ func init_firewall(index: int):
 	
 	var material = StandardMaterial3D.new()
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	
 	var mesh_instances = firewall.find_children("", "MeshInstance3D")
 	for mi in mesh_instances:
@@ -195,7 +197,10 @@ func init_firewall(index: int):
 	
 	firewall.position = Vector3(start_pos.x, 0.0, start_pos.y)
 	
-	firewall.rotation = Vector3(0, vector.angle(), 0)
+	firewall.scale.x = start_pos.distance_to(end_pos)
+	
+	#firewall.rotate_y(-vector.angle())
+	firewall.rotation = Vector3(0, -vector.angle(), 0)
 	
 	print("fw index: ", index)
 	print("firewall init: ", tile_pos_start_end)
@@ -203,6 +208,8 @@ func init_firewall(index: int):
 	# TODO: position, rotate and scale properly
 
 func firewall_set_tint(index: int, color: Color):
+	color.a = 0.2
+	
 	var mesh_instances = firewalls[index].find_children("", "MeshInstance3D")
 	for mi in mesh_instances:
 		mi.material_override.albedo_color = color
