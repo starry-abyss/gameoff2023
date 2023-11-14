@@ -525,12 +525,7 @@ func order_ability_repair(target: Unit, imaginary = false) -> bool:
 		return false
 	
 	if !imaginary:
-		var hp_before = target.hp
-		target.hp = target.hp_max
-		
-		var hp_delta = target.hp - hp_before
-		if hp_delta > 0:
-			battle_ui._on_unit_hp_change(target, hp_delta)
+		heal_unit(target, StaticData.ability_stats["repair"].restored_hp)
 	
 	return true
 
@@ -648,6 +643,19 @@ func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> boo
 		#for_all_tile_pos_around(target_tile_pos, apply_backdoor)
 	
 	return true
+
+func heal_unit(target: Unit, amount: int):
+	if amount <= 0:
+		return
+	
+	var hp_before = target.hp
+	
+	if target.hp > target.hp_max:
+		target.hp = target.hp_max
+	
+	var hp_change = target.hp - hp_before
+	if hp_change > 0:
+		battle_ui._on_unit_hp_change(target, hp_change)
 
 func hurt_unit(target: Unit, amount: int):
 	if amount <= 0:
@@ -803,12 +811,14 @@ func end_turn(silent = false):
 				unit.cooldowns[cd] = max(0, unit.cooldowns[cd] - 1)
 			
 			unit.ap = unit.ap_max
-		
-			if unit.type == UnitTypes.CENTRAL_NODE \
-				&& (!unit.cooldowns.has("spawn_worms") || unit.cooldowns["spawn_worms"] <= 0):
-				unit.cooldowns["spawn_worms"] = 3
-				for_all_tile_pos_around(unit.tile_pos, \
-					func(tile_pos): spawn_unit(tile_pos, UnitTypes.WORM, unit.group))
+			
+			if unit.type == UnitTypes.CENTRAL_NODE:
+				heal_unit(unit, StaticData.ability_stats["self_repair"].restored_hp)
+				
+				if (!unit.cooldowns.has("spawn_worms") || unit.cooldowns["spawn_worms"] <= 0):
+					unit.cooldowns["spawn_worms"] = 3
+					for_all_tile_pos_around(unit.tile_pos, \
+						func(tile_pos): spawn_unit(tile_pos, UnitTypes.WORM, unit.group))
 	
 	#update_firewalls()
 	
