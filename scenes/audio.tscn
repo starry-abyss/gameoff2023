@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cwliog3ple6dh"]
+[gd_scene load_steps=3 format=3 uid="uid://cwliog3ple6dh"]
 
 [ext_resource type="Script" path="res://scenes/audio.gd" id="1_13gjq"]
+[ext_resource type="EventAsset" uid="uid://c8v61cq5hpm6x" path="res://addons/FMOD/editor/resources/events/{5335d2d5-6192-4f27-8b9c-2f03acf58a1e}.tres" id="2_hh0rk"]
 
 [node name="audio" type="Node"]
 script = ExtResource("1_13gjq")
+event = ExtResource("2_hh0rk")

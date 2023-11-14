@@ -12,3 +12,5 @@ func _on_volume_value_changed(value):
 	var bus = FMODStudioModule.get_studio_system().get_bus("bus:/Music Bus")
 	#if bus:
 	bus.set_volume(value / 100.0)
+	
+	UIHelpers.audio_event("Ui/Ui_Slider")

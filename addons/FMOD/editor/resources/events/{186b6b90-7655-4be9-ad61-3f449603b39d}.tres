@@ -1,0 +1,9 @@
+[gd_resource type="EventAsset" format=3 uid="uid://vnuvoac2g18c"]
+
+[resource]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/Ui/Ui_Highlight"
+guid = "{186b6b90-7655-4be9-ad61-3f449603b39d}"
+name = "Ui_Highlight"

@@ -1,90 +1,223 @@
-[gd_resource type="ProjectCache" load_steps=7 format=3 uid="uid://bpu1mr2ld7trp"]
+[gd_resource type="ProjectCache" load_steps=17 format=3 uid="uid://bpu1mr2ld7trp"]
 
-[sub_resource type="BankAsset" id="BankAsset_j1bgx"]
-file_path = "res://audio/banks/Master.bank"
-modified_time = 1699254822
-path = "bank:/Master"
-guid = "{d56e27cd-e0e2-4222-8166-3483854723ac}"
-name = "Master"
+[ext_resource type="BankAsset" uid="uid://50ir213qxasn" path="res://addons/FMOD/editor/resources/banks/{d56e27cd-e0e2-4222-8166-3483854723ac}.tres" id="1_6qkdn"]
+[ext_resource type="BankAsset" uid="uid://4utoni5l53s7" path="res://addons/FMOD/editor/resources/banks/{4d730719-9199-0e60-072f-be7d74b42534}.tres" id="2_forr2"]
+[ext_resource type="BusAsset" uid="uid://sm74xaf8dlgt" path="res://addons/FMOD/editor/resources/busses/{d6b204da-ff03-412d-be8e-60acb614cf75}.tres" id="3_b2tvu"]
+[ext_resource type="BusAsset" uid="uid://cx7ts1wt2xeov" path="res://addons/FMOD/editor/resources/busses/{56137743-9306-4ce6-95f0-784bd6e210e6}.tres" id="4_t3o7o"]
+[ext_resource type="BusAsset" uid="uid://che52q2erpywd" path="res://addons/FMOD/editor/resources/busses/{fa278c3e-3b9b-4a99-ba7a-cc395eb02b53}.tres" id="5_e6m0w"]
+[ext_resource type="EventAsset" uid="uid://c8v61cq5hpm6x" path="res://addons/FMOD/editor/resources/events/{5335d2d5-6192-4f27-8b9c-2f03acf58a1e}.tres" id="6_igj6q"]
 
-[sub_resource type="BankAsset" id="BankAsset_07act"]
-file_path = "res://audio/banks/Master.strings.bank"
-modified_time = 1699254822
-path = "bank:/Master.strings"
-guid = "{4d730719-9199-0e60-072f-be7d74b42534}"
-name = "Master.strings"
+[sub_resource type="BusAsset" id="BusAsset_65ldi"]
+path = "bus:/Dx Bus"
+guid = "{0cd9aea3-efbd-4ed5-ab6e-d64379284214}"
+name = "Dx Bus"
 
-[sub_resource type="BusAsset" id="BusAsset_7v8lw"]
-path = "bus:/Music Bus"
-guid = "{56137743-9306-4ce6-95f0-784bd6e210e6}"
-name = "Music Bus"
+[sub_resource type="BusAsset" id="BusAsset_n56uv"]
+path = "bus:/Ui Bus"
+guid = "{deba9fc2-d6c3-486a-8649-8e95638f77df}"
+name = "Ui Bus"
 
-[sub_resource type="BusAsset" id="BusAsset_0gmvc"]
-path = "bus:/Reverb"
-guid = "{fa278c3e-3b9b-4a99-ba7a-cc395eb02b53}"
-name = "Reverb"
-
-[sub_resource type="BusAsset" id="BusAsset_m3gbd"]
-path = "bus:/"
-guid = "{d6b204da-ff03-412d-be8e-60acb614cf75}"
-name = "Master"
-
-[sub_resource type="EventAsset" id="EventAsset_2eo7t"]
+[sub_resource type="EventAsset" id="EventAsset_3g7ej"]
+is_oneshot = true
 min_distance = 1.0
 max_distance = 20.0
-path = "event:/MusicPlaylist"
-guid = "{5335d2d5-6192-4f27-8b9c-2f03acf58a1e}"
-name = "MusicPlaylist"
+path = "event:/DX/Dx_End"
+guid = "{ec98efaf-dbe1-4e47-88c6-2b9dc984a7db}"
+name = "Dx_End"
+
+[sub_resource type="EventAsset" id="EventAsset_nc8tv"]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/DX/Dx_Start"
+guid = "{53a7a743-72c4-45cd-8acf-4ed9a2e8b49f}"
+name = "Dx_Start"
+
+[sub_resource type="EventAsset" id="EventAsset_eebcy"]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/Ui/Ui_Accept"
+guid = "{075248e6-776a-46a9-a3d6-0daa4ab1d1d2}"
+name = "Ui_Accept"
+
+[sub_resource type="EventAsset" id="EventAsset_ywpqj"]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/Ui/Ui_Back"
+guid = "{9f16de96-46cd-4768-9c67-537045d1454a}"
+name = "Ui_Back"
+
+[sub_resource type="EventAsset" id="EventAsset_8suvs"]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/Ui/Ui_Highlight"
+guid = "{186b6b90-7655-4be9-ad61-3f449603b39d}"
+name = "Ui_Highlight"
+
+[sub_resource type="EventAsset" id="EventAsset_k8erj"]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/Ui/Ui_Quit"
+guid = "{e0ee26cd-a97b-47c4-9cc7-16b0bf0a018d}"
+name = "Ui_Quit"
+
+[sub_resource type="EventAsset" id="EventAsset_lalqx"]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/Ui/Ui_Slider"
+guid = "{f269926e-a4f7-4292-9a6a-b0d4270a975f}"
+name = "Ui_Slider"
+
+[sub_resource type="EventAsset" id="EventAsset_rvskg"]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/Ui/Ui_Start"
+guid = "{e47d45b9-059b-4425-984c-dea5f253332d}"
+name = "Ui_Start"
 
 [resource]
 banks = {
-"{4d730719-9199-0e60-072f-be7d74b42534}": SubResource("BankAsset_07act"),
-"{d56e27cd-e0e2-4222-8166-3483854723ac}": SubResource("BankAsset_j1bgx")
+"{4d730719-9199-0e60-072f-be7d74b42534}": ExtResource("2_forr2"),
+"{d56e27cd-e0e2-4222-8166-3483854723ac}": ExtResource("1_6qkdn")
 }
 events = {
-"{5335d2d5-6192-4f27-8b9c-2f03acf58a1e}": SubResource("EventAsset_2eo7t")
+"{075248e6-776a-46a9-a3d6-0daa4ab1d1d2}": SubResource("EventAsset_eebcy"),
+"{186b6b90-7655-4be9-ad61-3f449603b39d}": SubResource("EventAsset_8suvs"),
+"{5335d2d5-6192-4f27-8b9c-2f03acf58a1e}": ExtResource("6_igj6q"),
+"{53a7a743-72c4-45cd-8acf-4ed9a2e8b49f}": SubResource("EventAsset_nc8tv"),
+"{9f16de96-46cd-4768-9c67-537045d1454a}": SubResource("EventAsset_ywpqj"),
+"{e0ee26cd-a97b-47c4-9cc7-16b0bf0a018d}": SubResource("EventAsset_k8erj"),
+"{e47d45b9-059b-4425-984c-dea5f253332d}": SubResource("EventAsset_rvskg"),
+"{ec98efaf-dbe1-4e47-88c6-2b9dc984a7db}": SubResource("EventAsset_3g7ej"),
+"{f269926e-a4f7-4292-9a6a-b0d4270a975f}": SubResource("EventAsset_lalqx")
 }
 busses = {
-"{56137743-9306-4ce6-95f0-784bd6e210e6}": SubResource("BusAsset_7v8lw"),
-"{d6b204da-ff03-412d-be8e-60acb614cf75}": SubResource("BusAsset_m3gbd"),
-"{fa278c3e-3b9b-4a99-ba7a-cc395eb02b53}": SubResource("BusAsset_0gmvc")
+"{0cd9aea3-efbd-4ed5-ab6e-d64379284214}": SubResource("BusAsset_65ldi"),
+"{56137743-9306-4ce6-95f0-784bd6e210e6}": ExtResource("4_t3o7o"),
+"{d6b204da-ff03-412d-be8e-60acb614cf75}": ExtResource("3_b2tvu"),
+"{deba9fc2-d6c3-486a-8649-8e95638f77df}": SubResource("BusAsset_n56uv"),
+"{fa278c3e-3b9b-4a99-ba7a-cc395eb02b53}": ExtResource("5_e6m0w")
 }
 bank_tree = [{
 "children": [],
 "item_type": 3,
 "node_name": "Master",
 "path": "bank:/Master",
-"resource": SubResource("BankAsset_j1bgx")
+"resource": ExtResource("1_6qkdn")
 }, {
 "children": [],
 "item_type": 3,
 "node_name": "Master.strings",
 "path": "bank:/Master.strings",
-"resource": SubResource("BankAsset_07act")
+"resource": ExtResource("2_forr2")
 }]
 event_tree = [{
+"children": [{
+"children": [],
+"item_type": 1,
+"node_name": "Dx_End",
+"path": "event:/DX/Dx_End",
+"resource": SubResource("EventAsset_3g7ej")
+}, {
+"children": [],
+"item_type": 1,
+"node_name": "Dx_Start",
+"path": "event:/DX/Dx_Start",
+"resource": SubResource("EventAsset_nc8tv")
+}],
+"item_type": 7,
+"node_name": "DX",
+"path": "",
+"resource": null
+}, {
+"children": [{
 "children": [],
 "item_type": 1,
 "node_name": "MusicPlaylist",
-"path": "event:/MusicPlaylist",
-"resource": SubResource("EventAsset_2eo7t")
+"path": "event:/Music/MusicPlaylist",
+"resource": ExtResource("6_igj6q")
+}],
+"item_type": 7,
+"node_name": "Music",
+"path": "",
+"resource": null
+}, {
+"children": [{
+"children": [],
+"item_type": 1,
+"node_name": "Ui_Accept",
+"path": "event:/Ui/Ui_Accept",
+"resource": SubResource("EventAsset_eebcy")
+}, {
+"children": [],
+"item_type": 1,
+"node_name": "Ui_Back",
+"path": "event:/Ui/Ui_Back",
+"resource": SubResource("EventAsset_ywpqj")
+}, {
+"children": [],
+"item_type": 1,
+"node_name": "Ui_Highlight",
+"path": "event:/Ui/Ui_Highlight",
+"resource": SubResource("EventAsset_8suvs")
+}, {
+"children": [],
+"item_type": 1,
+"node_name": "Ui_Quit",
+"path": "event:/Ui/Ui_Quit",
+"resource": SubResource("EventAsset_k8erj")
+}, {
+"children": [],
+"item_type": 1,
+"node_name": "Ui_Slider",
+"path": "event:/Ui/Ui_Slider",
+"resource": SubResource("EventAsset_lalqx")
+}, {
+"children": [],
+"item_type": 1,
+"node_name": "Ui_Start",
+"path": "event:/Ui/Ui_Start",
+"resource": SubResource("EventAsset_rvskg")
+}],
+"item_type": 7,
+"node_name": "Ui",
+"path": "",
+"resource": null
 }]
 bus_tree = [{
 "children": [{
 "children": [],
 "item_type": 4,
+"node_name": "Dx Bus",
+"path": "bus:/Dx Bus",
+"resource": SubResource("BusAsset_65ldi")
+}, {
+"children": [],
+"item_type": 4,
 "node_name": "Music Bus",
 "path": "bus:/Music Bus",
-"resource": SubResource("BusAsset_7v8lw")
+"resource": ExtResource("4_t3o7o")
 }, {
 "children": [],
 "item_type": 4,
 "node_name": "Reverb",
 "path": "bus:/Reverb",
-"resource": SubResource("BusAsset_0gmvc")
+"resource": ExtResource("5_e6m0w")
+}, {
+"children": [],
+"item_type": 4,
+"node_name": "Ui Bus",
+"path": "bus:/Ui Bus",
+"resource": SubResource("BusAsset_n56uv")
 }],
 "item_type": 4,
 "node_name": "bus:",
 "path": "bus:/",
-"resource": SubResource("BusAsset_m3gbd")
+"resource": ExtResource("3_b2tvu")
 }]

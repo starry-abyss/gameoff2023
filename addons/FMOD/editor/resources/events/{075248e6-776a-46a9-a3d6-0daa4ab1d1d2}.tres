@@ -1,0 +1,9 @@
+[gd_resource type="EventAsset" format=3 uid="uid://d2basb5ke8ft8"]
+
+[resource]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/Ui/Ui_Accept"
+guid = "{075248e6-776a-46a9-a3d6-0daa4ab1d1d2}"
+name = "Ui_Accept"

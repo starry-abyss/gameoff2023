@@ -1,0 +1,9 @@
+[gd_resource type="EventAsset" format=3 uid="uid://b4lruxh5t83au"]
+
+[resource]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/Ui/Ui_Slider"
+guid = "{f269926e-a4f7-4292-9a6a-b0d4270a975f}"
+name = "Ui_Slider"

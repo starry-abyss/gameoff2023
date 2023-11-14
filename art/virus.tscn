@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://b830ach63gj40"]
 
-[ext_resource type="PackedScene" uid="uid://p4mctrmw4k8r" path="res://art/models/animals/pixispider.blend" id="1_2ivii"]
+[ext_resource type="PackedScene" uid="uid://c33m8hggjsttm" path="res://art/models/Virus.blend" id="1_v2dd8"]
 
 [node name="virus" type="Node3D"]
 
-[node name="pixispider" parent="." instance=ExtResource("1_2ivii")]
-transform = Transform3D(8.02831e-05, 0, -0.1, 0, 0.1, 0, 0.1, 0, 8.02831e-05, 0, 0.15196, 0)
+[node name="Virus-6397ebfa2805bf6e9228f12a78ad765f" parent="." instance=ExtResource("1_v2dd8")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0.605197, 0)

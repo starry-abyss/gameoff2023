@@ -678,6 +678,8 @@ func end_battle(who_lost: HackingGroups):
 	
 	var who_won = flip_group(who_lost)
 	battle_ui._on_battle_end(who_won)
+	
+	UIHelpers.audio_event("DX/Dx_End")
 
 func order_attack(target: Unit, imaginary = false) -> bool:
 	if selected_unit == null || target == selected_unit || !selected_unit.can_attack():
@@ -889,4 +891,6 @@ func _ready():
 	end_turn(true)
 	# for second group to init
 	end_turn()
+	
+	UIHelpers.audio_event("DX/Dx_Start")
 	pass
