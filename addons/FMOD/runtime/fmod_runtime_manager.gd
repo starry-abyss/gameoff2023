@@ -23,6 +23,9 @@ func _enter_tree() -> void:
 
 
 func _notification(what: int) -> void:
+	# hack for the game, as we have a sound to play before the exit
+	return
+	
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		if get_child(0) && debug_scene:
 			debug_scene.free()

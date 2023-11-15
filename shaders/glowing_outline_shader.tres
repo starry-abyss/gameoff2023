@@ -93,7 +93,6 @@ parameter_name = "rim_sharpness"
 hint = 1
 max = 16.0
 default_value_enabled = true
-default_value = 2.08165e-12
 
 [sub_resource type="VisualShaderNodeVec3Parameter" id="VisualShaderNodeVec3Parameter_f8sle"]
 parameter_name = "aabb_bottom_right"
@@ -147,7 +146,7 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_s
 
 uniform vec4 emission_color : source_color = vec4(0.164706, 0.556863, 0.027451, 0.250980);
 uniform float emission_amount : hint_range(0, 16) = 5;
-uniform float rim_sharpness : hint_range(0, 16) = 0.00000000000208;
+uniform float rim_sharpness : hint_range(0, 16) = 0;
 uniform float hide_amount = 0;
 
 
@@ -251,7 +250,6 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-367.68, 634.56)
 nodes/vertex/0/position = Vector2(1260, 120)
 nodes/vertex/3/node = SubResource("VisualShaderNodeInput_gqfiu")
 nodes/vertex/3/position = Vector2(-840, 360)

@@ -702,6 +702,7 @@ func end_battle(who_lost: HackingGroups):
 	var who_won = flip_group(who_lost)
 	battle_ui._on_battle_end(who_won)
 	
+	UIHelpers.audio_set_parameter("Winner", who_won)
 	UIHelpers.audio_event("DX/Dx_End")
 
 func order_attack(target: Unit, imaginary = false) -> bool:

@@ -90,5 +90,21 @@ func group_to_color(which_group: Gameplay.HackingGroups) -> Color:
 		return StaticData.color_blue
 	return StaticData.color_neutral
 
+func audio_set_parameter(parameter_name: String, value: float):
+	FMODStudioModule.get_studio_system().set_parameter_by_name(parameter_name, value, false)
+
 func audio_event(event_name: String):
 	FMODRuntime.play_one_shot_path("event:/" + event_name)
+
+func quit_the_game():
+	# TODO: for debug, to be removed:
+	UIHelpers.audio_set_parameter("Winner", Gameplay.HackingGroups.PINK)
+	
+	UIHelpers.audio_event("Ui/Ui_Quit")
+	
+	await get_tree().create_timer(0.5).timeout
+	
+	FMODStudioModule.shutdown()
+	
+	get_tree().quit()
+

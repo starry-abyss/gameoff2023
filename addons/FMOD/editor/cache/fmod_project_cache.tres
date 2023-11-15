@@ -1,85 +1,39 @@
-[gd_resource type="ProjectCache" load_steps=17 format=3 uid="uid://bpu1mr2ld7trp"]
+[gd_resource type="ProjectCache" load_steps=20 format=3 uid="uid://bpu1mr2ld7trp"]
 
 [ext_resource type="BankAsset" uid="uid://50ir213qxasn" path="res://addons/FMOD/editor/resources/banks/{d56e27cd-e0e2-4222-8166-3483854723ac}.tres" id="1_6qkdn"]
 [ext_resource type="BankAsset" uid="uid://4utoni5l53s7" path="res://addons/FMOD/editor/resources/banks/{4d730719-9199-0e60-072f-be7d74b42534}.tres" id="2_forr2"]
 [ext_resource type="BusAsset" uid="uid://sm74xaf8dlgt" path="res://addons/FMOD/editor/resources/busses/{d6b204da-ff03-412d-be8e-60acb614cf75}.tres" id="3_b2tvu"]
+[ext_resource type="BusAsset" uid="uid://drharlmk2a7g5" path="res://addons/FMOD/editor/resources/busses/{0cd9aea3-efbd-4ed5-ab6e-d64379284214}.tres" id="4_i05h2"]
 [ext_resource type="BusAsset" uid="uid://cx7ts1wt2xeov" path="res://addons/FMOD/editor/resources/busses/{56137743-9306-4ce6-95f0-784bd6e210e6}.tres" id="4_t3o7o"]
 [ext_resource type="BusAsset" uid="uid://che52q2erpywd" path="res://addons/FMOD/editor/resources/busses/{fa278c3e-3b9b-4a99-ba7a-cc395eb02b53}.tres" id="5_e6m0w"]
 [ext_resource type="EventAsset" uid="uid://c8v61cq5hpm6x" path="res://addons/FMOD/editor/resources/events/{5335d2d5-6192-4f27-8b9c-2f03acf58a1e}.tres" id="6_igj6q"]
+[ext_resource type="BusAsset" uid="uid://cdym8q80fl8p" path="res://addons/FMOD/editor/resources/busses/{deba9fc2-d6c3-486a-8649-8e95638f77df}.tres" id="7_5lf7f"]
+[ext_resource type="EventAsset" uid="uid://by5npdydbye3b" path="res://addons/FMOD/editor/resources/events/{ec98efaf-dbe1-4e47-88c6-2b9dc984a7db}.tres" id="8_ox44k"]
+[ext_resource type="EventAsset" uid="uid://plp54liax7th" path="res://addons/FMOD/editor/resources/events/{53a7a743-72c4-45cd-8acf-4ed9a2e8b49f}.tres" id="9_hwdxk"]
+[ext_resource type="EventAsset" uid="uid://d2basb5ke8ft8" path="res://addons/FMOD/editor/resources/events/{075248e6-776a-46a9-a3d6-0daa4ab1d1d2}.tres" id="11_6etls"]
+[ext_resource type="EventAsset" uid="uid://beio5k58ya4i4" path="res://addons/FMOD/editor/resources/events/{9f16de96-46cd-4768-9c67-537045d1454a}.tres" id="12_hn135"]
+[ext_resource type="EventAsset" uid="uid://vnuvoac2g18c" path="res://addons/FMOD/editor/resources/events/{186b6b90-7655-4be9-ad61-3f449603b39d}.tres" id="13_rw6v1"]
+[ext_resource type="EventAsset" uid="uid://gxc6nh7yivwp" path="res://addons/FMOD/editor/resources/events/{e0ee26cd-a97b-47c4-9cc7-16b0bf0a018d}.tres" id="14_yrc1h"]
+[ext_resource type="EventAsset" uid="uid://b4lruxh5t83au" path="res://addons/FMOD/editor/resources/events/{f269926e-a4f7-4292-9a6a-b0d4270a975f}.tres" id="15_fasf4"]
+[ext_resource type="EventAsset" uid="uid://c2bgl0hqlvu6p" path="res://addons/FMOD/editor/resources/events/{e47d45b9-059b-4425-984c-dea5f253332d}.tres" id="16_u1feo"]
 
-[sub_resource type="BusAsset" id="BusAsset_65ldi"]
-path = "bus:/Dx Bus"
-guid = "{0cd9aea3-efbd-4ed5-ab6e-d64379284214}"
-name = "Dx Bus"
+[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_t456q"]
+data1 = 2766960050
+data2 = 3573907233
 
-[sub_resource type="BusAsset" id="BusAsset_n56uv"]
-path = "bus:/Ui Bus"
-guid = "{deba9fc2-d6c3-486a-8649-8e95638f77df}"
-name = "Ui Bus"
+[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_4n32k"]
+name = "Winner"
+id = SubResource("FMOD_STUDIO_PARAMETER_ID_t456q")
+maximum = 1.0
+flags = 28
+guid = "{f91af73b-8b13-47cc-843b-3e06e832fbe5}"
 
-[sub_resource type="EventAsset" id="EventAsset_3g7ej"]
-is_oneshot = true
-min_distance = 1.0
-max_distance = 20.0
-path = "event:/DX/Dx_End"
-guid = "{ec98efaf-dbe1-4e47-88c6-2b9dc984a7db}"
-name = "Dx_End"
-
-[sub_resource type="EventAsset" id="EventAsset_nc8tv"]
-is_oneshot = true
-min_distance = 1.0
-max_distance = 20.0
-path = "event:/DX/Dx_Start"
-guid = "{53a7a743-72c4-45cd-8acf-4ed9a2e8b49f}"
-name = "Dx_Start"
-
-[sub_resource type="EventAsset" id="EventAsset_eebcy"]
-is_oneshot = true
-min_distance = 1.0
-max_distance = 20.0
-path = "event:/Ui/Ui_Accept"
-guid = "{075248e6-776a-46a9-a3d6-0daa4ab1d1d2}"
-name = "Ui_Accept"
-
-[sub_resource type="EventAsset" id="EventAsset_ywpqj"]
-is_oneshot = true
-min_distance = 1.0
-max_distance = 20.0
-path = "event:/Ui/Ui_Back"
-guid = "{9f16de96-46cd-4768-9c67-537045d1454a}"
-name = "Ui_Back"
-
-[sub_resource type="EventAsset" id="EventAsset_8suvs"]
-is_oneshot = true
-min_distance = 1.0
-max_distance = 20.0
-path = "event:/Ui/Ui_Highlight"
-guid = "{186b6b90-7655-4be9-ad61-3f449603b39d}"
-name = "Ui_Highlight"
-
-[sub_resource type="EventAsset" id="EventAsset_k8erj"]
-is_oneshot = true
-min_distance = 1.0
-max_distance = 20.0
-path = "event:/Ui/Ui_Quit"
-guid = "{e0ee26cd-a97b-47c4-9cc7-16b0bf0a018d}"
-name = "Ui_Quit"
-
-[sub_resource type="EventAsset" id="EventAsset_lalqx"]
-is_oneshot = true
-min_distance = 1.0
-max_distance = 20.0
-path = "event:/Ui/Ui_Slider"
-guid = "{f269926e-a4f7-4292-9a6a-b0d4270a975f}"
-name = "Ui_Slider"
-
-[sub_resource type="EventAsset" id="EventAsset_rvskg"]
-is_oneshot = true
-min_distance = 1.0
-max_distance = 20.0
-path = "event:/Ui/Ui_Start"
-guid = "{e47d45b9-059b-4425-984c-dea5f253332d}"
-name = "Ui_Start"
+[sub_resource type="ParameterAsset" id="ParameterAsset_tmfy6"]
+parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_4n32k")
+labels = ["RebelsWin", "CyberPoliceWin"]
+path = "parameter:/Winner"
+guid = "{f91af73b-8b13-47cc-843b-3e06e832fbe5}"
+name = "Winner"
 
 [resource]
 banks = {
@@ -87,22 +41,25 @@ banks = {
 "{d56e27cd-e0e2-4222-8166-3483854723ac}": ExtResource("1_6qkdn")
 }
 events = {
-"{075248e6-776a-46a9-a3d6-0daa4ab1d1d2}": SubResource("EventAsset_eebcy"),
-"{186b6b90-7655-4be9-ad61-3f449603b39d}": SubResource("EventAsset_8suvs"),
+"{075248e6-776a-46a9-a3d6-0daa4ab1d1d2}": ExtResource("11_6etls"),
+"{186b6b90-7655-4be9-ad61-3f449603b39d}": ExtResource("13_rw6v1"),
 "{5335d2d5-6192-4f27-8b9c-2f03acf58a1e}": ExtResource("6_igj6q"),
-"{53a7a743-72c4-45cd-8acf-4ed9a2e8b49f}": SubResource("EventAsset_nc8tv"),
-"{9f16de96-46cd-4768-9c67-537045d1454a}": SubResource("EventAsset_ywpqj"),
-"{e0ee26cd-a97b-47c4-9cc7-16b0bf0a018d}": SubResource("EventAsset_k8erj"),
-"{e47d45b9-059b-4425-984c-dea5f253332d}": SubResource("EventAsset_rvskg"),
-"{ec98efaf-dbe1-4e47-88c6-2b9dc984a7db}": SubResource("EventAsset_3g7ej"),
-"{f269926e-a4f7-4292-9a6a-b0d4270a975f}": SubResource("EventAsset_lalqx")
+"{53a7a743-72c4-45cd-8acf-4ed9a2e8b49f}": ExtResource("9_hwdxk"),
+"{9f16de96-46cd-4768-9c67-537045d1454a}": ExtResource("12_hn135"),
+"{e0ee26cd-a97b-47c4-9cc7-16b0bf0a018d}": ExtResource("14_yrc1h"),
+"{e47d45b9-059b-4425-984c-dea5f253332d}": ExtResource("16_u1feo"),
+"{ec98efaf-dbe1-4e47-88c6-2b9dc984a7db}": ExtResource("8_ox44k"),
+"{f269926e-a4f7-4292-9a6a-b0d4270a975f}": ExtResource("15_fasf4")
 }
 busses = {
-"{0cd9aea3-efbd-4ed5-ab6e-d64379284214}": SubResource("BusAsset_65ldi"),
+"{0cd9aea3-efbd-4ed5-ab6e-d64379284214}": ExtResource("4_i05h2"),
 "{56137743-9306-4ce6-95f0-784bd6e210e6}": ExtResource("4_t3o7o"),
 "{d6b204da-ff03-412d-be8e-60acb614cf75}": ExtResource("3_b2tvu"),
-"{deba9fc2-d6c3-486a-8649-8e95638f77df}": SubResource("BusAsset_n56uv"),
+"{deba9fc2-d6c3-486a-8649-8e95638f77df}": ExtResource("7_5lf7f"),
 "{fa278c3e-3b9b-4a99-ba7a-cc395eb02b53}": ExtResource("5_e6m0w")
+}
+parameters = {
+"{f91af73b-8b13-47cc-843b-3e06e832fbe5}": SubResource("ParameterAsset_tmfy6")
 }
 bank_tree = [{
 "children": [],
@@ -123,13 +80,13 @@ event_tree = [{
 "item_type": 1,
 "node_name": "Dx_End",
 "path": "event:/DX/Dx_End",
-"resource": SubResource("EventAsset_3g7ej")
+"resource": ExtResource("8_ox44k")
 }, {
 "children": [],
 "item_type": 1,
 "node_name": "Dx_Start",
 "path": "event:/DX/Dx_Start",
-"resource": SubResource("EventAsset_nc8tv")
+"resource": ExtResource("9_hwdxk")
 }],
 "item_type": 7,
 "node_name": "DX",
@@ -153,37 +110,37 @@ event_tree = [{
 "item_type": 1,
 "node_name": "Ui_Accept",
 "path": "event:/Ui/Ui_Accept",
-"resource": SubResource("EventAsset_eebcy")
+"resource": ExtResource("11_6etls")
 }, {
 "children": [],
 "item_type": 1,
 "node_name": "Ui_Back",
 "path": "event:/Ui/Ui_Back",
-"resource": SubResource("EventAsset_ywpqj")
+"resource": ExtResource("12_hn135")
 }, {
 "children": [],
 "item_type": 1,
 "node_name": "Ui_Highlight",
 "path": "event:/Ui/Ui_Highlight",
-"resource": SubResource("EventAsset_8suvs")
+"resource": ExtResource("13_rw6v1")
 }, {
 "children": [],
 "item_type": 1,
 "node_name": "Ui_Quit",
 "path": "event:/Ui/Ui_Quit",
-"resource": SubResource("EventAsset_k8erj")
+"resource": ExtResource("14_yrc1h")
 }, {
 "children": [],
 "item_type": 1,
 "node_name": "Ui_Slider",
 "path": "event:/Ui/Ui_Slider",
-"resource": SubResource("EventAsset_lalqx")
+"resource": ExtResource("15_fasf4")
 }, {
 "children": [],
 "item_type": 1,
 "node_name": "Ui_Start",
 "path": "event:/Ui/Ui_Start",
-"resource": SubResource("EventAsset_rvskg")
+"resource": ExtResource("16_u1feo")
 }],
 "item_type": 7,
 "node_name": "Ui",
@@ -196,7 +153,7 @@ bus_tree = [{
 "item_type": 4,
 "node_name": "Dx Bus",
 "path": "bus:/Dx Bus",
-"resource": SubResource("BusAsset_65ldi")
+"resource": ExtResource("4_i05h2")
 }, {
 "children": [],
 "item_type": 4,
@@ -214,10 +171,17 @@ bus_tree = [{
 "item_type": 4,
 "node_name": "Ui Bus",
 "path": "bus:/Ui Bus",
-"resource": SubResource("BusAsset_n56uv")
+"resource": ExtResource("7_5lf7f")
 }],
 "item_type": 4,
 "node_name": "bus:",
 "path": "bus:/",
 "resource": ExtResource("3_b2tvu")
+}]
+parameter_tree = [{
+"children": [],
+"item_type": 6,
+"node_name": "Winner",
+"path": "parameter:/Winner",
+"resource": SubResource("ParameterAsset_tmfy6")
 }]

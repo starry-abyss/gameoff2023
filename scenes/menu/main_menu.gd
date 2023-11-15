@@ -15,7 +15,4 @@ func _on_options_pressed():
 
 
 func _on_quit_pressed():
-	UIHelpers.audio_event("Ui/Ui_Quit")
-	
-	# TODO: wait for the sound to end before exiting
-	get_tree().quit()
+	UIHelpers.quit_the_game()
