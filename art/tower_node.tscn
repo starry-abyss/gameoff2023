@@ -1,13 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://b0528if1rt1s"]
+[gd_scene load_steps=2 format=3 uid="uid://b0528if1rt1s"]
 
 [ext_resource type="PackedScene" uid="uid://dlfwei4f7dyu3" path="res://art/models/tower.blend" id="1_0vkxm"]
-[ext_resource type="PackedScene" uid="uid://q1h8nb85jk5l" path="res://art/models/Turret.blend" id="2_k0dcf"]
 
 [node name="tower_node" type="Node3D"]
 
 [node name="tower-a86a63a4e9a93e2d99e00df586653a2d" parent="." instance=ExtResource("1_0vkxm")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -2.91149, 0, -2.03008)
-
-[node name="Turret-876a8f811ba48d2bbe5992887e4a360d" parent="." instance=ExtResource("2_k0dcf")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.139464, 1.60423, 0.0769522)
-visible = false
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -2.911, 2.08165e-12, -1.95)
