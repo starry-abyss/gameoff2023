@@ -1,7 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqeemyrkr6c6e"]
+[gd_scene load_steps=5 format=3 uid="uid://bqeemyrkr6c6e"]
+
+[ext_resource type="ArrayMesh" uid="uid://gc38v24l4rd7" path="res://art/models/kenney-hex/hex_mesh.tres" id="1_q61y0"]
+
+[sub_resource type="MeshTexture" id="MeshTexture_4vca1"]
+mesh = ExtResource("1_q61y0")
+image_size = Vector2(100, 100)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m5dby"]
-shading_mode = 0
+albedo_texture = SubResource("MeshTexture_4vca1")
+heightmap_scale = 5.383
 
 [sub_resource type="PrismMesh" id="PrismMesh_hj722"]
 material = SubResource("StandardMaterial3D_m5dby")
@@ -10,3 +17,11 @@ material = SubResource("StandardMaterial3D_m5dby")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("PrismMesh_hj722")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+
+[node name="stone" type="Node3D" parent="."]
+
+[node name="stone_001" type="MeshInstance3D" parent="stone"]
+mesh = ExtResource("1_q61y0")
+skeleton = NodePath("")

@@ -177,14 +177,15 @@ func init_firewall(index: int):
 	var firewall = preload("res://art/firewall.tscn").instantiate()
 	firewalls[index] = firewall
 	
-	var material = StandardMaterial3D.new()
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.cull_mode = BaseMaterial3D.CULL_DISABLED
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	#var material = StandardMaterial3D.new()
+	#material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	#material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	#material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	
 	var mesh_instances = firewall.find_children("", "MeshInstance3D")
 	for mi in mesh_instances:
-		mi.material_override = material
+	#	mi.material_override = material
+		mi.material_override = preload("res://art/firewall_material.tres").duplicate()
 	
 	battle_area.add_child(firewall)
 	
@@ -208,7 +209,7 @@ func init_firewall(index: int):
 	# TODO: position, rotate and scale properly
 
 func firewall_set_tint(index: int, color: Color):
-	color.a = 0.2
+	color.a = 0.1
 	
 	var mesh_instances = firewalls[index].find_children("", "MeshInstance3D")
 	for mi in mesh_instances:
@@ -381,6 +382,11 @@ func find_unit_by_tile_pos(tile_pos: Vector2i):
 
 func hover_tile(tile_pos: Vector2i):
 	if !is_tile_pos_out_of_bounds(tile_pos):
+		#for i in range(tiles.size()):
+		#	var tile = tiles[i]
+		#	if tile != null:
+		#		tile.get_node("tile_wireframe").visible = i == tile_pos_to_tile_index(tile_pos)
+			
 		# TODO: make order_move support reporting not enough AP reason
 		if order_move(tile_pos, true):
 			var path = get_path_to_tile_pos(tile_pos)

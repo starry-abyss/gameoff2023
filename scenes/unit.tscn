@@ -1,7 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://cjufk4uan3ouy"]
+[gd_scene load_steps=6 format=3 uid="uid://cjufk4uan3ouy"]
 
 [ext_resource type="Script" path="res://scripts/unit.gd" id="1_s7oy4"]
 [ext_resource type="PackedScene" uid="uid://ciwv1a203lwby" path="res://scenes/components/clickable_component.tscn" id="2_i2p8p"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_11hrc"]
+albedo_color = Color(1, 1, 0.203922, 1)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5rx31"]
+emission_shape_offset = Vector3(2.08165e-12, 0.5, 2.08165e-12)
+emission_shape = 3
+emission_box_extents = Vector3(0.5, 0.5, 0.5)
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+scale_min = 0.1
+scale_max = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_g3opu"]
 
 [node name="unit" type="Node3D"]
 script = ExtResource("1_s7oy4")
@@ -9,3 +22,11 @@ type = 2
 tile_ownership_radius = null
 
 [node name="ClickableComponent" parent="." instance=ExtResource("2_i2p8p")]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+visible = false
+material_override = SubResource("StandardMaterial3D_11hrc")
+amount = 20
+lifetime = 0.3
+process_material = SubResource("ParticleProcessMaterial_5rx31")
+draw_pass_1 = SubResource("BoxMesh_g3opu")

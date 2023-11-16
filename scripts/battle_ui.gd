@@ -40,7 +40,7 @@ func _ready():
 	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)
 	
 	for button in find_children("", "Button"):
-		button.mouse_entered.connect(_on_button_highlight)
+		button.mouse_entered.connect(_on_button_highlight.bind(button))
 	
 	for ability_id in StaticData.ability_stats.keys():
 		add_ability_button(ability_id)
@@ -49,9 +49,13 @@ func _ready():
 	
 	movement_path_timer.timeout.connect(_on_timer_timeout)
 	movement_path_timer.wait_time = StaticData.turn_animation_duration
+	
+	#RenderingServer.set_debug_generate_wireframes(true)
+	#get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
 
-func _on_button_highlight():
-	UIHelpers.audio_event("Ui/Ui_Highlight")
+func _on_button_highlight(button: Button):
+	if !button.disabled:
+		UIHelpers.audio_event("Ui/Ui_Highlight")
 
 func change_actions_disabled(disable: bool):
 	select_idle_unit.disabled = disable
@@ -101,7 +105,7 @@ func add_ability_button(ability_id: String):
 	
 	%ability_buttons.add_child(button)
 	button.pressed.connect(_on_ability_button_clicked.bind(ability_id, target_type))
-	button.mouse_entered.connect(_on_button_highlight)
+	button.mouse_entered.connect(_on_button_highlight.bind(button))
 
 func _on_show_path(unit: Unit, path: Array):
 	draw_3d.clear_all()

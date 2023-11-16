@@ -1,0 +1,38 @@
+[gd_resource type="ArrayMesh" load_steps=3 format=3 uid="uid://gc38v24l4rd7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nv4u1"]
+resource_name = "dirt.001"
+albedo_color = Color(0.948242, 0.744326, 0.619001, 1)
+metallic = 1.0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_7gk2h"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.57735, 1, 1e-05, 1.1547),
+"format": 34896613377,
+"index_count": 24,
+"index_data": PackedByteArray(5, 0, 1, 0, 3, 0, 1, 0, 0, 0, 0, 0, 5, 0, 0, 0, 1, 0, 4, 0, 5, 0, 4, 0, 4, 0, 0, 0, 5, 0, 2, 0, 2, 0, 2, 0, 2, 0, 4, 0, 2, 0, 0, 0, 4, 0, 2, 0),
+"name": "dirt.001",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 255, 63, 0, 0, 0, 0, 0, 0, 255, 191, 0, 0, 255, 127, 0, 0, 0, 0, 0, 0, 255, 127, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 63, 0, 0, 255, 255, 0, 0, 255, 191, 0, 0)
+}]
+blend_shape_mode = 0
+
+[resource]
+resource_name = "stone_Mesh stone_001"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.57735, 1, 1e-05, 1.1547),
+"attribute_data": PackedByteArray(255, 255, 22, 72, 255, 255, 177, 194, 255, 127, 201, 10, 255, 127, 255, 255, 0, 0, 22, 72, 0, 0, 177, 194, 255, 255, 22, 72, 255, 127, 201, 10, 255, 127, 201, 10, 0, 0, 22, 72),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray(5, 0, 1, 0, 3, 0, 1, 0, 6, 0, 0, 0, 5, 0, 6, 0, 1, 0, 9, 0, 5, 0, 4, 0, 9, 0, 6, 0, 5, 0, 7, 0, 8, 0, 2, 0, 7, 0, 9, 0, 8, 0, 6, 0, 9, 0, 7, 0),
+"material": SubResource("StandardMaterial3D_nv4u1"),
+"name": "dirt.001",
+"primitive": 3,
+"uv_scale": Vector4(39.3701, 47.4607, 0, 0),
+"vertex_count": 10,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 255, 63, 255, 255, 0, 0, 0, 0, 255, 191, 255, 255, 255, 127, 0, 0, 0, 0, 255, 255, 255, 127, 0, 0, 255, 255, 255, 255, 255, 255, 0, 0, 255, 63, 255, 255, 255, 255, 0, 0, 255, 191, 255, 255, 0, 0, 0, 0, 255, 63, 255, 255, 255, 127, 0, 0, 0, 0, 255, 255, 255, 127, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 255, 63, 255, 255, 255, 127, 255, 63, 255, 127, 255, 63, 255, 127, 255, 63, 255, 127, 255, 63, 255, 127, 255, 63, 255, 127, 255, 63, 255, 127, 255, 63, 255, 127, 255, 63, 255, 127, 255, 63, 255, 127, 255, 63)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_7gk2h")

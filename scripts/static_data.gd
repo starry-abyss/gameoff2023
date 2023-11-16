@@ -12,7 +12,7 @@ extends Node
 	
 	Gameplay.UnitTypes.WORM: { "name": "Worm", "hp_max": 1, "ap_max": 3, "abilities": ["scale","self_modify_to_virus","self_modify_to_trojan"] },
 	Gameplay.UnitTypes.TROJAN: { "name": "Trojan", "hp_max": 6, "ap_max": 8, "abilities": ["capture_tower","backdoor"] },
-	Gameplay.UnitTypes.VIRUS: { "name": "Virus", "hp_max": 12, "ap_max": 5, "attack": 3, "attack_extra": 2, "ap_cost_of_attack": 3 },
+	Gameplay.UnitTypes.VIRUS: { "name": "Virus", "hp_max": 15, "ap_max": 5, "attack": 3, "attack_extra": 2, "ap_cost_of_attack": 3 },
 	}
 
 # sometimes abilities make AP drop right to zero, this table only shows the minimum AP cost
@@ -30,6 +30,6 @@ extends Node
 	"backdoor": { "name": "Open a backdoor", "target": Gameplay.TargetTypes.TILE, "ap": 2, "cooldown": 3 },
 	}
 	
-@export var tile_size = Vector2(1.2, 1.2)
+@export var tile_size = Vector2(1.15, 1.05)
 @export var map_origin = Vector2(1.0, 1.0)
 
