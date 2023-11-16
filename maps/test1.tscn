@@ -42,8 +42,9 @@ func _process(delta):
 [sub_resource type="Environment" id="Environment_mk85x"]
 glow_enabled = true
 glow_normalized = true
-glow_intensity = 0.3
-glow_strength = 1.5
+glow_intensity = 0.2
+glow_strength = 1.4
+glow_mix = 0.439
 glow_blend_mode = 1
 
 [node name="Test1" type="Node3D"]
@@ -68,7 +69,10 @@ size = 20.0
 script = SubResource("GDScript_bx5im")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.76873, 0.165534, -0.61778, -6.24119e-09, 0.965926, 0.258819, 0.639573, -0.198962, 0.742536, 0, 0, 0)
+transform = Transform3D(0.258819, 0.25, -0.933012, 3.36902e-16, 0.965926, 0.258819, 0.965926, -0.0669873, 0.25, 0, 0, 0)
+light_energy = 3.0
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 0.0
 sky_mode = 1
 
 [node name="Label3D" type="Label3D" parent="."]

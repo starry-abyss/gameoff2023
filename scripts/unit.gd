@@ -1,4 +1,4 @@
-@tool
+#@tool
 class_name Unit
 extends Node3D
 
@@ -81,6 +81,7 @@ func load_model(model_scene_name: String):
 	
 	material = ShaderMaterial.new()
 	material.shader = glowing_outline_shader
+	#material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
 	
 	var mesh_instances = model.find_children("", "MeshInstance3D")
 	#var mesh_instance: MeshInstance3D = mesh_instances[-1]
@@ -141,7 +142,7 @@ func load_stats(which_type: Gameplay.UnitTypes):
 	
 func set_tint(color: Color):
 	if material != null:
-		color.a = 0.65
+		#color.a = 0.65
 		material.set_shader_parameter("emission_color", color)
 	pass
 	

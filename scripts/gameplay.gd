@@ -209,7 +209,7 @@ func init_firewall(index: int):
 	# TODO: position, rotate and scale properly
 
 func firewall_set_tint(index: int, color: Color):
-	color.a = 0.1
+	color.a = 0.3
 	
 	var mesh_instances = firewalls[index].find_children("", "MeshInstance3D")
 	for mi in mesh_instances:

@@ -1,4 +1,11 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://da2dc5d7t5pa7"]
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://da2dc5d7t5pa7"]
+
+[sub_resource type="Gradient" id="Gradient_ymk8f"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_080a1"]
+gradient = SubResource("Gradient_ymk8f")
+fill_from = Vector2(2.08165e-12, 1)
+fill_to = Vector2(2.08165e-12, 2.08165e-12)
 
 [resource]
 transparency = 1
@@ -6,4 +13,5 @@ blend_mode = 1
 cull_mode = 2
 shading_mode = 0
 albedo_color = Color(1, 1, 1, 0.364706)
+albedo_texture = SubResource("GradientTexture2D_080a1")
 distance_fade_max_distance = 47.27

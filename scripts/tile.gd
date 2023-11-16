@@ -54,14 +54,16 @@ func set_tint(color: Color):
 		if group == Gameplay.HackingGroups.NEUTRAL:
 			#color.v *= 0.15
 			color = Color.BLACK
-			grey_color.v = 0.15
+			grey_color.v = 0.12
 			
 			#get_node("tile_wireframe").visible = true
 		else:
-			color.v *= 0.20
+			#color.v *= 0.20
 			
 			grey_color = color
-			grey_color.v = 0.35
+			grey_color.v = 0.45
+			
+			color = Color.BLACK
 			
 			#get_node("tile_wireframe").visible = false
 			
