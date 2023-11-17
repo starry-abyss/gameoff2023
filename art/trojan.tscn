@@ -1,9 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://ccgj0dggb6gwa"]
 
-[ext_resource type="ArrayMesh" uid="uid://dwx4graaykj66" path="res://art/models/animals/LD_HorseRtime02.obj" id="1_u542o"]
+[ext_resource type="PackedScene" uid="uid://ba5q3cyvnrik6" path="res://art/models/Horse.blend" id="1_a6kug"]
 
 [node name="trojan" type="Node3D"]
 
-[node name="horse" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-09, 3.48787e-17, 0.1, 3.48787e-17, 0.1, -3.48787e-17, -0.1, 3.48787e-17, -4.37114e-09, 0, 0.487863, 0)
-mesh = ExtResource("1_u542o")
+[node name="Horse-fb0c0d0dde7961b9e43a5ccda2862c30" parent="." instance=ExtResource("1_a6kug")]
+transform = Transform3D(-0.4, 2.45986e-09, -5.49859e-08, 2.49902e-08, 0.364155, -0.165502, 4.90407e-08, -0.165502, -0.364155, 0.11792, 0.327405, 0.231767)

@@ -5,4 +5,4 @@
 [node name="virus" type="Node3D"]
 
 [node name="Virus-6397ebfa2805bf6e9228f12a78ad765f" parent="." instance=ExtResource("1_v2dd8")]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0.605197, 0)
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0.49769, 0)
