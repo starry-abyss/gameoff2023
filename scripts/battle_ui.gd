@@ -219,7 +219,8 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 	#update_abilities_buttons(selected_unit)
 
 func _unhandled_input(event):
-	if event is InputEventMouseButton && event.pressed:
+	if event is InputEventMouseButton && event.pressed \
+		&& event.button_index == MOUSE_BUTTON_LEFT:
 		#print("Mouse Click/Unclick at: ", event.position)
 
 		var world_pos = UIHelpers.screen_pos_to_world_pos(event.position)
