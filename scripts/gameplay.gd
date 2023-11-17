@@ -782,9 +782,11 @@ func get_path_to_tile_pos(tile_pos: Vector2i):
 				if !is_tile_pos_out_of_bounds(pos_to_explore_next):
 					var next_distance = distances[tile_pos_to_tile_index(pos_to_explore_next)]
 					if next_distance < distance && next_distance != NotCalculated && next_distance != Unreachable:
-						path.push_front(pos_to_explore_next)
 						tile_pos = pos_to_explore_next
 						distance = next_distance
+						
+						path.push_front(tile_pos)
+						break
 			
 			# const NotInitialized = 9999999
 			#var min_distance_with_pos = [NotInitialized, Vector2i(0, 0)]
