@@ -1,10 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://cxaqvfti58xoq"]
+[gd_scene load_steps=14 format=3 uid="uid://cxaqvfti58xoq"]
 
 [ext_resource type="PackedScene" uid="uid://c7k4uu8silsa6" path="res://scenes/battle_area.tscn" id="1_mgdil"]
 [ext_resource type="Script" path="res://scripts/gameplay.gd" id="1_nrikt"]
+[ext_resource type="Texture2D" uid="uid://bgbadqs8blksv" path="res://assets/kenney_game-icons/PNG/White/1x/gear.png" id="3_fbnhy"]
 [ext_resource type="PackedScene" uid="uid://khbj7vpou3mu" path="res://scenes/battle_ui.tscn" id="3_iddt0"]
 [ext_resource type="FontFile" uid="uid://ckdo8mgv1ag2i" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="4_uy1sx"]
 [ext_resource type="PackedScene" uid="uid://cvvm6puvfa4gf" path="res://art/firewall.tscn" id="5_ey2ky"]
+[ext_resource type="PackedScene" uid="uid://chr8t35qwnt7j" path="res://scenes/menu/options_menu.tscn" id="6_xh7ly"]
+[ext_resource type="Shader" path="res://shaders/glitch.gdshader" id="8_bq4h5"]
+[ext_resource type="Texture2D" uid="uid://dgfw5dh42i3qk" path="res://icon.svg" id="9_fr0wu"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_uuila"]
 
@@ -46,6 +50,14 @@ glow_intensity = 0.2
 glow_strength = 1.7
 glow_mix = 0.439
 glow_blend_mode = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a0hti"]
+shader = ExtResource("8_bq4h5")
+shader_parameter/range = 0.0
+shader_parameter/noiseQuality = 300.0
+shader_parameter/noiseIntensity = 0.000499961
+shader_parameter/offsetIntensity = 0.03
+shader_parameter/colorOffsetIntensity = 0.0
 
 [node name="Test1" type="Node3D"]
 script = ExtResource("1_nrikt")
@@ -89,3 +101,28 @@ visible = false
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_mk85x")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Button" type="Button" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -39.0
+offset_top = 10.0
+offset_right = 19.0
+offset_bottom = 68.0
+grow_horizontal = 0
+scale = Vector2(0.5, 0.5)
+icon = ExtResource("3_fbnhy")
+
+[node name="OptionsMenu" parent="CanvasLayer" instance=ExtResource("6_xh7ly")]
+visible = false
+
+[node name="Effect" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_a0hti")
+position = Vector2(573.5, 323.5)
+scale = Vector2(8.96094, 5.03906)
+texture = ExtResource("9_fr0wu")
+
+[connection signal="pressed" from="CanvasLayer/Button" to="." method="_on_button_pressed"]

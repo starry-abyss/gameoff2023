@@ -3,6 +3,10 @@ extends Node3D
 
 @onready var battle_area = %battle_area
 @onready var battle_ui = %battle_ui
+@onready var options_menu = $CanvasLayer/OptionsMenu
+@onready var button = $CanvasLayer/Button
+@onready var blue_theme = preload("res://themes/blue.tres")
+@onready var pink_theme = preload("res://themes/pink.tres")
 
 enum UnitTypes { CENTRAL_NODE, TOWER_NODE, WORM, TROJAN, VIRUS }
 enum TargetTypes { UNIT, TILE, SELF }
@@ -673,6 +677,7 @@ func hurt_unit(target: Unit, amount: int):
 	target.hp = max(target.hp - amount, 0)
 	
 	var damage = hp_before - target.hp
+	target.on_hurt()
 	if damage > 0:
 		battle_ui._on_unit_hp_change(target, -damage)
 	
@@ -858,6 +863,30 @@ func for_all_tile_pos_around(tile_pos: Vector2i, f: Callable):
 		if tile != null:
 			f.call(adj_tile_pos_absolute)
 
+
+func on_group_color_change(group: Gameplay.HackingGroups, color: Color):
+	for unit in units:
+		if unit.group == group:
+			unit.set_tint(color)
+	update_firewalls()
+	#update theme color
+	match group:
+		Gameplay.HackingGroups.BLUE:
+			blue_theme.set_color("font_color", "Button", color)
+			blue_theme.set_color("font_focus_color", "Button", color)
+		Gameplay.HackingGroups.PINK:
+			pink_theme.set_color("font_color", "Button", color)
+			pink_theme.set_color("font_focus_color", "Button", color)
+
+
+func _on_button_pressed():
+	options_menu.visible = true
+	
+
+func _on_back_pressed():
+	options_menu.visible = false
+	
+
 func _ready():
 	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", end_turn)
 	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", select_next_unit)
@@ -865,6 +894,8 @@ func _ready():
 	battle_ui.connect("tile_hovered", hover_tile)
 	battle_ui.connect("unit_clicked", click_unit)
 	battle_ui.connect("order_given", give_order)
+	options_menu.connect("on_group_color_change", on_group_color_change)
+	options_menu.connect("on_back_pressed", _on_back_pressed)
 	
 	tiles.resize(map_size.x * map_size.y)
 	distances.resize(tiles.size())
@@ -930,3 +961,4 @@ func _ready():
 	
 	UIHelpers.audio_event("DX/Dx_Start")
 	pass
+

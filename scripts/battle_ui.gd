@@ -48,7 +48,7 @@ func _ready():
 	in_select_target_mode = false
 	
 	movement_path_timer.timeout.connect(_on_timer_timeout)
-	movement_path_timer.wait_time = StaticData.turn_animation_duration
+	#movement_path_timer.wait_time = StaticData.turn_animation_duration
 	
 	#RenderingServer.set_debug_generate_wireframes(true)
 	#get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
@@ -136,6 +136,7 @@ func _on_unit_move(unit: Unit, path: Array):
 		var pos_offset = Vector3(pos.x, 0.0, pos.y) - unit.position
 		new_curve.add_point(pos_offset)
 	movement_path.curve = new_curve
+	movement_path_timer.wait_time = StaticData.move_animation_duration_per_tile * (len(path) - 1)
 	movement_path_timer.start()
 	
 	in_unit_animation_mode = true
