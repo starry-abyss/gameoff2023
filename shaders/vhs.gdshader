@@ -1,3 +1,5 @@
+// credits to https://godotshaders.com/shader/vhs-and-crt-monitor-effect/
+
 /*
 Shader from Godot Shaders - the free shader library.
 godotshaders.com/shader/VHS-and-CRT-monitor-effect

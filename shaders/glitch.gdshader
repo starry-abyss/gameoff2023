@@ -1,4 +1,5 @@
-//credits to https://godotshaders.com/shader/vhs-and-crt-monitor-effect/
+// credits to: https://www.shadertoy.com/view/Ms3XWH
+
 shader_type canvas_item;
 
 uniform float range : hint_range(0.0, 0.1, 0.005)= 0.05;
