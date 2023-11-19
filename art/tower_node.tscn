@@ -5,4 +5,4 @@
 [node name="tower_node" type="Node3D"]
 
 [node name="tower-a86a63a4e9a93e2d99e00df586653a2d" parent="." instance=ExtResource("1_0vkxm")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -2.911, 2.08165e-12, -1.95)
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 2.08165e-12, 2.08165e-12, 2.08165e-12)

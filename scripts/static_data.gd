@@ -33,6 +33,6 @@ extends Node
 	"backdoor": { "name": "Open a backdoor", "target": Gameplay.TargetTypes.TILE, "ap": 2, "cooldown": 3 },
 	}
 	
-@export var tile_size = Vector2(1.15, 1.05)
+@export var tile_size = Vector2(1.15, 1.15 * sin(PI / 3.0))
 @export var map_origin = Vector2(1.0, 1.0)
 

@@ -69,7 +69,7 @@ func update_selection_indicator(unit: Unit):
 
 func update_abilities_buttons_general_visibility():
 	$CanvasLayer/cancel_select_target.visible = !in_unit_animation_mode && in_select_target_mode && selected_unit_indicator.visible
-	%ability_buttons.visible = !in_unit_animation_mode && !in_select_target_mode && selected_unit_indicator.visible
+	%ability_buttons.visible = !in_select_target_mode && selected_unit_indicator.visible
 
 func update_abilities_buttons(selected_unit: Unit):
 	update_abilities_buttons_general_visibility()
@@ -83,29 +83,45 @@ func update_abilities_buttons(selected_unit: Unit):
 				button.visible = stats.abilities.has(ability_id)
 				button.disabled = selected_unit.ap < ability_stats.ap \
 					|| selected_unit.get_cooldown(ability_id) > 0
+				
+				update_ability_button_text(ability_id, selected_unit)
 			else:
 				button.visible = false
+	
+	if in_unit_animation_mode:
+		for button in %ability_buttons.get_children():
+			button.disabled = true
 
 func add_ability_button(ability_id: String):
 	var stats = StaticData.ability_stats[ability_id]
 	
 	var button = Button.new()
 	
-	var button_text = stats.name
-	var target_type = stats.target
-	
-	var cooldown_text = (", CD: " + str(stats.cooldown)) if stats.cooldown > 0 else ""
-	
 	button.name = ability_id
-	button.text = button_text \
-		+ "\ntarget: " + Gameplay.TargetTypes.keys()[target_type] \
-		+ "\nAP: " + str(stats.ap) + cooldown_text
+	button.text = ""
 	#button.position.x = %ability_buttons.get_children().size() * 100
 	button.custom_minimum_size = Vector2(100, 100)
 	
 	%ability_buttons.add_child(button)
-	button.pressed.connect(_on_ability_button_clicked.bind(ability_id, target_type))
+	button.pressed.connect(_on_ability_button_clicked.bind(ability_id, stats.target))
 	button.mouse_entered.connect(_on_button_highlight.bind(button))
+
+func update_ability_button_text(ability_id: String, selected_unit: Unit):
+	assert(selected_unit != null)
+	
+	var stats = StaticData.ability_stats[ability_id]
+	
+	var cooldown_text = ""
+	if stats.cooldown > 0:
+		cooldown_text = ", CD: " + str(stats.cooldown)
+		var current_cooldown = selected_unit.get_cooldown(ability_id)
+		if current_cooldown > 0:
+			cooldown_text += "\n(" + str(current_cooldown) + " turns left)"
+	
+	var button = %ability_buttons.get_node(ability_id)
+	button.text = stats.name \
+		+ "\ntarget: " + Gameplay.TargetTypes.keys()[stats.target] \
+		+ "\nAP: " + str(stats.ap) + cooldown_text
 
 func _on_show_path(unit: Unit, path: Array):
 	draw_3d.clear_all()
@@ -144,15 +160,18 @@ func _on_unit_move(unit: Unit, path: Array):
 
 func _on_unit_selection_changed(unit: Unit):
 	if unit == null:
-		selected_unit_stats.visible = false
-		
 		in_select_target_mode = false
-	else:
-		selected_unit_stats.visible = true 
-		selected_unit_stats._display_unit_stats(unit)
 	
 	update_selection_indicator(unit)
 	update_abilities_buttons(unit)
+	#update_abilities_buttons_general_visibility()
+
+func _on_unit_show_stats(unit: Unit):
+	if unit == null:
+		selected_unit_stats.visible = false
+	else:
+		selected_unit_stats.visible = true 
+		selected_unit_stats._display_unit_stats(unit)
 
 func _on_unit_destroy(unit: Unit):
 	pass
@@ -216,8 +235,8 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 	if success:
 		in_select_target_mode = false
 	
-	_on_unit_selection_changed(selected_unit)
-	#update_abilities_buttons(selected_unit)
+	_on_unit_show_stats(selected_unit)
+	update_abilities_buttons(selected_unit)
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton && event.pressed \
@@ -266,3 +285,5 @@ func _process(delta):
 func _on_timer_timeout():
 	in_unit_animation_mode = false
 	animated_unit = null
+	
+	animation_finished.emit()

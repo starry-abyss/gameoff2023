@@ -59,12 +59,7 @@ func calculate_distances():
 					assert(tower != null)
 					# neutral can't have firewalls, so it's an enemy's one
 					if tower.group != selected_unit.group:
-						# if tile_pos is on a firewall line, 
-						# then dy_to_tile_pos/dx_to_tile_pos == dy_to_end_pos/dx_to_end_pos
-						# which means that dy_to_tile_pos * dx_to_end_pos == dy_to_end_pos * dx_to_tile_pos
-						# and we can perform a check for that
-						if (selected_unit.tile_pos.y - start_tile_pos.y) * (end_tile_pos.x - start_tile_pos.x) \
-							== (end_tile_pos.y - start_tile_pos.y) * (selected_unit.tile_pos.x - start_tile_pos.x):
+						if is_unit_inside_the_firewall(selected_unit, start_tile_pos, end_tile_pos):
 							inside_an_enemy_firewall = true
 							# mark two lines parallel to the firewall as Unreachable to trap the unit
 							# 1) find the direction to the second tower
@@ -151,6 +146,17 @@ func find_direction_for_tower_tile_pos(tile_pos1: Vector2i, tile_pos2: Vector2i)
 	
 	assert(false)
 	return 0
+
+func is_unit_inside_the_firewall(unit: Unit, start_tile_pos: Vector2i, end_tile_pos: Vector2i) -> bool:
+	var tile_pos = start_tile_pos
+	var distance = UIHelpers.tile_pos_distance(start_tile_pos, end_tile_pos)
+	var direction = find_direction_for_tower_tile_pos(start_tile_pos, end_tile_pos)
+	for i in range(distance-1):
+		tile_pos += UIHelpers.get_tile_neighbor_list(tile_pos)[direction]
+		if tile_pos == unit.tile_pos:
+			return true
+	
+	return false
 
 const firewall_index_multiplier: int = 256 * 256
 func tower_pos_to_firewall_index(tile_pos1: Vector2i, tile_pos2: Vector2i) -> int:
@@ -399,6 +405,12 @@ func hover_tile(tile_pos: Vector2i):
 			battle_ui._on_hide_path()
 	else:
 		battle_ui._on_hide_path()
+	
+	var hovered_unit = find_unit_by_tile_pos(tile_pos)
+	if hovered_unit != null:
+		battle_ui._on_unit_show_stats(hovered_unit)
+	else:
+		battle_ui._on_unit_show_stats(selected_unit)
 
 func click_tile(tile_pos: Vector2i):
 	# TODO: also select units by clicking tiles
@@ -462,6 +474,7 @@ func select_unit(unit_to_select: Unit, no_ui = false):
 		battle_ui._on_unit_selection_changed(null)
 	else:
 		battle_ui._on_unit_selection_changed(selected_unit)
+		battle_ui._on_unit_show_stats(selected_unit)
 
 func select_next_unit():
 	var units_in_the_same_group_before_selected_unit = []
@@ -510,7 +523,7 @@ func order_ability_self_modify(new_type: UnitTypes, imaginary = false) -> bool:
 		selected_unit.type = new_type
 		selected_unit.ap = 0
 		
-		select_unit(null)
+		#select_unit(null)
 	
 	return true
 
@@ -736,6 +749,8 @@ func order_attack(target: Unit, imaginary = false) -> bool:
 				
 				var attack_power = selected_unit.attack + randi_range(0, selected_unit.attack_extra)
 				hurt_unit(target, attack_power)
+				
+				print("attack power: ", attack_power)
 			
 			return true
 	
@@ -894,6 +909,7 @@ func _ready():
 	battle_ui.connect("tile_hovered", hover_tile)
 	battle_ui.connect("unit_clicked", click_unit)
 	battle_ui.connect("order_given", give_order)
+	battle_ui.connect("animation_finished", func(): select_unit(selected_unit))
 	options_menu.connect("on_group_color_change", on_group_color_change)
 	options_menu.connect("on_back_pressed", _on_back_pressed)
 	
@@ -911,10 +927,11 @@ func _ready():
 	remove_tile(Vector2i(19, 10))
 	
 	#spawn_unit(Vector2i(0, 1), UnitTypes.WORM, HackingGroups.BLUE)
-	#spawn_unit(Vector2i(13, 3), UnitTypes.TROJAN, HackingGroups.BLUE)
+	spawn_unit(Vector2i(13, 3), UnitTypes.TROJAN, HackingGroups.BLUE)
 	#spawn_unit(Vector2i(0, 3), UnitTypes.VIRUS, HackingGroups.PINK)
 	
-	#spawn_unit(Vector2i(13, 2), UnitTypes.TROJAN, HackingGroups.PINK)
+	spawn_unit(Vector2i(13, 2), UnitTypes.TROJAN, HackingGroups.PINK)
+	spawn_unit(Vector2i(14, 3), UnitTypes.TROJAN, HackingGroups.PINK)
 	
 	spawn_unit(Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)

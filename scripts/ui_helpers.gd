@@ -96,6 +96,11 @@ func audio_set_parameter(parameter_name: String, value: float):
 func audio_event(event_name: String):
 	FMODRuntime.play_one_shot_path("event:/" + event_name)
 
+#var audioEmitter3d = StudioEventEmitter3D.new()
+func audio_event3d(event_name: String, pos: Vector2):
+	#audioEmitter3d
+	pass
+
 func quit_the_game():
 	# TODO: for debug, to be removed:
 	UIHelpers.audio_set_parameter("Winner", Gameplay.HackingGroups.PINK)

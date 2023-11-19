@@ -154,6 +154,10 @@ func set_tint(color: Color):
 func type_changed_set_up(new_type: Gameplay.UnitTypes):
 	load_stats(new_type)
 	load_model(type_to_model_scene_name(new_type))
+	
+	if new_type == Gameplay.UnitTypes.TOWER_NODE && model != null:
+		var sides: MeshInstance3D = model.find_child("Sides")
+		sides.rotate_y(randf() * PI * 2.0)
 
 func _ready():
 	#if Engine.is_editor_hint():
@@ -189,5 +193,9 @@ func _process(delta):
 		
 		if destroy_timer >= StaticData.turn_animation_duration:
 			queue_free()
+	
+	if type == Gameplay.UnitTypes.TOWER_NODE && model != null:
+		var sides: MeshInstance3D = model.find_child("Sides")
+		sides.rotate_y(delta * 0.4)
 
 
