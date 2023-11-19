@@ -16,6 +16,8 @@ extends Node3D
 
 var destroy_timer = 0.0
 var to_be_removed = false
+var hurt_timer = 0.0
+var is_hurt = false
 
 var hp: int = 8
 var hp_max: int = 8
@@ -26,6 +28,8 @@ var ap_cost_of_attack: int = 1
 var ap: int = 3
 var ap_max: int = 3
 var cooldowns = {}
+
+var emission_color: Color
 
 # TODO: add this for Central nodes to restore tile coloring after capture
 @export var tile_ownership_radius = 0
@@ -160,12 +164,30 @@ func _ready():
 func _on_click():
 	on_click.emit(self)
 	
+
+func on_hurt():
+	is_hurt = true
+	emission_color = Color(material.get_shader_parameter("emission_color"))
+	material.set_shader_parameter("emission_color", Color.WHITE)
+		
+	
 func _process(delta):
+	if is_hurt:
+		hurt_timer += delta
+		# TODO: improve this animation
+		if hurt_timer >= StaticData.hurt_animation_duration:
+			material.set_shader_parameter("emission_color", emission_color)
+			is_hurt = false
+		return
+			
 	if to_be_removed:
 		destroy_timer += delta
 		
 		var new_scale = max(0.01, StaticData.turn_animation_duration - destroy_timer * 5.0) / StaticData.turn_animation_duration
-		scale = Vector3(new_scale, new_scale, new_scale)
+		#scale = Vector3(new_scale, new_scale, new_scale)
+		material.set_shader_parameter("emission_color", Color(material.get_shader_parameter("emission_color"), new_scale))
 		
 		if destroy_timer >= StaticData.turn_animation_duration:
 			queue_free()
+
+

@@ -4,7 +4,10 @@ extends Node
 @export var color_blue: Color = Color("#0045ff")
 @export var color_neutral: Color = Color("#606060")
 
+@export var hurt_animation_duration: float = 0.2
 @export var turn_animation_duration: float = 1.0
+@export var move_animation_duration_per_tile: float = 0.2
+
 
 @export var unit_stats = { 
 	Gameplay.UnitTypes.CENTRAL_NODE: { "name": "Kernel", "hp_max": 200, "ap_max": 6, "abilities": ["repair","reset"] },

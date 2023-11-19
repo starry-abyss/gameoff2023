@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cjn1r45r7stqb"]
 
 [ext_resource type="Script" path="res://scenes/click_test.gd" id="1_1w7u6"]
-[ext_resource type="PackedScene" uid="uid://bbpqmtalxqd5i" path="res://scenes/menu/selected_unit_stats.tscn" id="3_q4x1c"]
+[ext_resource type="PackedScene" uid="uid://bbpqmtalxqd5i" path="res://selected_unit_stats.tscn" id="3_q4x1c"]
 
 [node name="ClickTest" type="Node3D"]
 script = ExtResource("1_1w7u6")
