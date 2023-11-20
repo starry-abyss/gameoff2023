@@ -15,7 +15,7 @@ extends Node
 	
 	Gameplay.UnitTypes.WORM: { "name": "Worm", "hp_max": 1, "ap_max": 3, "abilities": ["move","scale","self_modify_to_virus","self_modify_to_trojan"] },
 	Gameplay.UnitTypes.TROJAN: { "name": "Trojan", "hp_max": 6, "ap_max": 8, "abilities": ["move","capture_tower","backdoor"] },
-	Gameplay.UnitTypes.VIRUS: { "name": "Virus", "hp_max": 15, "ap_max": 5, "abilities": ["move","virus_attack"] },
+	Gameplay.UnitTypes.VIRUS: { "name": "Virus", "hp_max": 15, "ap_max": 5, "abilities": ["move","virus_attack","integrate","spread"] },
 	}
 
 # sometimes abilities make AP drop right to zero, this table only shows the minimum AP cost
@@ -28,6 +28,9 @@ extends Node
 	"scale": { "name": "Double", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 2 },
 	"self_modify_to_virus": { "name": "Mutate to Virus", "target": Gameplay.TargetTypes.SELF, "ap": 2, "cooldown": 0 },
 	"self_modify_to_trojan": { "name": "Mutate to Trojan", "target": Gameplay.TargetTypes.SELF, "ap": 3, "cooldown": 0 },
+	
+	"integrate": { "name": "Integrate", "target": Gameplay.TargetTypes.UNIT, "ap": -3, "cooldown": 1 },
+	"spread": { "name": "Spread", "target": Gameplay.TargetTypes.UNIT, "ap": 6, "cooldown": 0, "attack": 1, "attack_extra": 2 },
 	
 	"repair": { "name": "Patch", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "restored_hp": 6 },
 	"reset": { "name": "Reset", "target": Gameplay.TargetTypes.TILE, "ap": 6, "cooldown": 5 },

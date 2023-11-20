@@ -113,6 +113,8 @@ func make_ap_string(ability_id, ap) -> String:
 		return "AP: " + str(ap) + " per tile"
 	elif ap > 0:
 		return "AP: " + str(ap)
+	elif ap < 0:
+		return "AP: +" + str(-ap)
 	
 	return "auto-call"
 

@@ -425,14 +425,14 @@ func click_tile(tile_pos: Vector2i):
 				click_unit(unit_at_pos)
 				pass
 			else: # unit_at_pos.can_attack():
-				var result = false
+				#var result = false
 				if selected_unit != null && selected_unit.can_attack():
 					if selected_unit.type == UnitTypes.VIRUS:
-						result = order_ability_virus_attack(unit_at_pos)
+						give_order("virus_attack", unit_at_pos) #result = order_ability_virus_attack(unit_at_pos)
 					elif selected_unit.type == UnitTypes.TOWER_NODE:
-						result = order_ability_tower_attack(unit_at_pos)
+						give_order("tower_attack", unit_at_pos) #result = order_ability_tower_attack(unit_at_pos)
 					
-					battle_ui._on_order_processed(result, selected_unit)
+					#battle_ui._on_order_processed(result, selected_unit)
 
 func click_unit(unit_to_select: Unit):
 	if unit_to_select.group == current_turn_group && !is_ai_turn():
@@ -531,6 +531,10 @@ func order_ability_self_modify(new_type: UnitTypes, imaginary = false) -> bool:
 	if !imaginary:
 		selected_unit.type = new_type
 		selected_unit.ap = 0
+		
+		# disallow restoring AP right after Virus' creation
+		if new_type == UnitTypes.VIRUS:
+			selected_unit.cooldowns["integrate"] = 1
 		
 		#select_unit(null)
 	
@@ -632,6 +636,81 @@ func order_ability_capture_tower(target: Unit, imaginary = false) -> bool:
 		remove_unit(selected_unit)
 		
 		update_firewalls()
+	
+	return true
+
+func order_ability_integrate(target: Unit, imaginary = false) -> bool:
+	if selected_unit == null:
+		return false
+	
+	if target.type != UnitTypes.WORM:
+		return false
+	
+	if target.group != selected_unit.group:
+		return false
+	
+	var target_is_neighbor = \
+		UIHelpers.tile_pos_distance(selected_unit.tile_pos, target.tile_pos) == 1
+	
+	if !target_is_neighbor:
+		return false
+	
+	if !imaginary:
+		remove_unit(target)
+	
+	return true
+
+func check_ability_spread(target: Unit) -> bool:
+	if selected_unit == null || target == null || target == selected_unit:
+		return false
+	
+	if target.hp == 0:
+		return false
+	
+	if target.is_static():
+		return false
+	
+	# allow to only attack enemies
+	if target.group != flip_group(selected_unit.group):
+		return false
+	
+	return true
+
+func execute_ability_spread(target: Unit) -> void:
+	var ability_stats = StaticData.ability_stats["spread"]
+	var attack_power = ability_stats.attack + randi_range(0, ability_stats.attack_extra)
+	hurt_unit(target, attack_power)
+
+func order_ability_spread(target: Unit, imaginary = false) -> bool:
+	if !check_ability_spread(target):
+		return false
+	
+	var target_is_neighbor = \
+		UIHelpers.tile_pos_distance(selected_unit.tile_pos, target.tile_pos) == 1
+	
+	if !target_is_neighbor:
+		return false
+	
+	if !imaginary:
+		execute_ability_spread(target)
+		var affected_units = [ target ]
+		
+		var pos_to_explore_stack = [ target.tile_pos ]
+		while pos_to_explore_stack.size() > 0:
+			var pos_to_explore = pos_to_explore_stack.pop_front()
+			
+			var tile_neighbors = UIHelpers.get_tile_neighbor_list(pos_to_explore)
+			for adj_tile_pos in tile_neighbors:
+				var pos_to_explore_next = pos_to_explore + adj_tile_pos
+				
+				var current_distance = distances[tile_pos_to_tile_index(pos_to_explore_next)]
+				
+				var unit_to_damage = find_unit_by_tile_pos(pos_to_explore_next)
+				if check_ability_spread(unit_to_damage) && current_distance != Unreachable && !affected_units.has(unit_to_damage):
+					execute_ability_spread(unit_to_damage)
+					affected_units.append(unit_to_damage)
+					
+					pos_to_explore_stack.append(pos_to_explore_next)
 	
 	return true
 
@@ -762,9 +841,9 @@ func order_attack(target: Unit, imaginary: bool, ability_stats) -> bool:
 		return false
 	
 	if UIHelpers.tile_pos_distance(selected_unit.tile_pos, target.tile_pos) <= ability_stats.attack_range:
-		if selected_unit.ap >= ability_stats.ap:
+		#if selected_unit.ap >= ability_stats.ap:
 			if !imaginary:
-				selected_unit.ap -= ability_stats.ap
+				#selected_unit.ap -= ability_stats.ap
 				
 				var attack_power = ability_stats.attack + randi_range(0, ability_stats.attack_extra)
 				hurt_unit(target, attack_power)
