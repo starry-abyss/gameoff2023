@@ -751,6 +751,10 @@ func order_attack(target: Unit, imaginary: bool, ability_stats) -> bool:
 	if target.hp == 0:
 		return false
 	
+	# allow to only attack enemies
+	if target.group != flip_group(selected_unit.group):
+		return false
+	
 	# to block attack through firewalls, but it only works with range 1 attacks
 	# TODO: for range 2+ attacks need to cast rays as an extra step
 	var distance = distances[tile_pos_to_tile_index(target.tile_pos)]
@@ -862,7 +866,7 @@ func end_turn(silent = false):
 				heal_unit(unit, StaticData.ability_stats["self_repair"].restored_hp)
 				
 				if (!unit.cooldowns.has("spawn_worms") || unit.cooldowns["spawn_worms"] <= 0):
-					unit.cooldowns["spawn_worms"] = 3
+					unit.cooldowns["spawn_worms"] = StaticData.ability_stats["spawn_worms"].cooldown
 					for_all_tile_pos_around(unit.tile_pos, \
 						func(tile_pos): spawn_unit(tile_pos, UnitTypes.WORM, unit.group))
 	
