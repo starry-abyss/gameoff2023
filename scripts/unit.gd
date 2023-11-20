@@ -57,7 +57,9 @@ func is_static() -> bool:
 	return type == Gameplay.UnitTypes.CENTRAL_NODE || type == Gameplay.UnitTypes.TOWER_NODE
 
 func can_attack() -> bool:
-	return attack > 0 || attack_extra > 0
+	#return attack > 0 || attack_extra > 0
+	
+	return type == Gameplay.UnitTypes.VIRUS || type == Gameplay.UnitTypes.TOWER_NODE
 
 func get_cooldown(ability_id: String) -> int:
 	if cooldowns.has(ability_id):
@@ -121,6 +123,9 @@ func load_stats(which_type: Gameplay.UnitTypes):
 		ap_max = 0
 		ap = 0
 	
+	return
+	
+	# TODO: remove after refactoring attack into ability is finished
 	if stats.has("attack"):
 		attack = stats.attack
 	else:
@@ -187,7 +192,7 @@ func _process(delta):
 	if to_be_removed:
 		destroy_timer += delta
 		
-		var new_scale = max(0.01, StaticData.turn_animation_duration - destroy_timer * 5.0) / StaticData.turn_animation_duration
+		var new_scale = max(0.0, StaticData.turn_animation_duration - destroy_timer * 2.0) / StaticData.turn_animation_duration
 		#scale = Vector3(new_scale, new_scale, new_scale)
 		material.set_shader_parameter("emission_color", Color(material.get_shader_parameter("emission_color"), new_scale))
 		

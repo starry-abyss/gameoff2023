@@ -7,6 +7,7 @@
 script = ExtResource("1_jec03")
 
 [node name="Label" type="Label3D" parent="."]
+pixel_size = 0.01
 billboard = 2
 double_sided = false
 font = ExtResource("1_gr7dt")

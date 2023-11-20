@@ -398,7 +398,7 @@ func hover_tile(tile_pos: Vector2i):
 		#		tile.get_node("tile_wireframe").visible = i == tile_pos_to_tile_index(tile_pos)
 			
 		# TODO: make order_move support reporting not enough AP reason
-		if order_move(tile_pos, true):
+		if order_ability_move(tile_pos, true):
 			var path = get_path_to_tile_pos(tile_pos)
 			battle_ui._on_show_path(selected_unit, path)
 		else:
@@ -418,15 +418,21 @@ func click_tile(tile_pos: Vector2i):
 	if !is_tile_pos_out_of_bounds(tile_pos):
 		var unit_at_pos: Unit = find_unit_by_tile_pos(tile_pos)
 		if unit_at_pos == null:
-			var result = order_move(tile_pos)
+			var result = order_ability_move(tile_pos)
 			battle_ui._on_order_processed(result, selected_unit)
 		else:
 			if unit_at_pos.group == current_turn_group:
 				click_unit(unit_at_pos)
 				pass
 			else: # unit_at_pos.can_attack():
-				var result = order_attack(unit_at_pos)
-				battle_ui._on_order_processed(result, selected_unit)
+				var result = false
+				if selected_unit != null && selected_unit.can_attack():
+					if selected_unit.type == UnitTypes.VIRUS:
+						result = order_ability_virus_attack(unit_at_pos)
+					elif selected_unit.type == UnitTypes.TOWER_NODE:
+						result = order_ability_tower_attack(unit_at_pos)
+					
+					battle_ui._on_order_processed(result, selected_unit)
 
 func click_unit(unit_to_select: Unit):
 	if unit_to_select.group == current_turn_group && !is_ai_turn():
@@ -453,9 +459,12 @@ func give_order(ability_id: String, target):
 		if result:
 			# if the selected unit wasn't removed during the order execution
 			if selected_unit != null:
-				# need to prevent AP from going below zero,
-				# if during the order execution AP already became zero
-				selected_unit.ap = max(0, selected_unit.ap - stats.ap)
+				# move cost is per tile, so it'll be processed during the order execution
+				if ability_id != "move":
+					# need to prevent AP from going below zero,
+					# if during the order execution AP already became zero
+					selected_unit.ap = max(0, selected_unit.ap - stats.ap)
+				
 				selected_unit.cooldowns[ability_id] = stats.cooldown
 	
 	if result:
@@ -729,7 +738,13 @@ func end_battle(who_lost: HackingGroups):
 	UIHelpers.audio_set_parameter("Winner", who_won)
 	UIHelpers.audio_event("DX/Dx_End")
 
-func order_attack(target: Unit, imaginary = false) -> bool:
+func order_ability_virus_attack(target: Unit, imaginary = false) -> bool:
+	return order_attack(target, imaginary, StaticData.ability_stats["virus_attack"])
+
+func order_ability_tower_attack(target: Unit, imaginary = false) -> bool:
+	return order_attack(target, imaginary, StaticData.ability_stats["tower_attack"])
+
+func order_attack(target: Unit, imaginary: bool, ability_stats) -> bool:
 	if selected_unit == null || target == selected_unit || !selected_unit.can_attack():
 		return false
 	
@@ -742,12 +757,12 @@ func order_attack(target: Unit, imaginary = false) -> bool:
 	if distance == Unreachable:
 		return false
 	
-	if UIHelpers.tile_pos_distance(selected_unit.tile_pos, target.tile_pos) <= selected_unit.attack_range:
-		if selected_unit.ap >= selected_unit.ap_cost_of_attack:
+	if UIHelpers.tile_pos_distance(selected_unit.tile_pos, target.tile_pos) <= ability_stats.attack_range:
+		if selected_unit.ap >= ability_stats.ap:
 			if !imaginary:
-				selected_unit.ap -= selected_unit.ap_cost_of_attack
+				selected_unit.ap -= ability_stats.ap
 				
-				var attack_power = selected_unit.attack + randi_range(0, selected_unit.attack_extra)
+				var attack_power = ability_stats.attack + randi_range(0, ability_stats.attack_extra)
 				hurt_unit(target, attack_power)
 				
 				print("attack power: ", attack_power)
@@ -756,7 +771,7 @@ func order_attack(target: Unit, imaginary = false) -> bool:
 	
 	return false
 
-func order_move(new_tile_pos: Vector2i, imaginary = false) -> bool:
+func order_ability_move(new_tile_pos: Vector2i, imaginary = false) -> bool:
 	if selected_unit == null: #|| !selected_unit.can_move():
 		return false
 	

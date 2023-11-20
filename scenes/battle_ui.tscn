@@ -7,12 +7,12 @@
 [ext_resource type="Script" path="res://scenes/SelectedUnitIndicator.gd" id="4_h3s35"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_meo4c"]
+shading_mode = 0
+specular_mode = 2
 disable_ambient_light = true
-albedo_color = Color(0.105882, 0.768627, 0.227451, 1)
-emission_enabled = true
-emission = Color(0.239216, 0.239216, 0.239216, 1)
-emission_energy_multiplier = 5.43
+albedo_color = Color(0, 1, 0, 1)
 disable_receive_shadows = true
+grow_amount = 1.0
 
 [sub_resource type="TextMesh" id="TextMesh_y8ha2"]
 material = SubResource("StandardMaterial3D_meo4c")
@@ -43,10 +43,16 @@ offset_right = 75.0
 offset_bottom = 81.0
 text = "End turn"
 
+[node name="function_list_label" type="Label" parent="CanvasLayer"]
+offset_top = 500.0
+offset_right = 121.0
+offset_bottom = 519.0
+text = "Function list:"
+
 [node name="cancel_select_target" type="Button" parent="CanvasLayer"]
-offset_top = 548.0
+offset_top = 500.0
 offset_right = 207.0
-offset_bottom = 579.0
+offset_bottom = 531.0
 text = "Cancel selecting target"
 
 [node name="ability_buttons" type="HBoxContainer" parent="CanvasLayer"]
@@ -80,6 +86,7 @@ outline_size = 20
 
 [node name="cursor" type="MeshInstance3D" parent="SelectedUnitIndicator"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.08165e-12, -1.2, -2.08165e-12)
+cast_shadow = 0
 gi_mode = 0
 mesh = SubResource("TextMesh_y8ha2")
 skeleton = NodePath("../..")

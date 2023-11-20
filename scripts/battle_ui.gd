@@ -70,6 +70,7 @@ func update_selection_indicator(unit: Unit):
 func update_abilities_buttons_general_visibility():
 	$CanvasLayer/cancel_select_target.visible = !in_unit_animation_mode && in_select_target_mode && selected_unit_indicator.visible
 	%ability_buttons.visible = !in_select_target_mode && selected_unit_indicator.visible
+	$CanvasLayer/function_list_label.visible = %ability_buttons.visible
 
 func update_abilities_buttons(selected_unit: Unit):
 	update_abilities_buttons_general_visibility()
@@ -82,7 +83,8 @@ func update_abilities_buttons(selected_unit: Unit):
 			if stats.has("abilities"):
 				button.visible = stats.abilities.has(ability_id)
 				button.disabled = selected_unit.ap < ability_stats.ap \
-					|| selected_unit.get_cooldown(ability_id) > 0
+					|| selected_unit.get_cooldown(ability_id) > 0 \
+					|| ability_stats.ap == 0
 				
 				update_ability_button_text(ability_id, selected_unit)
 			else:
@@ -106,6 +108,23 @@ func add_ability_button(ability_id: String):
 	button.pressed.connect(_on_ability_button_clicked.bind(ability_id, stats.target))
 	button.mouse_entered.connect(_on_button_highlight.bind(button))
 
+func make_ap_string(ability_id, ap) -> String:
+	if ability_id == "move":
+		return "AP: " + str(ap) + " per tile"
+	elif ap > 0:
+		return "AP: " + str(ap)
+	
+	return "auto-call"
+
+func make_cd_string(cooldown) -> String:
+	if cooldown > 0:
+		if cooldown % 10 == 1:
+			return str(cooldown) + " turn left"
+		else:
+			return str(cooldown) + " turns left"
+	
+	return ""
+
 func update_ability_button_text(ability_id: String, selected_unit: Unit):
 	assert(selected_unit != null)
 	
@@ -113,15 +132,13 @@ func update_ability_button_text(ability_id: String, selected_unit: Unit):
 	
 	var cooldown_text = ""
 	if stats.cooldown > 0:
-		cooldown_text = ", CD: " + str(stats.cooldown)
 		var current_cooldown = selected_unit.get_cooldown(ability_id)
-		if current_cooldown > 0:
-			cooldown_text += "\n(" + str(current_cooldown) + " turns left)"
+		cooldown_text = ", CD: " + str(stats.cooldown) + "\n" + make_cd_string(current_cooldown)
 	
 	var button = %ability_buttons.get_node(ability_id)
 	button.text = stats.name \
-		+ "\ntarget: " + Gameplay.TargetTypes.keys()[stats.target] \
-		+ "\nAP: " + str(stats.ap) + cooldown_text
+		#+ "\nargument: " + Gameplay.TargetTypes.keys()[stats.target] \
+		+ "\n\n\n\n\n\n" + make_ap_string(ability_id, stats.ap) + cooldown_text
 
 func _on_show_path(unit: Unit, path: Array):
 	draw_3d.clear_all()
@@ -153,6 +170,10 @@ func _on_unit_move(unit: Unit, path: Array):
 		new_curve.add_point(pos_offset)
 	movement_path.curve = new_curve
 	movement_path_timer.wait_time = StaticData.move_animation_duration_per_tile * (len(path) - 1)
+	
+	if movement_path_timer.wait_time > StaticData.turn_animation_duration:
+		movement_path_timer.wait_time = StaticData.turn_animation_duration
+	
 	movement_path_timer.start()
 	
 	in_unit_animation_mode = true
@@ -271,7 +292,8 @@ func _unhandled_input(event):
 		
 		if !in_select_target_mode and !in_unit_animation_mode:
 			tile_hovered.emit(tile_pos)
-		
+		elif in_select_target_mode and order_parameters.ability_id == "move":
+			tile_hovered.emit(tile_pos)
 		
 func _process(delta):
 	if animated_unit != null:
