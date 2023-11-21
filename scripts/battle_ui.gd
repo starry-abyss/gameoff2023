@@ -292,6 +292,9 @@ func _unhandled_input(event):
 				elif order_parameters.target_type == Gameplay.TargetTypes.UNIT:
 					order_given.emit(order_parameters.ability_id, tile_pos)
 		
+	if event is InputEventMouseButton && event.pressed \
+		&& event.button_index == MOUSE_BUTTON_RIGHT:
+		in_select_target_mode = false
 	elif event is InputEventMouseMotion:
 		#print("Mouse Motion at: ", event.position)
 		
