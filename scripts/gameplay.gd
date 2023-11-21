@@ -981,6 +981,9 @@ func on_group_color_change(group: Gameplay.HackingGroups, color: Color):
 	for unit in units:
 		if unit.group == group:
 			unit.set_tint(color)
+	for tile in tiles:
+		if tile != null and tile.group == group:
+			tile.set_tint(color)
 	update_firewalls()
 	#update theme color
 	match group:
@@ -1077,3 +1080,8 @@ func _ready():
 	UIHelpers.audio_event("DX/Dx_Start")
 	pass
 
+
+# FIXME for test usage!
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("End Turn"):
+		end_turn()

@@ -18,6 +18,9 @@ var destroy_timer = 0.0
 var to_be_removed = false
 var hurt_timer = 0.0
 var is_hurt = false
+var spawn_timer = 0.0
+var on_spawn = false
+var aabb = null
 
 var hp: int = 8
 var hp_max: int = 8
@@ -104,6 +107,8 @@ func load_model(model_scene_name: String):
 	
 	set_tint(UIHelpers.group_to_color(group))
 	
+	aabb = Utils.get_aabb(model)
+	
 	pass
 	
 func load_stats(which_type: Gameplay.UnitTypes):
@@ -176,25 +181,40 @@ func _on_click():
 
 func on_hurt():
 	is_hurt = true
-	emission_color = Color(material.get_shader_parameter("emission_color"))
-	material.set_shader_parameter("emission_color", Color.WHITE)
-		
+	material.set_shader_parameter("show_glitch", true)
+	
+	var y_range = 0.3
+	var y_min = (aabb as AABB).size.y * randf_range(0, 1 - y_range)
+	var y_max = (aabb as AABB).size.y * y_range + y_min 
+	var glitch_y_range = Vector2(y_min, y_max)
+	print(glitch_y_range)
+	material.set_shader_parameter("glitch_y_range", glitch_y_range)
 	
 func _process(delta):
 	if is_hurt:
 		hurt_timer += delta
-		# TODO: improve this animation
 		if hurt_timer >= StaticData.hurt_animation_duration:
-			material.set_shader_parameter("emission_color", emission_color)
+			material.set_shader_parameter("show_glitch", false)
 			is_hurt = false
-		return
+			hurt_timer = 0
+			
+	if on_spawn:
+		spawn_timer += delta
+		var y_min = (aabb as AABB).size.y * spawn_timer / StaticData.spawn_animation_duration
+		var y_max = (aabb as AABB).size.y * 1.3 *spawn_timer / StaticData.spawn_animation_duration
+		var spawn_y_range = Vector2(y_min, y_max)
+		material.set_shader_parameter("spawn_y_range", spawn_y_range)
+		if spawn_timer >= StaticData.spawn_animation_duration:
+			on_spawn = false
+			spawn_timer = 0
+			material.set_shader_parameter("spawn_y_range", Vector2(-10, 10))
 			
 	if to_be_removed:
 		destroy_timer += delta
 		
-		var new_scale = max(0.0, StaticData.turn_animation_duration - destroy_timer * 2.0) / StaticData.turn_animation_duration
+		#var new_scale = max(0.0, StaticData.turn_animation_duration - destroy_timer * 2.0) / StaticData.turn_animation_duration
 		#scale = Vector3(new_scale, new_scale, new_scale)
-		material.set_shader_parameter("emission_color", Color(material.get_shader_parameter("emission_color"), new_scale))
+		#material.set_shader_parameter("emission_color", Color(material.get_shader_parameter("emission_color"), new_scale))
 		
 		if destroy_timer >= StaticData.turn_animation_duration:
 			queue_free()

@@ -65,7 +65,8 @@ func update_selection_indicator(unit: Unit):
 	selected_unit_indicator.visible = (unit != null)
 	
 	if unit != null:
-		selected_unit_indicator.position = unit.position + Vector3(0, 1.5, 0)
+		var unit_aabb = Utils.get_aabb(unit.model)
+		selected_unit_indicator.position = unit.position + Vector3(0, unit_aabb.size.y + unit_aabb.position.y + 0.5, 0)
 
 func update_abilities_buttons_general_visibility():
 	$CanvasLayer/cancel_select_target.visible = !in_unit_animation_mode && in_select_target_mode && selected_unit_indicator.visible
@@ -200,6 +201,7 @@ func _on_unit_destroy(unit: Unit):
 	pass
 
 func _on_unit_spawn(unit: Unit):
+	unit.on_spawn = true
 	pass
 
 func _on_unit_hp_change(unit: Unit, delta_hp: int):
