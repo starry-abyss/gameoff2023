@@ -633,6 +633,8 @@ func order_ability_capture_tower(target: Unit, imaginary = false) -> bool:
 	if !imaginary:
 		target.group = selected_unit.group
 		
+		target.hp = target.hp_max
+		
 		remove_unit(selected_unit)
 		
 		update_firewalls()
@@ -1025,11 +1027,11 @@ func _ready():
 	remove_tile(Vector2i(19, 10))
 	
 	#spawn_unit(Vector2i(0, 1), UnitTypes.WORM, HackingGroups.BLUE)
-	spawn_unit(Vector2i(13, 3), UnitTypes.TROJAN, HackingGroups.BLUE)
+	#spawn_unit(Vector2i(13, 3), UnitTypes.TROJAN, HackingGroups.BLUE)
 	#spawn_unit(Vector2i(0, 3), UnitTypes.VIRUS, HackingGroups.PINK)
 	
-	spawn_unit(Vector2i(13, 2), UnitTypes.TROJAN, HackingGroups.PINK)
-	spawn_unit(Vector2i(14, 3), UnitTypes.TROJAN, HackingGroups.PINK)
+	#spawn_unit(Vector2i(13, 2), UnitTypes.TROJAN, HackingGroups.PINK)
+	#spawn_unit(Vector2i(14, 3), UnitTypes.TROJAN, HackingGroups.PINK)
 	
 	spawn_unit(Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
