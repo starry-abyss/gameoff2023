@@ -325,6 +325,7 @@ func add_tile(tile_pos: Vector2i):
 			
 			tile.set_script(preload("res://scripts/tile.gd"))
 			tile._on_ready()
+			tile.set_process(true)
 
 # TODO: don't remove right away, first play an animation
 func remove_tile(tile_pos: Vector2i):
@@ -390,8 +391,37 @@ func find_unit_by_tile_pos(tile_pos: Vector2i):
 	
 	return null
 
+func tint_tiles(center_tile_pos: Vector2i, show_center: bool = true, show_neighbors: bool = false):
+	for t in tiles:
+		if t != null:
+			t.set_tint(Color.BLACK)
+	
+	# ignore what UI requested :D
+	if selected_unit == null:
+		return
+	
+	if show_center:
+		var tile = get_tile(center_tile_pos)
+		if tile != null:
+			tile.set_tint(Color.WEB_GRAY)
+	
+	if show_neighbors:
+		var tile_neighbors = UIHelpers.get_tile_neighbor_list(center_tile_pos)
+		for adj_tile_pos in tile_neighbors:
+			var pos_to_explore_next = center_tile_pos + adj_tile_pos
+			var tile = get_tile(pos_to_explore_next)
+			if tile != null:
+				tile.set_tint(Color.WEB_GRAY)
+		
+	pass
+
 func hover_tile(tile_pos: Vector2i):
+	#tint_tiles(tile_pos)
+	
 	if !is_tile_pos_out_of_bounds(tile_pos):
+		#if selected_unit != null:
+		#	selected_unit.set_look_at(UIHelpers.tile_pos_to_world_pos(tile_pos))
+		
 		#for i in range(tiles.size()):
 		#	var tile = tiles[i]
 		#	if tile != null:
@@ -1007,6 +1037,7 @@ func _ready():
 	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", select_next_unit)
 	battle_ui.connect("tile_clicked", click_tile)
 	battle_ui.connect("tile_hovered", hover_tile)
+	battle_ui.connect("tiles_need_tint", tint_tiles)
 	battle_ui.connect("unit_clicked", click_unit)
 	battle_ui.connect("order_given", give_order)
 	battle_ui.connect("animation_finished", func(): select_unit(selected_unit))

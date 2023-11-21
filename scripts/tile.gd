@@ -4,11 +4,16 @@ extends Node3D
 var group: Gameplay.HackingGroups = Gameplay.HackingGroups.NEUTRAL:
 	set(new_value):
 		group = new_value
-		set_tint(UIHelpers.group_to_color(new_value))
+		set_wireframe_tint(UIHelpers.group_to_color(new_value))
 
 var debug_distance: Label3D = Label3D.new()
 var material = null
 var material_wireframe = null
+
+func _process(delta):
+	#if material != null:
+	#	material.albedo_color.v = max(0, material.albedo_color.v - delta * 2.0)
+	pass
 
 func _on_ready():
 	debug_distance.font = preload("res://assets/fonts/ShareTechMono-Regular.ttf")
@@ -44,32 +49,23 @@ func _on_ready():
 	
 	group = Gameplay.HackingGroups.NEUTRAL
 	
+	set_tint(Color.BLACK)
+	
 	#debug_distance.text = "123"
 	pass
 
+func set_wireframe_tint(color: Color):
+	if material != null:
+		if group == Gameplay.HackingGroups.NEUTRAL:
+			color.v = 0.12
+		else:
+			color.v = 0.45
+		
+		material_wireframe.albedo_color = color
+
 func set_tint(color: Color):
 	if material != null:
-		var grey_color = Color.WHITE
-		
-		if group == Gameplay.HackingGroups.NEUTRAL:
-			#color.v *= 0.15
-			color = Color.BLACK
-			grey_color.v = 0.12
-			
-			#get_node("tile_wireframe").visible = true
-		else:
-			#color.v *= 0.20
-			
-			grey_color = color
-			grey_color.v = 0.45
-			
-			color = Color.BLACK
-			
-			#get_node("tile_wireframe").visible = false
-			
 		material.albedo_color = color
-		material_wireframe.albedo_color = grey_color
-	pass
 
 func _on_hide_debug_distance():
 	debug_distance.text = ""

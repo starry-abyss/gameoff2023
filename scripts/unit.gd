@@ -104,6 +104,7 @@ func load_model(model_scene_name: String):
 	
 	set_tint(UIHelpers.group_to_color(group))
 	
+	set_initial_facing()
 	pass
 	
 func load_stats(which_type: Gameplay.UnitTypes):
@@ -154,7 +155,32 @@ func set_tint(color: Color):
 		color.a = 0.45
 		material.set_shader_parameter("emission_color", color)
 	pass
+
+func set_look_at(point: Vector2):
+	return
 	
+	# doesn't fully work
+	if model != null:
+		var dx = point.x - model.global_position.z
+		var threshold = StaticData.tile_size.x * 0.5
+		var m = model.get_child(0)
+		
+		if dx > threshold:
+			m.rotation_degrees.x = -24.4
+			m.rotation_degrees.y = 0
+		elif dx < -threshold:
+			m.rotation_degrees.x = 24.4
+			m.rotation_degrees.y = 180
+
+func set_initial_facing():
+	if !is_static() && model != null:
+		var m = model.get_child(0)
+		if group == Gameplay.HackingGroups.BLUE:
+			m.rotation_degrees.x = 24.4
+			m.rotation_degrees.y = 180
+		else:
+			m.rotation_degrees.x = -24.4
+			m.rotation_degrees.y = 0
 
 func type_changed_set_up(new_type: Gameplay.UnitTypes):
 	load_stats(new_type)
@@ -200,5 +226,3 @@ func _process(delta):
 	if type == Gameplay.UnitTypes.TOWER_NODE && model != null:
 		var sides: MeshInstance3D = model.find_child("Sides")
 		sides.rotate_y(delta * 0.4)
-
-

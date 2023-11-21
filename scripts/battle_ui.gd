@@ -13,6 +13,7 @@ extends Node3D
 
 signal tile_clicked
 signal tile_hovered
+signal tiles_need_tint
 signal unit_clicked
 signal order_given
 
@@ -182,8 +183,10 @@ func _on_unit_move(unit: Unit, path: Array):
 	animated_unit = unit
 
 func _on_unit_selection_changed(unit: Unit):
-	if unit == null:
-		in_select_target_mode = false
+	#if unit == null:
+	in_select_target_mode = false
+	
+	tiles_tint_reset()
 	
 	update_selection_indicator(unit)
 	update_abilities_buttons(unit)
@@ -257,9 +260,14 @@ func _on_cancel_select_target_button_clicked():
 func _on_order_processed(success: bool, selected_unit: Unit):
 	if success:
 		in_select_target_mode = false
+		
+		tiles_tint_reset()
 	
 	_on_unit_show_stats(selected_unit)
 	update_abilities_buttons(selected_unit)
+
+func tiles_tint_reset():
+	tiles_need_tint.emit(Vector2i(0, 0), false, false)
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton && event.pressed \
@@ -294,8 +302,17 @@ func _unhandled_input(event):
 		
 		if !in_select_target_mode and !in_unit_animation_mode:
 			tile_hovered.emit(tile_pos)
-		elif in_select_target_mode and order_parameters.ability_id == "move":
-			tile_hovered.emit(tile_pos)
+			tiles_need_tint.emit(tile_pos)
+		elif in_select_target_mode:
+			if order_parameters.ability_id == "move":
+				tile_hovered.emit(tile_pos)
+			
+			if order_parameters.ability_id == "reset":
+				tiles_need_tint.emit(tile_pos, true, true)
+			elif order_parameters.ability_id == "backdoor":
+				tiles_need_tint.emit(tile_pos, false, true)
+			else:
+				tiles_need_tint.emit(tile_pos)
 		
 func _process(delta):
 	if animated_unit != null:
