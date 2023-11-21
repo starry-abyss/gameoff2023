@@ -6,7 +6,6 @@
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_up8a2")
+shader_parameter/show_glitch = false
 shader_parameter/emission_color = Color(0, 0.337255, 0.215686, 0.909804)
 shader_parameter/emission_amount = 5.0
-shader_parameter/rim_sharpness = 3.0
-shader_parameter/hide_amount = 0.0

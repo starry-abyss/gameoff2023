@@ -176,16 +176,14 @@ func _on_click():
 
 func on_hurt():
 	is_hurt = true
-	emission_color = Color(material.get_shader_parameter("emission_color"))
-	material.set_shader_parameter("emission_color", Color.WHITE)
+	material.set_shader_parameter("show_glitch", true)
 		
 	
 func _process(delta):
 	if is_hurt:
 		hurt_timer += delta
-		# TODO: improve this animation
 		if hurt_timer >= StaticData.hurt_animation_duration:
-			material.set_shader_parameter("emission_color", emission_color)
+			material.set_shader_parameter("show_glitch", false)
 			is_hurt = false
 		return
 			

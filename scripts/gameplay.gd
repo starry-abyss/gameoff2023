@@ -1077,3 +1077,8 @@ func _ready():
 	UIHelpers.audio_event("DX/Dx_Start")
 	pass
 
+
+# FIXME for test usage!
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("End Turn"):
+		end_turn()
