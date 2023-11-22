@@ -184,6 +184,13 @@ func _on_unit_move(unit: Unit, path: Array):
 	
 	in_unit_animation_mode = true
 	animated_unit = unit
+	
+	if animated_unit.type == Gameplay.UnitTypes.WORM:
+		UIHelpers.audio_event_3d_loop_start("SFX/Worms/SFX_WormMove", animated_unit)
+	elif animated_unit.type == Gameplay.UnitTypes.TROJAN:
+		UIHelpers.audio_event_3d_loop_start("SFX/Trojan/SFX_TrojanMove", animated_unit)
+	elif animated_unit.type == Gameplay.UnitTypes.VIRUS:
+		UIHelpers.audio_event_3d_loop_start("SFX/Virus/SFX_VirusMove", animated_unit)
 
 func _on_unit_selection_changed(unit: Unit):
 	#if unit == null:
@@ -331,6 +338,10 @@ func _process(delta):
 	
 func _on_timer_timeout():
 	in_unit_animation_mode = false
+	
+	if animated_unit != null:
+		UIHelpers.audio_event_3d_loop_end(animated_unit)
+	
 	animated_unit = null
 	
 	animation_finished.emit()

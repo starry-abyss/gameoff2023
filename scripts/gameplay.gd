@@ -565,6 +565,10 @@ func order_ability_self_modify(new_type: UnitTypes, imaginary = false) -> bool:
 		# disallow restoring AP right after Virus' creation
 		if new_type == UnitTypes.VIRUS:
 			selected_unit.cooldowns["integrate"] = 1
+			
+			UIHelpers.audio_event3d("SFX/Worms/SFX_MutateVirus", selected_unit.tile_pos)
+		else:
+			UIHelpers.audio_event3d("SFX/Worms/SFX_MutateTrojan", selected_unit.tile_pos)
 		
 		#select_unit(null)
 	
@@ -622,6 +626,8 @@ func order_ability_scale(target_tile_pos: Vector2i, imaginary = false) -> bool:
 		new_worm.ap = 0
 		new_worm.hp = selected_unit.hp
 		new_worm.cooldowns["scale"] = StaticData.ability_stats["scale"].cooldown
+		
+		UIHelpers.audio_event3d("SFX/Worms/SFX_Double", selected_unit.tile_pos)
 	
 	return true
 
