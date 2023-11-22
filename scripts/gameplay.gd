@@ -545,7 +545,7 @@ func select_next_unit():
 			if unit.ap > 0:
 				select_unit(unit)
 				return
-	elif selected_unit.ap == 0:
+	elif selected_unit != null && selected_unit.ap == 0:
 		select_unit(null)
 
 func teleport_unit(unit: Unit, new_tile_pos: Vector2i):
@@ -816,6 +816,14 @@ func hurt_unit(target: Unit, amount: int):
 	
 	if target.hp == 0:
 		var this_is_the_end = (target.type == UnitTypes.CENTRAL_NODE)
+		if this_is_the_end:
+			# maybe there are more than one Kernel
+			for u in units:
+				if u.type == UnitTypes.CENTRAL_NODE && u.group == target.group:
+					if target != u:
+						this_is_the_end = false
+						break
+		
 		var unit_group_originally = target.group
 		
 		if target.can_be_destroyed():

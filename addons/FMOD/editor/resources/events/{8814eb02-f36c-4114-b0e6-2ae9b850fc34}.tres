@@ -1,0 +1,10 @@
+[gd_resource type="EventAsset" format=3 uid="uid://dx4vlaysc2p8"]
+
+[resource]
+is_3d = true
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/SFX/Kernel Node/SFX_Maintenance"
+guid = "{8814eb02-f36c-4114-b0e6-2ae9b850fc34}"
+name = "SFX_Maintenance"

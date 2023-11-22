@@ -10,7 +10,7 @@ extends Node
 
 
 @export var unit_stats = { 
-	Gameplay.UnitTypes.CENTRAL_NODE: { "name": "Kernel node", "hp_max": 200, "ap_max": 6, "abilities": ["repair","reset","spawn_worms","self_repair"] },
+	Gameplay.UnitTypes.CENTRAL_NODE: { "name": "Kernel node", "hp_max": 100, "ap_max": 6, "abilities": ["repair","reset","spawn_worms","self_repair"] },
 	Gameplay.UnitTypes.TOWER_NODE: { "name": "Anti-virus node", "hp_max": 30, "ap_max": 9, "abilities": ["tower_attack"] },
 	
 	Gameplay.UnitTypes.WORM: { "name": "Worm", "hp_max": 1, "ap_max": 3, "abilities": ["move","scale","self_modify_to_virus","self_modify_to_trojan"] },

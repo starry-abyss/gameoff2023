@@ -103,7 +103,7 @@ func audio_event3d(event_name: String, pos: Vector2):
 
 func quit_the_game():
 	# TODO: for debug, to be removed:
-	UIHelpers.audio_set_parameter("Winner", Gameplay.HackingGroups.PINK)
+	#UIHelpers.audio_set_parameter("Winner", Gameplay.HackingGroups.PINK)
 	
 	UIHelpers.audio_event("Ui/Ui_Quit")
 	

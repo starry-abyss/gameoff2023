@@ -10,6 +10,8 @@ var debug_distance: Label3D = Label3D.new()
 var material = null
 var material_wireframe = null
 
+#static var tile_wireframe_mesh = null
+
 func _process(delta):
 	#if material != null:
 	#	material.albedo_color.v = max(0, material.albedo_color.v - delta * 2.0)
@@ -34,6 +36,22 @@ func _on_ready():
 	material_wireframe.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material_wireframe.cull_mode = BaseMaterial3D.CULL_DISABLED
 	
+	#material_wireframe.albedo_color = Color.WEB_GREEN
+	
+	#if tile_wireframe_mesh == null:
+	#	tile_wireframe_mesh = ImmediateMesh.new()
+	#	tile_wireframe_mesh.surface_begin(Mesh.PRIMITIVE_LINES)
+		
+	#	var a = 1.0
+		
+	#	tile_wireframe_mesh.surface_add_vertex(Vector3(-a*cos(PI/6.0), 0.0, a*sin(PI/6.0)))
+	#	tile_wireframe_mesh.surface_add_vertex(Vector3(0.0, 0.0, a))
+		
+	#	tile_wireframe_mesh.surface_add_vertex(Vector3(0.0, 0.0, a))
+	#	tile_wireframe_mesh.surface_add_vertex(Vector3(a*cos(PI/6.0), 0.0, a*sin(PI/6.0)))
+		
+	#	tile_wireframe_mesh.surface_end()
+	
 	#var grey_color = Color.WHITE
 	#grey_color.v = 0.15
 	
@@ -45,6 +63,7 @@ func _on_ready():
 	
 	var mesh_instances2 = get_node("tile_wireframe").find_children("", "MeshInstance3D")
 	for mesh_instance in mesh_instances2:
+		#mesh_instance.mesh = tile_wireframe_mesh
 		mesh_instance.material_override = material_wireframe
 	
 	group = Gameplay.HackingGroups.NEUTRAL

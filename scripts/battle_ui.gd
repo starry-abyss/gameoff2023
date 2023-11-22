@@ -38,11 +38,14 @@ var animated_unit_start_pos: Vector3
 
 
 func _ready():
-	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)
-	
 	for button in find_children("", "Button"):
-		button.mouse_entered.connect(_on_button_highlight.bind(button))
+		button.set_script(preload("res://scripts/button.gd"))
+		button._ready()
+		button.set_process(true)
 	
+	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)	
+	$CanvasLayer/cancel_select_target.is_back_button = true
+
 	for ability_id in StaticData.ability_stats.keys():
 		add_ability_button(ability_id)
 	
@@ -53,10 +56,6 @@ func _ready():
 	
 	#RenderingServer.set_debug_generate_wireframes(true)
 	#get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
-
-func _on_button_highlight(button: Button):
-	if !button.disabled:
-		UIHelpers.audio_event("Ui/Ui_Highlight")
 
 func change_actions_disabled(disable: bool):
 	select_idle_unit.disabled = disable
@@ -107,7 +106,11 @@ func add_ability_button(ability_id: String):
 	
 	%ability_buttons.add_child(button)
 	button.pressed.connect(_on_ability_button_clicked.bind(ability_id, stats.target))
-	button.mouse_entered.connect(_on_button_highlight.bind(button))
+	
+	button.set_script(preload("res://scripts/button.gd"))
+	button._ready()
+	button.set_process(true)
+	#button.mouse_entered.connect(_on_button_highlight.bind(button))
 
 func make_ap_string(ability_id, ap) -> String:
 	if ability_id == "move":
