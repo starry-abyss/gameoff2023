@@ -419,6 +419,8 @@ func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool
 			elif selected_unit.type == UnitTypes.TOWER_NODE:
 				if !give_order("tower_attack", unit_at_pos, true):
 					new_color = StaticData.tile_bad_target
+			else:
+				new_color = StaticData.tile_bad_target
 	
 	if show_center:
 		var tile = get_tile(center_tile_pos)
