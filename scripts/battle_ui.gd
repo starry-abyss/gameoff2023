@@ -110,6 +110,8 @@ func add_ability_button(ability_id: String):
 	button.set_script(preload("res://scripts/button.gd"))
 	button._ready()
 	button.set_process(true)
+	
+	button.no_press_sound = (stats.target == Gameplay.TargetTypes.SELF)
 	#button.mouse_entered.connect(_on_button_highlight.bind(button))
 
 func make_ap_string(ability_id, ap) -> String:

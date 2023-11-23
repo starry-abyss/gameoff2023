@@ -12,6 +12,6 @@ func _display_unit_stats(unit: Unit):
 	type_label.text = ""
 	%Title.text = StaticData.unit_stats[unit.type].name
 	group_label.text = "" #"GROUP " + Gameplay.HackingGroups.keys()[unit.group]
-	hp_label.text = "HP %s / %s" % [unit.hp, unit.hp_max]
+	hp_label.text = "Hit Points:    %s / %s" % [unit.hp, unit.hp_max]
 	attack_label.text = "" # "ATTACK %s - %s, RANGE %s" % [unit.attack, unit.attack + unit.attack_extra, unit.attack_range]
-	ap_label.text = "AP %s / %s" % [unit.ap, unit.ap_max]
+	ap_label.text = "Action Points: %s / %s" % [unit.ap, unit.ap_max]
