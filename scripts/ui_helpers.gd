@@ -100,13 +100,13 @@ func audio_event3d(event_name: String, tile_pos: Vector2i):
 	var pos = tile_pos_to_world_pos(tile_pos)
 	FMODRuntime.play_one_shot_path("event:/" + event_name, Vector3(pos.x, 0.0, pos.y))
 
-func audio_event_3d_loop_start(event_name: String, unit: Unit):
+func audio_event3d_loop_start(event_name: String, unit: Unit):
 	#unit.get_node("sound_loop").event.set_event_ref_from_description( \
 	#	FMODRuntime.get_event_description_path("event:/" + event_name))
 	
 	unit.get_node("sound_loop").play()
 	
-func audio_event_3d_loop_end(unit: Unit):
+func audio_event3d_loop_end(unit: Unit):
 	unit.get_node("sound_loop").stop()
 
 func quit_the_game():

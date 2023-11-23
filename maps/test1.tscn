@@ -79,7 +79,7 @@ current = true
 size = 20.0
 script = SubResource("GDScript_bx5im")
 
-[node name="StudioEventEmitter3D" type="StudioEventEmitter3D" parent="Camera3D"]
+[node name="StudioListener3D" type="StudioListener3D" parent="Camera3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.258819, 0.25, -0.933012, 3.36902e-16, 0.965926, 0.258819, 0.965926, -0.0669873, 0.25, 0, 0, 0)

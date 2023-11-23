@@ -206,9 +206,11 @@ func init_firewall(index: int):
 	
 	var vector: Vector2 = end_pos - start_pos
 	
-	firewall.position = Vector3(start_pos.x, 0.0, start_pos.y)
+	#start_pos += vector.normalized() * StaticData.tile_size.x * 0.5
 	
-	firewall.scale.x = start_pos.distance_to(end_pos)
+	firewall.position = (Vector3(start_pos.x, 0.0, start_pos.y) + Vector3(end_pos.x, 0.0, end_pos.y)) * 0.5
+	
+	firewall.scale.x = start_pos.distance_to(end_pos) - StaticData.tile_size.x * 0.5
 	
 	#firewall.rotate_y(-vector.angle())
 	firewall.rotation = Vector3(0, -vector.angle(), 0)
@@ -391,7 +393,7 @@ func find_unit_by_tile_pos(tile_pos: Vector2i):
 	
 	return null
 
-func tint_tiles(center_tile_pos: Vector2i, show_center: bool = true, show_neighbors: bool = false):
+func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool = true, show_neighbors: bool = false):
 	for t in tiles:
 		if t != null:
 			t.set_tint(Color.BLACK)
@@ -400,10 +402,15 @@ func tint_tiles(center_tile_pos: Vector2i, show_center: bool = true, show_neighb
 	if selected_unit == null:
 		return
 	
+	var new_color = Color("#808080")
+	if ability_id != "":
+		if !give_order(ability_id, center_tile_pos, true):
+			new_color = Color("#252525")
+	
 	if show_center:
 		var tile = get_tile(center_tile_pos)
 		if tile != null:
-			tile.set_tint(Color.WEB_GRAY)
+			tile.set_tint(new_color)
 	
 	if show_neighbors:
 		var tile_neighbors = UIHelpers.get_tile_neighbor_list(center_tile_pos)
@@ -411,7 +418,7 @@ func tint_tiles(center_tile_pos: Vector2i, show_center: bool = true, show_neighb
 			var pos_to_explore_next = center_tile_pos + adj_tile_pos
 			var tile = get_tile(pos_to_explore_next)
 			if tile != null:
-				tile.set_tint(Color.WEB_GRAY)
+				tile.set_tint(new_color)
 		
 	pass
 
@@ -471,20 +478,24 @@ func click_unit(unit_to_select: Unit):
 		else:
 			select_unit(unit_to_select)
 
-func give_order(ability_id: String, target):
+func give_order(ability_id: String, target, imaginary = false) -> bool:
 	var order_callable = Callable(self, "order_ability_" + ability_id)
 	var result = false
 	
 	if StaticData.ability_stats[ability_id].target == Gameplay.TargetTypes.UNIT && target is Vector2i:
 		target = find_unit_by_tile_pos(target)
 		if target == null:
-			battle_ui._on_order_processed(result, selected_unit)
-			return
+			if !imaginary:
+				battle_ui._on_order_processed(result, selected_unit)
+			return result
 	
 	var stats = StaticData.ability_stats[ability_id]
 	if selected_unit.ap >= stats.ap && selected_unit.get_cooldown(ability_id) == 0:
 		
-		result = order_callable.call(target, false)
+		result = order_callable.call(target, imaginary)
+		
+		if imaginary:
+			return result
 		
 		if result:
 			# if the selected unit wasn't removed during the order execution
@@ -497,9 +508,12 @@ func give_order(ability_id: String, target):
 				
 				selected_unit.cooldowns[ability_id] = stats.cooldown
 	
-	if result:
-		calculate_distances()
-	battle_ui._on_order_processed(result, selected_unit)
+	if !imaginary:
+		if result:
+			calculate_distances()
+		battle_ui._on_order_processed(result, selected_unit)
+	
+	return result
 
 func select_unit(unit_to_select: Unit, no_ui = false):
 	for unit in units:
@@ -678,6 +692,8 @@ func order_ability_capture_tower(target: Unit, imaginary = false) -> bool:
 		remove_unit(selected_unit)
 		
 		update_firewalls()
+		
+		UIHelpers.audio_event3d("SFX/Trojan/SFX_CaptureNode", selected_unit.tile_pos)
 	
 	return true
 
@@ -699,6 +715,8 @@ func order_ability_integrate(target: Unit, imaginary = false) -> bool:
 	
 	if !imaginary:
 		remove_unit(target)
+		
+		UIHelpers.audio_event3d("SFX/Virus/SFX_Integrate", selected_unit.tile_pos)
 	
 	return true
 
@@ -754,6 +772,8 @@ func order_ability_spread(target: Unit, imaginary = false) -> bool:
 					
 					pos_to_explore_stack.append(pos_to_explore_next)
 	
+		UIHelpers.audio_event3d("SFX/Virus/SFX_Spread", selected_unit.tile_pos)
+	
 	return true
 
 func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> bool:
@@ -784,6 +804,8 @@ func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> boo
 						unit_from.ap = 1
 					
 					unit_from.update_model_pos()
+					
+		UIHelpers.audio_event3d("SFX/Trojan/SFX_Backdoor", selected_unit.tile_pos)
 		
 		#var apply_backdoor = func(tile_pos):
 		#	var unit = find_unit_by_tile_pos(tile_pos)
@@ -900,6 +922,8 @@ func order_attack(target: Unit, imaginary: bool, ability_stats) -> bool:
 				
 				if selected_unit.type == UnitTypes.TOWER_NODE:
 					UIHelpers.audio_event3d("SFX/Anti Virus Node/SFX_DamageRange", selected_unit.tile_pos)
+				elif selected_unit.type == UnitTypes.VIRUS:
+					UIHelpers.audio_event3d("SFX/Virus/SFX_Damage", selected_unit.tile_pos)
 				
 				print("attack power: ", attack_power)
 			

@@ -188,11 +188,11 @@ func _on_unit_move(unit: Unit, path: Array):
 	animated_unit = unit
 	
 	if animated_unit.type == Gameplay.UnitTypes.WORM:
-		UIHelpers.audio_event_3d_loop_start("SFX/Worms/SFX_WormMove", animated_unit)
+		UIHelpers.audio_event3d_loop_start("SFX/Worms/SFX_WormMove", animated_unit)
 	elif animated_unit.type == Gameplay.UnitTypes.TROJAN:
-		UIHelpers.audio_event_3d_loop_start("SFX/Trojan/SFX_TrojanMove", animated_unit)
+		UIHelpers.audio_event3d_loop_start("SFX/Trojan/SFX_TrojanMove", animated_unit)
 	elif animated_unit.type == Gameplay.UnitTypes.VIRUS:
-		UIHelpers.audio_event_3d_loop_start("SFX/Virus/SFX_VirusMove", animated_unit)
+		UIHelpers.audio_event3d_loop_start("SFX/Virus/SFX_VirusMove", animated_unit)
 
 func _on_unit_selection_changed(unit: Unit):
 	#if unit == null:
@@ -279,7 +279,7 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 	update_abilities_buttons(selected_unit)
 
 func tiles_tint_reset():
-	tiles_need_tint.emit(Vector2i(0, 0), false, false)
+	tiles_need_tint.emit("", Vector2i(0, 0), false, false)
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton && event.pressed \
@@ -317,17 +317,17 @@ func _unhandled_input(event):
 		
 		if !in_select_target_mode and !in_unit_animation_mode:
 			tile_hovered.emit(tile_pos)
-			tiles_need_tint.emit(tile_pos)
+			tiles_need_tint.emit("", tile_pos)
 		elif in_select_target_mode:
 			if order_parameters.ability_id == "move":
 				tile_hovered.emit(tile_pos)
 			
 			if order_parameters.ability_id == "reset":
-				tiles_need_tint.emit(tile_pos, true, true)
+				tiles_need_tint.emit(order_parameters.ability_id, tile_pos, true, true)
 			elif order_parameters.ability_id == "backdoor":
-				tiles_need_tint.emit(tile_pos, false, true)
+				tiles_need_tint.emit(order_parameters.ability_id, tile_pos, false, true)
 			else:
-				tiles_need_tint.emit(tile_pos)
+				tiles_need_tint.emit(order_parameters.ability_id, tile_pos)
 		
 func _process(delta):
 	if animated_unit != null:
@@ -342,7 +342,7 @@ func _on_timer_timeout():
 	in_unit_animation_mode = false
 	
 	if animated_unit != null:
-		UIHelpers.audio_event_3d_loop_end(animated_unit)
+		UIHelpers.audio_event3d_loop_end(animated_unit)
 	
 	animated_unit = null
 	

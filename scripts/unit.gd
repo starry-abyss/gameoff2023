@@ -201,6 +201,9 @@ func _on_click():
 	
 
 func on_hurt():
+	# TODO: wrong event fow now, for testing
+	UIHelpers.audio_event3d("SFX/Worms/SFX_MutateTrojan", tile_pos)
+	
 	is_hurt = true
 	material.set_shader_parameter("show_glitch", true)
 		
