@@ -3,6 +3,8 @@ extends Node
 @export var color_pink: Color = Color("#a61162")
 @export var color_blue: Color = Color("#0045ff")
 @export var color_neutral: Color = Color("#606060")
+@export var tile_good_target: Color = Color("#808080")
+@export var tile_bad_target: Color = Color("#252525")
 
 @export var hurt_animation_duration: float = 0.2
 @export var turn_animation_duration: float = 1.0

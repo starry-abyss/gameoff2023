@@ -402,10 +402,23 @@ func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool
 	if selected_unit == null:
 		return
 	
-	var new_color = Color("#808080")
+	var new_color = StaticData.tile_good_target
+	# TODO: bad and duplicated code, but not much time until release
 	if ability_id != "":
 		if !give_order(ability_id, center_tile_pos, true):
-			new_color = Color("#252525")
+			new_color = StaticData.tile_bad_target
+	else:
+		var unit_at_pos = find_unit_by_tile_pos(center_tile_pos)
+		if unit_at_pos == null:
+			if !give_order("move", center_tile_pos, true):
+				new_color = StaticData.tile_bad_target
+		else:
+			if selected_unit.type == UnitTypes.VIRUS:
+				if !give_order("virus_attack", unit_at_pos, true):
+					new_color = StaticData.tile_bad_target
+			elif selected_unit.type == UnitTypes.TOWER_NODE:
+				if !give_order("tower_attack", unit_at_pos, true):
+					new_color = StaticData.tile_bad_target
 	
 	if show_center:
 		var tile = get_tile(center_tile_pos)
@@ -445,9 +458,9 @@ func hover_tile(tile_pos: Vector2i):
 	
 	var hovered_unit = find_unit_by_tile_pos(tile_pos)
 	if hovered_unit != null:
-		battle_ui._on_unit_show_stats(hovered_unit)
+		battle_ui._on_unit_show_stats(hovered_unit, hovered_unit == selected_unit)
 	else:
-		battle_ui._on_unit_show_stats(selected_unit)
+		battle_ui._on_unit_show_stats(selected_unit, true)
 
 func click_tile(tile_pos: Vector2i):
 	# TODO: also select units by clicking tiles
@@ -527,7 +540,7 @@ func select_unit(unit_to_select: Unit, no_ui = false):
 		battle_ui._on_unit_selection_changed(null)
 	else:
 		battle_ui._on_unit_selection_changed(selected_unit)
-		battle_ui._on_unit_show_stats(selected_unit)
+		battle_ui._on_unit_show_stats(selected_unit, true)
 
 func select_next_unit():
 	var units_in_the_same_group_before_selected_unit = []

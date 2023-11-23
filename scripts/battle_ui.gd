@@ -36,6 +36,7 @@ var order_parameters = {}
 var animated_unit: Unit
 var animated_unit_start_pos: Vector3
 
+var current_group: Gameplay.HackingGroups
 
 func _ready():
 	for button in find_children("", "Button"):
@@ -204,12 +205,12 @@ func _on_unit_selection_changed(unit: Unit):
 	update_abilities_buttons(unit)
 	#update_abilities_buttons_general_visibility()
 
-func _on_unit_show_stats(unit: Unit):
+func _on_unit_show_stats(unit: Unit, is_selected: bool):
 	if unit == null:
 		selected_unit_stats.visible = false
 	else:
 		selected_unit_stats.visible = true 
-		selected_unit_stats._display_unit_stats(unit)
+		selected_unit_stats._display_unit_stats(unit, current_group, is_selected)
 
 func _on_unit_destroy(unit: Unit):
 	pass
@@ -230,6 +231,8 @@ func _on_unit_hp_change(unit: Unit, delta_hp: int):
 	
 func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn: bool):
 	#var group_color = UIHelpers.group_to_color(current_group)
+	
+	self.current_group = current_group
 	
 	if current_group == Gameplay.HackingGroups.PINK:
 		$CanvasLayer/end_turn.theme = preload("res://themes/pink.tres")
@@ -275,7 +278,7 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 		
 		tiles_tint_reset()
 	
-	_on_unit_show_stats(selected_unit)
+	_on_unit_show_stats(selected_unit, true)
 	update_abilities_buttons(selected_unit)
 
 func tiles_tint_reset():

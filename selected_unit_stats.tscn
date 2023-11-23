@@ -37,6 +37,7 @@ horizontal_alignment = 1
 [node name="Group" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "hp placeholder"
+horizontal_alignment = 1
 
 [node name="Type" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -46,10 +47,10 @@ text = "hp placeholder"
 layout_mode = 2
 text = "hp placeholder"
 
-[node name="Attack" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Ap" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "hp placeholder"
 
-[node name="Ap" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Attack" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "hp placeholder"
