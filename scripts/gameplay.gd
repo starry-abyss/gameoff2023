@@ -393,6 +393,15 @@ func find_unit_by_tile_pos(tile_pos: Vector2i):
 	
 	return null
 
+func highlight_idle_units():
+	for t in tiles:
+		if t != null:
+			t.set_tint(Color.BLACK)
+	
+	for unit in units:
+		if unit.group == current_turn_group && unit.ap > 0:
+			get_tile(unit.tile_pos).set_tint(StaticData.tile_good_target)
+
 func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool = true, show_neighbors: bool = false):
 	for t in tiles:
 		if t != null:
@@ -1100,6 +1109,8 @@ func _on_back_pressed():
 func _ready():
 	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", end_turn)
 	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", select_next_unit)
+	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("mouse_entered", highlight_idle_units)
+	
 	battle_ui.connect("tile_clicked", click_tile)
 	battle_ui.connect("tile_hovered", hover_tile)
 	battle_ui.connect("tiles_need_tint", tint_tiles)
