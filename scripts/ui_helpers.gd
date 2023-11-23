@@ -101,8 +101,8 @@ func audio_event3d(event_name: String, tile_pos: Vector2i):
 	FMODRuntime.play_one_shot_path("event:/" + event_name, Vector3(pos.x, 0.0, pos.y))
 
 func audio_event_3d_loop_start(event_name: String, unit: Unit):
-	unit.get_node("sound_loop").event.set_event_ref_from_description( \
-		FMODRuntime.get_event_description_path("event:/" + event_name))
+	#unit.get_node("sound_loop").event.set_event_ref_from_description( \
+	#	FMODRuntime.get_event_description_path("event:/" + event_name))
 	
 	unit.get_node("sound_loop").play()
 	

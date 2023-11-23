@@ -596,6 +596,8 @@ func order_ability_repair(target: Unit, imaginary = false) -> bool:
 	
 	if !imaginary:
 		heal_unit(target, StaticData.ability_stats["repair"].restored_hp)
+		
+		UIHelpers.audio_event3d("SFX/Kernel Node/SFX_Patch", selected_unit.tile_pos)
 	
 	return true
 
@@ -649,6 +651,8 @@ func order_ability_reset(target_tile_pos: Vector2i, imaginary = false) -> bool:
 		
 		apply_reset.call(target_tile_pos)
 		for_all_tile_pos_around(target_tile_pos, apply_reset)
+		
+		UIHelpers.audio_event3d("SFX/Kernel Node/SFX_Reset", selected_unit.tile_pos)
 	
 	return true
 
@@ -894,6 +898,9 @@ func order_attack(target: Unit, imaginary: bool, ability_stats) -> bool:
 				var attack_power = ability_stats.attack + randi_range(0, ability_stats.attack_extra)
 				hurt_unit(target, attack_power)
 				
+				if selected_unit.type == UnitTypes.TOWER_NODE:
+					UIHelpers.audio_event3d("SFX/Anti Virus Node/SFX_DamageRange", selected_unit.tile_pos)
+				
 				print("attack power: ", attack_power)
 			
 			return true
@@ -988,10 +995,15 @@ func end_turn(silent = false):
 			unit.ap = unit.ap_max
 			
 			if unit.type == UnitTypes.CENTRAL_NODE:
+				if unit.hp < unit.hp_max:
+					UIHelpers.audio_event3d("SFX/Kernel Node/SFX_Maintenance", unit.tile_pos)
+				
 				heal_unit(unit, StaticData.ability_stats["self_repair"].restored_hp)
 				
 				if (!unit.cooldowns.has("spawn_worms") || unit.cooldowns["spawn_worms"] <= 0):
 					unit.cooldowns["spawn_worms"] = StaticData.ability_stats["spawn_worms"].cooldown
+					UIHelpers.audio_event3d("SFX/Kernel Node/SFX_GenerateWorms", unit.tile_pos)
+					
 					for_all_tile_pos_around(unit.tile_pos, \
 						func(tile_pos): spawn_unit(tile_pos, UnitTypes.WORM, unit.group))
 	
