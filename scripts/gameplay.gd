@@ -210,7 +210,7 @@ func init_firewall(index: int):
 	
 	firewall.position = (Vector3(start_pos.x, 0.0, start_pos.y) + Vector3(end_pos.x, 0.0, end_pos.y)) * 0.5
 	
-	firewall.scale.x = start_pos.distance_to(end_pos) - StaticData.tile_size.x * 0.5
+	firewall.scale.x = start_pos.distance_to(end_pos) - StaticData.tile_size.x * 1.1
 	
 	#firewall.rotate_y(-vector.angle())
 	firewall.rotation = Vector3(0, -vector.angle(), 0)
