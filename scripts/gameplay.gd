@@ -819,6 +819,24 @@ func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> boo
 	if selected_unit.tile_pos == target_tile_pos:
 		return false
 	
+	# if no friendly malware nearby then don't waste AP
+	# need scopes for variables with the same name, so if true :'D
+	if true:
+		var found_someone = false
+		var tile_neighbors_from = UIHelpers.get_tile_neighbor_list(target_tile_pos)
+		for i in range(tile_neighbors_from.size()):
+			var tile_pos_from = target_tile_pos + tile_neighbors_from[i]
+			var unit_from = find_unit_by_tile_pos(tile_pos_from)
+			
+			if unit_from != null && !unit_from.is_static() \
+				&& unit_from.group == selected_unit.group \
+				&& unit_from != selected_unit:
+				found_someone = true
+				break
+		
+		if !found_someone:
+			return false
+	
 	if !imaginary:
 		var tile_neighbors_from = UIHelpers.get_tile_neighbor_list(target_tile_pos)
 		var tile_neighbors_to = UIHelpers.get_tile_neighbor_list(selected_unit.tile_pos)
