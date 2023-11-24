@@ -402,10 +402,21 @@ func highlight_idle_units():
 		if unit.group == current_turn_group && unit.ap > 0:
 			get_tile(unit.tile_pos).set_tint(StaticData.tile_good_target)
 
-func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool = true, show_neighbors: bool = false):
-	for t in tiles:
+func tint_all_tiles(ability_id: String):
+	var target_type_is_self = StaticData.ability_stats[ability_id].target == Gameplay.TargetTypes.SELF
+	for i in range(tiles.size()):
+		var t = tiles[i]
 		if t != null:
-			t.set_tint(Color.BLACK)
+			if target_type_is_self:
+				t.set_tint(Color.BLACK)
+			else:
+				tint_tiles(ability_id, tile_index_to_tile_pos(i), true, false, true)
+
+func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool = true, show_neighbors: bool = false, no_reset: bool = false):
+	if !no_reset:
+		for t in tiles:
+			if t != null:
+				t.set_tint(Color.BLACK)
 	
 	# ignore what UI requested :D
 	if selected_unit == null:
@@ -1125,6 +1136,7 @@ func _ready():
 	battle_ui.connect("tile_clicked", click_tile)
 	battle_ui.connect("tile_hovered", hover_tile)
 	battle_ui.connect("tiles_need_tint", tint_tiles)
+	battle_ui.connect("tiles_need_tint_all", tint_all_tiles)
 	battle_ui.connect("unit_clicked", click_unit)
 	battle_ui.connect("order_given", give_order)
 	battle_ui.connect("animation_finished", func(): select_unit(selected_unit))

@@ -14,6 +14,7 @@ extends Node3D
 signal tile_clicked
 signal tile_hovered
 signal tiles_need_tint
+signal tiles_need_tint_all
 signal unit_clicked
 signal order_given
 
@@ -108,6 +109,11 @@ func add_ability_button(ability_id: String):
 	%ability_buttons.add_child(button)
 	button.pressed.connect(_on_ability_button_clicked.bind(ability_id, stats.target))
 	
+	var tint_all_tiles = func():
+		if !button.disabled:
+			tiles_need_tint_all.emit(ability_id)
+	button.mouse_entered.connect(tint_all_tiles)
+	
 	button.set_script(preload("res://scripts/button.gd"))
 	button._ready()
 	button.set_process(true)
@@ -189,11 +195,14 @@ func _on_unit_move(unit: Unit, path: Array):
 	animated_unit = unit
 	
 	if animated_unit.type == Gameplay.UnitTypes.WORM:
-		UIHelpers.audio_event3d_loop_start("SFX/Worms/SFX_WormMove", animated_unit)
+		#UIHelpers.audio_event3d_loop_start("SFX/Worms/SFX_WormMove", animated_unit)
+		UIHelpers.audio_event3d("SFX/Worms/SFX_WormMove", animated_unit.tile_pos)
 	elif animated_unit.type == Gameplay.UnitTypes.TROJAN:
-		UIHelpers.audio_event3d_loop_start("SFX/Trojan/SFX_TrojanMove", animated_unit)
+		#UIHelpers.audio_event3d_loop_start("SFX/Trojan/SFX_TrojanMove", animated_unit)
+		UIHelpers.audio_event3d("SFX/Trojan/SFX_TrojanMove", animated_unit.tile_pos)
 	elif animated_unit.type == Gameplay.UnitTypes.VIRUS:
-		UIHelpers.audio_event3d_loop_start("SFX/Virus/SFX_VirusMove", animated_unit)
+		#UIHelpers.audio_event3d_loop_start("SFX/Virus/SFX_VirusMove", animated_unit)
+		UIHelpers.audio_event3d("SFX/Virus/SFX_VirusMove", animated_unit.tile_pos)
 
 func _on_unit_selection_changed(unit: Unit):
 	#if unit == null:
@@ -344,8 +353,8 @@ func _process(delta):
 func _on_timer_timeout():
 	in_unit_animation_mode = false
 	
-	if animated_unit != null:
-		UIHelpers.audio_event3d_loop_end(animated_unit)
+	#if animated_unit != null:
+	#	UIHelpers.audio_event3d_loop_end(animated_unit)
 	
 	animated_unit = null
 	
