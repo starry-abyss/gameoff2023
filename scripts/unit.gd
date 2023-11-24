@@ -4,9 +4,11 @@ extends Node3D
 
 @export var type: Gameplay.UnitTypes = Gameplay.UnitTypes.TOWER_NODE:
 	set(new_value):
-		if type != new_value || model == null:
-			type_changed_set_up(new_value)
+		var type_changed = (type != new_value)
 		type = new_value
+		if type_changed || model == null:
+			type_changed_set_up(new_value)
+		
 
 @export var group: Gameplay.HackingGroups = Gameplay.HackingGroups.NEUTRAL:
 	set(new_value):
@@ -30,6 +32,8 @@ var ap_max: int = 3
 var cooldowns = {}
 
 var emission_color: Color
+
+var tower_balls = []
 
 # TODO: add this for Central nodes to restore tile coloring after capture
 @export var tile_ownership_radius = 0
@@ -94,6 +98,15 @@ func load_model(model_scene_name: String):
 	for mi in mesh_instances:
 		mi.material_override = material
 	
+	if type == Gameplay.UnitTypes.TOWER_NODE:
+		var ball_material = ShaderMaterial.new()
+		ball_material.shader = glowing_outline_shader
+		ball_material.set_shader_parameter("show_glitch", true)
+		
+		for mi in model.get_node("balls").get_children():
+			tower_balls.append(mi)
+			mi.material_override = ball_material
+	
 	#var lights = model.find_children("", "Light3D")
 	#for light in lights:
 	#	light.queue_free()
@@ -153,6 +166,11 @@ func load_stats(which_type: Gameplay.UnitTypes):
 func set_tint(color: Color):
 	if material != null:
 		color.a = 0.85
+		
+		#if type == Gameplay.UnitTypes.TOWER_NODE:
+			#color.v *= 0.85
+			#color.s *= 0.8
+		
 		material.set_shader_parameter("emission_color", color)
 	pass
 

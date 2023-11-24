@@ -1033,15 +1033,20 @@ func end_turn(silent = false):
 	if !silent:
 		select_unit(null)
 	
-	current_turn_group = flip_group(current_turn_group)
-	
+	# end of turn
 	for unit in units:
 		if unit.group == current_turn_group:
 			for cd in unit.cooldowns.keys():
 				unit.cooldowns[cd] = max(0, unit.cooldowns[cd] - 1)
 			
 			unit.ap = unit.ap_max
-			
+	
+	# switch turn
+	current_turn_group = flip_group(current_turn_group)
+	
+	# start of turn
+	for unit in units:
+		if unit.group == current_turn_group:
 			if unit.type == UnitTypes.CENTRAL_NODE:
 				if unit.hp < unit.hp_max:
 					UIHelpers.audio_event3d("SFX/Kernel Node/SFX_Maintenance", unit.tile_pos)

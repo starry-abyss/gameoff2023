@@ -1,7 +1,7 @@
 extends Node
 
-@export var color_pink: Color = Color("#601d48")
-@export var color_blue: Color = Color("#003090")
+@export var color_pink: Color = Color("#641347")
+@export var color_blue: Color = Color("#002a80")
 @export var color_neutral: Color = Color("#606060")
 @export var tile_good_target: Color = Color("#757575")
 @export var tile_bad_target: Color = Color("#252525")

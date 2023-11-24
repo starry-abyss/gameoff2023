@@ -27,7 +27,7 @@ func _display_unit_stats(unit: Unit, current_group: Gameplay.HackingGroups, is_s
 	
 	attack_label.text = "" # "ATTACK %s - %s, RANGE %s" % [unit.attack, unit.attack + unit.attack_extra, unit.attack_range]
 	
-	if unit.group == current_group:
+	if unit.group != Gameplay.HackingGroups.NEUTRAL:
 		ap_label.text = "Action Points:  %s / %s" % [unit.ap, unit.ap_max]
 	else:
 		ap_label.text = ""
