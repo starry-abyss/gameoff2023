@@ -945,6 +945,10 @@ func order_attack(target: Unit, imaginary: bool, ability_stats) -> bool:
 				hurt_unit(target, attack_power)
 				
 				if selected_unit.type == UnitTypes.TOWER_NODE:
+					# TODO: move to animation code
+					var ball = selected_unit.use_tower_ball()
+					ball.visible = false
+					
 					UIHelpers.audio_event3d("SFX/Anti Virus Node/SFX_DamageRange", selected_unit.tile_pos)
 				elif selected_unit.type == UnitTypes.VIRUS:
 					UIHelpers.audio_event3d("SFX/Virus/SFX_Damage", selected_unit.tile_pos)
@@ -1040,6 +1044,8 @@ func end_turn(silent = false):
 				unit.cooldowns[cd] = max(0, unit.cooldowns[cd] - 1)
 			
 			unit.ap = unit.ap_max
+			
+			unit.restore_tower_balls()
 	
 	# switch turn
 	current_turn_group = flip_group(current_turn_group)

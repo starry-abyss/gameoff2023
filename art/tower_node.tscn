@@ -12,13 +12,13 @@ transform = Transform3D(0.13, 0, 0, 0, 0.13, 0, 0, 0, 0.13, 2.08165e-12, 2.08165
 [node name="balls" type="Node3D" parent="."]
 
 [node name="ball" type="MeshInstance3D" parent="balls"]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 1.14043, -0.242433)
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 1.14043, -0.242433)
 mesh = SubResource("SphereMesh_8jn2d")
 
 [node name="ball2" type="MeshInstance3D" parent="balls"]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 1.14043, 0.197427)
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 1.14043, 0.197427)
 mesh = SubResource("SphereMesh_8jn2d")
 
 [node name="ball3" type="MeshInstance3D" parent="balls"]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0.265616, 1.14043, 0.00429618)
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0.265616, 1.14043, 0.00429618)
 mesh = SubResource("SphereMesh_8jn2d")

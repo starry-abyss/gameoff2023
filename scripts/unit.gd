@@ -99,13 +99,21 @@ func load_model(model_scene_name: String):
 		mi.material_override = material
 	
 	if type == Gameplay.UnitTypes.TOWER_NODE:
-		var ball_material = ShaderMaterial.new()
-		ball_material.shader = glowing_outline_shader
-		ball_material.set_shader_parameter("show_glitch", true)
+		#var ball_material = ShaderMaterial.new()
+		#ball_material.shader = preload("res://shaders/electric/electric.gdshader")
+		#ball_material.set_shader_parameter("show_glitch", true)
 		
-		for mi in model.get_node("balls").get_children():
-			tower_balls.append(mi)
-			mi.material_override = ball_material
+		var ball_material = preload("res://shaders/electric/electric_tower_material.tres")
+		
+		for ball in model.get_node("balls").get_children():
+			ball.material_override = ball_material.duplicate()
+			
+			ball.rotate_y(randf() * PI * 2.0)
+			ball.material_override.set_shader_parameter("electro_scale", 10.0 + randf() * 2.0)
+			ball.material_override.set_shader_parameter("speed", 3.0 + randf() * 2.0)
+			#ball.material_override.set_shader_parameter("seed", Vector2(randf(), randf()))
+		
+		restore_tower_balls()
 	
 	#var lights = model.find_children("", "Light3D")
 	#for light in lights:
@@ -120,6 +128,16 @@ func load_model(model_scene_name: String):
 	set_initial_facing()
 	pass
 	
+func restore_tower_balls():
+	if type == Gameplay.UnitTypes.TOWER_NODE && model != null:
+		tower_balls = []
+		for ball in model.get_node("balls").get_children():
+			ball.visible = true
+			tower_balls.append(ball)
+
+func use_tower_ball() -> MeshInstance3D:
+	return tower_balls.pop_back()
+
 func load_stats(which_type: Gameplay.UnitTypes):
 	var stats: Dictionary = StaticData.unit_stats[which_type]
 	
@@ -249,3 +267,14 @@ func _process(delta):
 	if type == Gameplay.UnitTypes.TOWER_NODE && model != null:
 		var sides: MeshInstance3D = model.find_child("Sides")
 		sides.rotate_y(delta * 0.4)
+		
+		for i in range(3):
+			if tower_balls.size() > i:
+				var ball = tower_balls[i]
+				var a = sides.rotation.y + i * 2.0 * PI / 3.0
+				var b = sides.rotation.y * (i + 1) * 3.0
+				
+				var distance = 0.25
+				ball.global_position = global_position + Vector3(distance * cos(a), 1.2 + 0.2 * sin(b), distance * sin(a))
+				ball.rotate_y(delta * 1.1)
+				
