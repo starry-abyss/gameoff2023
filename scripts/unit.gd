@@ -152,7 +152,7 @@ func load_stats(which_type: Gameplay.UnitTypes):
 	
 func set_tint(color: Color):
 	if material != null:
-		color.a = 0.45
+		color.a = 0.85
 		material.set_shader_parameter("emission_color", color)
 	pass
 
