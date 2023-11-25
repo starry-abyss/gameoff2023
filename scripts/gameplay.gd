@@ -408,15 +408,22 @@ func tint_all_tiles(ability_id: String):
 		var t = tiles[i]
 		if t != null:
 			if target_type_is_self:
-				t.set_tint(Color.BLACK)
+				if tile_pos_to_tile_index(selected_unit.tile_pos) == i:
+					t.set_tint(StaticData.tile_good_target)
+				else:
+					t.set_tint(Color.BLACK)
 			else:
 				tint_tiles(ability_id, tile_index_to_tile_pos(i), true, false, true)
 
 func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool = true, show_neighbors: bool = false, no_reset: bool = false):
+	var bad_target_color = StaticData.tile_bad_target
+	
 	if !no_reset:
 		for t in tiles:
 			if t != null:
 				t.set_tint(Color.BLACK)
+	else:
+		bad_target_color = Color.BLACK
 	
 	# ignore what UI requested :D
 	if selected_unit == null:
@@ -426,21 +433,21 @@ func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool
 	# TODO: bad and duplicated code, but not much time until release
 	if ability_id != "":
 		if !give_order(ability_id, center_tile_pos, true):
-			new_color = StaticData.tile_bad_target
+			new_color = bad_target_color
 	else:
 		var unit_at_pos = find_unit_by_tile_pos(center_tile_pos)
 		if unit_at_pos == null:
 			if !give_order("move", center_tile_pos, true):
-				new_color = StaticData.tile_bad_target
+				new_color = bad_target_color
 		else:
 			if selected_unit.type == UnitTypes.VIRUS:
 				if !give_order("virus_attack", unit_at_pos, true):
-					new_color = StaticData.tile_bad_target
+					new_color = bad_target_color
 			elif selected_unit.type == UnitTypes.TOWER_NODE:
 				if !give_order("tower_attack", unit_at_pos, true):
-					new_color = StaticData.tile_bad_target
+					new_color = bad_target_color
 			else:
-				new_color = StaticData.tile_bad_target
+				new_color = bad_target_color
 	
 	if show_center:
 		var tile = get_tile(center_tile_pos)
