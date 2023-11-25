@@ -1,10 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://bbpqmtalxqd5i"]
+[gd_scene load_steps=3 format=3 uid="uid://bbpqmtalxqd5i"]
 
 [ext_resource type="Script" path="res://scenes/menu/selected_unit_stats.gd" id="1_g8sad"]
+[ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="1_ofymy"]
 
 [node name="Panel" type="Panel"]
 offset_right = 284.0
 offset_bottom = 400.0
+theme = ExtResource("1_ofymy")
 script = ExtResource("1_g8sad")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]

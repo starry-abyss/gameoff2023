@@ -23,6 +23,7 @@ grow_vertical = 2
 script = ExtResource("1_46h0q")
 
 [node name="Quit" type="Button" parent="."]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 offset_left = 28.0
 offset_top = 598.0
@@ -52,9 +53,10 @@ theme_override_constants/margin_bottom = 100
 layout_mode = 2
 
 [node name="Play" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme = ExtResource("3_c1x3u")
-text = "PLAY"
+text = "Play"
 expand_icon = true
 
 [node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
@@ -62,9 +64,10 @@ layout_mode = 2
 theme_override_constants/margin_bottom = 10
 
 [node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme = ExtResource("3_c1x3u")
-text = "OPTIONS"
+text = "Options"
 expand_icon = true
 
 [node name="Timer" type="Timer" parent="."]

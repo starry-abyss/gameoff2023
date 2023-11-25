@@ -6,9 +6,8 @@
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_up8a2")
-shader_parameter/glitch_y_range = Vector2(2.08165e-12, 1)
+shader_parameter/glitch_y_range = Vector2(-1, 1)
 shader_parameter/show_glitch = false
 shader_parameter/glitch_scale = 0.5
 shader_parameter/emission_color = Color(0, 0.337255, 0.215686, 0.909804)
 shader_parameter/emission_amount = 5.0
-shader_parameter/spawn_y_range = Vector2(-1, 1)

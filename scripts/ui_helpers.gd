@@ -113,3 +113,42 @@ func quit_the_game():
 	
 	get_tree().quit()
 
+
+func override_ui_node_theme_with_color(nodes: Array, color: Color):	
+	for node in nodes:		
+		node.add_theme_color_override("font_color", color)
+		
+		if node is Button:
+			var normal_style_box = (node.get_theme_stylebox("normal") as StyleBoxFlat).duplicate()
+			normal_style_box.bg_color = color.darkened(1)
+			normal_style_box.border_color = color
+			node.add_theme_stylebox_override("normal", normal_style_box)
+			node.add_theme_stylebox_override("disabled", normal_style_box)
+			node.add_theme_stylebox_override("pressed", normal_style_box)
+			node.add_theme_stylebox_override("focus", normal_style_box)
+			
+			var hover_style_box = (node.get_theme_stylebox("hover") as StyleBoxFlat).duplicate()
+			hover_style_box.bg_color = color.darkened(0.8)
+			hover_style_box.border_color = color
+			node.add_theme_stylebox_override("hover", hover_style_box)
+		elif node is Panel:
+			var panel_style_box = (node.get_theme_stylebox("panel") as StyleBoxFlat).duplicate()
+			panel_style_box.bg_color = color.darkened(1)
+			panel_style_box.border_color = color
+			node.add_theme_stylebox_override("panel", panel_style_box)
+		elif node is HSlider:
+			var slider_style_box = (node.get_theme_stylebox("slider") as StyleBoxFlat).duplicate()
+			slider_style_box.bg_color = color.darkened(1)
+			slider_style_box.border_color = color
+			node.add_theme_stylebox_override("slider", slider_style_box)
+			
+			var grabber_area_style_box = (node.get_theme_stylebox("grabber_area") as StyleBoxFlat).duplicate()
+			grabber_area_style_box.bg_color = color.darkened(0.6)
+			grabber_area_style_box.border_color = color
+			node.add_theme_stylebox_override("grabber_area", grabber_area_style_box)
+			
+			var grabber_area_highlight_style_box = (node.get_theme_stylebox("grabber_area_highlight") as StyleBoxFlat).duplicate()
+			grabber_area_highlight_style_box.bg_color = color.darkened(0.2)
+			grabber_area_highlight_style_box.border_color = color
+			node.add_theme_stylebox_override("grabber_area_highlight", grabber_area_highlight_style_box)
+

@@ -3,10 +3,8 @@ extends Node3D
 
 @onready var battle_area = %battle_area
 @onready var battle_ui = %battle_ui
-@onready var options_menu = $CanvasLayer/OptionsMenu
-@onready var button = $CanvasLayer/Button
-@onready var blue_theme = preload("res://themes/blue.tres")
-@onready var pink_theme = preload("res://themes/pink.tres")
+@onready var options_menu: Control = $CanvasLayer/OptionsMenu
+@onready var options: Button = $CanvasLayer/Options
 
 enum UnitTypes { CENTRAL_NODE, TOWER_NODE, WORM, TROJAN, VIRUS }
 enum TargetTypes { UNIT, TILE, SELF }
@@ -933,6 +931,7 @@ func end_turn(silent = false):
 		select_unit(null)
 	
 	current_turn_group = flip_group(current_turn_group)
+	battle_ui.current_group = current_turn_group
 	
 	for unit in units:
 		if unit.group == current_turn_group:
@@ -953,6 +952,7 @@ func end_turn(silent = false):
 	
 	if !silent:
 		battle_ui._on_playing_group_changed(current_turn_group, is_ai_turn())
+		_init_group_color()
 
 func get_tile(tile_pos: Vector2i) -> Tile:
 	if is_tile_pos_out_of_bounds(tile_pos):
@@ -977,6 +977,21 @@ func for_all_tile_pos_around(tile_pos: Vector2i, f: Callable):
 			f.call(adj_tile_pos_absolute)
 
 
+func _on_back_pressed() -> void:
+	options_menu.visible = false
+	
+	
+func _on_options_pressed() -> void:
+	options_menu.visible = true
+
+
+func _init_group_color():
+	if current_turn_group == Gameplay.HackingGroups.PINK:
+		on_group_color_change(current_turn_group, StaticData.color_pink)
+	else:
+		on_group_color_change(current_turn_group, StaticData.color_blue)
+
+
 func on_group_color_change(group: Gameplay.HackingGroups, color: Color):
 	for unit in units:
 		if unit.group == group:
@@ -985,23 +1000,11 @@ func on_group_color_change(group: Gameplay.HackingGroups, color: Color):
 		if tile != null and tile.group == group:
 			tile.set_tint(color)
 	update_firewalls()
-	#update theme color
-	match group:
-		Gameplay.HackingGroups.BLUE:
-			blue_theme.set_color("font_color", "Button", color)
-			blue_theme.set_color("font_focus_color", "Button", color)
-		Gameplay.HackingGroups.PINK:
-			pink_theme.set_color("font_color", "Button", color)
-			pink_theme.set_color("font_focus_color", "Button", color)
+	battle_ui.change_theme_color()
+	if group == current_turn_group:
+		options_menu.change_theme_color(color)
+		UIHelpers.override_ui_node_theme_with_color([options], color)
 
-
-func _on_button_pressed():
-	options_menu.visible = true
-	
-
-func _on_back_pressed():
-	options_menu.visible = false
-	
 
 func _ready():
 	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", end_turn)

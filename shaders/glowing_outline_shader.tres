@@ -228,7 +228,6 @@ uniform float glitch_scale = 0.5;
 uniform sampler2D tex_vtx_32;
 uniform vec4 emission_color : source_color = vec4(0.164706, 0.556863, 0.027451, 0.250980);
 uniform float emission_amount : hint_range(0, 16) = 5;
-uniform vec2 spawn_y_range = vec2(-1.000000, 1.000000);
 
 
 
@@ -342,58 +341,14 @@ void fragment() {
 	vec3 n_out5p0 = vec3(n_out2p0.xyz) * vec3(n_out3p0);
 
 
-// Input:45
-	vec3 n_out45p0 = VERTEX;
-	float n_out45p2 = n_out45p0.g;
-
-
-// Vector2Parameter:46
-	vec2 n_out46p0 = spawn_y_range;
-	float n_out46p1 = n_out46p0.r;
-	float n_out46p2 = n_out46p0.g;
-
-
-// Compare:47
-	bool n_out47p0 = n_out45p2 >= n_out46p1;
-
-
-// Compare:48
-	bool n_out48p0 = n_out45p2 <= n_out46p2;
-
-
-	bool n_out49p0;
-// Switch:49
-	bool n_in49p2 = false;
-	if (n_out47p0) {
-		n_out49p0 = n_out48p0;
-	} else {
-		n_out49p0 = n_in49p2;
-	}
-
-
-	float n_out50p0;
-// Switch:50
-	float n_in50p1 = 5.00000;
-	float n_in50p2 = 0.00000;
-	n_out50p0 = mix(n_in50p2, n_in50p1, float(n_out49p0));
-
-
-// VectorCompose:52
-	vec3 n_out52p0 = vec3(n_out50p0, n_out50p0, n_out50p0);
-
-
-// VectorOp:51
-	vec3 n_out51p0 = n_out5p0 * n_out52p0;
-
-
 // Output:0
 	ALBEDO = n_out5p0;
-	ALPHA = n_out50p0;
-	EMISSION = n_out51p0;
+	EMISSION = n_out5p0;
 
 
 }
 "
+graph_offset = Vector2(-393.296, 28.5895)
 nodes/vertex/0/position = Vector2(2280, 1140)
 nodes/vertex/20/node = SubResource("VisualShaderNodeInput_67w01")
 nodes/vertex/20/position = Vector2(-1540, 400)
@@ -516,8 +471,8 @@ nodes/fragment/49/position = Vector2(-920, -500)
 nodes/fragment/50/node = SubResource("VisualShaderNodeSwitch_458wm")
 nodes/fragment/50/position = Vector2(-420, -480)
 nodes/fragment/51/node = SubResource("VisualShaderNodeVectorOp_txvoh")
-nodes/fragment/51/position = Vector2(1780, 600)
+nodes/fragment/51/position = Vector2(1500, 740)
 nodes/fragment/52/node = SubResource("VisualShaderNodeVectorCompose_t31ih")
-nodes/fragment/52/position = Vector2(1360, 700)
-nodes/fragment/connections = PackedInt32Array(2, 0, 5, 0, 3, 0, 5, 1, 9, 0, 10, 0, 4, 0, 10, 1, 2, 0, 11, 0, 11, 3, 12, 1, 10, 0, 12, 0, 5, 0, 0, 0, 16, 0, 15, 0, 6, 0, 9, 1, 13, 0, 19, 1, 19, 0, 14, 0, 14, 0, 22, 1, 8, 0, 6, 1, 7, 0, 21, 1, 22, 0, 24, 2, 24, 0, 20, 0, 18, 0, 24, 0, 7, 0, 25, 0, 25, 0, 18, 2, 25, 1, 18, 0, 25, 2, 18, 1, 34, 0, 36, 1, 12, 0, 36, 0, 29, 0, 37, 0, 37, 1, 34, 2, 26, 0, 35, 0, 26, 0, 34, 0, 35, 0, 34, 1, 7, 0, 6, 0, 34, 0, 38, 1, 39, 0, 43, 1, 41, 0, 43, 0, 40, 0, 44, 1, 41, 0, 44, 0, 47, 0, 49, 0, 48, 0, 49, 1, 46, 1, 47, 1, 45, 2, 48, 0, 45, 2, 47, 0, 49, 0, 50, 0, 46, 2, 48, 1, 50, 0, 0, 1, 5, 0, 51, 0, 51, 0, 0, 5, 52, 0, 51, 1, 50, 0, 52, 0, 50, 0, 52, 2, 50, 0, 52, 1)
+nodes/fragment/52/position = Vector2(1100, 800)
+nodes/fragment/connections = PackedInt32Array(2, 0, 5, 0, 3, 0, 5, 1, 9, 0, 10, 0, 4, 0, 10, 1, 2, 0, 11, 0, 11, 3, 12, 1, 10, 0, 12, 0, 5, 0, 0, 0, 16, 0, 15, 0, 6, 0, 9, 1, 13, 0, 19, 1, 19, 0, 14, 0, 14, 0, 22, 1, 8, 0, 6, 1, 7, 0, 21, 1, 22, 0, 24, 2, 24, 0, 20, 0, 18, 0, 24, 0, 7, 0, 25, 0, 25, 0, 18, 2, 25, 1, 18, 0, 25, 2, 18, 1, 34, 0, 36, 1, 12, 0, 36, 0, 29, 0, 37, 0, 37, 1, 34, 2, 26, 0, 35, 0, 26, 0, 34, 0, 35, 0, 34, 1, 7, 0, 6, 0, 34, 0, 38, 1, 39, 0, 43, 1, 41, 0, 43, 0, 40, 0, 44, 1, 41, 0, 44, 0, 47, 0, 49, 0, 48, 0, 49, 1, 46, 1, 47, 1, 45, 2, 48, 0, 45, 2, 47, 0, 49, 0, 50, 0, 46, 2, 48, 1, 5, 0, 51, 0, 52, 0, 51, 1, 50, 0, 52, 0, 50, 0, 52, 2, 50, 0, 52, 1, 5, 0, 0, 5)
 metadata/_edit_res_path = "res://shaders/glowing_outline_shader.tres"

@@ -89,6 +89,7 @@ func load_model(model_scene_name: String):
 	#model.set_meta("_edit_lock_", true)
 	
 	material = ShaderMaterial.new()
+	material.resource_local_to_scene = true
 	material.shader = glowing_outline_shader
 	#material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
 	
@@ -96,7 +97,6 @@ func load_model(model_scene_name: String):
 	#var mesh_instance: MeshInstance3D = mesh_instances[-1]
 	for mi in mesh_instances:
 		mi.material_override = material
-	
 	#var lights = model.find_children("", "Light3D")
 	#for light in lights:
 	#	light.queue_free()
@@ -201,7 +201,7 @@ func _process(delta):
 	if on_spawn:
 		spawn_timer += delta
 		var y_min = (aabb as AABB).size.y * spawn_timer / StaticData.spawn_animation_duration
-		var y_max = (aabb as AABB).size.y * 1.3 *spawn_timer / StaticData.spawn_animation_duration
+		var y_max = y_min + (aabb as AABB).size.y * 0.3
 		var spawn_y_range = Vector2(y_min, y_max)
 		material.set_shader_parameter("spawn_y_range", spawn_y_range)
 		if spawn_timer >= StaticData.spawn_animation_duration:

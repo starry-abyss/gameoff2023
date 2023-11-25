@@ -23,14 +23,36 @@ grow_vertical = 2
 script = ExtResource("1_mumff")
 
 [node name="Background" type="Panel" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_drc0s")
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -204.0
+offset_right = 210.0
+offset_bottom = 204.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_qg0hq")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_ncrul")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -71,6 +93,7 @@ offset_left = 4.0
 offset_right = 56.0
 offset_bottom = 19.0
 size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 20
 text = "music"
 
 [node name="Control2" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
@@ -83,6 +106,7 @@ offset_left = 4.0
 offset_right = 56.0
 offset_bottom = 19.0
 size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 20
 text = "sounds"
 
 [node name="Control3" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
@@ -95,6 +119,7 @@ offset_left = 4.0
 offset_right = 56.0
 offset_bottom = 19.0
 size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 20
 text = "team colors"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
@@ -152,13 +177,34 @@ color = Color(1, 1, 1, 1)
 layout_mode = 2
 theme_override_constants/margin_bottom = 50
 
-[node name="Back" type="Button" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
+[node name="Back" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = 137.0
+offset_right = 80.0
+offset_bottom = 167.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("5_ncrul")
 text = "Back"
 expand_icon = true
 
+[node name="Options" type="Button" parent="."]
+visible = false
+offset_left = 1040.0
+offset_top = 15.0
+offset_right = 1136.0
+offset_bottom = 45.0
+theme = ExtResource("5_ncrul")
+text = "Options"
+
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control/Volume" to="." method="_on_volume_value_changed"]
 [connection signal="color_changed" from="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control3/HBoxContainer/TeamColor1" to="." method="_on_color_picker_button_color_changed"]
 [connection signal="color_changed" from="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control3/HBoxContainer/TeamColor2" to="." method="_on_color_picker_button_2_color_changed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Options" to="." method="_on_options_pressed"]

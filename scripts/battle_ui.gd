@@ -34,7 +34,7 @@ var in_select_target_mode = false:
 var order_parameters = {}
 var animated_unit: Unit
 var animated_unit_start_pos: Vector3
-
+var current_group
 
 func _ready():
 	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)
@@ -99,6 +99,7 @@ func add_ability_button(ability_id: String):
 	var stats = StaticData.ability_stats[ability_id]
 	
 	var button = Button.new()
+	button.theme = load("res://themes/ui.tres")
 	
 	button.name = ability_id
 	button.text = ""
@@ -195,7 +196,7 @@ func _on_unit_show_stats(unit: Unit):
 		selected_unit_stats.visible = false
 	else:
 		selected_unit_stats.visible = true 
-		selected_unit_stats._display_unit_stats(unit)
+		selected_unit_stats._display_unit_stats(unit, current_group)
 
 func _on_unit_destroy(unit: Unit):
 	pass
@@ -216,15 +217,17 @@ func _on_unit_hp_change(unit: Unit, delta_hp: int):
 	label.global_position = unit.global_position + Vector3(0.0, 2.0, 0.0)
 	
 func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn: bool):
-	#var group_color = UIHelpers.group_to_color(current_group)
+	change_theme_color()
 	
+
+func change_theme_color():
+	var ui_nodes = [$CanvasLayer/end_turn, $CanvasLayer/select_idle_unit, $CanvasLayer/cancel_select_target, $CanvasLayer/SelectedUnitStats]
+	ui_nodes.append_array(%ability_buttons.get_children())
 	if current_group == Gameplay.HackingGroups.PINK:
-		$CanvasLayer/end_turn.theme = preload("res://themes/pink.tres")
-		$CanvasLayer/select_idle_unit.theme = preload("res://themes/pink.tres")
+		UIHelpers.override_ui_node_theme_with_color(ui_nodes, StaticData.color_pink)
 	else:
-		$CanvasLayer/end_turn.theme = preload("res://themes/blue.tres")
-		$CanvasLayer/select_idle_unit.theme = preload("res://themes/blue.tres")
-	pass
+		UIHelpers.override_ui_node_theme_with_color(ui_nodes, StaticData.color_blue)
+
 
 func _on_battle_end(who_won: Gameplay.HackingGroups):
 	$CanvasLayer/end_game_message.visible = true
