@@ -86,6 +86,12 @@ func set_tint(color: Color):
 	if material != null:
 		material.albedo_color = color
 
+func get_tint() -> Color:
+	if material != null:
+		return material.albedo_color
+	else:
+		return Color.BLACK
+
 func _on_hide_debug_distance():
 	debug_distance.text = ""
 	pass

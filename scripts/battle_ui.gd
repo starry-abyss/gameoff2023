@@ -234,7 +234,7 @@ func _on_unit_hp_change(unit: Unit, delta_hp: int):
 	if delta_hp > 0:
 		label.get_node("Label").text = "+" + str(delta_hp)
 	else:
-		label.get_node("Label").text = str(delta_hp)
+		label.get_node("Label").text = "" + str(delta_hp)
 	
 	label.global_position = unit.global_position + Vector3(0.0, 2.0, 0.0)
 	

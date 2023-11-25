@@ -403,6 +403,10 @@ func highlight_idle_units():
 			get_tile(unit.tile_pos).set_tint(StaticData.tile_good_target)
 
 func tint_all_tiles(ability_id: String):
+	for t in tiles:
+		if t != null:
+			t.set_tint(Color.BLACK)
+	
 	var target_type_is_self = StaticData.ability_stats[ability_id].target == Gameplay.TargetTypes.SELF
 	for i in range(tiles.size()):
 		var t = tiles[i]
@@ -413,7 +417,8 @@ func tint_all_tiles(ability_id: String):
 				else:
 					t.set_tint(Color.BLACK)
 			else:
-				tint_tiles(ability_id, tile_index_to_tile_pos(i), true, false, true)
+				tint_tiles(ability_id, tile_index_to_tile_pos(i), \
+				ability_id != "backdoor", ability_id == "backdoor" || ability_id == "reset", true)
 
 func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool = true, show_neighbors: bool = false, no_reset: bool = false):
 	var bad_target_color = StaticData.tile_bad_target
@@ -452,7 +457,8 @@ func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool
 	if show_center:
 		var tile = get_tile(center_tile_pos)
 		if tile != null:
-			tile.set_tint(new_color)
+			if !no_reset || (tile.get_tint() != StaticData.tile_good_target):
+				tile.set_tint(new_color)
 	
 	if show_neighbors:
 		var tile_neighbors = UIHelpers.get_tile_neighbor_list(center_tile_pos)
@@ -460,7 +466,8 @@ func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool
 			var pos_to_explore_next = center_tile_pos + adj_tile_pos
 			var tile = get_tile(pos_to_explore_next)
 			if tile != null:
-				tile.set_tint(new_color)
+				if !no_reset || (tile.get_tint() != StaticData.tile_good_target):
+					tile.set_tint(new_color)
 		
 	pass
 
@@ -831,13 +838,17 @@ func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> boo
 	if true:
 		var found_someone = false
 		var tile_neighbors_from = UIHelpers.get_tile_neighbor_list(target_tile_pos)
+		var tile_neighbors_to = UIHelpers.get_tile_neighbor_list(selected_unit.tile_pos)
 		for i in range(tile_neighbors_from.size()):
 			var tile_pos_from = target_tile_pos + tile_neighbors_from[i]
+			var tile_pos_to = selected_unit.tile_pos + tile_neighbors_to[i]
+			
 			var unit_from = find_unit_by_tile_pos(tile_pos_from)
 			
 			if unit_from != null && !unit_from.is_static() \
 				&& unit_from.group == selected_unit.group \
-				&& unit_from != selected_unit:
+				&& unit_from != selected_unit \
+				&& is_tile_walkable(tile_pos_to):
 				found_someone = true
 				break
 		
@@ -1155,6 +1166,7 @@ func _on_back_pressed():
 
 func _ready():
 	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", end_turn)
+	battle_ui.get_node("CanvasLayer/end_turn").connect("mouse_entered", highlight_idle_units)
 	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", select_next_unit)
 	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("mouse_entered", highlight_idle_units)
 	
