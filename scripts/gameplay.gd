@@ -20,7 +20,7 @@ var units = []
 var firewalls = {}
 var selected_unit: Unit = null
 
-var map_size: Vector2i = Vector2i(20, 11)
+var map_size: Vector2i = Vector2i(28, 19)
 var tiles = []
 
 var distances = []
@@ -566,6 +566,9 @@ func select_unit(unit_to_select: Unit, no_ui = false):
 	for unit in units:
 		#unit.selected = (unit == unit_to_select)
 		pass
+		
+	#if selected_unit != unit_to_select:
+	#	UIHelpers.audio_event("Ui/Ui_UnitChanged")
 	
 	selected_unit = unit_to_select
 	calculate_distances()
@@ -736,11 +739,11 @@ func order_ability_capture_tower(target: Unit, imaginary = false) -> bool:
 		
 		target.hp = target.hp_max
 		
+		UIHelpers.audio_event3d("SFX/Trojan/SFX_CaptureNode", selected_unit.tile_pos)
+		
 		remove_unit(selected_unit)
 		
 		update_firewalls()
-		
-		UIHelpers.audio_event3d("SFX/Trojan/SFX_CaptureNode", selected_unit.tile_pos)
 	
 	return true
 
@@ -932,6 +935,8 @@ func hurt_unit(target: Unit, amount: int):
 		else:
 			target.group = HackingGroups.NEUTRAL
 			update_firewalls()
+			
+			UIHelpers.audio_event3d("SFX/Kernel Node/SFX_KernelDamage", target.tile_pos)
 		
 		if this_is_the_end:
 			end_battle(unit_group_originally)
@@ -939,9 +944,13 @@ func hurt_unit(target: Unit, amount: int):
 	calculate_distances()
 
 func end_battle(who_lost: HackingGroups):
-	for unit in units:
+	var units_array = units.duplicate()
+	for unit in units_array:
 		if unit.group == who_lost:
 			unit.group = HackingGroups.NEUTRAL
+			
+			if !unit.is_static():
+				hurt_unit(unit, 99999999)
 		
 			if unit.type == UnitTypes.TOWER_NODE:
 				unit.hp = 0
@@ -1191,12 +1200,27 @@ func _ready():
 		for y in range(map_size.y):
 			add_tile(Vector2i(x, y))
 	
-	remove_tile(Vector2i(19, 0))
-	remove_tile(Vector2i(19, 2))
-	remove_tile(Vector2i(19, 4))
-	remove_tile(Vector2i(19, 6))
-	remove_tile(Vector2i(19, 8))
-	remove_tile(Vector2i(19, 10))
+	#for i in range(map_size.y / 2 + 1):
+	#	remove_tile(Vector2i(map_size.x - 1, i * 2))
+	
+	for i in range(map_size.y / 2 + 1):
+		for j in range(4 - i / 2):
+			remove_tile(Vector2i(j, i))
+			remove_tile(Vector2i(j, map_size.y - i - 1))
+			
+			remove_tile(Vector2i(map_size.x - j - 1, i))
+			remove_tile(Vector2i(map_size.x - j - 1, map_size.y - i - 1))
+	
+	remove_tile(Vector2i(23, 0))
+	remove_tile(Vector2i(24, 2))
+	remove_tile(Vector2i(25, 4))
+	remove_tile(Vector2i(26, 6))
+	remove_tile(Vector2i(27, 8))
+	remove_tile(Vector2i(27, 10))
+	remove_tile(Vector2i(26, 12))
+	remove_tile(Vector2i(25, 14))
+	remove_tile(Vector2i(24, 16))
+	remove_tile(Vector2i(23, 18))
 	
 	#spawn_unit(Vector2i(0, 1), UnitTypes.WORM, HackingGroups.BLUE)
 	#spawn_unit(Vector2i(13, 3), UnitTypes.TROJAN, HackingGroups.BLUE)
@@ -1205,20 +1229,22 @@ func _ready():
 	#spawn_unit(Vector2i(13, 2), UnitTypes.TROJAN, HackingGroups.PINK)
 	#spawn_unit(Vector2i(14, 3), UnitTypes.TROJAN, HackingGroups.PINK)
 	
-	spawn_unit(Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(3, 2), UnitTypes.TOWER_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(2, 5), UnitTypes.TOWER_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(3, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(8, 5), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	var pink_offset = Vector2i(4, 4)
 	
-	for_all_tile_pos_around(Vector2i(5, 5), func(tile1): \
+	spawn_unit(pink_offset + Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
+	spawn_unit(pink_offset + Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(pink_offset + Vector2i(3, 2), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(pink_offset + Vector2i(2, 5), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(pink_offset + Vector2i(3, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(pink_offset + Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(pink_offset + Vector2i(8, 5), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	
+	for_all_tile_pos_around(pink_offset + Vector2i(5, 5), func(tile1): \
 		for_all_tile_pos_around(tile1, func(tile2): \
 			for_all_tile_pos_around(tile2, func(tile3): \
 				get_tile(tile3).group = HackingGroups.PINK)))
 	
-	var blue_offset = Vector2i(9, 0)
+	var blue_offset = Vector2i(13, 4)
 	
 	spawn_unit(blue_offset + Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.BLUE)
 	spawn_unit(blue_offset + Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.BLUE)

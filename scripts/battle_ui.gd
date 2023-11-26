@@ -131,7 +131,7 @@ func make_ap_string(ability_id, ap) -> String:
 	elif ap < 0:
 		return "AP: +" + str(-ap)
 	
-	return "auto-call"
+	return "auto"
 
 func make_cd_string(cooldown) -> String:
 	if cooldown > 0:
@@ -150,7 +150,7 @@ func update_ability_button_text(ability_id: String, selected_unit: Unit):
 	var cooldown_text = ""
 	if stats.cooldown > 0:
 		var current_cooldown = selected_unit.get_cooldown(ability_id)
-		cooldown_text = ", CD: " + str(stats.cooldown) + "\n" + make_cd_string(current_cooldown)
+		cooldown_text = ", cooldown: " + str(stats.cooldown) + "\n" + make_cd_string(current_cooldown)
 	
 	var button = %ability_buttons.get_node(ability_id)
 	button.text = stats.name \
@@ -196,15 +196,16 @@ func _on_unit_move(unit: Unit, path: Array):
 	in_unit_animation_mode = true
 	animated_unit = unit
 	
-	if animated_unit.type == Gameplay.UnitTypes.WORM:
+	#if animated_unit.type == Gameplay.UnitTypes.WORM:
 		#UIHelpers.audio_event3d_loop_start("SFX/Worms/SFX_WormMove", animated_unit)
-		UIHelpers.audio_event3d("SFX/Worms/SFX_WormMove", animated_unit.tile_pos)
-	elif animated_unit.type == Gameplay.UnitTypes.TROJAN:
+		#UIHelpers.audio_event3d("SFX/Worms/SFX_WormMove", animated_unit.tile_pos)
+	#elif animated_unit.type == Gameplay.UnitTypes.TROJAN:
 		#UIHelpers.audio_event3d_loop_start("SFX/Trojan/SFX_TrojanMove", animated_unit)
-		UIHelpers.audio_event3d("SFX/Trojan/SFX_TrojanMove", animated_unit.tile_pos)
-	elif animated_unit.type == Gameplay.UnitTypes.VIRUS:
+		#UIHelpers.audio_event3d("SFX/Trojan/SFX_TrojanMove", animated_unit.tile_pos)
+	#elif animated_unit.type == Gameplay.UnitTypes.VIRUS:
 		#UIHelpers.audio_event3d_loop_start("SFX/Virus/SFX_VirusMove", animated_unit)
-		UIHelpers.audio_event3d("SFX/Virus/SFX_VirusMove", animated_unit.tile_pos)
+	UIHelpers.audio_event3d("SFX/Virus/SFX_VirusMove", animated_unit.tile_pos)
+	#UIHelpers.audio_event("SFX/Virus/SFX_VirusMove")
 
 func _on_unit_selection_changed(unit: Unit):
 	#if unit == null:
@@ -235,6 +236,7 @@ func _on_unit_hp_change(unit: Unit, delta_hp: int):
 	add_child(label)
 	
 	if delta_hp > 0:
+		label.get_node("Label").modulate = Color("#00ff00")
 		label.get_node("Label").text = "+" + str(delta_hp)
 	else:
 		label.get_node("Label").text = "" + str(delta_hp)

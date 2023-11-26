@@ -15,6 +15,8 @@ extends Node3D
 		if group != new_value:
 			set_tint(UIHelpers.group_to_color(new_value))
 		group = new_value
+		
+		restore_tower_balls()
 
 var destroy_timer = 0.0
 var to_be_removed = false
@@ -138,7 +140,7 @@ func restore_tower_balls():
 	if type == Gameplay.UnitTypes.TOWER_NODE && model != null:
 		tower_balls = []
 		for ball in model.get_node("balls").get_children():
-			ball.visible = true
+			ball.visible = group != Gameplay.HackingGroups.NEUTRAL
 			tower_balls.append(ball)
 
 func use_tower_ball() -> MeshInstance3D:
@@ -243,8 +245,7 @@ func _on_click():
 	
 
 func on_hurt():
-	# TODO: wrong event fow now, for testing
-	UIHelpers.audio_event3d("SFX/Worms/SFX_MutateTrojan", tile_pos)
+	UIHelpers.audio_event3d("SFX/GeneralEvents/UnitDamage", tile_pos)
 	
 	is_hurt = true
 	material.set_shader_parameter("show_glitch", true)

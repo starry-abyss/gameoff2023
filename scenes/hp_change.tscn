@@ -11,7 +11,8 @@ pixel_size = 0.01
 billboard = 2
 double_sided = false
 font = ExtResource("1_gr7dt")
-font_size = 64
+font_size = 96
+outline_size = 32
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 1.5

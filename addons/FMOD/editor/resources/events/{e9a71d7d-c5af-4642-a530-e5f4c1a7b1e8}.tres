@@ -1,0 +1,9 @@
+[gd_resource type="EventAsset" format=3 uid="uid://byjk0wtjwiaxf"]
+
+[resource]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/SFX/GeneralEvents/UnitDamage"
+guid = "{e9a71d7d-c5af-4642-a530-e5f4c1a7b1e8}"
+name = "UnitDamage"

@@ -5,4 +5,4 @@
 [node name="central_node" type="Node3D"]
 
 [node name="Kernel3-ca2c877f122a0494a2f4c74eb3980555" parent="." instance=ExtResource("2_32gtt")]
-transform = Transform3D(-3.49691e-09, 1.74393e-16, 0.08, 2.79029e-17, 0.5, -2.79029e-17, -0.08, 1.74393e-16, -3.49691e-09, 0, 2.06123, 0)
+transform = Transform3D(-3.0598e-09, 1.56954e-16, 0.07, 2.4415e-17, 0.45, -2.4415e-17, -0.07, 1.56954e-16, -3.0598e-09, 0, 1.83988, 0)

@@ -1,0 +1,9 @@
+[gd_resource type="EventAsset" format=3 uid="uid://bq1a57r7lhqn1"]
+
+[resource]
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/Ui/Ui_UnitChanged"
+guid = "{83ea7205-5830-47ca-ae24-a11f9f29a5d0}"
+name = "Ui_UnitChanged"
