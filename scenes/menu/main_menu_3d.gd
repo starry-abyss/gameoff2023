@@ -101,13 +101,13 @@ func add_tile(tile_pos: Vector2i):
 func _go_to_main_menu():
 	options_menu.visible = false
 	main_menu.visible = true
-	UIHelpers.audio_event("Ui/Ui_Back")
+	#UIHelpers.audio_event("Ui/Ui_Back")
 	
 
 func _go_to_options_menu():
 	main_menu.visible = false
 	options_menu.visible = true
-	UIHelpers.audio_event("Ui/Ui_Accept")
+	#UIHelpers.audio_event("Ui/Ui_Accept")
 
 
 func _on_timer_timeout():
