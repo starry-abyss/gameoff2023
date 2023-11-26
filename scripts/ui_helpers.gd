@@ -124,19 +124,25 @@ func quit_the_game():
 
 func override_ui_node_theme_with_color(nodes: Array, color: Color):	
 	for node in nodes:		
-		node.add_theme_color_override("font_color", color)
+		#node.add_theme_color_override("font_color", color)
+		node.add_theme_color_override("font_color", Color.WHITE)
+		node.add_theme_color_override("font_disabled_color", StaticData.color_neutral)
 		
 		if node is Button:
 			var normal_style_box = (node.get_theme_stylebox("normal") as StyleBoxFlat).duplicate()
 			normal_style_box.bg_color = color.darkened(1)
 			normal_style_box.border_color = color
 			node.add_theme_stylebox_override("normal", normal_style_box)
-			node.add_theme_stylebox_override("disabled", normal_style_box)
 			node.add_theme_stylebox_override("pressed", normal_style_box)
 			node.add_theme_stylebox_override("focus", normal_style_box)
 			
+			var disabled_style_box = (node.get_theme_stylebox("normal") as StyleBoxFlat).duplicate()
+			disabled_style_box.bg_color = color.darkened(1)
+			disabled_style_box.border_color = color.darkened(0.6)
+			node.add_theme_stylebox_override("disabled", disabled_style_box)
+			
 			var hover_style_box = (node.get_theme_stylebox("hover") as StyleBoxFlat).duplicate()
-			hover_style_box.bg_color = color.darkened(0.8)
+			hover_style_box.bg_color = color.darkened(0.6)
 			hover_style_box.border_color = color
 			node.add_theme_stylebox_override("hover", hover_style_box)
 		elif node is Panel:
