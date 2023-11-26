@@ -25,20 +25,20 @@ extends Node
 @export var ability_stats = {
 	"move": { "name": "move", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 0 },
 	
-	"virus_attack": { "name": "damage_short", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 4, "attack_extra": 2, "attack_range": 1 },
-	"tower_attack": { "name": "damage_long", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 6, "attack_extra": 2, "attack_range": 2 },
+	"virus_attack": { "name": "attack_short", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 4, "attack_extra": 2, "attack_range": 1 },
+	"tower_attack": { "name": "attack_long", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 6, "attack_extra": 2, "attack_range": 2 },
 	
 	"scale": { "name": "double", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 2 },
 	"self_modify_to_virus": { "name": "mutate_to_virus", "target": Gameplay.TargetTypes.SELF, "ap": 2, "cooldown": 0 },
 	"self_modify_to_trojan": { "name": "mutate_to_trojan", "target": Gameplay.TargetTypes.SELF, "ap": 3, "cooldown": 0 },
 	
 	"integrate": { "name": "integrate", "target": Gameplay.TargetTypes.UNIT, "ap": -3, "cooldown": 1 },
-	"spread": { "name": "spread", "target": Gameplay.TargetTypes.UNIT, "ap": 6, "cooldown": 0, "attack": 1, "attack_extra": 2 },
+	"spread": { "name": "attack_n_spread", "target": Gameplay.TargetTypes.UNIT, "ap": 6, "cooldown": 0, "attack": 1, "attack_extra": 2 },
 	
 	"repair": { "name": "patch", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "restored_hp": 4 },
-	"reset": { "name": "reset", "target": Gameplay.TargetTypes.TILE, "ap": 6, "cooldown": 5 },
+	"reset": { "name": "reset_area", "target": Gameplay.TargetTypes.TILE, "ap": 6, "cooldown": 5 },
 	"spawn_worms": { "name": "generate_worms", "target": Gameplay.TargetTypes.SELF, "ap": 0, "cooldown": 5 },
-	"self_repair": { "name": "maintain", "target": Gameplay.TargetTypes.SELF, "ap": 0, "cooldown": 0, "restored_hp": 6 },
+	"self_repair": { "name": "self_maintain", "target": Gameplay.TargetTypes.SELF, "ap": 0, "cooldown": 0, "restored_hp": 6 },
 	
 	"capture_tower": { "name": "capture_node", "target": Gameplay.TargetTypes.UNIT, "ap": 4, "cooldown": 0 },
 	"backdoor": { "name": "open_port", "target": Gameplay.TargetTypes.TILE, "ap": 2, "cooldown": 3 },
@@ -118,7 +118,7 @@ extends Node
 		Click this button to end your turn and start the enemy's turn.
 		
 		All friendly units will restore Action Points.
-		Cooldowns of their actions will be reduced by 1.
+		The ready status of their actions will be increased by 1.
 		""" },
 	"next_idle_unit": { "text": """
 		Click this button to select next friendly unit with spare Action Points.
@@ -138,21 +138,22 @@ extends Node
 		""" },
 	
 	"virus_attack": { "text": """
-		Deals the damage from 6 to 8 Hit Points to an enemy unit on a neighbor tile.
-		
+		Deals the damage to an enemy unit on a neighbor tile.
 		This action won't work through enemy firewalls, so attack Anti-Virus nodes first.
 		
 		For this action it's not required to click the action button first.
 		
 		The other type of Virus attack is 'spread'.
+		
+		Possible damage amount is shown on the button.
 		""" },
 	"tower_attack": { "text": """
-		The damage amount is from 10 to 13 Hit Points.
-		
-		It's only possible to damage enemy units within the distance of 2 tiles.
+		Deals the damage to an enemy unit within the distance of 2 tiles.
 		Note that there are enough Action Points for every Anti-virus to perform this action 3 times each turn.
 		
 		For this action it's not required to click the action button first.
+		
+		Possible damage amount is shown on the button.
 		""" },
 	
 	"scale": { "text": """
@@ -160,7 +161,7 @@ extends Node
 		
 		After doubling both Worms are stuck until the next turn, so you might want to move the original one first.
 		
-		The period of unavailability after use (cooldown), in turns, is shown on the button.
+		The period of unavailability after use, in turns, is shown on the button.
 		""" },
 	"self_modify_to_virus": { "text": """
 		Changes malware type from Worm to Virus, no target selection needed.
@@ -181,33 +182,39 @@ extends Node
 		This is the only way to perform the 'spread' action (on the same turn).
 		""" },
 	"spread": { "text": """
-		Deals the damage from 1 to 3 Hit Points to an enemy on a neighbor tile.
-		It's repeated instantly along the chain for enemy units on next neighbor tiles.
+		Deals the damage to an enemy on a neighbor tile.
+		The damage is also spread instantly along the chain for enemy units on next neighbor tiles.
 		
 		The total maximum distance is unlimited.
 		This action won't work through enemy firewalls, free tiles and friendly units.
+		
+		Possible damage amount is shown on the button.
 		""" },
 	
 	"repair": { "text": """
-		Restores up to 4 Hit Points of the chosen friendly unit, except itself.
+		Restores a few Hit Points of the chosen friendly unit, except itself.
 		The target unit must be located on the territory marked with the Kernel group's color.
 		
 		The Kernel's own Hit Points are partially restored at the beginning of every turn with 'maintain'.
+		
+		The amount of Hit Points restored is shown on the button.
 		""" },
 	"reset": { "text": """
 		Performs a reset on 7 selected tiles eliminating all malware there regardless of their group.
 		Nodes are unaffected. The central tile of the 7 must be located on the territory marked with the Kernel group's color.
 		
-		The period of unavailability after use (cooldown), in turns, is shown on the button.
+		The period of unavailability after use, in turns, is shown on the button.
 	""" },
 	"spawn_worms": { "text": """
 		Automatically generates up to 6 Worms on neighbor tiles.
 		If any of neighbor tiles is occupied, no Worm is generated on that tile.
 		
-		The period of unavailability after use (cooldown), in turns, is shown on the button.
+		The period of unavailability after use, in turns, is shown on the button.
 	""" },
 	"self_repair": { "text": """
-		Automatically restores up to 6 Kernel's own Hit Points at the beginning of every turn.
+		Automatically restores a few Kernel's own Hit Points at the beginning of every turn.
+		
+		The amount of Hit Points restored is shown on the button.
 		""" },
 	
 	"capture_tower": { "text": """
@@ -225,7 +232,7 @@ extends Node
 		
 		All teleported units' Action Points are reduced to one (at maximum) until the next turn.
 		
-		The period of unavailability after use (cooldown), in turns, is shown on the button.
+		The period of unavailability after use, in turns, is shown on the button.
 		""" },
 	
 	}

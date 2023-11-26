@@ -219,8 +219,6 @@ func init_firewall(index: int):
 	
 	print("fw index: ", index)
 	print("firewall init: ", tile_pos_start_end)
-	
-	# TODO: position, rotate and scale properly
 
 func firewall_set_tint(index: int, color: Color):
 	var animation_color = color
@@ -410,10 +408,13 @@ func highlight_idle_units():
 		if unit.group == current_turn_group && unit.ap > 0:
 			get_tile(unit.tile_pos).set_tint(StaticData.tile_good_target)
 
-func tint_all_tiles(ability_id: String):
+func reset_tint_tiles():
 	for t in tiles:
 		if t != null:
 			t.set_tint(Color.BLACK)
+
+func tint_all_tiles(ability_id: String):
+	reset_tint_tiles()
 	
 	var target_type_is_self = StaticData.ability_stats[ability_id].target == Gameplay.TargetTypes.SELF
 	for i in range(tiles.size()):
@@ -432,9 +433,7 @@ func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool
 	var bad_target_color = StaticData.tile_bad_target
 	
 	if !no_reset:
-		for t in tiles:
-			if t != null:
-				t.set_tint(Color.BLACK)
+		reset_tint_tiles()
 	else:
 		bad_target_color = Color.BLACK
 	
@@ -577,8 +576,10 @@ func select_unit(unit_to_select: Unit, no_ui = false):
 		#unit.selected = (unit == unit_to_select)
 		pass
 		
-	#if selected_unit != unit_to_select:
-	#	UIHelpers.audio_event("Ui/Ui_UnitChanged")
+	if selected_unit != unit_to_select:
+		#UIHelpers.audio_event("Ui/Ui_UnitChanged")
+		if unit_to_select != null:
+			UIHelpers.audio_event("Ui/Ui_Accept")
 	
 	selected_unit = unit_to_select
 	calculate_distances()
@@ -1198,6 +1199,8 @@ func _ready():
 	battle_ui.connect("tile_hovered", hover_tile)
 	battle_ui.connect("tiles_need_tint", tint_tiles)
 	battle_ui.connect("tiles_need_tint_all", tint_all_tiles)
+	battle_ui.connect("tiles_need_reset_tint", reset_tint_tiles)
+	
 	battle_ui.connect("unit_clicked", click_unit)
 	battle_ui.connect("order_given", give_order)
 	battle_ui.connect("animation_finished", func(): select_unit(selected_unit))

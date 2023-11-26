@@ -5,4 +5,4 @@
 [node name="trojan" type="Node3D"]
 
 [node name="Horse-fb0c0d0dde7961b9e43a5ccda2862c30" parent="." instance=ExtResource("1_a6kug")]
-transform = Transform3D(-0.4, 2.45986e-09, -5.49859e-08, 2.49902e-08, 0.364155, -0.165502, 4.90407e-08, -0.165502, -0.364155, 2.08165e-12, 0.232727, 0.0524116)
+transform = Transform3D(-0.4, 1.39515e-16, 3.49691e-08, 1.39515e-16, 0.4, -1.39515e-16, -3.49691e-08, -1.39515e-16, -0.4, 2.08165e-12, 0.232727, -0.000276998)

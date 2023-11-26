@@ -83,7 +83,7 @@ func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups):
 	unit.on_spawn = true
 	
 	# to hide the hack with angles we are using in the game
-	unit.model.rotation_degrees.x = 0
+	unit.model.get_child(0).rotation_degrees.x = 0
 	
 	var tile = tiles[tile_pos_to_tile_index(tile_pos)]
 	if tile != null:

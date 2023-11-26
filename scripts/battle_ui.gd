@@ -15,6 +15,7 @@ signal tile_clicked
 signal tile_hovered
 signal tiles_need_tint
 signal tiles_need_tint_all
+signal tiles_need_reset_tint
 signal unit_clicked
 signal order_given
 
@@ -106,7 +107,7 @@ func add_ability_button(ability_id: String):
 	button.name = ability_id
 	button.text = ""
 	#button.position.x = %ability_buttons.get_children().size() * 100
-	button.custom_minimum_size = Vector2(100, 100)
+	button.custom_minimum_size = Vector2(200, 200)
 	
 	#var text_size = 8
 	#button.add_theme_font_size_override("normal", text_size)
@@ -121,6 +122,8 @@ func add_ability_button(ability_id: String):
 	var tint_all_tiles = func():
 		if !button.disabled:
 			tiles_need_tint_all.emit(ability_id)
+		else:
+			tiles_need_reset_tint.emit()
 	button.mouse_entered.connect(tint_all_tiles)
 	
 	button.set_script(preload("res://scripts/button.gd"))
@@ -157,12 +160,19 @@ func update_ability_button_text(ability_id: String, selected_unit: Unit):
 	var cooldown_text = ""
 	if stats.cooldown > 0:
 		var current_cooldown = selected_unit.get_cooldown(ability_id)
-		cooldown_text = ", cooldown: " + str(stats.cooldown) + "\n" + make_cd_string(current_cooldown)
+		cooldown_text += ", ready: %s/%s" % [stats.cooldown - current_cooldown, stats.cooldown]
+		#+ str(stats.cooldown) + "\n" + make_cd_string(current_cooldown)
+	
+	if stats.has("attack"):
+		cooldown_text += ", damage: %s-%s" % [stats.attack, stats.attack + stats.attack_extra]
+	
+	if stats.has("restored_hp"):
+		cooldown_text += ", HP: +%s" % [stats.restored_hp]
 	
 	var button = %ability_buttons.get_node(ability_id)
-	button.text = stats.name \
+	button.text = make_ap_string(ability_id, stats.ap) + cooldown_text \
 		#+ "\nargument: " + Gameplay.TargetTypes.keys()[stats.target] \
-		+ "\n\n\n\n\n\n" + make_ap_string(ability_id, stats.ap) + cooldown_text
+		+ "\n\n\n\n\n\n" + stats.name
 
 func _on_show_path(unit: Unit, path: Array):
 	draw_3d.clear_all()

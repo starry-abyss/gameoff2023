@@ -38,6 +38,8 @@ var cooldowns = {}
 
 var emission_color: Color
 
+var idle_animation_offset = 0.0
+
 var tower_balls = []
 
 # TODO: add this for Central nodes to restore tile coloring after capture
@@ -254,12 +256,18 @@ func type_changed_set_up(new_type: Gameplay.UnitTypes):
 	if new_type == Gameplay.UnitTypes.TOWER_NODE && model != null:
 		var sides: MeshInstance3D = model.find_child("Sides")
 		sides.rotate_y(randf() * PI * 2.0)
+	
+	if new_type == Gameplay.UnitTypes.CENTRAL_NODE && model != null:
+		var antenna: MeshInstance3D = model.find_child("Antenna")
+		antenna.rotate_y(randf() * PI * 2.0)
 
 func _ready():
 	#if Engine.is_editor_hint():
 	type_changed_set_up(type)
 
 	clickable_component.on_click.connect(_on_click)
+	
+	idle_animation_offset = randf_range(0.0, 2 * PI)
 	
 func _on_click():
 	on_click.emit(self)
@@ -308,6 +316,22 @@ func _process(delta):
 		
 		if destroy_timer >= StaticData.turn_animation_duration:
 			queue_free()
+	
+	if type == Gameplay.UnitTypes.VIRUS && model != null:
+		var time = Time.get_ticks_msec()
+		model.position.y = 0.18 * ease(1.0 + sin(idle_animation_offset + time * 0.001), 0.2)
+		
+	if type == Gameplay.UnitTypes.WORM && model != null:
+		var time = Time.get_ticks_msec()
+		model.rotation.x = 0.12 * (0.0 + sin(idle_animation_offset + time * 0.001))
+	
+	if type == Gameplay.UnitTypes.TROJAN && model != null:
+		var time = Time.get_ticks_msec()
+		model.position.x = 0.07 * ease(1.0 + sin(idle_animation_offset + time * 0.001), -5.0)
+	
+	if type == Gameplay.UnitTypes.CENTRAL_NODE && model != null:
+		var antenna: MeshInstance3D = model.find_child("Antenna")
+		antenna.rotate_y(delta * 0.4)
 	
 	if type == Gameplay.UnitTypes.TOWER_NODE && model != null:
 		var sides: MeshInstance3D = model.find_child("Sides")
