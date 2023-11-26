@@ -7,7 +7,7 @@ func _ready():
 	#FMODRuntime.play_one_shot(event)
 	
 	# TODO: for debug, to be removed:
-	UIHelpers.audio_set_parameter("Winner", Gameplay.HackingGroups.BLUE)
+	#UIHelpers.audio_set_parameter("Winner", Gameplay.HackingGroups.BLUE)
 	
 	UIHelpers.audio_event("Music/MusicPlaylist")
 	pass # Replace with function body.

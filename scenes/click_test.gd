@@ -35,5 +35,5 @@ func _on_unit_click(unit: Unit):
 		selected_unit_stats.visible = true
 		selected_unit_indicator.position = selected_unit.position + Vector3(0, 1.5, 0) 
 		selected_unit_indicator.visible = true
-		selected_unit_stats._display_unit_stats(selected_unit)
+		selected_unit_stats._display_unit_stats(selected_unit, Gameplay.HackingGroups.PINK, false)
 	

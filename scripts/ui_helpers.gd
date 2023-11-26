@@ -96,14 +96,22 @@ func audio_set_parameter(parameter_name: String, value: float):
 func audio_event(event_name: String):
 	FMODRuntime.play_one_shot_path("event:/" + event_name)
 
-#var audioEmitter3d = StudioEventEmitter3D.new()
-func audio_event3d(event_name: String, pos: Vector2):
-	#audioEmitter3d
-	pass
+func audio_event3d(event_name: String, tile_pos: Vector2i):
+	var pos = tile_pos_to_world_pos(tile_pos)
+	FMODRuntime.play_one_shot_path("event:/" + event_name, Vector3(pos.x, 0.0, pos.y))
+
+func audio_event3d_loop_start(event_name: String, unit: Unit):
+	#unit.get_node("sound_loop").event.set_event_ref_from_description( \
+	#	FMODRuntime.get_event_description_path("event:/" + event_name))
+	
+	unit.get_node("sound_loop").play()
+	
+func audio_event3d_loop_end(unit: Unit):
+	unit.get_node("sound_loop").stop()
 
 func quit_the_game():
 	# TODO: for debug, to be removed:
-	UIHelpers.audio_set_parameter("Winner", Gameplay.HackingGroups.PINK)
+	#UIHelpers.audio_set_parameter("Winner", Gameplay.HackingGroups.PINK)
 	
 	UIHelpers.audio_event("Ui/Ui_Quit")
 	

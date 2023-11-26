@@ -30,7 +30,10 @@ func _ready():
 	get_tree().set_auto_accept_quit(false)
 	
 	for button in find_children("", "Button"):
-		button.mouse_entered.connect(_on_button_highlight)
+		button.set_script(preload("res://scripts/button.gd"))
+		button._ready()
+		button.set_process(true)
+		#button.mouse_entered.connect(_on_button_highlight)
 	
 	for x in range(MAP_SIZE.x):
 		for y in range(MAP_SIZE.y):
@@ -84,10 +87,6 @@ func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups):
 		tiles[tile_pos_to_tile_index(tile_pos)].group = group
 	
 
-func _on_button_highlight():
-	UIHelpers.audio_event("Ui/Ui_Highlight")
-
-
 func add_tile(tile_pos: Vector2i):
 	var tile = preload("res://art/tile.tscn").instantiate()
 	tiles.append(tile)
@@ -101,12 +100,14 @@ func add_tile(tile_pos: Vector2i):
 func _go_to_main_menu():
 	options_menu.visible = false
 	main_menu.visible = true
+	
 	#UIHelpers.audio_event("Ui/Ui_Back")
 	
 
 func _go_to_options_menu():
 	main_menu.visible = false
 	options_menu.visible = true
+	
 	#UIHelpers.audio_event("Ui/Ui_Accept")
 
 

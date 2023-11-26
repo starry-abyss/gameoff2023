@@ -4,11 +4,18 @@ extends Node3D
 var group: Gameplay.HackingGroups = Gameplay.HackingGroups.NEUTRAL:
 	set(new_value):
 		group = new_value
-		set_tint(UIHelpers.group_to_color(new_value))
+		set_wireframe_tint(UIHelpers.group_to_color(new_value))
 
 var debug_distance: Label3D = Label3D.new()
 var material = null
 var material_wireframe = null
+
+#static var tile_wireframe_mesh = null
+
+func _process(delta):
+	#if material != null:
+	#	material.albedo_color.v = max(0, material.albedo_color.v - delta * 2.0)
+	pass
 
 func _on_ready():
 	debug_distance.font = preload("res://assets/fonts/ShareTechMono-Regular.ttf")
@@ -29,6 +36,22 @@ func _on_ready():
 	material_wireframe.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material_wireframe.cull_mode = BaseMaterial3D.CULL_DISABLED
 	
+	#material_wireframe.albedo_color = Color.WEB_GREEN
+	
+	#if tile_wireframe_mesh == null:
+	#	tile_wireframe_mesh = ImmediateMesh.new()
+	#	tile_wireframe_mesh.surface_begin(Mesh.PRIMITIVE_LINES)
+		
+	#	var a = 1.0
+		
+	#	tile_wireframe_mesh.surface_add_vertex(Vector3(-a*cos(PI/6.0), 0.0, a*sin(PI/6.0)))
+	#	tile_wireframe_mesh.surface_add_vertex(Vector3(0.0, 0.0, a))
+		
+	#	tile_wireframe_mesh.surface_add_vertex(Vector3(0.0, 0.0, a))
+	#	tile_wireframe_mesh.surface_add_vertex(Vector3(a*cos(PI/6.0), 0.0, a*sin(PI/6.0)))
+		
+	#	tile_wireframe_mesh.surface_end()
+	
 	#var grey_color = Color.WHITE
 	#grey_color.v = 0.15
 	
@@ -40,36 +63,34 @@ func _on_ready():
 	
 	var mesh_instances2 = get_node("tile_wireframe").find_children("", "MeshInstance3D")
 	for mesh_instance in mesh_instances2:
+		#mesh_instance.mesh = tile_wireframe_mesh
 		mesh_instance.material_override = material_wireframe
 	
 	group = Gameplay.HackingGroups.NEUTRAL
 	
+	set_tint(Color.BLACK)
+	
 	#debug_distance.text = "123"
 	pass
 
+func set_wireframe_tint(color: Color):
+	if material != null:
+		if group == Gameplay.HackingGroups.NEUTRAL:
+			color.v = 0.12
+		else:
+			color.v = 0.45
+		
+		material_wireframe.albedo_color = color
+
 func set_tint(color: Color):
 	if material != null:
-		var grey_color = Color.WHITE
-		
-		if group == Gameplay.HackingGroups.NEUTRAL:
-			#color.v *= 0.15
-			color = Color.BLACK
-			grey_color.v = 0.12
-			
-			#get_node("tile_wireframe").visible = true
-		else:
-			#color.v *= 0.20
-			
-			grey_color = color
-			grey_color.v = 0.45
-			
-			color = Color.BLACK
-			
-			#get_node("tile_wireframe").visible = false
-			
 		material.albedo_color = color
-		material_wireframe.albedo_color = grey_color
-	pass
+
+func get_tint() -> Color:
+	if material != null:
+		return material.albedo_color
+	else:
+		return Color.BLACK
 
 func _on_hide_debug_distance():
 	debug_distance.text = ""

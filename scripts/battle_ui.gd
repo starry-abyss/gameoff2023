@@ -13,6 +13,8 @@ extends Node3D
 
 signal tile_clicked
 signal tile_hovered
+signal tiles_need_tint
+signal tiles_need_tint_all
 signal unit_clicked
 signal order_given
 
@@ -34,14 +36,18 @@ var in_select_target_mode = false:
 var order_parameters = {}
 var animated_unit: Unit
 var animated_unit_start_pos: Vector3
-var current_group
+
+var current_group: Gameplay.HackingGroups
 
 func _ready():
-	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)
-	
 	for button in find_children("", "Button"):
-		button.mouse_entered.connect(_on_button_highlight.bind(button))
+		button.set_script(preload("res://scripts/button.gd"))
+		button._ready()
+		button.set_process(true)
 	
+	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)	
+	$CanvasLayer/cancel_select_target.is_back_button = true
+
 	for ability_id in StaticData.ability_stats.keys():
 		add_ability_button(ability_id)
 	
@@ -52,10 +58,6 @@ func _ready():
 	
 	#RenderingServer.set_debug_generate_wireframes(true)
 	#get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
-
-func _on_button_highlight(button: Button):
-	if !button.disabled:
-		UIHelpers.audio_event("Ui/Ui_Highlight")
 
 func change_actions_disabled(disable: bool):
 	select_idle_unit.disabled = disable
@@ -108,7 +110,18 @@ func add_ability_button(ability_id: String):
 	
 	%ability_buttons.add_child(button)
 	button.pressed.connect(_on_ability_button_clicked.bind(ability_id, stats.target))
-	button.mouse_entered.connect(_on_button_highlight.bind(button))
+	
+	var tint_all_tiles = func():
+		if !button.disabled:
+			tiles_need_tint_all.emit(ability_id)
+	button.mouse_entered.connect(tint_all_tiles)
+	
+	button.set_script(preload("res://scripts/button.gd"))
+	button._ready()
+	button.set_process(true)
+	
+	button.no_press_sound = (stats.target == Gameplay.TargetTypes.SELF)
+	#button.mouse_entered.connect(_on_button_highlight.bind(button))
 
 func make_ap_string(ability_id, ap) -> String:
 	if ability_id == "move":
@@ -182,21 +195,33 @@ func _on_unit_move(unit: Unit, path: Array):
 	
 	in_unit_animation_mode = true
 	animated_unit = unit
+	
+	if animated_unit.type == Gameplay.UnitTypes.WORM:
+		#UIHelpers.audio_event3d_loop_start("SFX/Worms/SFX_WormMove", animated_unit)
+		UIHelpers.audio_event3d("SFX/Worms/SFX_WormMove", animated_unit.tile_pos)
+	elif animated_unit.type == Gameplay.UnitTypes.TROJAN:
+		#UIHelpers.audio_event3d_loop_start("SFX/Trojan/SFX_TrojanMove", animated_unit)
+		UIHelpers.audio_event3d("SFX/Trojan/SFX_TrojanMove", animated_unit.tile_pos)
+	elif animated_unit.type == Gameplay.UnitTypes.VIRUS:
+		#UIHelpers.audio_event3d_loop_start("SFX/Virus/SFX_VirusMove", animated_unit)
+		UIHelpers.audio_event3d("SFX/Virus/SFX_VirusMove", animated_unit.tile_pos)
 
 func _on_unit_selection_changed(unit: Unit):
-	if unit == null:
-		in_select_target_mode = false
+	#if unit == null:
+	in_select_target_mode = false
+	
+	tiles_tint_reset()
 	
 	update_selection_indicator(unit)
 	update_abilities_buttons(unit)
 	#update_abilities_buttons_general_visibility()
 
-func _on_unit_show_stats(unit: Unit):
+func _on_unit_show_stats(unit: Unit, is_selected: bool):
 	if unit == null:
 		selected_unit_stats.visible = false
 	else:
 		selected_unit_stats.visible = true 
-		selected_unit_stats._display_unit_stats(unit, current_group)
+		selected_unit_stats._display_unit_stats(unit, current_group, is_selected)
 
 func _on_unit_destroy(unit: Unit):
 	pass
@@ -212,17 +237,18 @@ func _on_unit_hp_change(unit: Unit, delta_hp: int):
 	if delta_hp > 0:
 		label.get_node("Label").text = "+" + str(delta_hp)
 	else:
-		label.get_node("Label").text = str(delta_hp)
+		label.get_node("Label").text = "" + str(delta_hp)
 	
 	label.global_position = unit.global_position + Vector3(0.0, 2.0, 0.0)
 	
 func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn: bool):
 	change_theme_color()
-	
+	self.current_group = current_group
 
 func change_theme_color():
 	var ui_nodes = [$CanvasLayer/end_turn, $CanvasLayer/select_idle_unit, $CanvasLayer/cancel_select_target, $CanvasLayer/SelectedUnitStats]
 	ui_nodes.append_array(%ability_buttons.get_children())
+	
 	if current_group == Gameplay.HackingGroups.PINK:
 		UIHelpers.override_ui_node_theme_with_color(ui_nodes, StaticData.color_pink)
 	else:
@@ -262,9 +288,14 @@ func _on_cancel_select_target_button_clicked():
 func _on_order_processed(success: bool, selected_unit: Unit):
 	if success:
 		in_select_target_mode = false
+		
+		tiles_tint_reset()
 	
-	_on_unit_show_stats(selected_unit)
+	_on_unit_show_stats(selected_unit, true)
 	update_abilities_buttons(selected_unit)
+
+func tiles_tint_reset():
+	tiles_need_tint.emit("", Vector2i(0, 0), false, false)
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton && event.pressed \
@@ -289,6 +320,9 @@ func _unhandled_input(event):
 				elif order_parameters.target_type == Gameplay.TargetTypes.UNIT:
 					order_given.emit(order_parameters.ability_id, tile_pos)
 		
+	if event is InputEventMouseButton && event.pressed \
+		&& event.button_index == MOUSE_BUTTON_RIGHT:
+		in_select_target_mode = false
 	elif event is InputEventMouseMotion:
 		#print("Mouse Motion at: ", event.position)
 		
@@ -299,8 +333,17 @@ func _unhandled_input(event):
 		
 		if !in_select_target_mode and !in_unit_animation_mode:
 			tile_hovered.emit(tile_pos)
-		elif in_select_target_mode and order_parameters.ability_id == "move":
-			tile_hovered.emit(tile_pos)
+			tiles_need_tint.emit("", tile_pos)
+		elif in_select_target_mode:
+			if order_parameters.ability_id == "move":
+				tile_hovered.emit(tile_pos)
+			
+			if order_parameters.ability_id == "reset":
+				tiles_need_tint.emit(order_parameters.ability_id, tile_pos, true, true)
+			elif order_parameters.ability_id == "backdoor":
+				tiles_need_tint.emit(order_parameters.ability_id, tile_pos, false, true)
+			else:
+				tiles_need_tint.emit(order_parameters.ability_id, tile_pos)
 		
 func _process(delta):
 	if animated_unit != null:
@@ -313,6 +356,10 @@ func _process(delta):
 	
 func _on_timer_timeout():
 	in_unit_animation_mode = false
+	
+	#if animated_unit != null:
+	#	UIHelpers.audio_event3d_loop_end(animated_unit)
+	
 	animated_unit = null
 	
 	animation_finished.emit()

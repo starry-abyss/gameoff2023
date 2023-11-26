@@ -1,8 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://b0528if1rt1s"]
+[gd_scene load_steps=3 format=3 uid="uid://b0528if1rt1s"]
 
 [ext_resource type="PackedScene" uid="uid://dlfwei4f7dyu3" path="res://art/models/tower.blend" id="1_0vkxm"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_8jn2d"]
 
 [node name="tower_node" type="Node3D"]
 
 [node name="tower-a86a63a4e9a93e2d99e00df586653a2d" parent="." instance=ExtResource("1_0vkxm")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+transform = Transform3D(0.13, 0, 0, 0, 0.13, 0, 0, 0, 0.13, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+
+[node name="balls" type="Node3D" parent="."]
+
+[node name="ball" type="MeshInstance3D" parent="balls"]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 1.14043, -0.242433)
+mesh = SubResource("SphereMesh_8jn2d")
+
+[node name="ball2" type="MeshInstance3D" parent="balls"]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 1.14043, 0.197427)
+mesh = SubResource("SphereMesh_8jn2d")
+
+[node name="ball3" type="MeshInstance3D" parent="balls"]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0.265616, 1.14043, 0.00429618)
+mesh = SubResource("SphereMesh_8jn2d")

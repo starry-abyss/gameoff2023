@@ -1,0 +1,10 @@
+[gd_resource type="EventAsset" format=3 uid="uid://pyl7h0y3ggvx"]
+
+[resource]
+is_3d = true
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/SFX/Virus/SFX_VirusMove"
+guid = "{fdd0ed87-d583-4fdd-bd06-ac355dbf9236}"
+name = "SFX_VirusMove"

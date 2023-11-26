@@ -1,0 +1,10 @@
+[gd_resource type="EventAsset" format=3 uid="uid://d01pu4vb1bkwx"]
+
+[resource]
+is_3d = true
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/SFX/Worms/SFX_MutateVirus"
+guid = "{914dbbe9-cfde-4218-aead-c3d1faa901fe}"
+name = "SFX_MutateVirus"

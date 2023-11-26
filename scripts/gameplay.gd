@@ -204,9 +204,11 @@ func init_firewall(index: int):
 	
 	var vector: Vector2 = end_pos - start_pos
 	
-	firewall.position = Vector3(start_pos.x, 0.0, start_pos.y)
+	#start_pos += vector.normalized() * StaticData.tile_size.x * 0.5
 	
-	firewall.scale.x = start_pos.distance_to(end_pos)
+	firewall.position = (Vector3(start_pos.x, 0.0, start_pos.y) + Vector3(end_pos.x, 0.0, end_pos.y)) * 0.5
+	
+	firewall.scale.x = start_pos.distance_to(end_pos) - StaticData.tile_size.x * 1.1
 	
 	#firewall.rotate_y(-vector.angle())
 	firewall.rotation = Vector3(0, -vector.angle(), 0)
@@ -323,6 +325,7 @@ func add_tile(tile_pos: Vector2i):
 			
 			tile.set_script(preload("res://scripts/tile.gd"))
 			tile._on_ready()
+			tile.set_process(true)
 
 # TODO: don't remove right away, first play an animation
 func remove_tile(tile_pos: Vector2i):
@@ -388,8 +391,91 @@ func find_unit_by_tile_pos(tile_pos: Vector2i):
 	
 	return null
 
+func highlight_idle_units():
+	for t in tiles:
+		if t != null:
+			t.set_tint(Color.BLACK)
+	
+	for unit in units:
+		if unit.group == current_turn_group && unit.ap > 0:
+			get_tile(unit.tile_pos).set_tint(StaticData.tile_good_target)
+
+func tint_all_tiles(ability_id: String):
+	for t in tiles:
+		if t != null:
+			t.set_tint(Color.BLACK)
+	
+	var target_type_is_self = StaticData.ability_stats[ability_id].target == Gameplay.TargetTypes.SELF
+	for i in range(tiles.size()):
+		var t = tiles[i]
+		if t != null:
+			if target_type_is_self:
+				if tile_pos_to_tile_index(selected_unit.tile_pos) == i:
+					t.set_tint(StaticData.tile_good_target)
+				else:
+					t.set_tint(Color.BLACK)
+			else:
+				tint_tiles(ability_id, tile_index_to_tile_pos(i), \
+				ability_id != "backdoor", ability_id == "backdoor" || ability_id == "reset", true)
+
+func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool = true, show_neighbors: bool = false, no_reset: bool = false):
+	var bad_target_color = StaticData.tile_bad_target
+	
+	if !no_reset:
+		for t in tiles:
+			if t != null:
+				t.set_tint(Color.BLACK)
+	else:
+		bad_target_color = Color.BLACK
+	
+	# ignore what UI requested :D
+	if selected_unit == null:
+		return
+	
+	var new_color = StaticData.tile_good_target
+	# TODO: bad and duplicated code, but not much time until release
+	if ability_id != "":
+		if !give_order(ability_id, center_tile_pos, true):
+			new_color = bad_target_color
+	else:
+		var unit_at_pos = find_unit_by_tile_pos(center_tile_pos)
+		if unit_at_pos == null:
+			if !give_order("move", center_tile_pos, true):
+				new_color = bad_target_color
+		else:
+			if selected_unit.type == UnitTypes.VIRUS:
+				if !give_order("virus_attack", unit_at_pos, true):
+					new_color = bad_target_color
+			elif selected_unit.type == UnitTypes.TOWER_NODE:
+				if !give_order("tower_attack", unit_at_pos, true):
+					new_color = bad_target_color
+			else:
+				new_color = bad_target_color
+	
+	if show_center:
+		var tile = get_tile(center_tile_pos)
+		if tile != null:
+			if !no_reset || (tile.get_tint() != StaticData.tile_good_target):
+				tile.set_tint(new_color)
+	
+	if show_neighbors:
+		var tile_neighbors = UIHelpers.get_tile_neighbor_list(center_tile_pos)
+		for adj_tile_pos in tile_neighbors:
+			var pos_to_explore_next = center_tile_pos + adj_tile_pos
+			var tile = get_tile(pos_to_explore_next)
+			if tile != null:
+				if !no_reset || (tile.get_tint() != StaticData.tile_good_target):
+					tile.set_tint(new_color)
+		
+	pass
+
 func hover_tile(tile_pos: Vector2i):
+	#tint_tiles(tile_pos)
+	
 	if !is_tile_pos_out_of_bounds(tile_pos):
+		#if selected_unit != null:
+		#	selected_unit.set_look_at(UIHelpers.tile_pos_to_world_pos(tile_pos))
+		
 		#for i in range(tiles.size()):
 		#	var tile = tiles[i]
 		#	if tile != null:
@@ -406,9 +492,9 @@ func hover_tile(tile_pos: Vector2i):
 	
 	var hovered_unit = find_unit_by_tile_pos(tile_pos)
 	if hovered_unit != null:
-		battle_ui._on_unit_show_stats(hovered_unit)
+		battle_ui._on_unit_show_stats(hovered_unit, hovered_unit == selected_unit)
 	else:
-		battle_ui._on_unit_show_stats(selected_unit)
+		battle_ui._on_unit_show_stats(selected_unit, true)
 
 func click_tile(tile_pos: Vector2i):
 	# TODO: also select units by clicking tiles
@@ -439,20 +525,24 @@ func click_unit(unit_to_select: Unit):
 		else:
 			select_unit(unit_to_select)
 
-func give_order(ability_id: String, target):
+func give_order(ability_id: String, target, imaginary = false) -> bool:
 	var order_callable = Callable(self, "order_ability_" + ability_id)
 	var result = false
 	
 	if StaticData.ability_stats[ability_id].target == Gameplay.TargetTypes.UNIT && target is Vector2i:
 		target = find_unit_by_tile_pos(target)
 		if target == null:
-			battle_ui._on_order_processed(result, selected_unit)
-			return
+			if !imaginary:
+				battle_ui._on_order_processed(result, selected_unit)
+			return result
 	
 	var stats = StaticData.ability_stats[ability_id]
 	if selected_unit.ap >= stats.ap && selected_unit.get_cooldown(ability_id) == 0:
 		
-		result = order_callable.call(target, false)
+		result = order_callable.call(target, imaginary)
+		
+		if imaginary:
+			return result
 		
 		if result:
 			# if the selected unit wasn't removed during the order execution
@@ -465,9 +555,12 @@ func give_order(ability_id: String, target):
 				
 				selected_unit.cooldowns[ability_id] = stats.cooldown
 	
-	if result:
-		calculate_distances()
-	battle_ui._on_order_processed(result, selected_unit)
+	if !imaginary:
+		if result:
+			calculate_distances()
+		battle_ui._on_order_processed(result, selected_unit)
+	
+	return result
 
 func select_unit(unit_to_select: Unit, no_ui = false):
 	for unit in units:
@@ -481,7 +574,7 @@ func select_unit(unit_to_select: Unit, no_ui = false):
 		battle_ui._on_unit_selection_changed(null)
 	else:
 		battle_ui._on_unit_selection_changed(selected_unit)
-		battle_ui._on_unit_show_stats(selected_unit)
+		battle_ui._on_unit_show_stats(selected_unit, true)
 
 func select_next_unit():
 	var units_in_the_same_group_before_selected_unit = []
@@ -513,7 +606,7 @@ func select_next_unit():
 			if unit.ap > 0:
 				select_unit(unit)
 				return
-	elif selected_unit.ap == 0:
+	elif selected_unit != null && selected_unit.ap == 0:
 		select_unit(null)
 
 func teleport_unit(unit: Unit, new_tile_pos: Vector2i):
@@ -533,6 +626,10 @@ func order_ability_self_modify(new_type: UnitTypes, imaginary = false) -> bool:
 		# disallow restoring AP right after Virus' creation
 		if new_type == UnitTypes.VIRUS:
 			selected_unit.cooldowns["integrate"] = 1
+			
+			UIHelpers.audio_event3d("SFX/Worms/SFX_MutateVirus", selected_unit.tile_pos)
+		else:
+			UIHelpers.audio_event3d("SFX/Worms/SFX_MutateTrojan", selected_unit.tile_pos)
 		
 		#select_unit(null)
 	
@@ -560,6 +657,8 @@ func order_ability_repair(target: Unit, imaginary = false) -> bool:
 	
 	if !imaginary:
 		heal_unit(target, StaticData.ability_stats["repair"].restored_hp)
+		
+		UIHelpers.audio_event3d("SFX/Kernel Node/SFX_Patch", selected_unit.tile_pos)
 	
 	return true
 
@@ -590,6 +689,8 @@ func order_ability_scale(target_tile_pos: Vector2i, imaginary = false) -> bool:
 		new_worm.ap = 0
 		new_worm.hp = selected_unit.hp
 		new_worm.cooldowns["scale"] = StaticData.ability_stats["scale"].cooldown
+		
+		UIHelpers.audio_event3d("SFX/Worms/SFX_Double", selected_unit.tile_pos)
 	
 	return true
 
@@ -611,6 +712,8 @@ func order_ability_reset(target_tile_pos: Vector2i, imaginary = false) -> bool:
 		
 		apply_reset.call(target_tile_pos)
 		for_all_tile_pos_around(target_tile_pos, apply_reset)
+		
+		UIHelpers.audio_event3d("SFX/Kernel Node/SFX_Reset", selected_unit.tile_pos)
 	
 	return true
 
@@ -631,9 +734,13 @@ func order_ability_capture_tower(target: Unit, imaginary = false) -> bool:
 	if !imaginary:
 		target.group = selected_unit.group
 		
+		target.hp = target.hp_max
+		
 		remove_unit(selected_unit)
 		
 		update_firewalls()
+		
+		UIHelpers.audio_event3d("SFX/Trojan/SFX_CaptureNode", selected_unit.tile_pos)
 	
 	return true
 
@@ -655,6 +762,8 @@ func order_ability_integrate(target: Unit, imaginary = false) -> bool:
 	
 	if !imaginary:
 		remove_unit(target)
+		
+		UIHelpers.audio_event3d("SFX/Virus/SFX_Integrate", selected_unit.tile_pos)
 	
 	return true
 
@@ -710,6 +819,8 @@ func order_ability_spread(target: Unit, imaginary = false) -> bool:
 					
 					pos_to_explore_stack.append(pos_to_explore_next)
 	
+		UIHelpers.audio_event3d("SFX/Virus/SFX_Spread", selected_unit.tile_pos)
+	
 	return true
 
 func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> bool:
@@ -719,6 +830,28 @@ func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> boo
 	# doesn't make sense for Trojan to target precisely itself
 	if selected_unit.tile_pos == target_tile_pos:
 		return false
+	
+	# if no friendly malware nearby then don't waste AP
+	# need scopes for variables with the same name, so if true :'D
+	if true:
+		var found_someone = false
+		var tile_neighbors_from = UIHelpers.get_tile_neighbor_list(target_tile_pos)
+		var tile_neighbors_to = UIHelpers.get_tile_neighbor_list(selected_unit.tile_pos)
+		for i in range(tile_neighbors_from.size()):
+			var tile_pos_from = target_tile_pos + tile_neighbors_from[i]
+			var tile_pos_to = selected_unit.tile_pos + tile_neighbors_to[i]
+			
+			var unit_from = find_unit_by_tile_pos(tile_pos_from)
+			
+			if unit_from != null && !unit_from.is_static() \
+				&& unit_from.group == selected_unit.group \
+				&& unit_from != selected_unit \
+				&& is_tile_walkable(tile_pos_to):
+				found_someone = true
+				break
+		
+		if !found_someone:
+			return false
 	
 	if !imaginary:
 		var tile_neighbors_from = UIHelpers.get_tile_neighbor_list(target_tile_pos)
@@ -740,6 +873,8 @@ func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> boo
 						unit_from.ap = 1
 					
 					unit_from.update_model_pos()
+					
+		UIHelpers.audio_event3d("SFX/Trojan/SFX_Backdoor", selected_unit.tile_pos)
 		
 		#var apply_backdoor = func(tile_pos):
 		#	var unit = find_unit_by_tile_pos(tile_pos)
@@ -782,6 +917,14 @@ func hurt_unit(target: Unit, amount: int):
 	
 	if target.hp == 0:
 		var this_is_the_end = (target.type == UnitTypes.CENTRAL_NODE)
+		if this_is_the_end:
+			# maybe there are more than one Kernel
+			for u in units:
+				if u.type == UnitTypes.CENTRAL_NODE && u.group == target.group:
+					if target != u:
+						this_is_the_end = false
+						break
+		
 		var unit_group_originally = target.group
 		
 		if target.can_be_destroyed():
@@ -845,6 +988,15 @@ func order_attack(target: Unit, imaginary: bool, ability_stats) -> bool:
 				
 				var attack_power = ability_stats.attack + randi_range(0, ability_stats.attack_extra)
 				hurt_unit(target, attack_power)
+				
+				if selected_unit.type == UnitTypes.TOWER_NODE:
+					# TODO: move to animation code
+					var ball = selected_unit.use_tower_ball()
+					ball.visible = false
+					
+					UIHelpers.audio_event3d("SFX/Anti Virus Node/SFX_DamageRange", selected_unit.tile_pos)
+				elif selected_unit.type == UnitTypes.VIRUS:
+					UIHelpers.audio_event3d("SFX/Virus/SFX_Damage", selected_unit.tile_pos)
 				
 				print("attack power: ", attack_power)
 			
@@ -930,9 +1082,7 @@ func end_turn(silent = false):
 	if !silent:
 		select_unit(null)
 	
-	current_turn_group = flip_group(current_turn_group)
-	battle_ui.current_group = current_turn_group
-	
+	# end of turn
 	for unit in units:
 		if unit.group == current_turn_group:
 			for cd in unit.cooldowns.keys():
@@ -940,11 +1090,24 @@ func end_turn(silent = false):
 			
 			unit.ap = unit.ap_max
 			
+			unit.restore_tower_balls()
+	
+	# switch turn
+	current_turn_group = flip_group(current_turn_group)
+	
+	# start of turn
+	for unit in units:
+		if unit.group == current_turn_group:
 			if unit.type == UnitTypes.CENTRAL_NODE:
+				if unit.hp < unit.hp_max:
+					UIHelpers.audio_event3d("SFX/Kernel Node/SFX_Maintenance", unit.tile_pos)
+				
 				heal_unit(unit, StaticData.ability_stats["self_repair"].restored_hp)
 				
 				if (!unit.cooldowns.has("spawn_worms") || unit.cooldowns["spawn_worms"] <= 0):
 					unit.cooldowns["spawn_worms"] = StaticData.ability_stats["spawn_worms"].cooldown
+					UIHelpers.audio_event3d("SFX/Kernel Node/SFX_GenerateWorms", unit.tile_pos)
+					
 					for_all_tile_pos_around(unit.tile_pos, \
 						func(tile_pos): spawn_unit(tile_pos, UnitTypes.WORM, unit.group))
 	
@@ -1008,9 +1171,14 @@ func on_group_color_change(group: Gameplay.HackingGroups, color: Color):
 
 func _ready():
 	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", end_turn)
+	battle_ui.get_node("CanvasLayer/end_turn").connect("mouse_entered", highlight_idle_units)
 	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", select_next_unit)
+	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("mouse_entered", highlight_idle_units)
+	
 	battle_ui.connect("tile_clicked", click_tile)
 	battle_ui.connect("tile_hovered", hover_tile)
+	battle_ui.connect("tiles_need_tint", tint_tiles)
+	battle_ui.connect("tiles_need_tint_all", tint_all_tiles)
 	battle_ui.connect("unit_clicked", click_unit)
 	battle_ui.connect("order_given", give_order)
 	battle_ui.connect("animation_finished", func(): select_unit(selected_unit))
@@ -1031,11 +1199,11 @@ func _ready():
 	remove_tile(Vector2i(19, 10))
 	
 	#spawn_unit(Vector2i(0, 1), UnitTypes.WORM, HackingGroups.BLUE)
-	spawn_unit(Vector2i(13, 3), UnitTypes.TROJAN, HackingGroups.BLUE)
+	#spawn_unit(Vector2i(13, 3), UnitTypes.TROJAN, HackingGroups.BLUE)
 	#spawn_unit(Vector2i(0, 3), UnitTypes.VIRUS, HackingGroups.PINK)
 	
-	spawn_unit(Vector2i(13, 2), UnitTypes.TROJAN, HackingGroups.PINK)
-	spawn_unit(Vector2i(14, 3), UnitTypes.TROJAN, HackingGroups.PINK)
+	#spawn_unit(Vector2i(13, 2), UnitTypes.TROJAN, HackingGroups.PINK)
+	#spawn_unit(Vector2i(14, 3), UnitTypes.TROJAN, HackingGroups.PINK)
 	
 	spawn_unit(Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)

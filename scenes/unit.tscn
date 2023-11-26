@@ -29,3 +29,5 @@ amount = 20
 lifetime = 0.3
 process_material = SubResource("ParticleProcessMaterial_5rx31")
 draw_pass_1 = SubResource("BoxMesh_g3opu")
+
+[node name="sound_loop" type="StudioEventEmitter3D" parent="."]

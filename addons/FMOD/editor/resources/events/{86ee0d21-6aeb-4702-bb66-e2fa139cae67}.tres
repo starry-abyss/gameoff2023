@@ -1,0 +1,10 @@
+[gd_resource type="EventAsset" format=3 uid="uid://cisaal7ma7c7w"]
+
+[resource]
+is_3d = true
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/SFX/Worms/SFX_MutateTrojan"
+guid = "{86ee0d21-6aeb-4702-bb66-e2fa139cae67}"
+name = "SFX_MutateTrojan"

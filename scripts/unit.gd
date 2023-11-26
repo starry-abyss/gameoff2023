@@ -4,9 +4,11 @@ extends Node3D
 
 @export var type: Gameplay.UnitTypes = Gameplay.UnitTypes.TOWER_NODE:
 	set(new_value):
-		if type != new_value || model == null:
-			type_changed_set_up(new_value)
+		var type_changed = (type != new_value)
 		type = new_value
+		if type_changed || model == null:
+			type_changed_set_up(new_value)
+		
 
 @export var group: Gameplay.HackingGroups = Gameplay.HackingGroups.NEUTRAL:
 	set(new_value):
@@ -33,6 +35,8 @@ var ap_max: int = 3
 var cooldowns = {}
 
 var emission_color: Color
+
+var tower_balls = []
 
 # TODO: add this for Central nodes to restore tile coloring after capture
 @export var tile_ownership_radius = 0
@@ -97,6 +101,24 @@ func load_model(model_scene_name: String):
 	#var mesh_instance: MeshInstance3D = mesh_instances[-1]
 	for mi in mesh_instances:
 		mi.material_override = material
+	
+	if type == Gameplay.UnitTypes.TOWER_NODE:
+		#var ball_material = ShaderMaterial.new()
+		#ball_material.shader = preload("res://shaders/electric/electric.gdshader")
+		#ball_material.set_shader_parameter("show_glitch", true)
+		
+		var ball_material = preload("res://shaders/electric/electric_tower_material.tres")
+		
+		for ball in model.get_node("balls").get_children():
+			ball.material_override = ball_material.duplicate()
+			
+			ball.rotate_y(randf() * PI * 2.0)
+			ball.material_override.set_shader_parameter("electro_scale", 10.0 + randf() * 2.0)
+			ball.material_override.set_shader_parameter("speed", 3.0 + randf() * 2.0)
+			#ball.material_override.set_shader_parameter("seed", Vector2(randf(), randf()))
+		
+		restore_tower_balls()
+	
 	#var lights = model.find_children("", "Light3D")
 	#for light in lights:
 	#	light.queue_free()
@@ -109,8 +131,19 @@ func load_model(model_scene_name: String):
 	
 	aabb = Utils.get_aabb(model)
 	
+	set_initial_facing()
 	pass
 	
+func restore_tower_balls():
+	if type == Gameplay.UnitTypes.TOWER_NODE && model != null:
+		tower_balls = []
+		for ball in model.get_node("balls").get_children():
+			ball.visible = true
+			tower_balls.append(ball)
+
+func use_tower_ball() -> MeshInstance3D:
+	return tower_balls.pop_back()
+
 func load_stats(which_type: Gameplay.UnitTypes):
 	var stats: Dictionary = StaticData.unit_stats[which_type]
 	
@@ -156,10 +189,40 @@ func load_stats(which_type: Gameplay.UnitTypes):
 	
 func set_tint(color: Color):
 	if material != null:
-		color.a = 0.45
+		color.a = 0.85
+		
+		#if type == Gameplay.UnitTypes.TOWER_NODE:
+			#color.v *= 0.85
+			#color.s *= 0.8
+		
 		material.set_shader_parameter("emission_color", color)
 	pass
+
+func set_look_at(point: Vector2):
+	return
 	
+	# doesn't fully work
+	if model != null:
+		var dx = point.x - model.global_position.z
+		var threshold = StaticData.tile_size.x * 0.5
+		var m = model.get_child(0)
+		
+		if dx > threshold:
+			m.rotation_degrees.x = -24.4
+			m.rotation_degrees.y = 0
+		elif dx < -threshold:
+			m.rotation_degrees.x = 24.4
+			m.rotation_degrees.y = 180
+
+func set_initial_facing():
+	if !is_static() && model != null:
+		var m = model.get_child(0)
+		if group == Gameplay.HackingGroups.BLUE:
+			m.rotation_degrees.x = 24.4
+			m.rotation_degrees.y = 180
+		else:
+			m.rotation_degrees.x = -24.4
+			m.rotation_degrees.y = 0
 
 func type_changed_set_up(new_type: Gameplay.UnitTypes):
 	load_stats(new_type)
@@ -180,6 +243,9 @@ func _on_click():
 	
 
 func on_hurt():
+	# TODO: wrong event fow now, for testing
+	UIHelpers.audio_event3d("SFX/Worms/SFX_MutateTrojan", tile_pos)
+	
 	is_hurt = true
 	material.set_shader_parameter("show_glitch", true)
 	
@@ -212,9 +278,11 @@ func _process(delta):
 	if to_be_removed:
 		destroy_timer += delta
 		
-		#var new_scale = max(0.0, StaticData.turn_animation_duration - destroy_timer * 2.0) / StaticData.turn_animation_duration
+		var new_scale = max(0.0, StaticData.turn_animation_duration - destroy_timer * 1.5) / StaticData.turn_animation_duration
 		#scale = Vector3(new_scale, new_scale, new_scale)
-		#material.set_shader_parameter("emission_color", Color(material.get_shader_parameter("emission_color"), new_scale))
+		new_scale = ease(new_scale, 0.4)
+		
+		material.set_shader_parameter("emission_color", Color(material.get_shader_parameter("emission_color"), new_scale))
 		
 		if destroy_timer >= StaticData.turn_animation_duration:
 			queue_free()
@@ -222,5 +290,14 @@ func _process(delta):
 	if type == Gameplay.UnitTypes.TOWER_NODE && model != null:
 		var sides: MeshInstance3D = model.find_child("Sides")
 		sides.rotate_y(delta * 0.4)
-
-
+		
+		for i in range(3):
+			if tower_balls.size() > i:
+				var ball = tower_balls[i]
+				var a = sides.rotation.y + i * 2.0 * PI / 3.0
+				var b = sides.rotation.y * (i + 1) * 3.0
+				
+				var distance = 0.25
+				ball.global_position = global_position + Vector3(distance * cos(a), 1.2 + 0.2 * sin(b), distance * sin(a))
+				ball.rotate_y(delta * 1.1)
+				

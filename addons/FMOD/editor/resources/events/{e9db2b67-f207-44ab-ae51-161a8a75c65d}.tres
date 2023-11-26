@@ -1,0 +1,10 @@
+[gd_resource type="EventAsset" format=3 uid="uid://bbkj3myn6jmgt"]
+
+[resource]
+is_3d = true
+is_oneshot = true
+min_distance = 1.0
+max_distance = 20.0
+path = "event:/SFX/Kernel Node/SFX_Patch"
+guid = "{e9db2b67-f207-44ab-ae51-161a8a75c65d}"
+name = "SFX_Patch"

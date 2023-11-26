@@ -34,27 +34,24 @@ offset_right = 251.0
 offset_bottom = 344.0
 
 [node name="select_idle_unit" type="Button" parent="CanvasLayer"]
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 192.0
-offset_bottom = 50.0
-theme = ExtResource("3_7nk56")
+offset_left = 12.0
+offset_top = 454.0
+offset_right = 141.0
+offset_bottom = 481.0
 text = "Next idle unit"
 
 [node name="end_turn" type="Button" parent="CanvasLayer"]
-offset_left = 20.0
-offset_top = 60.0
-offset_right = 127.0
-offset_bottom = 90.0
-theme = ExtResource("3_7nk56")
+offset_left = 14.0
+offset_top = 17.0
+offset_right = 92.0
+offset_bottom = 48.0
 text = "End turn"
 
 [node name="function_list_label" type="Label" parent="CanvasLayer"]
 offset_top = 500.0
 offset_right = 121.0
 offset_bottom = 519.0
-theme_override_font_sizes/font_size = 20
-text = " Function list:"
+text = "command list:"
 
 [node name="cancel_select_target" type="Button" parent="CanvasLayer"]
 offset_left = 20.0
@@ -94,7 +91,7 @@ font_size = 128
 outline_size = 20
 
 [node name="cursor" type="MeshInstance3D" parent="SelectedUnitIndicator"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.08165e-12, -1.2, -2.08165e-12)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 3, -2.08165e-12, -1.2, -2.08165e-12)
 cast_shadow = 0
 gi_mode = 0
 mesh = SubResource("TextMesh_y8ha2")
