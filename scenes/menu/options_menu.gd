@@ -32,7 +32,7 @@ func _ready():
 		background.visible = false
 	
 	if true:
-		var button = $MarginContainer/VBoxContainer/Back
+		var button = $Back
 #for button in find_children("", "Button"):
 	#if button.get_script() == null:
 		button.set_script(preload("res://scripts/button.gd"))
@@ -40,10 +40,6 @@ func _ready():
 		button.set_process(true)
 		
 		button.is_back_button = true
-
-
-func _on_back_pressed():
-	on_back_pressed.emit()
 
 
 func _on_volume_music_value_changed(value):
@@ -78,7 +74,7 @@ func _on_color_picker_button_2_color_changed(color):
 
 
 func change_theme_color(color):
-	var ui_nodes = [$Panel, $Back, music_slider, sound_slider, background, team_1_color_button, team_2_color_button, options]
+	var ui_nodes = [$Panel, $Back, music_slider, sfx_slider, master_slider, background, team_1_color_button, team_2_color_button, options]
 	UIHelpers.override_ui_node_theme_with_color(ui_nodes, color)
 
 

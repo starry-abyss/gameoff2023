@@ -1161,7 +1161,7 @@ func on_group_color_change(group: Gameplay.HackingGroups, color: Color):
 			unit.set_tint(color)
 	for tile in tiles:
 		if tile != null and tile.group == group:
-			tile.set_tint(color)
+			tile.set_wireframe_tint(color)
 	update_firewalls()
 	battle_ui.change_theme_color()
 	if group == current_turn_group:
