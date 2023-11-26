@@ -5,9 +5,9 @@
 [resource]
 render_priority = 0
 shader = ExtResource("1_2ya0m")
-shader_parameter/light_color = Color(1, 1, 1, 0.501961)
-shader_parameter/arc_color = Color(0.478431, 0.478431, 0.478431, 1)
+shader_parameter/light_color = Color(1, 1, 1, 1)
+shader_parameter/arc_color = Color(1, 1, 1, 1)
 shader_parameter/seed = Vector2(0, 0)
-shader_parameter/speed = 5.1
-shader_parameter/random_scale = 4.6
-shader_parameter/electro_scale = 11.459
+shader_parameter/speed = 2.0
+shader_parameter/random_scale = 1.0
+shader_parameter/electro_scale = 50.0

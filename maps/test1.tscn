@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://cxaqvfti58xoq"]
+[gd_scene load_steps=13 format=3 uid="uid://cxaqvfti58xoq"]
 
 [ext_resource type="PackedScene" uid="uid://c7k4uu8silsa6" path="res://scenes/battle_area.tscn" id="1_mgdil"]
 [ext_resource type="Script" path="res://scripts/gameplay.gd" id="1_nrikt"]
 [ext_resource type="PackedScene" uid="uid://khbj7vpou3mu" path="res://scenes/battle_ui.tscn" id="3_iddt0"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="4_shixd"]
+[ext_resource type="Script" path="res://scripts/button.gd" id="5_ijx7g"]
 [ext_resource type="PackedScene" uid="uid://chr8t35qwnt7j" path="res://scenes/menu/options_menu.tscn" id="6_xh7ly"]
 [ext_resource type="Shader" path="res://shaders/glitch.gdshader" id="8_bq4h5"]
 [ext_resource type="Texture2D" uid="uid://dgfw5dh42i3qk" path="res://icon.svg" id="9_fr0wu"]
@@ -15,8 +16,8 @@ script/source = "extends Camera3D
 
 
 const CAMERA_SCROLL_SPEED = 5
-const CAMERA_SIZE_MIN = 10
-const CAMERA_SIZE_MAX = 30
+const CAMERA_SIZE_MIN = 15
+const CAMERA_SIZE_MAX = 50
 const CAMERA_SIZE_ZOOM_STEP = 2
 
 
@@ -80,6 +81,7 @@ size = 40.0
 script = SubResource("GDScript_bx5im")
 
 [node name="StudioListener3D" type="StudioListener3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.258819, 0.25, -0.933012, 3.36902e-16, 0.965926, 0.258819, 0.965926, -0.0669873, 0.25, 0, 0, 0)
@@ -101,6 +103,7 @@ offset_bottom = 47.0
 theme = ExtResource("4_shixd")
 text = "Options"
 expand_icon = true
+script = ExtResource("5_ijx7g")
 
 [node name="OptionsMenu" parent="CanvasLayer" instance=ExtResource("6_xh7ly")]
 visible = false

@@ -14,10 +14,12 @@
 [ext_resource type="EventAsset" uid="uid://d2basb5ke8ft8" path="res://addons/FMOD/editor/resources/events/{075248e6-776a-46a9-a3d6-0daa4ab1d1d2}.tres" id="11_6etls"]
 [ext_resource type="EventAsset" uid="uid://beio5k58ya4i4" path="res://addons/FMOD/editor/resources/events/{9f16de96-46cd-4768-9c67-537045d1454a}.tres" id="12_hn135"]
 [ext_resource type="EventAsset" uid="uid://tajxc5holi58" path="res://addons/FMOD/editor/resources/events/{c93a6031-b18f-4bf3-8721-c194d2ed347f}.tres" id="12_pyjtq"]
+[ext_resource type="EventAsset" uid="uid://byjk0wtjwiaxf" path="res://addons/FMOD/editor/resources/events/{e9a71d7d-c5af-4642-a530-e5f4c1a7b1e8}.tres" id="13_ntl2q"]
 [ext_resource type="EventAsset" uid="uid://dwcn4qublf6t3" path="res://addons/FMOD/editor/resources/events/{8ca72b98-6e61-4397-af0a-e9f980a4abbb}.tres" id="13_nwwuy"]
 [ext_resource type="EventAsset" uid="uid://vnuvoac2g18c" path="res://addons/FMOD/editor/resources/events/{186b6b90-7655-4be9-ad61-3f449603b39d}.tres" id="13_rw6v1"]
 [ext_resource type="EventAsset" uid="uid://dx4vlaysc2p8" path="res://addons/FMOD/editor/resources/events/{8814eb02-f36c-4114-b0e6-2ae9b850fc34}.tres" id="14_6hsrt"]
 [ext_resource type="EventAsset" uid="uid://gxc6nh7yivwp" path="res://addons/FMOD/editor/resources/events/{e0ee26cd-a97b-47c4-9cc7-16b0bf0a018d}.tres" id="14_yrc1h"]
+[ext_resource type="EventAsset" uid="uid://ca1rhb28agqac" path="res://addons/FMOD/editor/resources/events/{ec503f21-a869-49f1-83d2-8d18d16bea68}.tres" id="15_d1xgq"]
 [ext_resource type="EventAsset" uid="uid://b4lruxh5t83au" path="res://addons/FMOD/editor/resources/events/{f269926e-a4f7-4292-9a6a-b0d4270a975f}.tres" id="15_fasf4"]
 [ext_resource type="EventAsset" uid="uid://bbkj3myn6jmgt" path="res://addons/FMOD/editor/resources/events/{e9db2b67-f207-44ab-ae51-161a8a75c65d}.tres" id="15_pq44x"]
 [ext_resource type="EventAsset" uid="uid://c2bgl0hqlvu6p" path="res://addons/FMOD/editor/resources/events/{e47d45b9-059b-4425-984c-dea5f253332d}.tres" id="16_u1feo"]
@@ -35,22 +37,6 @@
 [ext_resource type="EventAsset" uid="uid://d01pu4vb1bkwx" path="res://addons/FMOD/editor/resources/events/{914dbbe9-cfde-4218-aead-c3d1faa901fe}.tres" id="26_6m43m"]
 [ext_resource type="EventAsset" uid="uid://duh8h17bytb0g" path="res://addons/FMOD/editor/resources/events/{d31585c5-84f5-46fd-a32a-2fdb3568f9b7}.tres" id="27_5jo1a"]
 [ext_resource type="EventAsset" uid="uid://bq1a57r7lhqn1" path="res://addons/FMOD/editor/resources/events/{83ea7205-5830-47ca-ae24-a11f9f29a5d0}.tres" id="34_nqdvh"]
-
-[sub_resource type="EventAsset" id="EventAsset_667ik"]
-is_oneshot = true
-min_distance = 1.0
-max_distance = 20.0
-path = "event:/SFX/GeneralEvents/UnitDamage"
-guid = "{e9a71d7d-c5af-4642-a530-e5f4c1a7b1e8}"
-name = "UnitDamage"
-
-[sub_resource type="EventAsset" id="EventAsset_hu4h3"]
-is_oneshot = true
-min_distance = 1.0
-max_distance = 20.0
-path = "event:/SFX/Kernel Node/SFX_KernelDamage"
-guid = "{ec503f21-a869-49f1-83d2-8d18d16bea68}"
-name = "SFX_KernelDamage"
 
 [resource]
 banks = {
@@ -78,9 +64,9 @@ events = {
 "{d31585c5-84f5-46fd-a32a-2fdb3568f9b7}": ExtResource("27_5jo1a"),
 "{e0ee26cd-a97b-47c4-9cc7-16b0bf0a018d}": ExtResource("14_yrc1h"),
 "{e47d45b9-059b-4425-984c-dea5f253332d}": ExtResource("16_u1feo"),
-"{e9a71d7d-c5af-4642-a530-e5f4c1a7b1e8}": SubResource("EventAsset_667ik"),
+"{e9a71d7d-c5af-4642-a530-e5f4c1a7b1e8}": ExtResource("13_ntl2q"),
 "{e9db2b67-f207-44ab-ae51-161a8a75c65d}": ExtResource("15_pq44x"),
-"{ec503f21-a869-49f1-83d2-8d18d16bea68}": SubResource("EventAsset_hu4h3"),
+"{ec503f21-a869-49f1-83d2-8d18d16bea68}": ExtResource("15_d1xgq"),
 "{ec98efaf-dbe1-4e47-88c6-2b9dc984a7db}": ExtResource("8_ox44k"),
 "{f1dcdd7b-5d72-4cf8-ad5b-7d91e3669bdd}": ExtResource("17_4oss0"),
 "{f269926e-a4f7-4292-9a6a-b0d4270a975f}": ExtResource("15_fasf4"),
@@ -160,7 +146,7 @@ event_tree = [{
 "item_type": 1,
 "node_name": "UnitDamage",
 "path": "event:/SFX/GeneralEvents/UnitDamage",
-"resource": SubResource("EventAsset_667ik")
+"resource": ExtResource("13_ntl2q")
 }],
 "item_type": 7,
 "node_name": "GeneralEvents",
@@ -178,7 +164,7 @@ event_tree = [{
 "item_type": 1,
 "node_name": "SFX_KernelDamage",
 "path": "event:/SFX/Kernel Node/SFX_KernelDamage",
-"resource": SubResource("EventAsset_hu4h3")
+"resource": ExtResource("15_d1xgq")
 }, {
 "children": [],
 "item_type": 1,

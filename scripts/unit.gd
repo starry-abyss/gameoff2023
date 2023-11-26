@@ -115,8 +115,9 @@ func load_model(model_scene_name: String):
 			ball.material_override = ball_material.duplicate()
 			
 			ball.rotate_y(randf() * PI * 2.0)
-			ball.material_override.set_shader_parameter("electro_scale", 10.0 + randf() * 2.0)
-			ball.material_override.set_shader_parameter("speed", 3.0 + randf() * 2.0)
+			ball.material_override.set_shader_parameter("electro_scale", 6.0 + randf() * 2.0)
+			ball.material_override.set_shader_parameter("speed", 3.5 + randf() * 1.5)
+			ball.material_override.set_shader_parameter("random_scale", 4.6)
 			#ball.material_override.set_shader_parameter("seed", Vector2(randf(), randf()))
 		
 		restore_tower_balls()
@@ -191,6 +192,26 @@ func load_stats(which_type: Gameplay.UnitTypes):
 	
 func set_tint(color: Color):
 	if material != null:
+		if type == Gameplay.UnitTypes.TOWER_NODE:
+			var ball_color = color
+			
+			
+			for ball in model.get_node("balls").get_children():
+				ball_color.a = 0.5
+				ball_color.v *= 1.3
+				ball.material_override.set_shader_parameter("light_color", ball_color)
+				
+				#ball_color.v *= 2.0
+				#ball.material_override.set_shader_parameter("arc_color", ball_color)
+			
+			#color.a = 0.85
+			#color.s = 1.0
+			#color.v = 0.20
+			
+			#material.set_shader_parameter("emission_amount", 3.0)
+			#material.set_shader_parameter("emission_color", color)
+			#return
+		
 		color.a = 0.85
 		
 		#if type == Gameplay.UnitTypes.TOWER_NODE:

@@ -5,7 +5,7 @@
 	MIT License
 */
 shader_type spatial;
-render_mode unshaded, blend_add;
+render_mode unshaded, blend_add, cull_disabled;
 
 uniform vec4 light_color : source_color = vec4( 0.32, 0.5, 0.82, 0.5 );
 uniform vec4 arc_color : source_color = vec4( 0.46, 0.68, 1.0, 1.0 );

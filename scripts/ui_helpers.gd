@@ -126,7 +126,7 @@ func override_ui_node_theme_with_color(nodes: Array, color: Color):
 	for node in nodes:		
 		#node.add_theme_color_override("font_color", color)
 		node.add_theme_color_override("font_color", Color.WHITE)
-		node.add_theme_color_override("font_disabled_color", StaticData.color_neutral)
+		node.add_theme_color_override("font_disabled_color", Color("#454545"))
 		
 		if node is Button:
 			var normal_style_box = (node.get_theme_stylebox("normal") as StyleBoxFlat).duplicate()

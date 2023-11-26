@@ -7,6 +7,8 @@ var no_press_sound = false
 func _ready():
 	mouse_entered.connect(_on_highlight)
 	pressed.connect(_on_press)
+	
+	focus_mode = Control.FOCUS_NONE
 	pass # Replace with function body.
 
 func _on_highlight():

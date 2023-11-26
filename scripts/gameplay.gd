@@ -194,6 +194,8 @@ func init_firewall(index: int):
 	for mi in mesh_instances:
 	#	mi.material_override = material
 		mi.material_override = preload("res://art/firewall_material.tres").duplicate()
+		
+		mi.material_overlay = preload("res://shaders/electric/electric_tower_material.tres").duplicate()
 	
 	battle_area.add_child(firewall)
 	
@@ -213,17 +215,25 @@ func init_firewall(index: int):
 	#firewall.rotate_y(-vector.angle())
 	firewall.rotation = Vector3(0, -vector.angle(), 0)
 	
+	firewall.get_node("right").rotation = Vector3(0, PI, 0)
+	
 	print("fw index: ", index)
 	print("firewall init: ", tile_pos_start_end)
 	
 	# TODO: position, rotate and scale properly
 
 func firewall_set_tint(index: int, color: Color):
+	var animation_color = color
+	animation_color.v *= 0.4
+	
 	color.a = 0.3
 	
 	var mesh_instances = firewalls[index].find_children("", "MeshInstance3D")
 	for mi in mesh_instances:
 		mi.material_override.albedo_color = color
+		
+		mi.material_overlay.set_shader_parameter("arc_color", animation_color)
+		mi.material_overlay.set_shader_parameter("light_color", animation_color)
 	pass
 
 func update_firewalls(init = false):
@@ -1282,3 +1292,6 @@ func _ready():
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("End Turn"):
 		end_turn()
+	
+	var map_center = (UIHelpers.tile_pos_to_world_pos(Vector2i(13, 9)) + UIHelpers.tile_pos_to_world_pos(Vector2i(14, 9))) / 2.0
+	$Camera3D/StudioListener3D.global_position = Vector3(map_center.x, 0.0, map_center.y)

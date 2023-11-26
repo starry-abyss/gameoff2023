@@ -53,7 +53,7 @@ text = "End turn"
 offset_top = 500.0
 offset_right = 121.0
 offset_bottom = 519.0
-text = "command list:"
+text = "action list:"
 
 [node name="cancel_select_target" type="Button" parent="CanvasLayer"]
 offset_left = 20.0

@@ -17,7 +17,7 @@ func _display_unit_stats(unit: Unit, current_group: Gameplay.HackingGroups, is_s
 			if is_selected:
 				group_label.text = "(selected)"
 			else:
-				group_label.text = ""
+				group_label.text = " " # if just an empty string, then height of the widget jitters
 		else:
 			group_label.text = "(enemy)"
 		hp_label.text = "Hit Points:     %s / %s" % [unit.hp, unit.hp_max]
