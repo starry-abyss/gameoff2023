@@ -12,8 +12,8 @@ extends Node
 
 
 @export var unit_stats = { 
-	Gameplay.UnitTypes.CENTRAL_NODE: { "name": "Kernel node", "hp_max": 100, "ap_max": 6, "abilities": ["repair","reset","spawn_worms","self_repair"] },
-	Gameplay.UnitTypes.TOWER_NODE: { "name": "Anti-virus node", "hp_max": 40, "ap_max": 9, "abilities": ["tower_attack"] },
+	Gameplay.UnitTypes.CENTRAL_NODE: { "name": "Kernel node", "hp_max": 60, "ap_max": 6, "abilities": ["repair","reset","spawn_worms","self_repair"] },
+	Gameplay.UnitTypes.TOWER_NODE: { "name": "Anti-virus node", "hp_max": 25, "ap_max": 9, "abilities": ["tower_attack"] },
 	
 	Gameplay.UnitTypes.WORM: { "name": "Worm", "hp_max": 1, "ap_max": 3, "abilities": ["move","scale","self_modify_to_virus","self_modify_to_trojan"] },
 	Gameplay.UnitTypes.TROJAN: { "name": "Trojan", "hp_max": 6, "ap_max": 8, "abilities": ["move","capture_tower","backdoor"] },
@@ -24,8 +24,8 @@ extends Node
 @export var ability_stats = {
 	"move": { "name": "move", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 0 },
 	
-	"virus_attack": { "name": "damage_short", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 6, "attack_extra": 2, "attack_range": 1 },
-	"tower_attack": { "name": "damage_long", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 10, "attack_extra": 3, "attack_range": 2 },
+	"virus_attack": { "name": "damage_short", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 4, "attack_extra": 2, "attack_range": 1 },
+	"tower_attack": { "name": "damage_long", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 6, "attack_extra": 2, "attack_range": 2 },
 	
 	"scale": { "name": "double", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 2 },
 	"self_modify_to_virus": { "name": "mutate_to_virus", "target": Gameplay.TargetTypes.SELF, "ap": 2, "cooldown": 0 },
@@ -48,7 +48,7 @@ extends Node
 
 @export var tooltips = {
 	"default": { "text": """
-		The goal in this battle is to put down all enemy Kernel nodes.
+		The goal in this battle is to put down the enemy Kernel node.
 		Start with doubling Worms and mutating them.
 		
 		Use left mouse button to select units (nodes and malware) on your base.
@@ -79,12 +79,12 @@ extends Node
 		This node has only one action type and button.
 		""" },
 	"central_node": { "text": """
-		Kernel nodes contain rootkits allowing us to control the computer of 
+		The Kernel node contains rootkits allowing us to control the computer of 
 		a random internet guy.
 		
-		The group which doesn't have any Kernel nodes - all damaged down to 0 Hit Points - loses the battle.
+		The group which loses the Kernel node - all damaged down to 0 Hit Points - loses the battle.
 		
-		Kernel nodes have actions just like other units, some of them performed automatically when
+		The Kernel node has actions just like other units, some of them performed automatically when
 		available.
 		To perform non-automatic actions first click on the action button and then - on the target tile on the map.
 		
@@ -109,7 +109,7 @@ extends Node
 	"trojan": { "text": """
 		The Trojan malware can move fast but cannot attack.
 		
-		It can capture an enemy Anti-virus or Kernel node.
+		It can capture an enemy Anti-virus node.
 		It can open a backdoor port to move friendly malware to the Trojan over long distances.
 		""" },
 	
@@ -210,7 +210,7 @@ extends Node
 		""" },
 	
 	"capture_tower": { "text": """
-		To capture an enemy Anti-virus or Kernel node, firstly damage it down to 0 HP.
+		To capture an enemy Anti-virus node, firstly damage it down to 0 HP.
 		Secondly, move the Trojan near the node (then of the neutral group) and use this action on it.
 	""" },
 	"backdoor": { "text": """
