@@ -5,14 +5,15 @@ signal on_back_pressed
 signal on_group_color_change(group: Gameplay.HackingGroups, color: Color)
 
 @export var hide_background_effect := true
+@export var show_options_button := false
 
 @onready var music_slider: HSlider = $MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control4/VolumeMusic
 @onready var sfx_slider: HSlider = $MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control2/VolumeSFX
 @onready var master_slider: HSlider = $MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control/VolumeMaster
 @onready var background = $Background
-@onready var effect = $Effect
 @onready var team_1_color_button = $MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control3/HBoxContainer/TeamColor1
 @onready var team_2_color_button = $MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control3/HBoxContainer/TeamColor2
+@onready var options: Button = $Options
 
 
 func _ready():
@@ -29,20 +30,16 @@ func _ready():
 	
 	if hide_background_effect:
 		background.visible = false
-		effect.visible = false
 	
 	if true:
-			var button = $MarginContainer/VBoxContainer/Back
-	#for button in find_children("", "Button"):
-		#if button.get_script() == null:
-			button.set_script(preload("res://scripts/button.gd"))
-			button._ready()
-			button.set_process(true)
-			
-			button.is_back_button = true
-
-func _on_back_pressed():
-	on_back_pressed.emit()
+		var button = $Back
+#for button in find_children("", "Button"):
+	#if button.get_script() == null:
+		button.set_script(preload("res://scripts/button.gd"))
+		button._ready()
+		button.set_process(true)
+		
+		button.is_back_button = true
 
 
 func _on_volume_music_value_changed(value):
@@ -69,8 +66,30 @@ func _on_volume_master_value_changed(value):
 func _on_color_picker_button_color_changed(color):
 	StaticData.color_pink = color
 	on_group_color_change.emit(Gameplay.HackingGroups.PINK, color)
-
+	
 
 func _on_color_picker_button_2_color_changed(color):
 	StaticData.color_blue = color
 	on_group_color_change.emit(Gameplay.HackingGroups.BLUE, color)
+
+
+func change_theme_color(color):
+	var ui_nodes = [$Panel, $Back, music_slider, sfx_slider, master_slider, background, team_1_color_button, team_2_color_button, options]
+	UIHelpers.override_ui_node_theme_with_color(ui_nodes, color)
+
+
+#func _on_options_pressed() -> void:
+	#options.disabled = true
+	#set_content_visible(true)
+
+
+func _on_back_pressed():
+	on_back_pressed.emit()
+	#set_content_visible(false)
+	#options.disabled = false
+
+
+#func set_content_visible(visible: bool):
+	#$Panel.visible = visible
+	#$MarginContainer.visible = visible
+	#$Back.visible = visible

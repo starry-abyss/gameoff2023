@@ -6,7 +6,8 @@ extends Node
 @export var tile_good_target: Color = Color("#757575")
 @export var tile_bad_target: Color = Color("#252525")
 
-@export var hurt_animation_duration: float = 0.2
+@export var hurt_animation_duration: float = 0.5
+@export var spawn_animation_duration: float = 2
 @export var turn_animation_duration: float = 1.0
 @export var move_animation_duration_per_tile: float = 0.2
 

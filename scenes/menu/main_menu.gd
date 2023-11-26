@@ -4,13 +4,13 @@ extends Control
 signal go_to_options_menu
 
 
+@onready var glitch_effect: Sprite2D = $Effect
 @onready var show_glitch_effect_timer = $Timer
-@onready var effect = $Effect
 
 
 func _on_play_pressed():
-	effect.visible = true
 	show_glitch_effect_timer.start()
+	glitch_effect.visible = true
 	UIHelpers.audio_event("Ui/Ui_Start")
 
 
@@ -23,5 +23,5 @@ func _on_quit_pressed():
 
 
 func _on_timer_timeout():
-	effect.visible = false
+	glitch_effect.visible = false
 	get_tree().change_scene_to_file("res://maps/test1.tscn")

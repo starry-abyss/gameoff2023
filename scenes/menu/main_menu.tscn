@@ -1,16 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://d0psqdiovqmy8"]
+[gd_scene load_steps=6 format=3 uid="uid://d0psqdiovqmy8"]
 
-[ext_resource type="Shader" path="res://shaders/glitch.gdshader" id="1_0egmt"]
 [ext_resource type="Script" path="res://scenes/menu/main_menu.gd" id="1_46h0q"]
-[ext_resource type="Texture2D" uid="uid://6h1hg72n1pa7" path="res://assets/kenney_game-icons/PNG/White/1x/gamepad.png" id="2_3kh11"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="3_c1x3u"]
-[ext_resource type="Texture2D" uid="uid://bgbadqs8blksv" path="res://assets/kenney_game-icons/PNG/White/1x/gear.png" id="3_nrjc3"]
-[ext_resource type="Texture2D" uid="uid://dgfw5dh42i3qk" path="res://icon.svg" id="3_rrd0f"]
-[ext_resource type="Texture2D" uid="uid://ca1qnltq6xvh1" path="res://assets/kenney_game-icons/PNG/White/1x/exitLeft.png" id="4_w4yab"]
+[ext_resource type="Shader" path="res://shaders/glitch.gdshader" id="3_kfdc0"]
+[ext_resource type="Texture2D" uid="uid://dgfw5dh42i3qk" path="res://icon.svg" id="4_tu3lh"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mjc1v"]
-shader = ExtResource("1_0egmt")
-shader_parameter/range = 0.035
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_31tw3"]
+shader = ExtResource("3_kfdc0")
+shader_parameter/range = 0.05
 shader_parameter/noiseQuality = 250.0
 shader_parameter/noiseIntensity = 0.0088
 shader_parameter/offsetIntensity = 0.03
@@ -26,6 +23,7 @@ grow_vertical = 2
 script = ExtResource("1_46h0q")
 
 [node name="Quit" type="Button" parent="."]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 offset_left = 28.0
 offset_top = 598.0
@@ -33,7 +31,6 @@ offset_right = 128.0
 offset_bottom = 625.0
 theme = ExtResource("3_c1x3u")
 text = "Quit"
-icon = ExtResource("4_w4yab")
 expand_icon = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -56,10 +53,10 @@ theme_override_constants/margin_bottom = 100
 layout_mode = 2
 
 [node name="Play" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme = ExtResource("3_c1x3u")
-text = "PLAY"
-icon = ExtResource("2_3kh11")
+text = "Play"
 expand_icon = true
 
 [node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
@@ -67,21 +64,21 @@ layout_mode = 2
 theme_override_constants/margin_bottom = 10
 
 [node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme = ExtResource("3_c1x3u")
-text = "OPTIONS"
-icon = ExtResource("3_nrjc3")
+text = "Options"
 expand_icon = true
-
-[node name="Effect" type="Sprite2D" parent="."]
-visible = false
-material = SubResource("ShaderMaterial_mjc1v")
-position = Vector2(573.5, 323.5)
-scale = Vector2(8.96094, 5.03906)
-texture = ExtResource("3_rrd0f")
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Effect" type="Sprite2D" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_31tw3")
+position = Vector2(573.5, 323.5)
+scale = Vector2(8.96094, 5.03906)
+texture = ExtResource("4_tu3lh")
 
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]

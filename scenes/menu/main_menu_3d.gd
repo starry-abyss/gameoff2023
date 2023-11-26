@@ -41,7 +41,7 @@ func _ready():
 			
 	_retint_tiles()
 	_generate_random_unit()
-	
+	spawn_unit(Vector2i(3, 3), 0, HackingGroups.PINK)
 	#for tile in tiles:
 		#var material = ShaderMaterial.new()
 		#material.shader = glowing_outline_shader
@@ -80,6 +80,7 @@ func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups):
 	units.append(unit)
 	unit.update_model_pos()
 	unit_container.add_child(unit)
+	unit.on_spawn = true
 	
 	var tile = tiles[tile_pos_to_tile_index(tile_pos)]
 	if tile != null:

@@ -20,6 +20,9 @@ var destroy_timer = 0.0
 var to_be_removed = false
 var hurt_timer = 0.0
 var is_hurt = false
+var spawn_timer = 0.0
+var on_spawn = false
+var aabb = null
 
 var hp: int = 8
 var hp_max: int = 8
@@ -90,6 +93,7 @@ func load_model(model_scene_name: String):
 	#model.set_meta("_edit_lock_", true)
 	
 	material = ShaderMaterial.new()
+	material.resource_local_to_scene = true
 	material.shader = glowing_outline_shader
 	#material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
 	
@@ -124,6 +128,8 @@ func load_model(model_scene_name: String):
 	#	camera.queue_free()
 	
 	set_tint(UIHelpers.group_to_color(group))
+	
+	aabb = Utils.get_aabb(model)
 	
 	set_initial_facing()
 	pass
@@ -242,7 +248,13 @@ func on_hurt():
 	
 	is_hurt = true
 	material.set_shader_parameter("show_glitch", true)
-		
+	
+	var y_range = 0.3
+	var y_min = (aabb as AABB).size.y * randf_range(0, 1 - y_range)
+	var y_max = (aabb as AABB).size.y * y_range + y_min 
+	var glitch_y_range = Vector2(y_min, y_max)
+	print(glitch_y_range)
+	material.set_shader_parameter("glitch_y_range", glitch_y_range)
 	
 func _process(delta):
 	if is_hurt:
@@ -250,7 +262,18 @@ func _process(delta):
 		if hurt_timer >= StaticData.hurt_animation_duration:
 			material.set_shader_parameter("show_glitch", false)
 			is_hurt = false
-		return
+			hurt_timer = 0
+			
+	if on_spawn:
+		spawn_timer += delta
+		var y_min = (aabb as AABB).size.y * spawn_timer / StaticData.spawn_animation_duration
+		var y_max = y_min + (aabb as AABB).size.y * 0.3
+		var spawn_y_range = Vector2(y_min, y_max)
+		material.set_shader_parameter("spawn_y_range", spawn_y_range)
+		if spawn_timer >= StaticData.spawn_animation_duration:
+			on_spawn = false
+			spawn_timer = 0
+			material.set_shader_parameter("spawn_y_range", Vector2(-10, 10))
 			
 	if to_be_removed:
 		destroy_timer += delta

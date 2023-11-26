@@ -6,7 +6,7 @@ extends Control
 @onready var hp_label: Label = $MarginContainer/VBoxContainer/Hp
 @onready var attack_label: Label = $MarginContainer/VBoxContainer/Attack
 @onready var ap_label: Label = $MarginContainer/VBoxContainer/Ap
-
+@onready var title: Label = %Title
 
 func _display_unit_stats(unit: Unit, current_group: Gameplay.HackingGroups, is_selected: bool):
 	type_label.text = ""

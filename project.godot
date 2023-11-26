@@ -26,6 +26,7 @@ FMODRuntime="*res://addons/FMOD/runtime/fmod_runtime_manager.gd"
 StaticData="*res://scripts/static_data.gd"
 UIHelpers="*res://scripts/ui_helpers.gd"
 Music="*res://scenes/audio.tscn"
+Utils="*res://scripts/utils.gd"
 
 [display]
 

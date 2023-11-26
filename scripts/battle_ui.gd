@@ -67,7 +67,8 @@ func update_selection_indicator(unit: Unit):
 	selected_unit_indicator.visible = (unit != null)
 	
 	if unit != null:
-		selected_unit_indicator.position = unit.position + Vector3(0, 1.5, 0)
+		var unit_aabb = Utils.get_aabb(unit.model)
+		selected_unit_indicator.position = unit.position + Vector3(0, unit_aabb.size.y, 0)
 
 func update_abilities_buttons_general_visibility():
 	$CanvasLayer/cancel_select_target.visible = !in_unit_animation_mode && in_select_target_mode && selected_unit_indicator.visible
@@ -100,6 +101,7 @@ func add_ability_button(ability_id: String):
 	var stats = StaticData.ability_stats[ability_id]
 	
 	var button = Button.new()
+	button.theme = load("res://themes/ui.tres")
 	
 	button.name = ability_id
 	button.text = ""
@@ -225,6 +227,7 @@ func _on_unit_destroy(unit: Unit):
 	pass
 
 func _on_unit_spawn(unit: Unit):
+	unit.on_spawn = true
 	pass
 
 func _on_unit_hp_change(unit: Unit, delta_hp: int):
@@ -239,17 +242,18 @@ func _on_unit_hp_change(unit: Unit, delta_hp: int):
 	label.global_position = unit.global_position + Vector3(0.0, 2.0, 0.0)
 	
 func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn: bool):
-	#var group_color = UIHelpers.group_to_color(current_group)
-	
+	change_theme_color()
 	self.current_group = current_group
+
+func change_theme_color():
+	var ui_nodes = [$CanvasLayer/end_turn, $CanvasLayer/select_idle_unit, $CanvasLayer/cancel_select_target, $CanvasLayer/SelectedUnitStats]
+	ui_nodes.append_array(%ability_buttons.get_children())
 	
 	if current_group == Gameplay.HackingGroups.PINK:
-		$CanvasLayer/end_turn.theme = preload("res://themes/pink.tres")
-		$CanvasLayer/select_idle_unit.theme = preload("res://themes/pink.tres")
+		UIHelpers.override_ui_node_theme_with_color(ui_nodes, StaticData.color_pink)
 	else:
-		$CanvasLayer/end_turn.theme = preload("res://themes/blue.tres")
-		$CanvasLayer/select_idle_unit.theme = preload("res://themes/blue.tres")
-	pass
+		UIHelpers.override_ui_node_theme_with_color(ui_nodes, StaticData.color_blue)
+
 
 func _on_battle_end(who_won: Gameplay.HackingGroups):
 	$CanvasLayer/end_game_message.visible = true
