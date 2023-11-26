@@ -568,6 +568,9 @@ func select_unit(unit_to_select: Unit, no_ui = false):
 	for unit in units:
 		#unit.selected = (unit == unit_to_select)
 		pass
+		
+	#if selected_unit != unit_to_select:
+	#	UIHelpers.audio_event("Ui/Ui_UnitChanged")
 	
 	selected_unit = unit_to_select
 	calculate_distances()
@@ -738,11 +741,11 @@ func order_ability_capture_tower(target: Unit, imaginary = false) -> bool:
 		
 		target.hp = target.hp_max
 		
+		UIHelpers.audio_event3d("SFX/Trojan/SFX_CaptureNode", selected_unit.tile_pos)
+		
 		remove_unit(selected_unit)
 		
 		update_firewalls()
-		
-		UIHelpers.audio_event3d("SFX/Trojan/SFX_CaptureNode", selected_unit.tile_pos)
 	
 	return true
 
@@ -934,6 +937,8 @@ func hurt_unit(target: Unit, amount: int):
 		else:
 			target.group = HackingGroups.NEUTRAL
 			update_firewalls()
+			
+			UIHelpers.audio_event3d("SFX/Kernel Node/SFX_KernelDamage", target.tile_pos)
 		
 		if this_is_the_end:
 			end_battle(unit_group_originally)
@@ -941,9 +946,13 @@ func hurt_unit(target: Unit, amount: int):
 	calculate_distances()
 
 func end_battle(who_lost: HackingGroups):
-	for unit in units:
+	var units_array = units.duplicate()
+	for unit in units_array:
 		if unit.group == who_lost:
 			unit.group = HackingGroups.NEUTRAL
+			
+			if !unit.is_static():
+				hurt_unit(unit, 99999999)
 		
 			if unit.type == UnitTypes.TOWER_NODE:
 				unit.hp = 0
@@ -1203,7 +1212,7 @@ func _ready():
 	spawn_unit(Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(3, 2), UnitTypes.TOWER_NODE, HackingGroups.PINK)
-	spawn_unit(Vector2i(2, 5), UnitTypes.TOWER_NODE, HackingGroups.PINK)
+	spawn_unit(Vector2i(2, 5), UnitTypes.TOWER_NODE, HackingGroups.NEUTRAL)
 	spawn_unit(Vector2i(3, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(6, 2), UnitTypes.TOWER_NODE, HackingGroups.PINK)
 	spawn_unit(Vector2i(8, 5), UnitTypes.TOWER_NODE, HackingGroups.PINK)
