@@ -109,13 +109,7 @@ func add_ability_button(ability_id: String):
 	button.text = ""
 	#button.position.x = %ability_buttons.get_children().size() * 100
 	button.custom_minimum_size = Vector2(200, 200)
-	
-	#var text_size = 8
-	#button.add_theme_font_size_override("normal", text_size)
-	#button.add_theme_font_size_override("pressed", text_size)
-	#button.add_theme_font_size_override("focus", text_size)
-	#button.add_theme_font_size_override("disabled", text_size)
-	#button.add_theme_font_size_override("hover", text_size + 4)
+	UIHelpers.override_ui_node_theme_font_size(button, 10)
 	
 	%ability_buttons.add_child(button)
 	button.pressed.connect(_on_ability_button_clicked.bind(ability_id, stats.target))
