@@ -1309,6 +1309,8 @@ func _process(delta: float) -> void:
 var ai_malware = []
 var ai_towers = []
 var ai_towers_repeat_far = []
+var ai_kernel_repair = []
+
 var ai_kernel = null
 
 var ai_time_for_step = false
@@ -1332,6 +1334,7 @@ func ai_new_turn():
 	assert(ai_kernel != null)
 	
 	ai_towers_repeat_far = ai_towers.duplicate()
+	ai_kernel_repair = [ ai_kernel, ai_kernel ]
 	
 	# first try reset
 	#ai_unit_to_move.push_front(ai_kernel)
@@ -1341,29 +1344,96 @@ func ai_new_turn():
 	
 	ai_time_for_step = true
 	pass
+	
+func ai_find_weakest(tile_pos, distance, group, condition):
+	var lambda_context = { "weakest_enemy": null }
+	
+	#if distance == 1:
+	#	var find_enemy = func(tile_pos):
+	#		var e = find_unit_by_tile_pos(tile_pos)
+	#		if e != null && e.group == flip_group(current_turn_group):
+	#			if lambda_context.weakest_enemy == null || lambda_context.weakest_enemy.hp > e.hp:
+	#				lambda_context.weakest_enemy = e
+	#	
+	#	for_all_tile_pos_around(tile_pos, find_enemy)
+	#	
+	#	return lambda_context.weakest_enemy
+	
+	for e in units:
+		if e != null && e.group == group:
+			if UIHelpers.tile_pos_distance(tile_pos, e.tile_pos) <= distance:
+				if condition.call(e, lambda_context.weakest_enemy):
+					lambda_context.weakest_enemy = e
+	
+	return lambda_context.weakest_enemy
+
+func ai_find_weakest_enemy(tile_pos, distance):
+	var condition = func(new_unit, unit):
+		return unit == null || unit.hp > new_unit.hp
+	
+	return ai_find_weakest(tile_pos, distance, flip_group(current_turn_group), condition)
+
+func ai_find_most_damaged_friend(tile_pos, distance):
+	var condition = func(new_unit, unit):
+		var new_unit_damage = new_unit.hp_max - new_unit.hp
+		
+		if unit == null && new_unit_damage > 0:
+			return true
+		
+		var unit_damage = new_unit.hp_max - new_unit.hp
+		
+		return unit_damage < new_unit_damage
+	
+	return ai_find_weakest(tile_pos, distance, current_turn_group, condition)
+	
+func ai_execute_order_for_array():
+	pass
 
 func ai_next_step():
 	while ai_towers.size() > 0:
 		var t = ai_towers[-1]
 		if t.ap > 0:
-			var lambda_context = { "weakest_enemy_near": null }
+			var enemy = ai_find_weakest_enemy(t.tile_pos, 1)
 			
-			var find_enemy = func(tile_pos):
-				var e = find_unit_by_tile_pos(tile_pos)
-				if e != null && e.group == flip_group(current_turn_group):
-					if lambda_context.weakest_enemy_near == null || lambda_context.weakest_enemy_near.hp > e.hp:
-						lambda_context.weakest_enemy_near = e
-			
-			for_all_tile_pos_around(t.tile_pos, find_enemy)
-			
-			if lambda_context.weakest_enemy_near == null:
+			if enemy == null:
 				ai_towers.erase(t)
 				continue
 			else:
-				ai_make_step(t, "tower_attack", lambda_context.weakest_enemy_near)
+				ai_make_step(t, "tower_attack", enemy)
 				return
 		else:
 			ai_towers.erase(t)
+			continue
+	
+	while ai_towers_repeat_far.size() > 0:
+		var t = ai_towers_repeat_far[-1]
+		if t.ap > 0:
+			var enemy = ai_find_weakest_enemy(t.tile_pos, 2)
+			
+			if enemy == null:
+				ai_towers_repeat_far.erase(t)
+				continue
+			else:
+				ai_make_step(t, "tower_attack", enemy)
+				return
+		else:
+			ai_towers_repeat_far.erase(t)
+			continue
+	
+	while ai_kernel_repair.size() > 0:
+		var t = ai_kernel_repair[-1]
+		if t.ap > 0:
+			# hardcoding distance == 3 since on this map it's constant :P
+			var target = ai_find_most_damaged_friend(t.tile_pos, 3)
+			
+			if target == null:
+				ai_kernel_repair.erase(t)
+				continue
+			else:
+				ai_make_step(t, "repair", target)
+				return
+		else:
+			ai_kernel_repair.erase(t)
 			continue
 	
 	end_turn()
