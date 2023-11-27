@@ -284,8 +284,8 @@ func on_hurt():
 	
 	var y_min = (aabb as AABB).size.y * randf_range(y_margin, 1.0 - y_margin - y_range)
 	var y_max = (aabb as AABB).size.y * y_range + y_min
-	var glitch_y_range = Vector2(y_min, y_max)
-	print(glitch_y_range)
+	var y_pos = aabb.position.y
+	var glitch_y_range = Vector2(y_min + y_pos, y_max + y_pos)
 	material.set_shader_parameter("glitch_y_range", glitch_y_range)
 	
 func _process(delta):
