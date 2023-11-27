@@ -4,7 +4,7 @@
 is_3d = true
 is_oneshot = true
 min_distance = 1.0
-max_distance = 20.0
+max_distance = 2800.0
 path = "event:/SFX/Virus/SFX_Spread"
 guid = "{6c73a94a-809a-464e-a9a4-2088aa5c70be}"
 name = "SFX_Spread"

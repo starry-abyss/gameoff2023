@@ -4,7 +4,7 @@
 is_3d = true
 is_oneshot = true
 min_distance = 1.0
-max_distance = 20.0
+max_distance = 2200.0
 path = "event:/SFX/Trojan/SFX_Backdoor"
 guid = "{f1dcdd7b-5d72-4cf8-ad5b-7d91e3669bdd}"
 name = "SFX_Backdoor"

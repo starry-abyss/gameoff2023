@@ -4,7 +4,7 @@
 is_3d = true
 is_oneshot = true
 min_distance = 1.0
-max_distance = 20.0
+max_distance = 2600.0
 path = "event:/SFX/Worms/SFX_WormMove"
 guid = "{d31585c5-84f5-46fd-a32a-2fdb3568f9b7}"
 name = "SFX_WormMove"

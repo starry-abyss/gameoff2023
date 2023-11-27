@@ -4,7 +4,7 @@
 is_3d = true
 is_oneshot = true
 min_distance = 1.0
-max_distance = 20.0
+max_distance = 3000.0
 path = "event:/SFX/Trojan/SFX_TrojanMove"
 guid = "{4f4f43d0-0eeb-4bde-9dd3-b4660b61a944}"
 name = "SFX_TrojanMove"

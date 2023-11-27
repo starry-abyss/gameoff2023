@@ -4,7 +4,7 @@
 is_3d = true
 is_oneshot = true
 min_distance = 1.0
-max_distance = 20.0
+max_distance = 3600.0
 path = "event:/SFX/Virus/SFX_Integrate"
 guid = "{7e78c86e-cf2b-4da1-9fe3-3436e079cc0c}"
 name = "SFX_Integrate"

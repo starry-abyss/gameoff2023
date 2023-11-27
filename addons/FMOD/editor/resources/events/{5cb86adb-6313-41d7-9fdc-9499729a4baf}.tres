@@ -4,7 +4,7 @@
 is_3d = true
 is_oneshot = true
 min_distance = 1.0
-max_distance = 20.0
+max_distance = 2000.0
 path = "event:/SFX/Trojan/SFX_CaptureNode"
 guid = "{5cb86adb-6313-41d7-9fdc-9499729a4baf}"
 name = "SFX_CaptureNode"

@@ -14,6 +14,8 @@ extends Node
 @export var who_controls_blue: Gameplay.ControllerType = Gameplay.ControllerType.PLAYER
 @export var who_controls_pink: Gameplay.ControllerType = Gameplay.ControllerType.PLAYER
 
+@export var fullscreen = false
+
 @export var unit_stats = { 
 	Gameplay.UnitTypes.CENTRAL_NODE: { "name": "Kernel node", "hp_max": 60, "ap_max": 6, "abilities": ["repair","reset","spawn_worms","self_repair"] },
 	Gameplay.UnitTypes.TOWER_NODE: { "name": "Anti-malware node", "hp_max": 25, "ap_max": 9, "abilities": ["tower_attack"] },

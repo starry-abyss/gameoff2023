@@ -1,18 +1,18 @@
 [gd_resource type="ParameterAsset" load_steps=3 format=3 uid="uid://6tbbgxck7rit"]
 
-[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_111xa"]
+[sub_resource type="FMOD_STUDIO_PARAMETER_ID" id="FMOD_STUDIO_PARAMETER_ID_qnb5n"]
 data1 = 2766960050
 data2 = 3573907233
 
-[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_shhyv"]
-name = "¸÷"
-id = SubResource("FMOD_STUDIO_PARAMETER_ID_111xa")
+[sub_resource type="FMOD_STUDIO_PARAMETER_DESCRIPTION" id="FMOD_STUDIO_PARAMETER_DESCRIPTION_q5n3k"]
+name = "¸·-"
+id = SubResource("FMOD_STUDIO_PARAMETER_ID_qnb5n")
 maximum = 1.0
 flags = 28
 guid = "{f91af73b-8b13-47cc-843b-3e06e832fbe5}"
 
 [resource]
-parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_shhyv")
+parameter_description = SubResource("FMOD_STUDIO_PARAMETER_DESCRIPTION_q5n3k")
 labels = ["RebelsWin", "CyberPoliceWin"]
 path = "parameter:/Winner"
 guid = "{f91af73b-8b13-47cc-843b-3e06e832fbe5}"

@@ -62,9 +62,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -150.0
-offset_top = -147.5
+offset_top = -260.0
 offset_right = 150.0
-offset_bottom = 147.5
+offset_bottom = 260.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_top = 100
@@ -94,7 +94,7 @@ offset_right = 56.0
 offset_bottom = 19.0
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 20
-text = "master"
+text = "Master volume"
 
 [node name="Control" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(120, 40)
@@ -107,7 +107,7 @@ offset_right = 56.0
 offset_bottom = 19.0
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 20
-text = "music"
+text = "Music volume"
 
 [node name="Control2" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(120, 40)
@@ -120,7 +120,7 @@ offset_right = 56.0
 offset_bottom = 19.0
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 20
-text = "sounds"
+text = "Sounds volume"
 
 [node name="Control3" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(120, 40)
@@ -133,7 +133,46 @@ offset_right = 56.0
 offset_bottom = 19.0
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 20
-text = "team colors"
+text = "Rebels color"
+
+[node name="Control5" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/Control5"]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 56.0
+offset_bottom = 19.0
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 20
+text = "Cyber police color"
+
+[node name="Control6" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/Control6"]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 56.0
+offset_bottom = 19.0
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 20
+text = "Show tutorial hints"
+
+[node name="Control7" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/Control7"]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 56.0
+offset_bottom = 19.0
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 20
+text = "Fullscreen"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -144,6 +183,7 @@ custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
 
 [node name="VolumeMaster" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control"]
+unique_name_in_owner = true
 layout_mode = 2
 offset_right = 176.0
 offset_bottom = 16.0
@@ -157,6 +197,7 @@ custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
 
 [node name="VolumeMusic" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control4"]
+unique_name_in_owner = true
 layout_mode = 2
 offset_right = 176.0
 offset_bottom = 16.0
@@ -170,6 +211,7 @@ custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
 
 [node name="VolumeSFX" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control2"]
+unique_name_in_owner = true
 layout_mode = 2
 offset_right = 176.0
 offset_bottom = 16.0
@@ -181,23 +223,50 @@ value = 50.0
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control3"]
+[node name="TeamColor1" type="ColorPickerButton" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 20)
 layout_mode = 2
+offset_left = 136.0
 offset_right = 176.0
 offset_bottom = 20.0
-alignment = 2
-
-[node name="TeamColor1" type="ColorPickerButton" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control3/HBoxContainer"]
-custom_minimum_size = Vector2(40, 20)
-layout_mode = 2
 theme = ExtResource("5_ncrul")
 color = Color(1, 1, 1, 1)
 
-[node name="TeamColor2" type="ColorPickerButton" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control3/HBoxContainer"]
+[node name="Control5" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+
+[node name="TeamColor2" type="ColorPickerButton" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control5"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 20)
 layout_mode = 2
+offset_left = 136.0
+offset_right = 176.0
+offset_bottom = 20.0
 theme = ExtResource("5_ncrul")
 color = Color(1, 1, 1, 1)
+
+[node name="Control6" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+
+[node name="HintsEnabled" type="CheckBox" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control6"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 24.0
+offset_bottom = 24.0
+button_pressed = true
+
+[node name="Control7" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+
+[node name="Fullscreen" type="CheckBox" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control7"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 24.0
+offset_bottom = 24.0
 
 [node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -230,7 +299,5 @@ offset_bottom = 45.0
 theme = ExtResource("5_ncrul")
 text = "Options"
 
-[connection signal="color_changed" from="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control3/HBoxContainer/TeamColor1" to="." method="_on_color_picker_button_color_changed"]
-[connection signal="color_changed" from="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control3/HBoxContainer/TeamColor2" to="." method="_on_color_picker_button_2_color_changed"]
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Options" to="." method="_on_options_pressed"]

@@ -4,7 +4,7 @@
 is_3d = true
 is_oneshot = true
 min_distance = 1.0
-max_distance = 20.0
+max_distance = 1600.0
 path = "event:/SFX/Kernel Node/SFX_Reset"
 guid = "{482fafd5-e024-4913-82dd-43a36581ed7c}"
 name = "SFX_Reset"

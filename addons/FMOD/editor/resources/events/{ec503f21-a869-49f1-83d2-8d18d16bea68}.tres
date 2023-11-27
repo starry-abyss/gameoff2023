@@ -1,9 +1,10 @@
 [gd_resource type="EventAsset" format=3 uid="uid://ca1rhb28agqac"]
 
 [resource]
+is_3d = true
 is_oneshot = true
 min_distance = 1.0
-max_distance = 20.0
+max_distance = 1600.0
 path = "event:/SFX/Kernel Node/SFX_KernelDamage"
 guid = "{ec503f21-a869-49f1-83d2-8d18d16bea68}"
 name = "SFX_KernelDamage"

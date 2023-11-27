@@ -4,7 +4,7 @@
 is_3d = true
 is_oneshot = true
 min_distance = 1.0
-max_distance = 20.0
+max_distance = 2000.0
 path = "event:/SFX/Kernel Node/SFX_Patch"
 guid = "{e9db2b67-f207-44ab-ae51-161a8a75c65d}"
 name = "SFX_Patch"

@@ -7,26 +7,35 @@ signal on_group_color_change(group: Gameplay.HackingGroups, color: Color)
 @export var hide_background_effect := true
 @export var show_options_button := false
 
-@onready var music_slider: HSlider = $MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control4/VolumeMusic
-@onready var sfx_slider: HSlider = $MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control2/VolumeSFX
-@onready var master_slider: HSlider = $MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control/VolumeMaster
+@onready var music_slider: HSlider = %VolumeMusic
+@onready var sfx_slider: HSlider = %VolumeSFX
+@onready var master_slider: HSlider = %VolumeMaster
+
 @onready var background = $Background
-@onready var team_1_color_button = $MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control3/HBoxContainer/TeamColor1
-@onready var team_2_color_button = $MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control3/HBoxContainer/TeamColor2
+@onready var team_1_color_button = %TeamColor1
+@onready var team_2_color_button = %TeamColor2
 @onready var options: Button = $Options
 
+@onready var hints_enabled = %HintsEnabled
+@onready var fullscreen = %Fullscreen
 
 func _ready():
 	team_1_color_button.color = StaticData.color_pink
 	team_2_color_button.color = StaticData.color_blue
-	music_slider.value = FMODStudioModule.get_studio_system().get_bus("bus:/Music Bus").get_volume().volume * 100
-	sfx_slider.value = FMODStudioModule.get_studio_system().get_bus("bus:/Sfx Bus").get_volume().volume * 100
-	#master_slider.value = FMODStudioModule.get_studio_system().get_bus("bus:/Master").get_volume().volume * 100
+	
+	team_1_color_button.color_changed.connect(_on_color_picker_button_color_changed)
+	team_2_color_button.color_changed.connect(_on_color_picker_button_2_color_changed)
+	
+	music_slider.value = FMODStudioModule.get_studio_system().get_bus("bus:/New Master Bus/Music Bus").get_volume().volume * 100
+	sfx_slider.value = FMODStudioModule.get_studio_system().get_bus("bus:/New Master Bus/Sfx Bus").get_volume().volume * 100
+	master_slider.value = FMODStudioModule.get_studio_system().get_bus("bus:/").get_volume().volume * 100
 	
 	music_slider.value_changed.connect(_on_volume_music_value_changed)
 	sfx_slider.value_changed.connect(_on_volume_sfx_value_changed)
 	master_slider.value_changed.connect(_on_volume_master_value_changed)
 	
+	fullscreen.button_pressed = StaticData.fullscreen
+	fullscreen.toggled.connect(fullscreen_changed)
 	
 	if hide_background_effect:
 		background.visible = false
@@ -41,25 +50,32 @@ func _ready():
 		
 		button.is_back_button = true
 
+func fullscreen_changed(value):
+	if value:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	
+	StaticData.fullscreen = value
 
 func _on_volume_music_value_changed(value):
-	var bus = FMODStudioModule.get_studio_system().get_bus("bus:/Music Bus")
+	var bus = FMODStudioModule.get_studio_system().get_bus("bus:/New Master Bus/Music Bus")
 	#if bus:
 	bus.set_volume(value / 100.0)
 	
 	UIHelpers.audio_event("Ui/Ui_Slider")
 
 func _on_volume_sfx_value_changed(value):
-	var bus = FMODStudioModule.get_studio_system().get_bus("bus:/Sfx Bus")
+	var bus = FMODStudioModule.get_studio_system().get_bus("bus:/New Master Bus/Sfx Bus")
 	#if bus:
 	bus.set_volume(value / 100.0)
 	
 	UIHelpers.audio_event("Ui/Ui_Slider")
 
 func _on_volume_master_value_changed(value):
-	#var bus = FMODStudioModule.get_studio_system().get_bus("bus:/Master Bus")
+	var bus = FMODStudioModule.get_studio_system().get_bus("bus:/")
 	#if bus:
-	#bus.set_volume(value / 100.0)
+	bus.set_volume(value / 100.0)
 	
 	UIHelpers.audio_event("Ui/Ui_Slider")
 

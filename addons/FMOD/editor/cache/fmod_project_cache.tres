@@ -1,4 +1,4 @@
-[gd_resource type="ProjectCache" load_steps=38 format=3 uid="uid://bpu1mr2ld7trp"]
+[gd_resource type="ProjectCache" load_steps=39 format=3 uid="uid://bpu1mr2ld7trp"]
 
 [ext_resource type="BankAsset" uid="uid://50ir213qxasn" path="res://addons/FMOD/editor/resources/banks/{d56e27cd-e0e2-4222-8166-3483854723ac}.tres" id="1_6qkdn"]
 [ext_resource type="BankAsset" uid="uid://4utoni5l53s7" path="res://addons/FMOD/editor/resources/banks/{4d730719-9199-0e60-072f-be7d74b42534}.tres" id="2_forr2"]
@@ -38,6 +38,11 @@
 [ext_resource type="EventAsset" uid="uid://duh8h17bytb0g" path="res://addons/FMOD/editor/resources/events/{d31585c5-84f5-46fd-a32a-2fdb3568f9b7}.tres" id="27_5jo1a"]
 [ext_resource type="EventAsset" uid="uid://bq1a57r7lhqn1" path="res://addons/FMOD/editor/resources/events/{83ea7205-5830-47ca-ae24-a11f9f29a5d0}.tres" id="34_nqdvh"]
 
+[sub_resource type="BusAsset" id="BusAsset_8bx53"]
+path = "bus:/New Master Bus"
+guid = "{0df3f20b-3f4e-4880-ba4d-2f3501b8b6c5}"
+name = "New Master Bus"
+
 [resource]
 banks = {
 "{4d730719-9199-0e60-072f-be7d74b42534}": ExtResource("2_forr2"),
@@ -76,6 +81,7 @@ events = {
 busses = {
 "{0cd9aea3-efbd-4ed5-ab6e-d64379284214}": ExtResource("4_i05h2"),
 "{0d8c3d9d-9f66-4739-a65c-5ba5c080e57d}": ExtResource("7_36wdg"),
+"{0df3f20b-3f4e-4880-ba4d-2f3501b8b6c5}": SubResource("BusAsset_8bx53"),
 "{56137743-9306-4ce6-95f0-784bd6e210e6}": ExtResource("4_t3o7o"),
 "{d6b204da-ff03-412d-be8e-60acb614cf75}": ExtResource("3_b2tvu"),
 "{deba9fc2-d6c3-486a-8649-8e95638f77df}": ExtResource("7_5lf7f"),
@@ -328,35 +334,41 @@ event_tree = [{
 }]
 bus_tree = [{
 "children": [{
+"children": [{
 "children": [],
 "item_type": 4,
 "node_name": "Dx Bus",
-"path": "bus:/Dx Bus",
+"path": "bus:/New Master Bus/Dx Bus",
 "resource": ExtResource("4_i05h2")
 }, {
 "children": [],
 "item_type": 4,
 "node_name": "Music Bus",
-"path": "bus:/Music Bus",
+"path": "bus:/New Master Bus/Music Bus",
 "resource": ExtResource("4_t3o7o")
 }, {
 "children": [],
 "item_type": 4,
 "node_name": "Reverb",
-"path": "bus:/Reverb",
+"path": "bus:/New Master Bus/Reverb",
 "resource": ExtResource("5_e6m0w")
 }, {
 "children": [],
 "item_type": 4,
 "node_name": "Sfx Bus",
-"path": "bus:/Sfx Bus",
+"path": "bus:/New Master Bus/Sfx Bus",
 "resource": ExtResource("7_36wdg")
 }, {
 "children": [],
 "item_type": 4,
 "node_name": "Ui Bus",
-"path": "bus:/Ui Bus",
+"path": "bus:/New Master Bus/Ui Bus",
 "resource": ExtResource("7_5lf7f")
+}],
+"item_type": 4,
+"node_name": "New Master Bus",
+"path": "bus:/New Master Bus",
+"resource": SubResource("BusAsset_8bx53")
 }],
 "item_type": 4,
 "node_name": "bus:",

@@ -4,7 +4,7 @@
 is_3d = true
 is_oneshot = true
 min_distance = 1.0
-max_distance = 20.0
+max_distance = 300.0
 path = "event:/SFX/Anti Virus Node/SFX_DamageRange"
 guid = "{c93a6031-b18f-4bf3-8721-c194d2ed347f}"
 name = "SFX_DamageRange"

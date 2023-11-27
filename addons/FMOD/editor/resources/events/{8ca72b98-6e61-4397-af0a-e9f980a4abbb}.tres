@@ -4,7 +4,7 @@
 is_3d = true
 is_oneshot = true
 min_distance = 1.0
-max_distance = 20.0
+max_distance = 4800.0
 path = "event:/SFX/Kernel Node/SFX_GenerateWorms"
 guid = "{8ca72b98-6e61-4397-af0a-e9f980a4abbb}"
 name = "SFX_GenerateWorms"
