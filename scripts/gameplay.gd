@@ -1386,55 +1386,39 @@ func ai_find_most_damaged_friend(tile_pos, distance):
 	
 	return ai_find_weakest(tile_pos, distance, current_turn_group, condition)
 	
-func ai_execute_order_for_array():
-	pass
-
-func ai_next_step():
-	while ai_towers.size() > 0:
-		var t = ai_towers[-1]
+func ai_execute_order_for_array(array, order_id, target_filter):
+	while array.size() > 0:
+		var t = array[-1]
 		if t.ap > 0:
-			var enemy = ai_find_weakest_enemy(t.tile_pos, 1)
-			
-			if enemy == null:
-				ai_towers.erase(t)
-				continue
-			else:
-				ai_make_step(t, "tower_attack", enemy)
-				return
-		else:
-			ai_towers.erase(t)
-			continue
-	
-	while ai_towers_repeat_far.size() > 0:
-		var t = ai_towers_repeat_far[-1]
-		if t.ap > 0:
-			var enemy = ai_find_weakest_enemy(t.tile_pos, 2)
-			
-			if enemy == null:
-				ai_towers_repeat_far.erase(t)
-				continue
-			else:
-				ai_make_step(t, "tower_attack", enemy)
-				return
-		else:
-			ai_towers_repeat_far.erase(t)
-			continue
-	
-	while ai_kernel_repair.size() > 0:
-		var t = ai_kernel_repair[-1]
-		if t.ap > 0:
-			# hardcoding distance == 3 since on this map it's constant :P
-			var target = ai_find_most_damaged_friend(t.tile_pos, 3)
+			var target = target_filter.call(t.tile_pos)
 			
 			if target == null:
-				ai_kernel_repair.erase(t)
+				array.erase(t)
 				continue
 			else:
-				ai_make_step(t, "repair", target)
-				return
+				ai_make_step(t, order_id, target)
+				return true
 		else:
-			ai_kernel_repair.erase(t)
+			array.erase(t)
 			continue
+	
+	return false
+
+func ai_next_step():
+	var filter_enemy_1 = func(tile_pos):
+		return ai_find_weakest_enemy(tile_pos, 1)
+	if ai_execute_order_for_array(ai_towers, "tower_attack", filter_enemy_1):
+		return
+	
+	var filter_enemy_2 = func(tile_pos):
+		return ai_find_weakest_enemy(tile_pos, 2)
+	if ai_execute_order_for_array(ai_towers_repeat_far, "tower_attack", filter_enemy_2):
+		return
+	
+	var filter_friend_3 = func(tile_pos):
+		return ai_find_most_damaged_friend(tile_pos, 3)
+	if ai_execute_order_for_array(ai_kernel_repair, "repair", filter_friend_3):
+		return
 	
 	end_turn()
 	pass
@@ -1443,12 +1427,16 @@ func ai_next_step():
 #	return await get_tree().create_timer(seconds).timeout
 
 func ai_make_step(unit: Unit, ability_id: String, target):
+	assert(unit != null)
+	
 	ai_time_for_step = false
 	select_unit(unit)
 	
 	#ai_visual_delay(0.2)
 	await get_tree().create_timer(0.2).timeout
 	
+	select_unit(unit)
+	assert(selected_unit != null)
 	give_order(ability_id, target)
 	
 	#ai_visual_delay(StaticData.turn_animation_duration + 0.1)
