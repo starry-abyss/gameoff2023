@@ -13,9 +13,6 @@ enum ControllerType { PLAYER, AI }
 
 var current_turn_group: HackingGroups = HackingGroups.PINK
 
-var who_controls_blue: ControllerType = ControllerType.PLAYER
-var who_controls_pink: ControllerType = ControllerType.PLAYER
-
 var units = []
 var firewalls = {}
 var selected_unit: Unit = null
@@ -296,9 +293,9 @@ func is_tile_walkable(tile_pos: Vector2i):
 	return false
 
 func is_ai_turn() -> bool:
-	if current_turn_group == HackingGroups.BLUE && who_controls_blue == ControllerType.AI:
+	if current_turn_group == HackingGroups.BLUE && StaticData.who_controls_blue == ControllerType.AI:
 		return true
-	if current_turn_group == HackingGroups.PINK && who_controls_pink == ControllerType.AI:
+	if current_turn_group == HackingGroups.PINK && StaticData.who_controls_pink == ControllerType.AI:
 		return true
 	return false
 
@@ -1133,10 +1130,12 @@ func end_turn(silent = false):
 						func(tile_pos): spawn_unit(tile_pos, UnitTypes.WORM, unit.group))
 	
 	#update_firewalls()
-	
 	if !silent:
 		battle_ui._on_playing_group_changed(current_turn_group, is_ai_turn())
 		_init_group_color()
+	
+	if is_ai_turn():
+		ai_new_turn()
 
 func get_tile(tile_pos: Vector2i) -> Tile:
 	if is_tile_pos_out_of_bounds(tile_pos):
@@ -1191,7 +1190,10 @@ func on_group_color_change(group: Gameplay.HackingGroups, color: Color):
 
 
 func _ready():
-	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", end_turn)
+	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", func():
+		if !is_ai_turn():
+			end_turn())
+	
 	battle_ui.get_node("CanvasLayer/end_turn").connect("mouse_entered", highlight_idle_units)
 	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", select_next_unit)
 	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("mouse_entered", highlight_idle_units)
@@ -1299,3 +1301,88 @@ func _process(delta: float) -> void:
 	
 	var map_center = (UIHelpers.tile_pos_to_world_pos(Vector2i(13, 9)) + UIHelpers.tile_pos_to_world_pos(Vector2i(14, 9))) / 2.0
 	$Camera3D/StudioListener3D.global_position = Vector3(map_center.x, 0.0, map_center.y)
+	
+	if is_ai_turn() && ai_time_for_step:
+		ai_next_step()
+
+# here goes the code for AI controller
+var ai_malware = []
+var ai_towers = []
+var ai_towers_repeat_far = []
+var ai_kernel = null
+
+var ai_time_for_step = false
+
+const ai_reset_use_min_score = 1
+
+func ai_new_turn():
+	ai_malware = []
+	ai_towers = []
+	ai_kernel = null
+	
+	for u in units:
+		if u.group == current_turn_group:
+			if u.type == UnitTypes.CENTRAL_NODE:
+				ai_kernel = u
+			elif u.type == UnitTypes.TOWER_NODE:
+				ai_towers.append(u)
+			else:
+				ai_malware.append(u)
+	
+	assert(ai_kernel != null)
+	
+	ai_towers_repeat_far = ai_towers.duplicate()
+	
+	# first try reset
+	#ai_unit_to_move.push_front(ai_kernel)
+	
+	# save repair for the last
+	#ai_unit_to_move.append(ai_kernel)
+	
+	ai_time_for_step = true
+	pass
+
+func ai_next_step():
+	while ai_towers.size() > 0:
+		var t = ai_towers[-1]
+		if t.ap > 0:
+			var lambda_context = { "weakest_enemy_near": null }
+			
+			var find_enemy = func(tile_pos):
+				var e = find_unit_by_tile_pos(tile_pos)
+				if e != null && e.group == flip_group(current_turn_group):
+					if lambda_context.weakest_enemy_near == null || lambda_context.weakest_enemy_near.hp > e.hp:
+						lambda_context.weakest_enemy_near = e
+			
+			for_all_tile_pos_around(t.tile_pos, find_enemy)
+			
+			if lambda_context.weakest_enemy_near == null:
+				ai_towers.erase(t)
+				continue
+			else:
+				ai_make_step(t, "tower_attack", lambda_context.weakest_enemy_near)
+				return
+		else:
+			ai_towers.erase(t)
+			continue
+	
+	end_turn()
+	pass
+
+#func ai_visual_delay(seconds):
+#	return await get_tree().create_timer(seconds).timeout
+
+func ai_make_step(unit: Unit, ability_id: String, target):
+	ai_time_for_step = false
+	select_unit(unit)
+	
+	#ai_visual_delay(0.2)
+	await get_tree().create_timer(0.2).timeout
+	
+	give_order(ability_id, target)
+	
+	#ai_visual_delay(StaticData.turn_animation_duration + 0.1)
+	await get_tree().create_timer(StaticData.turn_animation_duration + 0.1).timeout
+	
+	ai_time_for_step = true
+	

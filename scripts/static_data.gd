@@ -11,10 +11,12 @@ extends Node
 @export var turn_animation_duration: float = 1.0
 @export var move_animation_duration_per_tile: float = 0.2
 
+@export var who_controls_blue: Gameplay.ControllerType = Gameplay.ControllerType.PLAYER
+@export var who_controls_pink: Gameplay.ControllerType = Gameplay.ControllerType.PLAYER
 
 @export var unit_stats = { 
 	Gameplay.UnitTypes.CENTRAL_NODE: { "name": "Kernel node", "hp_max": 60, "ap_max": 6, "abilities": ["repair","reset","spawn_worms","self_repair"] },
-	Gameplay.UnitTypes.TOWER_NODE: { "name": "Anti-virus node", "hp_max": 25, "ap_max": 9, "abilities": ["tower_attack"] },
+	Gameplay.UnitTypes.TOWER_NODE: { "name": "Anti-malware node", "hp_max": 25, "ap_max": 9, "abilities": ["tower_attack"] },
 	
 	Gameplay.UnitTypes.WORM: { "name": "Worm", "hp_max": 1, "ap_max": 3, "abilities": ["move","scale","self_modify_to_virus","self_modify_to_trojan"] },
 	Gameplay.UnitTypes.TROJAN: { "name": "Trojan", "hp_max": 6, "ap_max": 8, "abilities": ["move","capture_tower","backdoor"] },
@@ -64,14 +66,14 @@ extends Node
 	"firewall": { "text": """
 		Firewalls block all enemy units from moving and damaging through them.
 		
-		They are automatically created on a straight line between two Anti-virus nodes.
-		For this Anti-virus nodes have to belong to the same group.
+		They are automatically created on a straight line between two Anti-malware nodes.
+		For this Anti-malware nodes have to belong to the same group.
 		
-		The only way to put down a firewall is to damage one of the two Anti-virus nodes to 0 Hit Points.
+		The only way to put down a firewall is to damage one of the two Anti-malware nodes to 0 Hit Points.
 		""" },
 	"tower_node": { "text": """
-		Anti-virus nodes can damage enemy units at the range of 2 tiles.
-		If two Anti-virus nodes belong to the same group and stand on a straight line,
+		Anti-malware nodes can damage enemy units at the range of 2 tiles.
+		If two Anti-malware nodes belong to the same group and stand on a straight line,
 		a firewall with be created between them.
 		
 		If Hit Points reach 0, all neighbor firewalls are down too.
@@ -110,7 +112,7 @@ extends Node
 	"trojan": { "text": """
 		The Trojan malware can move fast but cannot attack.
 		
-		It can capture an enemy Anti-virus node.
+		It can capture an enemy Anti-malware node.
 		It can open a backdoor port to move friendly malware to the Trojan over long distances.
 		""" },
 	
@@ -139,7 +141,7 @@ extends Node
 	
 	"virus_attack": { "text": """
 		Deals the damage to an enemy unit on a neighbor tile.
-		This action won't work through enemy firewalls, so attack Anti-Virus nodes first.
+		This action won't work through enemy firewalls, so attack Anti-malware nodes first.
 		
 		For this action it's not required to click the action button first.
 		
@@ -149,7 +151,7 @@ extends Node
 		""" },
 	"tower_attack": { "text": """
 		Deals the damage to an enemy unit within the distance of 2 tiles.
-		Note that there are enough Action Points for every Anti-virus to perform this action 3 times each turn.
+		Note that there are enough Action Points for every Anti-malware to perform this action 3 times each turn.
 		
 		For this action it's not required to click the action button first.
 		
@@ -218,7 +220,7 @@ extends Node
 		""" },
 	
 	"capture_tower": { "text": """
-		To capture an enemy Anti-virus node, firstly damage it down to 0 HP.
+		To capture an enemy Anti-malware node, firstly damage it down to 0 HP.
 		Secondly, move the Trojan near the node (then of the neutral group) and use this action on it.
 	""" },
 	"backdoor": { "text": """

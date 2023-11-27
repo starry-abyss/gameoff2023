@@ -9,6 +9,9 @@ signal go_to_options_menu
 
 
 func _on_play_pressed():
+	StaticData.who_controls_pink = %pink_controller.selected
+	StaticData.who_controls_blue = %blue_controller.selected
+	
 	show_glitch_effect_timer.start()
 	glitch_effect.visible = true
 	UIHelpers.audio_event("Ui/Ui_Start")

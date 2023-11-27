@@ -10,7 +10,8 @@ config_version=5
 
 [application]
 
-config/name="gameoff2023"
+config/name="Repro"
+config/version="v 0.9"
 run/main_scene="res://scenes/menu/main_menu_3d.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
 run/max_fps=60
