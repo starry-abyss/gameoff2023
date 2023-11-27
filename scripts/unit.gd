@@ -279,9 +279,11 @@ func on_hurt():
 	is_hurt = true
 	material.set_shader_parameter("show_glitch", true)
 	
-	var y_range = 0.3
-	var y_min = (aabb as AABB).size.y * randf_range(0, 1 - y_range)
-	var y_max = (aabb as AABB).size.y * y_range + y_min 
+	const y_range = 0.3
+	const y_margin = 0.2
+	
+	var y_min = (aabb as AABB).size.y * randf_range(y_margin, 1.0 - y_margin - y_range)
+	var y_max = (aabb as AABB).size.y * y_range + y_min
 	var glitch_y_range = Vector2(y_min, y_max)
 	print(glitch_y_range)
 	material.set_shader_parameter("glitch_y_range", glitch_y_range)

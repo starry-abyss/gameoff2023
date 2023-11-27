@@ -120,6 +120,8 @@ func add_ability_button(ability_id: String):
 	button.pressed.connect(_on_ability_button_clicked.bind(ability_id, stats.target))
 	
 	var tint_all_tiles = func():
+		_on_hide_path()
+		
 		if !button.disabled:
 			tiles_need_tint_all.emit(ability_id)
 		else:
@@ -175,6 +177,9 @@ func update_ability_button_text(ability_id: String, selected_unit: Unit):
 		+ "\n\n\n\n\n\n" + stats.name
 
 func _on_show_path(unit: Unit, path: Array):
+	if in_select_target_mode && (order_parameters.ability_id != "move"):
+		return
+	
 	draw_3d.clear_all()
 	for index in range(len(path) - 1):
 		var pos_1 = UIHelpers.tile_pos_to_world_pos(path[index])
@@ -354,8 +359,10 @@ func _unhandled_input(event):
 			tile_hovered.emit(tile_pos)
 			tiles_need_tint.emit("", tile_pos)
 		elif in_select_target_mode:
+			tile_hovered.emit(tile_pos)
 			if order_parameters.ability_id == "move":
-				tile_hovered.emit(tile_pos)
+				
+				pass
 			
 			if order_parameters.ability_id == "reset":
 				tiles_need_tint.emit(order_parameters.ability_id, tile_pos, true, true)

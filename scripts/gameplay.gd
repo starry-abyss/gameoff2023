@@ -37,9 +37,10 @@ func calculate_distances():
 	destination_for_cached_path = Vector2i(-1, -1)
 	
 	if selected_unit == null:
-		for tile in tiles:
-			if tile != null:
-				tile._on_hide_debug_distance()
+		#for tile in tiles:
+		#	if tile != null:
+		#		tile._on_hide_debug_distance()
+		pass
 	else:
 		for i in range(distances.size()):
 			distances[i] = NotCalculated
@@ -125,9 +126,9 @@ func calculate_distances():
 							distances[tile_pos_to_tile_index(pos_to_explore_next)] = current_distance + 1
 							pos_to_explore_stack.append(pos_to_explore_next)
 				
-		for i in range(tiles.size()):
-			if tiles[i] != null:
-				tiles[i]._on_show_debug_distance(distances[i])
+		#for i in range(tiles.size()):
+		#	if tiles[i] != null:
+		#		tiles[i]._on_show_debug_distance(distances[i])
 	pass
 
 # return an index to be used with the array returned from UIHelpers.get_tile_neighbor_list()
