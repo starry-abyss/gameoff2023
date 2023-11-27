@@ -5,6 +5,7 @@ extends Node3D
 @onready var select_idle_unit = $CanvasLayer/select_idle_unit
 @onready var end_turn = $CanvasLayer/end_turn
 @onready var draw_3d = $Draw3d
+@onready var selected_unit_label: Label = $CanvasLayer/Panel/Panel/SelectedUnitLabel
 
 @onready var movement_path: Path3D = $Path3D
 @onready var movement_path_follow: PathFollow3D = $Path3D/PathFollow3D
@@ -75,7 +76,8 @@ func update_selection_indicator(unit: Unit):
 func update_abilities_buttons_general_visibility():
 	$CanvasLayer/cancel_select_target.visible = !in_unit_animation_mode && in_select_target_mode && selected_unit_indicator.visible
 	%ability_buttons.visible = !in_select_target_mode && selected_unit_indicator.visible
-	$CanvasLayer/function_list_label.visible = %ability_buttons.visible
+	selected_unit_label.visible = %ability_buttons.visible
+	#$CanvasLayer/Panel/Panel/function_list_label.visible = %ability_buttons.visible
 
 func update_abilities_buttons(selected_unit: Unit):
 	update_abilities_buttons_general_visibility()
@@ -108,8 +110,8 @@ func add_ability_button(ability_id: String):
 	button.name = ability_id
 	button.text = ""
 	#button.position.x = %ability_buttons.get_children().size() * 100
-	button.custom_minimum_size = Vector2(200, 200)
-	UIHelpers.override_ui_node_theme_font_size(button, 10)
+	button.custom_minimum_size = Vector2(120, 120)
+	UIHelpers.override_ui_node_theme_font_size(button, 12)
 	
 	%ability_buttons.add_child(button)
 	button.pressed.connect(_on_ability_button_clicked.bind(ability_id, stats.target))
@@ -124,6 +126,8 @@ func add_ability_button(ability_id: String):
 	button.mouse_entered.connect(tint_all_tiles)
 	
 	button.set_script(preload("res://scripts/button.gd"))
+	button.connect("on_highlight", _on_ability_button_highlight)
+	button.connect("on_unhighlight", _on_ability_button_unhighlight)
 	button._ready()
 	button.set_process(true)
 	
@@ -230,8 +234,12 @@ func _on_unit_selection_changed(unit: Unit):
 	
 	tiles_tint_reset()
 	
+	if unit != null:
+		selected_unit_label.text = "%s (selected)" % [StaticData.unit_stats[unit.type].name]
+		
 	update_selection_indicator(unit)
 	update_abilities_buttons(unit)
+	
 	#update_abilities_buttons_general_visibility()
 
 func _on_unit_show_stats(unit: Unit, is_selected: bool):
@@ -266,7 +274,7 @@ func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn
 	self.is_ai_turn = is_ai_turn
 
 func change_theme_color():
-	var ui_nodes = [$CanvasLayer/end_turn, $CanvasLayer/select_idle_unit, $CanvasLayer/cancel_select_target, $CanvasLayer/SelectedUnitStats]
+	var ui_nodes = [$CanvasLayer/Panel/Panel, $CanvasLayer/end_turn, $CanvasLayer/select_idle_unit, $CanvasLayer/cancel_select_target, $CanvasLayer/Panel, selected_unit_stats]
 	ui_nodes.append_array(%ability_buttons.get_children())
 	
 	if current_group == Gameplay.HackingGroups.PINK:
@@ -301,6 +309,12 @@ func _on_ability_button_clicked(ability_id: String, target_type: Gameplay.Target
 		
 		order_parameters.ability_id = ability_id
 		order_parameters.target_type = target_type
+
+func _on_ability_button_highlight(name: String):
+	selected_unit_stats.show_button_description(name)
+
+func _on_ability_button_unhighlight():
+	selected_unit_stats.hide_button_description()
 
 func _on_cancel_select_target_button_clicked():
 	in_select_target_mode = false

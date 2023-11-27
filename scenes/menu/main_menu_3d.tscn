@@ -69,7 +69,6 @@ environment = SubResource("Environment_oktuc")
 
 [node name="OptionsMenu" parent="." instance=ExtResource("3_fxltc")]
 visible = false
-hide_background_effect = true
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 2.0
