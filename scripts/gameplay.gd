@@ -1190,7 +1190,11 @@ func on_group_color_change(group: Gameplay.HackingGroups, color: Color):
 	battle_ui.change_theme_color()
 	if group == current_turn_group:
 		options_menu.change_theme_color(color)
-		UIHelpers.override_ui_node_theme_with_color([options], color)
+		_override_other_ui_theme_with_color(color)
+
+
+func _override_other_ui_theme_with_color(color):
+	UIHelpers.override_ui_node_theme_with_color([options, $CanvasLayer/EndBattle, $CanvasLayer/RestartBattle, $CanvasLayer/ResetCamera], color)
 
 
 func _ready():
@@ -1539,3 +1543,15 @@ func ai_make_step(unit: Unit, ability_id: String, target):
 	
 	ai_time_for_step = true
 	
+
+func _on_end_battle_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/menu/main_menu_3d.tscn")
+
+
+func _on_restart_battle_pressed() -> void:
+	get_tree().change_scene_to_file("res://maps/test1.tscn")
+
+
+func _on_reset_camera_pressed() -> void:
+	$Camera3D.position = Vector3(15, 40, 35)
+	$Camera3D.size = 40

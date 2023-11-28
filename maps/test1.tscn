@@ -96,10 +96,10 @@ environment = SubResource("Environment_mk85x")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Options" type="Button" parent="CanvasLayer"]
-offset_left = 1038.0
-offset_top = 17.0
-offset_right = 1134.0
-offset_bottom = 47.0
+offset_left = 1042.0
+offset_top = 15.0
+offset_right = 1138.0
+offset_bottom = 45.0
 theme = ExtResource("4_shixd")
 text = "Options"
 expand_icon = true
@@ -109,6 +109,30 @@ script = ExtResource("5_ijx7g")
 visible = false
 show_options_button = true
 
+[node name="EndBattle" type="Button" parent="CanvasLayer"]
+offset_left = 1010.0
+offset_top = 54.0
+offset_right = 1138.0
+offset_bottom = 84.0
+theme = ExtResource("4_shixd")
+text = "End battle"
+
+[node name="RestartBattle" type="Button" parent="CanvasLayer"]
+offset_left = 967.0
+offset_top = 93.0
+offset_right = 1139.0
+offset_bottom = 123.0
+theme = ExtResource("4_shixd")
+text = "Restart battle"
+
+[node name="ResetCamera" type="Button" parent="CanvasLayer"]
+offset_left = 989.0
+offset_top = 133.0
+offset_right = 1139.0
+offset_bottom = 163.0
+theme = ExtResource("4_shixd")
+text = "Reset camera"
+
 [node name="Effect" type="Sprite2D" parent="."]
 visible = false
 material = SubResource("ShaderMaterial_a0hti")
@@ -117,3 +141,6 @@ scale = Vector2(8.96094, 5.03906)
 texture = ExtResource("9_fr0wu")
 
 [connection signal="pressed" from="CanvasLayer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="CanvasLayer/EndBattle" to="." method="_on_end_battle_pressed"]
+[connection signal="pressed" from="CanvasLayer/RestartBattle" to="." method="_on_restart_battle_pressed"]
+[connection signal="pressed" from="CanvasLayer/ResetCamera" to="." method="_on_reset_camera_pressed"]
