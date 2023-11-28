@@ -280,12 +280,14 @@ func _on_click():
 func on_attacking(target: Unit):
 	is_attacking = true
 	
+	var unit_aabb = Utils.get_aabb(target.model)
+	attack_target_pos = target.global_position + Vector3(0.0, unit_aabb.size.y * 0.5, 0.0)
+	
 	if type == Gameplay.UnitTypes.TOWER_NODE:
 		#if tower_ball_current == null:
 		tower_ball_current = use_tower_ball()
-		
-		var unit_aabb = Utils.get_aabb(target.model)
-		attack_target_pos = target.global_position + Vector3(0.0, unit_aabb.size.y * 0.5, 0.0)
+	else:
+		attack_target_pos.y = 0.0
 
 func on_hurt():
 	UIHelpers.audio_event3d("SFX/GeneralEvents/UnitDamage", tile_pos)
@@ -311,11 +313,19 @@ func _process(delta):
 			if tower_ball_current != null:
 				progress = ease(progress, 0.1)
 				tower_ball_current.global_position = global_position.lerp(attack_target_pos, progress)
+		elif type == Gameplay.UnitTypes.VIRUS:
+			if model != null:
+				rotation.y = progress * PI * 2.0
+				var wp = UIHelpers.tile_pos_to_world_pos(tile_pos)
+				var original_pos = Vector3(wp.x, 0.0, wp.y)
+				global_position = original_pos.lerp((attack_target_pos + original_pos) * 0.5, sin(progress * PI))
 		
 		if attack_timer >= StaticData.attack_animation_duration:
 			if type == Gameplay.UnitTypes.TOWER_NODE:
 				tower_ball_current.visible = false
 				tower_ball_current = null
+			elif type == Gameplay.UnitTypes.VIRUS:
+				update_model_pos()
 			
 			is_attacking = false
 			attack_timer = 0.0

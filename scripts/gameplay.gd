@@ -834,7 +834,8 @@ func order_ability_spread(target: Unit, imaginary = false) -> bool:
 					affected_units.append(unit_to_damage)
 					
 					pos_to_explore_stack.append(pos_to_explore_next)
-	
+		
+		selected_unit.on_attacking(target)
 		UIHelpers.audio_event3d("SFX/Virus/SFX_Spread", selected_unit.tile_pos)
 	
 	return true

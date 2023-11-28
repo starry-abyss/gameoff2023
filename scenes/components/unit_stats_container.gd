@@ -41,9 +41,15 @@ func _display_unit_stats(unit: Unit, current_group: Gameplay.HackingGroups, is_s
 			info_label.text = ""
 		
 		hp_label.text = "%s / %s" % [unit.hp, unit.hp_max]
+		
+		%HP.visible = true
+		%AP.visible = true
 	else:
 		info_label.text = "> Offline"
 		hp_label.text = ""
+		
+		%HP.visible = false
+		%AP.visible = false
 	
 	if unit.group != Gameplay.HackingGroups.NEUTRAL:
 		ap_label.text = "%s / %s" % [unit.ap, unit.ap_max]
