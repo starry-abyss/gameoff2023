@@ -140,7 +140,8 @@ extends Node
 	"ResetCamera": { "text": """
 		Click to reset the camera.
 		
-		To move camera you can use WASD or arrow keys.
+		To move camera you can use WASD or arrow keys or move mouse while holding its right button.
+		
 		And to zoom in and out you can use + and - keys or mouse wheel.
 		""" },
 	#"Options": { "text": """

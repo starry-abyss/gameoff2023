@@ -1324,7 +1324,7 @@ func _ready():
 
 # FIXME for test usage!
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("End Turn"):
+	if !is_ai_turn() && Input.is_action_just_pressed("End Turn"):
 		end_turn()
 	
 	#var map_center = (UIHelpers.tile_pos_to_world_pos(Vector2i(13, 9)) + UIHelpers.tile_pos_to_world_pos(Vector2i(14, 9))) / 2.0

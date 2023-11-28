@@ -425,6 +425,11 @@ func _unhandled_input(event):
 		&& event.button_index == MOUSE_BUTTON_RIGHT:
 		in_select_target_mode = false
 	elif event is InputEventMouseMotion:
+		if Input.is_action_pressed("Scroll Mouse"):
+			var camera = get_viewport().get_camera_3d()
+			camera.global_position += Vector3(event.relative.x, 0.0, event.relative.y)
+			return
+		
 		#print("Mouse Motion at: ", event.position)
 		
 		var world_pos = UIHelpers.screen_pos_to_world_pos(event.position)
