@@ -1330,11 +1330,13 @@ func _process(delta: float) -> void:
 		ai_next_step()
 
 # here goes the code for AI controller
-var ai_malware = []
+#var ai_malware = []
 var ai_towers = []
 var ai_towers_repeat_far = []
 var ai_kernel_repair = []
 var ai_worms = []
+var ai_virii = []
+var ai_trojans = []
 
 var ai_kernel = null
 var ai_enemy_kernel = null
@@ -1349,8 +1351,14 @@ const ai_worm_chance_virus = 0.3
 func ai_new_turn():
 	randomize()
 	
-	ai_malware = []
+	#ai_malware = []
 	ai_towers = []
+	ai_towers_repeat_far = []
+	ai_kernel_repair = []
+	ai_worms = []
+	ai_virii = []
+	ai_trojans = []
+	
 	ai_kernel = null
 	ai_enemy_kernel = null
 	
@@ -1362,8 +1370,12 @@ func ai_new_turn():
 				ai_towers.append(u)
 			elif u.type == UnitTypes.WORM:
 				ai_worms.append(u)
-			else:
-				ai_malware.append(u)
+			elif u.type == UnitTypes.VIRUS:
+				ai_virii.append(u)
+			elif u.type == UnitTypes.TROJAN:
+				ai_trojans.append(u)
+			#else:
+			#	ai_malware.append(u)
 		else:
 			if u.type == UnitTypes.CENTRAL_NODE:
 				ai_enemy_kernel = u
@@ -1382,7 +1394,10 @@ func ai_new_turn():
 	
 	ai_time_for_step = true
 	pass
-	
+
+func get_group_density(tile_pos, group):
+	pass
+
 func ai_find_weakest(tile_pos, distance, group, condition):
 	var lambda_context = { "weakest_enemy": null }
 	
@@ -1463,11 +1478,8 @@ func ai_next_step():
 	if ai_execute_order_for_array(ai_towers_repeat_far, "tower_attack", filter_enemy_2):
 		return
 	
-	var filter_friend_3 = func(tile_pos):
-		return ai_find_most_damaged_friend(tile_pos, 3)
-	if ai_execute_order_for_array(ai_kernel_repair, "repair", filter_friend_3):
-		return
-		
+	
+	
 	while ai_worms.size() > 0:
 		var t = ai_worms[-1]
 		if t.ap >= 3:
@@ -1508,6 +1520,12 @@ func ai_next_step():
 		else:
 			ai_worms.erase(t)
 			continue
+	
+	# better in the end, because it adds possibilities to choose Reset instead
+	var filter_friend_3 = func(tile_pos):
+		return ai_find_most_damaged_friend(tile_pos, 3)
+	if ai_execute_order_for_array(ai_kernel_repair, "repair", filter_friend_3):
+		return
 	
 	end_turn()
 	pass
