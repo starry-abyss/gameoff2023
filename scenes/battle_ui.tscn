@@ -79,9 +79,9 @@ alignment = 1
 [node name="end_turn" type="Button" parent="CanvasLayer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 2.08165e-12)
-offset_left = 1010.0
+offset_left = 924.0
 offset_top = 465.0
-offset_right = 1117.0
+offset_right = 1124.0
 offset_bottom = 496.0
 theme = ExtResource("3_7nk56")
 text = "End turn"
@@ -90,9 +90,9 @@ text = "End turn"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 2.08165e-12)
 offset_left = 655.0
-offset_top = 428.0
-offset_right = 827.0
-offset_bottom = 458.0
+offset_top = 484.0
+offset_right = 855.0
+offset_bottom = 514.0
 theme = ExtResource("3_7nk56")
 text = "Next idle unit"
 

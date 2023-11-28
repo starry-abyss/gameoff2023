@@ -366,7 +366,9 @@ func _on_ability_button_highlight(name: String, label: String, hide_stats = fals
 	else:
 		title = label
 	
-	if StaticData.tooltips.has(name):
+	var show_tooltip = StaticData.show_tutorial_hints || name == "Options"
+	
+	if StaticData.tooltips.has(name) && show_tooltip:
 		tooltip_panel.show_tooltip(title, StaticData.tooltips[name].text, "")
 	else:
 		tooltip_panel.hide_tooltip()

@@ -54,18 +54,17 @@ extends Node
 
 @export var tooltips = {
 	"Options": { "text": """
-		The goal is to put down the enemy Kernel node.
-		Start with doubling Worms and mutating them.
+		The goal is to put down the enemy Kernel node. Start with doubling Worms and mutating them.
 		
 		Use left mouse button to select units (nodes and malware) on your base (has the same color as panel borders).
+		
 		After a unit is selected, it can perform actions.
-		For more tips hover the mouse cursor over interactive objects and buttons.
+		
+		For more hints hover the mouse cursor over interactive objects and buttons (if hints are enabled in options).
 		
 		To end your turn, click the End turn button.
 		
 		Click this button to change options, or to end or restart the battle.
-		
-		When you're comfortable in the new role, you can turn off these hints in options.
 		""", 
 		"author_pink": "@space_rat", "author_blue": "Mike Denton" },
 	
