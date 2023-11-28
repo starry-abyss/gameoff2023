@@ -1310,17 +1310,25 @@ var ai_malware = []
 var ai_towers = []
 var ai_towers_repeat_far = []
 var ai_kernel_repair = []
+var ai_worms = []
 
 var ai_kernel = null
+var ai_enemy_kernel = null
 
 var ai_time_for_step = false
 
 const ai_reset_use_min_score = 1
 
+const ai_worm_chance_double = 0.6
+const ai_worm_chance_virus = 0.3
+
 func ai_new_turn():
+	randomize()
+	
 	ai_malware = []
 	ai_towers = []
 	ai_kernel = null
+	ai_enemy_kernel = null
 	
 	for u in units:
 		if u.group == current_turn_group:
@@ -1328,10 +1336,16 @@ func ai_new_turn():
 				ai_kernel = u
 			elif u.type == UnitTypes.TOWER_NODE:
 				ai_towers.append(u)
+			elif u.type == UnitTypes.WORM:
+				ai_worms.append(u)
 			else:
 				ai_malware.append(u)
+		else:
+			if u.type == UnitTypes.CENTRAL_NODE:
+				ai_enemy_kernel = u
 	
 	assert(ai_kernel != null)
+	assert(ai_enemy_kernel != null)
 	
 	ai_towers_repeat_far = ai_towers.duplicate()
 	ai_kernel_repair = [ ai_kernel, ai_kernel ]
@@ -1404,6 +1418,16 @@ func ai_execute_order_for_array(array, order_id, target_filter):
 	
 	return false
 
+func get_walkable_neighbor_tiles(tile_pos):
+	var walkable_tiles = []
+	var neighbor_tiles = UIHelpers.get_tile_neighbor_list(tile_pos)
+	for n in neighbor_tiles:
+		if is_tile_walkable(tile_pos + n) \
+		&& UIHelpers.tile_pos_distance(ai_kernel.tile_pos, tile_pos + n) >= 2:
+			walkable_tiles.append(tile_pos + n)
+		
+	return walkable_tiles
+
 func ai_next_step():
 	var filter_enemy_1 = func(tile_pos):
 		return ai_find_weakest_enemy(tile_pos, 1)
@@ -1419,6 +1443,47 @@ func ai_next_step():
 		return ai_find_most_damaged_friend(tile_pos, 3)
 	if ai_execute_order_for_array(ai_kernel_repair, "repair", filter_friend_3):
 		return
+		
+	while ai_worms.size() > 0:
+		var t = ai_worms[-1]
+		if t.ap >= 3:
+			#var target = target_filter.call(t.tile_pos)
+			
+			var role = randf()
+			if role > ai_worm_chance_double + ai_worm_chance_virus:
+				ai_make_step(t, "self_modify_to_trojan", null)
+				return
+			else:
+				var wt = get_walkable_neighbor_tiles(t.tile_pos)
+				if wt.size() > 0:
+					var direction = randi_range(0, wt.size()-1)
+					#if direction != wt.size():
+					var new_tile = wt[direction]
+					ai_make_step(t, "move", new_tile)
+					return
+				
+				ai_make_step(t, "self_modify_to_virus", null)
+				return
+		elif t.ap >= 2:
+			var role = randf() * (ai_worm_chance_double + ai_worm_chance_virus)
+			var distance_to_enemy_base = UIHelpers.tile_pos_distance(ai_enemy_kernel.tile_pos, t.tile_pos)
+				
+			if distance_to_enemy_base <= 6 || role > ai_worm_chance_double:
+				ai_make_step(t, "self_modify_to_virus", null)
+				return
+			else:
+				var wt = get_walkable_neighbor_tiles(t.tile_pos)
+				if wt.size() > 0:
+					var direction = randi_range(0, wt.size() - 1)
+					var new_tile = wt[direction]
+					ai_make_step(t, "scale", new_tile)
+				else:
+					# this branch should never happen actually
+					ai_make_step(t, "self_modify_to_virus", null)
+					return
+		else:
+			ai_worms.erase(t)
+			continue
 	
 	end_turn()
 	pass
@@ -1432,12 +1497,20 @@ func ai_make_step(unit: Unit, ability_id: String, target):
 	ai_time_for_step = false
 	select_unit(unit)
 	
+	#if ability_id == "move":
+	#if target != null:
+	#	hover_tile(target)
+	
 	#ai_visual_delay(0.2)
 	await get_tree().create_timer(0.2).timeout
 	
 	select_unit(unit)
 	assert(selected_unit != null)
 	give_order(ability_id, target)
+	
+	
+	#unit.update_model_pos()
+	
 	
 	#ai_visual_delay(StaticData.turn_animation_duration + 0.1)
 	await get_tree().create_timer(StaticData.turn_animation_duration + 0.1).timeout
