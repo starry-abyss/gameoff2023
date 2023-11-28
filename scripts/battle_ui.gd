@@ -89,10 +89,15 @@ func update_selection_indicator(unit: Unit):
 		selected_unit_indicator.position = unit.position + Vector3(0, unit_aabb.size.y, 0)
 
 func update_abilities_buttons_general_visibility():
-	$CanvasLayer/cancel_select_target.visible = !in_unit_animation_mode && in_select_target_mode && selected_unit_indicator.visible
-	%ability_buttons.visible = !in_select_target_mode && selected_unit_indicator.visible
+	$CanvasLayer/cancel_select_target.visible = !in_unit_animation_mode && in_select_target_mode && selected_unit_indicator.visible && !is_ai_turn
+	%ability_buttons.visible = !in_select_target_mode && selected_unit_indicator.visible && !is_ai_turn
 	#selected_unit_label.visible = %ability_buttons.visible
 	#$CanvasLayer/Panel/Panel/function_list_label.visible = %ability_buttons.visible
+	
+	$CanvasLayer/ai_turn_message.visible = is_ai_turn
+	%end_turn.visible = !is_ai_turn
+	%select_idle_unit.visible = !is_ai_turn
+	#%SelectedUnitStatsPanel.visible = !is_ai_turn
 
 func update_abilities_buttons(selected_unit: Unit):
 	update_abilities_buttons_general_visibility()
@@ -304,7 +309,7 @@ func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn
 	self.current_group = current_group
 	self.is_ai_turn = is_ai_turn
 	
-	$CanvasLayer/ai_turn_message.visible = is_ai_turn
+	update_abilities_buttons_general_visibility()
 
 func change_theme_color():
 	var ui_nodes = [
