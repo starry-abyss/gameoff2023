@@ -33,9 +33,9 @@ extends Node
 	"virus_attack": { "name": "attack_short", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 4, "attack_extra": 2, "attack_range": 1 },
 	"tower_attack": { "name": "attack_long", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 6, "attack_extra": 2, "attack_range": 2 },
 	
-	"scale": { "name": "double", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 1 },
-	"self_modify_to_virus": { "name": "mutate_to_virus", "target": Gameplay.TargetTypes.SELF, "ap": 2, "cooldown": 0 },
-	"self_modify_to_trojan": { "name": "mutate_to_trojan", "target": Gameplay.TargetTypes.SELF, "ap": 3, "cooldown": 0 },
+	"scale": { "icon": "duplicate 2", "name": "duplicate", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 1 },
+	"self_modify_to_virus": { "icon": "virus grid", "name": "mutate_to_virus", "target": Gameplay.TargetTypes.SELF, "ap": 2, "cooldown": 0 },
+	"self_modify_to_trojan": { "icon": "trojan", "name": "mutate_to_trojan", "target": Gameplay.TargetTypes.SELF, "ap": 3, "cooldown": 0 },
 	
 	"integrate": { "name": "integrate", "target": Gameplay.TargetTypes.UNIT, "ap": -3, "cooldown": 1 },
 	"spread": { "name": "attack_n_spread", "target": Gameplay.TargetTypes.UNIT, "ap": 6, "cooldown": 0, "attack": 3, "attack_extra": 2 },
@@ -45,8 +45,8 @@ extends Node
 	"spawn_worms": { "name": "generate_worms", "target": Gameplay.TargetTypes.SELF, "ap": 0, "cooldown": 5 },
 	"self_repair": { "name": "self_maintain", "target": Gameplay.TargetTypes.SELF, "ap": 0, "cooldown": 0, "restored_hp": 6 },
 	
-	"capture_tower": { "name": "capture_node", "target": Gameplay.TargetTypes.UNIT, "ap": 4, "cooldown": 0 },
-	"backdoor": { "name": "open_port", "target": Gameplay.TargetTypes.TILE, "ap": 2, "cooldown": 3 },
+	"capture_tower": { "icon": "capture", "name": "capture_node", "target": Gameplay.TargetTypes.UNIT, "ap": 4, "cooldown": 0 },
+	"backdoor": { "icon": "backdoor", "name": "open_port", "target": Gameplay.TargetTypes.TILE, "ap": 2, "cooldown": 3 },
 	}
 	
 @export var tile_size = Vector2(1.30, 1.30 * sin(PI / 3.0))
@@ -54,7 +54,7 @@ extends Node
 
 @export var tooltips = {
 	"Options": { "text": """
-		The goal is to put down the enemy Kernel node. Start with doubling Worms and mutating them.
+		The goal is to put down the enemy Kernel node. Start with duplicating Worms and mutating them.
 		
 		Use left mouse button to select units (nodes and malware) on your base (has the same color as panel borders).
 		
@@ -101,10 +101,10 @@ extends Node
 		""" },
 	
 	"worm": { "text": """
-		The Worm malware can reproduce by doubling, can move and can be mutated to other types of units.
+		The Worm malware can duplicate themselves, can move and can be mutated to other types of units.
 		
 		To perform these actions first click on the action button below and then - on the target tile on the map.
-		Mutation actions are performed on the Worm itself, so there is no step of choosing the target.
+		Mutation actions are performed on the Worm in place, so there is no step of choosing the target.
 		
 		The cost of every action in unit's Action Points is shown at the top of the button.
 		
@@ -176,9 +176,9 @@ extends Node
 		""" },
 	
 	"scale": { "text": """
-		The 'double' action generates a new Worm on the chosen neighbor tile.
+		The 'duplicate' action generates a new Worm on the chosen neighbor tile.
 		
-		After doubling both Worms are stuck until the next turn, so you might want to move the original one first.
+		After duplicating both Worms are stuck until the next turn, so you might want to move the original one first.
 		
 		The period of unavailability after use, in turns, is shown on the button.
 		""" },

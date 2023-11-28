@@ -128,9 +128,13 @@ func add_ability_button(ability_id: String):
 	button.theme = load("res://themes/ui.tres")
 	
 	button.name = ability_id
+	button.custom_minimum_size = Vector2(120, 120)
+
+		#icon.material.set_shader_parameter("tint", Color.GREEN)
+	
 	button.text = ""
 	#button.position.x = %ability_buttons.get_children().size() * 100
-	button.custom_minimum_size = Vector2(120, 120)
+	
 	UIHelpers.override_ui_node_theme_font_size(button, 12)
 	
 	%ability_buttons.add_child(button)
@@ -153,6 +157,21 @@ func add_ability_button(ability_id: String):
 	
 	button.no_press_sound = (stats.target == Gameplay.TargetTypes.SELF)
 	#button.mouse_entered.connect(_on_button_highlight.bind(button))
+	
+	if stats.has("icon"):
+		var icon = TextureRect.new()
+		icon.material = ShaderMaterial.new()
+		icon.material.shader = preload("res://shaders/icon_shader.gdshader")
+		icon.texture = load("res://art/icons/" + stats.icon + ".png")
+		icon.name = "icon"
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		button.add_child(icon)
+		
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.size = button.size * 0.4
+		#icon.pivot_offset = icon.size * 0.5
+		icon.position = (button.size - icon.size) * 0.5
+		
 
 func make_ap_string(ability_id, ap) -> String:
 	if ability_id == "move":
@@ -310,6 +329,16 @@ func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn
 	self.is_ai_turn = is_ai_turn
 	
 	update_abilities_buttons_general_visibility()
+	update_abilities_buttons_icon_tint()
+
+func update_abilities_buttons_icon_tint():
+	for button in %ability_buttons.get_children():
+		if button.has_node("icon"):
+			var color = UIHelpers.group_to_color(current_group)
+			color.v += 7.0
+			#color.s *= 1.1
+			button.get_node("icon").material.set_shader_parameter("tint", color)
+	
 
 func change_theme_color():
 	var ui_nodes = [
