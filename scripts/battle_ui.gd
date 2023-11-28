@@ -117,6 +117,8 @@ func update_abilities_buttons(selected_unit: Unit):
 			else:
 				button.visible = false
 	
+	update_abilities_buttons_icon_tint()
+	
 	if in_unit_animation_mode:
 		for button in %ability_buttons.get_children():
 			button.disabled = true
@@ -329,16 +331,19 @@ func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn
 	self.is_ai_turn = is_ai_turn
 	
 	update_abilities_buttons_general_visibility()
-	update_abilities_buttons_icon_tint()
+	#update_abilities_buttons_icon_tint()
 
 func update_abilities_buttons_icon_tint():
 	for button in %ability_buttons.get_children():
 		if button.has_node("icon"):
 			var color = UIHelpers.group_to_color(current_group)
-			color.v += 7.0
+			if button.disabled:
+				color.s -= 0.5
+				color.v += 1.0
+			else:
+				color.v += 7.0
 			#color.s *= 1.1
 			button.get_node("icon").material.set_shader_parameter("tint", color)
-	
 
 func change_theme_color():
 	var ui_nodes = [

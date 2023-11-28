@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://b41dl1bx7tp07" path="res://scenes/draw_3d.tscn" id="3_ji5a4"]
 [ext_resource type="FontFile" uid="uid://ckdo8mgv1ag2i" path="res://assets/fonts/ShareTechMono-Regular.ttf" id="3_x7kol"]
 [ext_resource type="Script" path="res://scenes/SelectedUnitIndicator.gd" id="4_h3s35"]
-[ext_resource type="PackedScene" path="res://scenes/components/selected_unit_avatar.tscn" id="5_wvsta"]
+[ext_resource type="PackedScene" uid="uid://cxwuitxg37k3d" path="res://scenes/components/selected_unit_avatar.tscn" id="5_wvsta"]
 [ext_resource type="PackedScene" uid="uid://b420toe6tohxy" path="res://scenes/components/unit_stats_container.tscn" id="6_yuq0d"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_meo4c"]
