@@ -1011,11 +1011,9 @@ func order_attack(target: Unit, imaginary: bool, ability_stats) -> bool:
 				var attack_power = ability_stats.attack + randi_range(0, ability_stats.attack_extra)
 				hurt_unit(target, attack_power)
 				
+				selected_unit.on_attacking(target)
+				
 				if selected_unit.type == UnitTypes.TOWER_NODE:
-					# TODO: move to animation code
-					var ball = selected_unit.use_tower_ball()
-					ball.visible = false
-					
 					UIHelpers.audio_event3d("SFX/Anti Virus Node/SFX_DamageRange", selected_unit.tile_pos)
 				elif selected_unit.type == UnitTypes.VIRUS:
 					UIHelpers.audio_event3d("SFX/Virus/SFX_Damage", selected_unit.tile_pos)

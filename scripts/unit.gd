@@ -36,6 +36,11 @@ var ap: int = 3
 var ap_max: int = 3
 var cooldowns = {}
 
+var tower_ball_current = null
+var attack_timer = 0.0
+var is_attacking = false
+var attack_target_pos = Vector3(0.0, 0.0, 0.0)
+
 var emission_color: Color
 
 var idle_animation_offset = 0.0
@@ -271,7 +276,16 @@ func _ready():
 	
 func _on_click():
 	on_click.emit(self)
+
+func on_attacking(target: Unit):
+	is_attacking = true
 	
+	if type == Gameplay.UnitTypes.TOWER_NODE:
+		#if tower_ball_current == null:
+		tower_ball_current = use_tower_ball()
+		
+		var unit_aabb = Utils.get_aabb(target.model)
+		attack_target_pos = target.global_position + Vector3(0.0, unit_aabb.size.y * 0.5, 0.0)
 
 func on_hurt():
 	UIHelpers.audio_event3d("SFX/GeneralEvents/UnitDamage", tile_pos)
@@ -289,6 +303,23 @@ func on_hurt():
 	material.set_shader_parameter("glitch_y_range", glitch_y_range)
 	
 func _process(delta):
+	if is_attacking:
+		attack_timer += delta
+		var progress = max(0.0, attack_timer * 1.0) / StaticData.attack_animation_duration
+		
+		if type == Gameplay.UnitTypes.TOWER_NODE:
+			if tower_ball_current != null:
+				progress = ease(progress, 0.1)
+				tower_ball_current.global_position = global_position.lerp(attack_target_pos, progress)
+		
+		if attack_timer >= StaticData.attack_animation_duration:
+			if type == Gameplay.UnitTypes.TOWER_NODE:
+				tower_ball_current.visible = false
+				tower_ball_current = null
+			
+			is_attacking = false
+			attack_timer = 0.0
+	
 	if is_hurt:
 		hurt_timer += delta
 		if hurt_timer >= StaticData.hurt_animation_duration:
