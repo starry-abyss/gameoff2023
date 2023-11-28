@@ -109,7 +109,7 @@ extends Node
 		The Virus malware can move and can attack enemy units in the range of 1.
 		
 		Also it can integrate friendly Worms to temporarily gain more Action Points, even beyond the limit!
-		Integrating a Worm is the only way to then perform the 'spread' type of attack.
+		Integrating a Worm is the only way to then perform 'attack_n_spread'.
 		""" },
 	"trojan": { "text": """
 		The Trojan malware can move fast but cannot attack.
@@ -147,8 +147,6 @@ extends Node
 		
 		For this action it's not required to click the action button first.
 		
-		The other type of Virus attack is 'spread'.
-		
 		Possible damage amount is shown on the button.
 		""" },
 	"tower_attack": { "text": """
@@ -183,7 +181,7 @@ extends Node
 		
 		Only one Worm per turn can be integrated by each Virus.
 		
-		This is the only way to perform the 'spread' action (on the same turn).
+		This is the only way to perform 'attack_n_spread' action (on the same turn).
 		""" },
 	"spread": { "text": """
 		Deals the damage to an enemy on a neighbor tile.
