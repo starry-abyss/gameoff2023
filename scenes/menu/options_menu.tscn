@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://chr8t35qwnt7j"]
+[gd_scene load_steps=7 format=3 uid="uid://chr8t35qwnt7j"]
 
 [ext_resource type="Script" path="res://scenes/menu/options_menu.gd" id="1_mumff"]
 [ext_resource type="Shader" path="res://shaders/blur.gdshader" id="2_t0fcv"]
@@ -10,6 +10,9 @@ shader_parameter/lod = 3.123
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qg0hq"]
 bg_color = Color(0.266667, 0.313726, 0.521569, 0.580392)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x4euk"]
+bg_color = Color(0, 0.964706, 0.984314, 1)
 
 [node name="OptionsMenu" type="Control"]
 layout_mode = 3
@@ -47,9 +50,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -200.0
-offset_top = -200.0
+offset_top = -224.0
 offset_right = 200.0
-offset_bottom = 200.0
+offset_bottom = 187.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("5_ncrul")
@@ -61,14 +64,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -260.0
-offset_right = 150.0
-offset_bottom = 260.0
+offset_left = -174.0
+offset_top = -204.0
+offset_right = 175.0
+offset_bottom = 204.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_top = 100
-theme_override_constants/margin_bottom = 100
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -184,9 +185,13 @@ layout_mode = 2
 
 [node name="VolumeMaster" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control"]
 unique_name_in_owner = true
-layout_mode = 2
-offset_right = 176.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -176.0
 offset_bottom = 16.0
+grow_horizontal = 0
 size_flags_vertical = 4
 theme = ExtResource("5_ncrul")
 step = 10.0
@@ -198,9 +203,13 @@ layout_mode = 2
 
 [node name="VolumeMusic" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control4"]
 unique_name_in_owner = true
-layout_mode = 2
-offset_right = 176.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -176.0
 offset_bottom = 16.0
+grow_horizontal = 0
 size_flags_vertical = 4
 theme = ExtResource("5_ncrul")
 step = 10.0
@@ -212,9 +221,13 @@ layout_mode = 2
 
 [node name="VolumeSFX" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control2"]
 unique_name_in_owner = true
-layout_mode = 2
-offset_right = 176.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -176.0
 offset_bottom = 16.0
+grow_horizontal = 0
 theme = ExtResource("5_ncrul")
 step = 10.0
 value = 50.0
@@ -226,10 +239,13 @@ layout_mode = 2
 [node name="TeamColor1" type="ColorPickerButton" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control3"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 20)
-layout_mode = 2
-offset_left = 136.0
-offset_right = 176.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
 offset_bottom = 20.0
+grow_horizontal = 0
 theme = ExtResource("5_ncrul")
 color = Color(1, 1, 1, 1)
 
@@ -240,10 +256,13 @@ layout_mode = 2
 [node name="TeamColor2" type="ColorPickerButton" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control5"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 20)
-layout_mode = 2
-offset_left = 136.0
-offset_right = 176.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
 offset_bottom = 20.0
+grow_horizontal = 0
 theme = ExtResource("5_ncrul")
 color = Color(1, 1, 1, 1)
 
@@ -251,22 +270,47 @@ color = Color(1, 1, 1, 1)
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
 
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control6"]
+layout_mode = 0
+offset_left = 204.0
+offset_top = 3.0
+offset_right = 222.0
+offset_bottom = 21.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_x4euk")
+
 [node name="HintsEnabled" type="CheckBox" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control6"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_right = 24.0
+self_modulate = Color(0, 0.964706, 0.984314, 1)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -24.0
 offset_bottom = 24.0
+grow_horizontal = 0
 button_pressed = true
 
 [node name="Control7" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
 
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control7"]
+offset_left = 204.0
+offset_top = 3.0
+offset_right = 222.0
+offset_bottom = 21.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_x4euk")
+
 [node name="Fullscreen" type="CheckBox" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control7"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_right = 24.0
+self_modulate = Color(0, 0.964706, 0.984314, 1)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -24.0
 offset_bottom = 24.0
+grow_horizontal = 0
 
 [node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
