@@ -479,32 +479,37 @@ func tint_tiles(ability_id: String, center_tile_pos: Vector2i, show_center: bool
 func hover_tile(tile_pos: Vector2i):
 	#tint_tiles(tile_pos)
 	
-	if !is_tile_pos_out_of_bounds(tile_pos):
-		#if selected_unit != null:
-		#	selected_unit.set_look_at(UIHelpers.tile_pos_to_world_pos(tile_pos))
-		
-		#for i in range(tiles.size()):
-		#	var tile = tiles[i]
-		#	if tile != null:
-		#		tile.get_node("tile_wireframe").visible = i == tile_pos_to_tile_index(tile_pos)
+	if !is_ai_turn():
+		if !is_tile_pos_out_of_bounds(tile_pos):
+			#if selected_unit != null:
+			#	selected_unit.set_look_at(UIHelpers.tile_pos_to_world_pos(tile_pos))
 			
-		# TODO: make order_move support reporting not enough AP reason
-		if order_ability_move(tile_pos, true):
-			var path = get_path_to_tile_pos(tile_pos)
-			battle_ui._on_show_path(selected_unit, path)
+			#for i in range(tiles.size()):
+			#	var tile = tiles[i]
+			#	if tile != null:
+			#		tile.get_node("tile_wireframe").visible = i == tile_pos_to_tile_index(tile_pos)
+				
+			# TODO: make order_move support reporting not enough AP reason
+			if order_ability_move(tile_pos, true):
+				var path = get_path_to_tile_pos(tile_pos)
+				battle_ui._on_show_path(selected_unit, path)
+			else:
+				battle_ui._on_hide_path()
 		else:
 			battle_ui._on_hide_path()
-	else:
-		battle_ui._on_hide_path()
 	
 	var hovered_unit = find_unit_by_tile_pos(tile_pos)
 	if hovered_unit != null:
 		battle_ui._on_unit_show_stats(hovered_unit, hovered_unit == selected_unit)
 	else:
-		battle_ui._on_unit_show_stats(selected_unit, true)
+		if !is_ai_turn():
+			battle_ui._on_unit_show_stats(selected_unit, true)
+		else:
+			battle_ui._on_unit_show_stats(null, false)
 
 func click_tile(tile_pos: Vector2i):
-	# TODO: also select units by clicking tiles
+	if is_ai_turn():
+		return
 	
 	if !is_tile_pos_out_of_bounds(tile_pos):
 		var unit_at_pos: Unit = find_unit_by_tile_pos(tile_pos)
@@ -586,7 +591,8 @@ func select_unit(unit_to_select: Unit, no_ui = false):
 		battle_ui._on_unit_selection_changed(null)
 	else:
 		battle_ui._on_unit_selection_changed(selected_unit)
-		battle_ui._on_unit_show_stats(selected_unit, true)
+		if !is_ai_turn():
+			battle_ui._on_unit_show_stats(selected_unit, true)
 
 func select_next_unit():
 	var units_in_the_same_group_before_selected_unit = []
@@ -1194,14 +1200,32 @@ func _ready():
 		if !is_ai_turn():
 			end_turn())
 	
-	battle_ui.get_node("CanvasLayer/end_turn").connect("mouse_entered", highlight_idle_units)
-	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", select_next_unit)
-	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("mouse_entered", highlight_idle_units)
+	battle_ui.get_node("CanvasLayer/end_turn").connect("mouse_entered", func():
+		if !is_ai_turn():
+			highlight_idle_units())
+	
+	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", func():
+		if !is_ai_turn():
+			select_next_unit())
+	
+	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("mouse_entered", func():
+		if !is_ai_turn():
+			highlight_idle_units())
 	
 	battle_ui.connect("tile_clicked", click_tile)
 	battle_ui.connect("tile_hovered", hover_tile)
-	battle_ui.connect("tiles_need_tint", tint_tiles)
-	battle_ui.connect("tiles_need_tint_all", tint_all_tiles)
+	battle_ui.connect("tiles_need_tint", func(arg1, arg2, arg3=true, arg4=false, arg5=false):
+		if !is_ai_turn():
+			tint_tiles(arg1, arg2, arg3, arg4, arg5)
+		else:
+			reset_tint_tiles())
+			
+	battle_ui.connect("tiles_need_tint_all", func(arg1):
+		if !is_ai_turn():
+			tint_all_tiles(arg1)
+		else:
+			reset_tint_tiles())
+	
 	battle_ui.connect("tiles_need_reset_tint", reset_tint_tiles)
 	
 	battle_ui.connect("unit_clicked", click_unit)

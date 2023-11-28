@@ -39,6 +39,7 @@ var animated_unit: Unit
 var animated_unit_start_pos: Vector3
 
 var current_group: Gameplay.HackingGroups
+var is_ai_turn = false
 
 func _ready():
 	for button in find_children("", "Button"):
@@ -268,6 +269,7 @@ func _on_unit_hp_change(unit: Unit, delta_hp: int):
 func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn: bool):
 	change_theme_color()
 	self.current_group = current_group
+	self.is_ai_turn = is_ai_turn
 
 func change_theme_color():
 	var ui_nodes = [$CanvasLayer/end_turn, $CanvasLayer/select_idle_unit, $CanvasLayer/cancel_select_target, $CanvasLayer/SelectedUnitStats]
@@ -315,7 +317,8 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 		
 		tiles_tint_reset()
 	
-	_on_unit_show_stats(selected_unit, true)
+	if !is_ai_turn:
+		_on_unit_show_stats(selected_unit, true)
 	update_abilities_buttons(selected_unit)
 
 func tiles_tint_reset():
