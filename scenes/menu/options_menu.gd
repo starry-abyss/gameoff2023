@@ -37,6 +37,9 @@ func _ready():
 	fullscreen.button_pressed = StaticData.fullscreen
 	fullscreen.toggled.connect(fullscreen_changed)
 	
+	hints_enabled.button_pressed = StaticData.show_tutorial_hints
+	hints_enabled.toggled.connect(show_tutorial_hints_changed)
+	
 	if hide_background_effect:
 		background.visible = false
 	
@@ -50,6 +53,9 @@ func _ready():
 		
 		button.is_back_button = true
 
+func show_tutorial_hints_changed(value):
+	StaticData.show_tutorial_hints = value
+	
 func fullscreen_changed(value):
 	if value:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)

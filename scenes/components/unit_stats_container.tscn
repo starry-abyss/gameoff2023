@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://cflff477ekckk"]
+[gd_scene load_steps=3 format=3 uid="uid://b420toe6tohxy"]
 
 [ext_resource type="Script" path="res://scenes/components/unit_stats_container.gd" id="1_5odmh"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="1_iwasj"]
 
 [node name="Panel" type="Panel"]
+custom_minimum_size = Vector2(240, 42)
 offset_right = 240.0
 offset_bottom = 42.0
 theme = ExtResource("1_iwasj")
@@ -28,7 +29,8 @@ text = "unit"
 
 [node name="InfoLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
-text = "()"
+theme_override_font_sizes/font_size = 12
+text = " "
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
@@ -38,10 +40,12 @@ theme_override_constants/separation = 10
 layout_mode = 2
 
 [node name="HP" type="Label" parent="HBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "HP"
 
 [node name="AP" type="Label" parent="HBoxContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "AP"
 

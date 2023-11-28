@@ -6,7 +6,7 @@ extends Node3D
 @onready var end_turn = $CanvasLayer/end_turn
 @onready var draw_3d = $Draw3d
 @onready var selected_unit_avatar: Panel = $CanvasLayer/SelectedUnitAvatar
-@onready var selected_unit_stats_panel: Panel = $CanvasLayer/SelectedUnitStatsPanel
+@onready var selected_unit_stats_panel: Panel = %SelectedUnitStatsPanel
 @onready var hovered_unit_stats_panel: Panel = $CanvasLayer/HoveredUnitStatsPanel
 
 @onready var movement_path: Path3D = $Path3D
@@ -49,6 +49,17 @@ func _ready():
 		button.set_script(preload("res://scripts/button.gd"))
 		button._ready()
 		button.set_process(true)
+		
+		button.connect("on_highlight", _on_ability_button_highlight)
+		button.connect("on_unhighlight", _on_ability_button_unhighlight)
+	
+	for button in get_node("../CanvasLayer").find_children("", "Button"):
+		button.set_script(preload("res://scripts/button.gd"))
+		button._ready()
+		button.set_process(true)
+		
+		button.connect("on_highlight", _on_ability_button_highlight)
+		button.connect("on_unhighlight", _on_ability_button_unhighlight)
 	
 	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)	
 	$CanvasLayer/cancel_select_target.is_back_button = true
@@ -63,6 +74,8 @@ func _ready():
 	
 	#RenderingServer.set_debug_generate_wireframes(true)
 	#get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
+	
+	_on_unit_show_stats(null, false)
 
 func change_actions_disabled(disable: bool):
 	select_idle_unit.disabled = disable
@@ -258,9 +271,14 @@ func update_selected_unit_stats(unit: Unit):
 func _on_unit_show_stats(unit: Unit, is_selected: bool):
 	if unit == null:
 		hovered_unit_stats_panel.visible = false
+		
+		_on_ability_button_unhighlight()
 	else:
 		hovered_unit_stats_panel.visible = true
 		hovered_unit_stats_panel._display_unit_stats(unit, current_group, is_selected)
+		
+		_on_ability_button_highlight(unit.type_to_model_scene_name(unit.type), \
+			StaticData.unit_stats[unit.type].name)
 
 func _on_unit_destroy(unit: Unit):
 	pass
@@ -285,6 +303,8 @@ func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn
 	change_theme_color()
 	self.current_group = current_group
 	self.is_ai_turn = is_ai_turn
+	
+	$CanvasLayer/ai_turn_message.visible = is_ai_turn
 
 func change_theme_color():
 	var ui_nodes = [
@@ -332,10 +352,22 @@ func _on_ability_button_clicked(ability_id: String, target_type: Gameplay.Target
 		order_parameters.ability_id = ability_id
 		order_parameters.target_type = target_type
 
-func _on_ability_button_highlight(name: String):
+func _on_ability_button_highlight(name: String, label: String, hide_stats = false):
 	#TODO add author name
 	#var author_name = StaticData.tooltips[name].author_pink if current_group == Gameplay.HackingGroups.PINK else StaticData.tooltips[name].author_blue
-	tooltip_panel.show_tooltip(StaticData.ability_stats[name].name, StaticData.tooltips[name].text, "")
+	var title = ""
+	if StaticData.ability_stats.has(name):
+		title = StaticData.ability_stats[name].name
+	else:
+		title = label
+	
+	if StaticData.tooltips.has(name):
+		tooltip_panel.show_tooltip(title, StaticData.tooltips[name].text, "")
+	else:
+		tooltip_panel.hide_tooltip()
+	
+	if hide_stats:
+		hovered_unit_stats_panel.visible = false
 
 func _on_ability_button_unhighlight():
 	tooltip_panel.hide_tooltip()
@@ -349,8 +381,8 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 		
 		tiles_tint_reset()
 	
-	if !is_ai_turn:
-		_on_unit_show_stats(selected_unit, true)
+	#if !is_ai_turn:
+	#	_on_unit_show_stats(selected_unit, true)
 	update_abilities_buttons(selected_unit)
 
 func tiles_tint_reset():
@@ -373,6 +405,9 @@ func _unhandled_input(event):
 		if !in_unit_animation_mode:
 			if !in_select_target_mode:
 				tile_clicked.emit(tile_pos)
+				
+				# hack for unit stats to update
+				tile_hovered.emit(tile_pos)
 			else:
 				if order_parameters.target_type == Gameplay.TargetTypes.TILE:
 					order_given.emit(order_parameters.ability_id, tile_pos)

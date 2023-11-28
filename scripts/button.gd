@@ -16,13 +16,16 @@ func _ready():
 	pass # Replace with function body.
 
 func _on_highlight():
+	on_highlight.emit(name, text, true)
+	
 	if !disabled:
-		on_highlight.emit(name)
 		UIHelpers.audio_event("Ui/Ui_Highlight")
 		
 func _on_unhighlight():
+	on_unhighlight.emit()
+	
 	if !disabled:
-		on_unhighlight.emit()
+		pass
 
 func _on_press():
 	if !no_press_sound:

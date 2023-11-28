@@ -15,6 +15,7 @@ extends Node
 @export var who_controls_pink: Gameplay.ControllerType = Gameplay.ControllerType.PLAYER
 
 @export var fullscreen = false
+@export var show_tutorial_hints = true
 
 @export var unit_stats = { 
 	Gameplay.UnitTypes.CENTRAL_NODE: { "name": "Kernel node", "hp_max": 60, "ap_max": 6, "abilities": ["repair","reset","spawn_worms","self_repair"] },
@@ -52,16 +53,19 @@ extends Node
 @export var map_origin = Vector2(1.0, 1.0)
 
 @export var tooltips = {
-	"default": { "text": """
-		The goal in this battle is to put down the enemy Kernel node.
+	"Options": { "text": """
+		The goal is to put down the enemy Kernel node.
 		Start with doubling Worms and mutating them.
 		
-		Use left mouse button to select units (nodes and malware) on your base.
-		After a unit is selected, it can perform one or more types of actions.
+		Use left mouse button to select units (nodes and malware) on your base (has the same color as panel borders).
+		After a unit is selected, it can perform actions.
 		For more tips hover the mouse cursor over interactive objects and buttons.
 		
-		To find units with spare Action Points, click Next idle unit.
 		To end your turn, click the End turn button.
+		
+		Click this button to change options, or to end or restart the battle.
+		
+		When you're comfortable in the new role, you can turn off these hints in options.
 		""", 
 		"author_pink": "@space_rat", "author_blue": "Mike Denton" },
 	
@@ -74,13 +78,14 @@ extends Node
 		The only way to put down a firewall is to damage one of the two Anti-malware nodes to 0 Hit Points.
 		""" },
 	"tower_node": { "text": """
-		Anti-malware nodes can damage enemy units at the range of 2 tiles.
+		Anti-malware nodes can damage enemy units at the range of 2 tiles. At the start of the battle it can't reach any enemies.
+		
 		If two Anti-malware nodes belong to the same group and stand on a straight line,
-		a firewall with be created between them.
+		a double firewall is created between them.
 		
 		If Hit Points reach 0, all neighbor firewalls are down too.
 		
-		The cost of every action in unit's Action Points is shown at the bottom of the button.
+		The cost of every action in unit's Action Points is shown at the top of the button.
 		This node has only one action type and button.
 		""" },
 	"central_node": { "text": """
@@ -91,17 +96,18 @@ extends Node
 		
 		The Kernel node has actions just like other units, some of them performed automatically when
 		available.
-		To perform non-automatic actions first click on the action button and then - on the target tile on the map.
+		To perform non-automatic actions first click on the action button below and then - on the target tile on the map.
 		
-		The cost of every action in unit's Action Points is shown at the bottom of the button.
+		The cost of every action in unit's Action Points is shown at the top of the button.
 		""" },
 	
 	"worm": { "text": """
 		The Worm malware can reproduce by doubling, can move and can be mutated to other types of units.
-		To perform those actions first click on the action button and then - on the target tile on the map.
+		
+		To perform these actions first click on the action button below and then - on the target tile on the map.
 		Mutation actions are performed on the Worm itself, so there is no step of choosing the target.
 		
-		The cost of every action in unit's Action Points is shown at the bottom of the button.
+		The cost of every action in unit's Action Points is shown at the top of the button.
 		
 		From time to time Kernel node generates new Worms.
 		""" },
@@ -119,24 +125,35 @@ extends Node
 		""" },
 	
 	"end_turn": { "text": """
-		Click this button to end your turn and start the enemy's turn.
+		Click to end your turn and start the enemy's turn.
 		
 		All friendly units will restore Action Points.
 		The ready status of their actions will be increased by 1.
 		""" },
-	"next_idle_unit": { "text": """
-		Click this button to select next friendly unit with spare Action Points.
+	"select_idle_unit": { "text": """
+		Click to select next friendly unit with spare Action Points.
 		""" },
-	"options": { "text": """
-		Click this button to change settings, or to end or restart the battle.
-	""" },
+	"cancel_select_target": { "text": """
+		Click to exit target selection mode.
+		
+		After that it will be possible to select other abilities or units.
+		""" },
+	"ResetCamera": { "text": """
+		Click to reset the camera.
+		
+		To move camera you can use WASD or arrow keys.
+		And to zoom in and out you can use + and - keys or mouse wheel.
+		""" },
+	#"Options": { "text": """
+	#	Click this button to change settings, or to end or restart the battle.
+	#""" },
 	
 	"move": { "text": """
 		Unlike nodes, malware can move.
 		Maximum distance depends on the amount of Action Points left for the malware.
 		It's impossible to walk through other units or through enemy firewalls.
 		
-		For this action it's not required to click the action button first.
+		For this action it's not required to click the action button first - you can click the target on the battle field right away.
 		
 		To move malware instantly at long distances use Trojan's 'open_port' action instead.
 		""" },
@@ -145,7 +162,7 @@ extends Node
 		Deals the damage to an enemy unit on a neighbor tile.
 		This action won't work through enemy firewalls, so attack Anti-malware nodes first.
 		
-		For this action it's not required to click the action button first.
+		For this action it's not required to click the action button first - you can click the target on the battle field right away.
 		
 		Possible damage amount is shown on the button.
 		""" },
@@ -153,7 +170,7 @@ extends Node
 		Deals the damage to an enemy unit within the distance of 2 tiles.
 		Note that there are enough Action Points for every Anti-malware to perform this action 3 times each turn.
 		
-		For this action it's not required to click the action button first.
+		For this action it's not required to click the action button first - you can click the target on the battle field right away.
 		
 		Possible damage amount is shown on the button.
 		""" },

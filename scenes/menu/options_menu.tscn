@@ -295,6 +295,7 @@ custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
 
 [node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control7"]
+layout_mode = 0
 offset_left = 204.0
 offset_top = 3.0
 offset_right = 222.0

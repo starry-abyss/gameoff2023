@@ -589,8 +589,8 @@ func select_unit(unit_to_select: Unit, no_ui = false):
 		battle_ui._on_unit_selection_changed(null)
 	else:
 		battle_ui._on_unit_selection_changed(selected_unit)
-		if !is_ai_turn():
-			battle_ui._on_unit_show_stats(selected_unit, true)
+		#if !is_ai_turn():
+		#	battle_ui._on_unit_show_stats(selected_unit, true)
 
 func select_next_unit():
 	var units_in_the_same_group_before_selected_unit = []
@@ -1198,6 +1198,8 @@ func _override_other_ui_theme_with_color(color):
 
 
 func _ready():
+	_on_reset_camera_pressed()
+	
 	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", func():
 		if !is_ai_turn():
 			end_turn())
@@ -1571,5 +1573,5 @@ func _on_restart_battle_pressed() -> void:
 
 
 func _on_reset_camera_pressed() -> void:
-	$Camera3D.position = Vector3(15, 40, 35)
+	$Camera3D.position = Vector3(15, 40, 38)
 	$Camera3D.size = 40
