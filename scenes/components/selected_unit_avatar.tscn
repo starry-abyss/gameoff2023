@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://cxwuitxg37k3d"]
+
+[ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="1_3lshw"]
+[ext_resource type="Script" path="res://scenes/components/selected_unit_avatar.gd" id="2_ejqy8"]
+
+[node name="SelectedUnitAvatar" type="Panel"]
+offset_right = 100.0
+offset_bottom = 100.0
+theme = ExtResource("1_3lshw")
+script = ExtResource("2_ejqy8")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(100, 100)
+render_target_update_mode = 4
+
+[node name="CameraContainer" type="Node3D" parent="SubViewportContainer/SubViewport"]
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/CameraContainer"]
+transform = Transform3D(1, 0, 0, 0, 0.878775, 0.477236, 0, -0.477236, 0.878775, 0, 2, 2.5)
+projection = 1
+current = true
+size = 2.0

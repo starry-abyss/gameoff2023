@@ -1,11 +1,13 @@
 extends Node3D
 
-@onready var selected_unit_stats = $CanvasLayer/SelectedUnitStats
+@onready var tooltip_panel = $CanvasLayer/TooltipPanel
 @onready var selected_unit_indicator = $SelectedUnitIndicator
 @onready var select_idle_unit = $CanvasLayer/select_idle_unit
 @onready var end_turn = $CanvasLayer/end_turn
 @onready var draw_3d = $Draw3d
-@onready var selected_unit_label: Label = $CanvasLayer/Panel/Panel/SelectedUnitLabel
+@onready var selected_unit_avatar: Panel = $CanvasLayer/SelectedUnitAvatar
+@onready var selected_unit_stats_panel: Panel = $CanvasLayer/SelectedUnitStatsPanel
+@onready var hovered_unit_stats_panel: Panel = $CanvasLayer/HoveredUnitStatsPanel
 
 @onready var movement_path: Path3D = $Path3D
 @onready var movement_path_follow: PathFollow3D = $Path3D/PathFollow3D
@@ -76,7 +78,7 @@ func update_selection_indicator(unit: Unit):
 func update_abilities_buttons_general_visibility():
 	$CanvasLayer/cancel_select_target.visible = !in_unit_animation_mode && in_select_target_mode && selected_unit_indicator.visible
 	%ability_buttons.visible = !in_select_target_mode && selected_unit_indicator.visible
-	selected_unit_label.visible = %ability_buttons.visible
+	#selected_unit_label.visible = %ability_buttons.visible
 	#$CanvasLayer/Panel/Panel/function_list_label.visible = %ability_buttons.visible
 
 func update_abilities_buttons(selected_unit: Unit):
@@ -234,20 +236,31 @@ func _on_unit_selection_changed(unit: Unit):
 	
 	tiles_tint_reset()
 	
-	if unit != null:
-		selected_unit_label.text = "%s (selected)" % [StaticData.unit_stats[unit.type].name]
-		
+	update_selected_unit_avatar(unit)
+	update_selected_unit_stats(unit)
 	update_selection_indicator(unit)
 	update_abilities_buttons(unit)
-	
 	#update_abilities_buttons_general_visibility()
+
+func update_selected_unit_avatar(unit: Unit):
+	if unit != null:
+		selected_unit_avatar.show_avatar(unit)
+	else:
+		selected_unit_avatar.hide_avatar()
+
+func update_selected_unit_stats(unit: Unit):
+	if unit == null:
+		selected_unit_stats_panel.visible = false
+	else:
+		selected_unit_stats_panel.visible = true
+		selected_unit_stats_panel._display_unit_stats(unit, current_group, true)
 
 func _on_unit_show_stats(unit: Unit, is_selected: bool):
 	if unit == null:
-		selected_unit_stats.visible = false
+		hovered_unit_stats_panel.visible = false
 	else:
-		selected_unit_stats.visible = true 
-		selected_unit_stats._display_unit_stats(unit, current_group, is_selected)
+		hovered_unit_stats_panel.visible = true
+		hovered_unit_stats_panel._display_unit_stats(unit, current_group, is_selected)
 
 func _on_unit_destroy(unit: Unit):
 	pass
@@ -274,7 +287,16 @@ func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn
 	self.is_ai_turn = is_ai_turn
 
 func change_theme_color():
-	var ui_nodes = [$CanvasLayer/Panel/Panel, $CanvasLayer/end_turn, $CanvasLayer/select_idle_unit, $CanvasLayer/cancel_select_target, $CanvasLayer/Panel, selected_unit_stats]
+	var ui_nodes = [
+	$CanvasLayer/end_turn, 
+	$CanvasLayer/select_idle_unit, 
+	$CanvasLayer/cancel_select_target, 
+	$CanvasLayer/Panel, 
+	tooltip_panel,
+	selected_unit_avatar,
+	selected_unit_stats_panel,
+	hovered_unit_stats_panel
+	]
 	ui_nodes.append_array(%ability_buttons.get_children())
 	
 	if current_group == Gameplay.HackingGroups.PINK:
@@ -311,10 +333,10 @@ func _on_ability_button_clicked(ability_id: String, target_type: Gameplay.Target
 		order_parameters.target_type = target_type
 
 func _on_ability_button_highlight(name: String):
-	selected_unit_stats.show_button_description(name)
+	tooltip_panel.show_tooltip(name, StaticData.tooltips[name].text)
 
 func _on_ability_button_unhighlight():
-	selected_unit_stats.hide_button_description()
+	tooltip_panel.hide_tooltip()
 
 func _on_cancel_select_target_button_clicked():
 	in_select_target_mode = false

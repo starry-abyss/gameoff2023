@@ -147,9 +147,9 @@ border_width_bottom = 6
 border_color = Color(0.0117647, 0.929412, 0.796078, 1)
 border_blend = true
 expand_margin_left = 10.0
-expand_margin_top = 4.0
+expand_margin_top = 10.0
 expand_margin_right = 10.0
-expand_margin_bottom = 4.0
+expand_margin_bottom = 10.0
 
 [resource]
 Button/colors/font_color = Color(0, 0.960784, 0.945098, 1)

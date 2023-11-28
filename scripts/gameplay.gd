@@ -502,10 +502,8 @@ func hover_tile(tile_pos: Vector2i):
 	if hovered_unit != null:
 		battle_ui._on_unit_show_stats(hovered_unit, hovered_unit == selected_unit)
 	else:
-		if !is_ai_turn():
-			battle_ui._on_unit_show_stats(selected_unit, true)
-		else:
-			battle_ui._on_unit_show_stats(null, false)
+		battle_ui._on_unit_show_stats(null, false)
+		
 
 func click_tile(tile_pos: Vector2i):
 	if is_ai_turn():

@@ -1,0 +1,57 @@
+[gd_scene load_steps=3 format=3 uid="uid://cflff477ekckk"]
+
+[ext_resource type="Script" path="res://scenes/components/unit_stats_container.gd" id="1_5odmh"]
+[ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="1_iwasj"]
+
+[node name="Panel" type="Panel"]
+offset_right = 240.0
+offset_bottom = 42.0
+theme = ExtResource("1_iwasj")
+script = ExtResource("1_5odmh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="UnitLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "unit"
+
+[node name="InfoLabel" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "()"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="HP" type="Label" parent="HBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "HP"
+
+[node name="AP" type="Label" parent="HBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "AP"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="HPLabel" type="Label" parent="HBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "-/-"
+
+[node name="APLabel" type="Label" parent="HBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "-/-"
