@@ -333,7 +333,9 @@ func _on_ability_button_clicked(ability_id: String, target_type: Gameplay.Target
 		order_parameters.target_type = target_type
 
 func _on_ability_button_highlight(name: String):
-	tooltip_panel.show_tooltip(name, StaticData.tooltips[name].text)
+	#TODO add author name
+	#var author_name = StaticData.tooltips[name].author_pink if current_group == Gameplay.HackingGroups.PINK else StaticData.tooltips[name].author_blue
+	tooltip_panel.show_tooltip(StaticData.ability_stats[name].name, StaticData.tooltips[name].text, "")
 
 func _on_ability_button_unhighlight():
 	tooltip_panel.hide_tooltip()
@@ -414,11 +416,13 @@ func _process(delta):
 	pass
 	
 func _on_timer_timeout():
+	animated_unit.update_model_pos()
 	in_unit_animation_mode = false
 	
 	#if animated_unit != null:
 	#	UIHelpers.audio_event3d_loop_end(animated_unit)
-	
 	animated_unit = null
 	
 	animation_finished.emit()
+
+	

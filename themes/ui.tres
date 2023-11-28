@@ -1,4 +1,6 @@
-[gd_resource type="Theme" load_steps=14 format=3 uid="uid://bcihimekk2fq0"]
+[gd_resource type="Theme" load_steps=16 format=3 uid="uid://bcihimekk2fq0"]
+
+[ext_resource type="Texture2D" uid="uid://pa1uh0dktctp" path="res://art/slider.png" id="1_0kq6q"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wqbs"]
 content_margin_left = 10.0
@@ -68,6 +70,12 @@ border_width_right = 4
 border_width_bottom = 4
 border_color = Color(0, 0.964706, 0.984314, 1)
 border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7u2n"]
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d5yg2"]
 bg_color = Color(0.47451, 0.784314, 1, 0.27451)
@@ -152,7 +160,6 @@ expand_margin_right = 10.0
 expand_margin_bottom = 10.0
 
 [resource]
-Button/colors/font_color = Color(0, 0.960784, 0.945098, 1)
 Button/colors/font_disabled_color = Color(0.760784, 0.760784, 0.760784, 0.65098)
 Button/font_sizes/font_size = 20
 Button/styles/disabled = SubResource("StyleBoxFlat_0wqbs")
@@ -160,10 +167,13 @@ Button/styles/focus = SubResource("StyleBoxFlat_0ck54")
 Button/styles/hover = SubResource("StyleBoxFlat_djlsa")
 Button/styles/normal = SubResource("StyleBoxFlat_en2rl")
 Button/styles/pressed = SubResource("StyleBoxFlat_fb3bs")
+CheckBox/styles/normal = SubResource("StyleBoxFlat_c7u2n")
 ColorPickerButton/styles/focus = SubResource("StyleBoxFlat_d5yg2")
 ColorPickerButton/styles/hover = SubResource("StyleBoxFlat_cqwn0")
 ColorPickerButton/styles/normal = SubResource("StyleBoxFlat_cvp77")
 ColorPickerButton/styles/pressed = SubResource("StyleBoxFlat_4tt5p")
+HSlider/icons/grabber = ExtResource("1_0kq6q")
+HSlider/icons/grabber_highlight = ExtResource("1_0kq6q")
 HSlider/styles/grabber_area = SubResource("StyleBoxFlat_sj4ik")
 HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_rhynm")
 HSlider/styles/slider = SubResource("StyleBoxFlat_qqiqy")

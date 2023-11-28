@@ -47,5 +47,5 @@ autowrap_mode = 2
 [node name="Additional Info" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Description placeholder"
+text = "Author placeholder"
 autowrap_mode = 2

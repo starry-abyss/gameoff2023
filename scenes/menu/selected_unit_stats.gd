@@ -11,9 +11,10 @@ func _ready() -> void:
 	hide_tooltip()
 
 
-func show_tooltip(title: String, tooltip: String):
+func show_tooltip(title: String, tooltip: String, additional_info: String):
 	title_label.text = title
 	tooltip_label.text = tooltip
+	additional_info_label.text = additional_info
 	visible = true
 	
 
