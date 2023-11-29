@@ -42,6 +42,11 @@ var is_attacking = false
 var attack_target_pos = Vector3(0.0, 0.0, 0.0)
 var attack_start_pos = Vector3(0.0, 0.0, 0.0)
 
+var is_mutating = false
+var mutation_timer = 0.0
+var start_mutation_scale_x = 0.3
+var start_mutation_scale_z = 0.5
+
 var emission_color: Color
 
 var idle_animation_offset = 0.0
@@ -278,10 +283,16 @@ func _ready():
 func _on_click():
 	on_click.emit(self)
 
+func on_mutating():
+	is_mutating = true
+	
+	scale = Vector3(start_mutation_scale_x, 1.0, start_mutation_scale_z)
+
 func on_attacking(target, start_pos):
 	is_attacking = true
 	
 	attack_start_pos = start_pos
+	global_position = attack_start_pos
 	
 	if target is Unit:
 		var unit_aabb = Utils.get_aabb(target.model)
@@ -354,6 +365,23 @@ func _process(delta):
 			
 			is_attacking = false
 			attack_timer = 0.0
+	
+	if is_mutating:
+		mutation_timer += delta
+		
+		var progress_x = max(start_mutation_scale_x, mutation_timer * 1.0) / StaticData.mutation_animation_duration
+		progress_x = ease(progress_x, 4.8)
+		
+		var progress_z = max(start_mutation_scale_z, mutation_timer * 1.0) / StaticData.mutation_animation_duration
+		progress_z = ease(progress_z, 4.8)
+		
+		scale = Vector3(progress_x, 1.0, progress_z)
+		
+		if mutation_timer >= StaticData.mutation_animation_duration:
+			scale = Vector3(1.0, 1.0, 1.0)
+			
+			is_mutating = false
+			mutation_timer = 0.0
 	
 	if is_hurt:
 		hurt_timer += delta

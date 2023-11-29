@@ -106,14 +106,14 @@ theme = ExtResource("3_7nk56")
 text = "Cancel selecting target"
 
 [node name="end_game_message" type="Label" parent="CanvasLayer"]
-visible = false
-offset_left = 388.0
-offset_top = 16.0
-offset_right = 528.0
-offset_bottom = 89.0
+offset_left = 14.0
+offset_top = 190.0
+offset_right = 1138.0
+offset_bottom = 263.0
 theme_override_fonts/font = ExtResource("3_x7kol")
 theme_override_font_sizes/font_size = 64
 text = "TEST"
+horizontal_alignment = 1
 
 [node name="SelectedUnitAvatar" parent="CanvasLayer" instance=ExtResource("5_wvsta")]
 visible = false

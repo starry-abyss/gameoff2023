@@ -44,7 +44,11 @@ var animated_unit_start_pos: Vector3
 var current_group: Gameplay.HackingGroups
 var is_ai_turn = false
 
+var last_tile_pos = Vector2i(0, 0)
+
 func _ready():
+	$CanvasLayer/end_game_message.visible = false
+	
 	for button in find_children("", "Button"):
 		button.set_script(preload("res://scripts/button.gd"))
 		button._ready()
@@ -333,6 +337,9 @@ func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn
 	
 	update_abilities_buttons_general_visibility()
 	#update_abilities_buttons_icon_tint()
+	
+	# hack for unit stats to update
+	tile_hovered.emit(last_tile_pos)
 
 func update_abilities_buttons_icon_tint():
 	for button in %ability_buttons.get_children():
@@ -425,6 +432,9 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 	
 	update_selected_unit_stats(selected_unit)
 	update_abilities_buttons(selected_unit)
+	
+	# hack for unit stats to update
+	tile_hovered.emit(last_tile_pos)
 
 func tiles_tint_reset():
 	tiles_need_tint.emit("", Vector2i(0, 0), false, false)
@@ -440,15 +450,14 @@ func _unhandled_input(event):
 		var tile_pos = UIHelpers.world_pos_to_tile_pos(world_pos)
 		print("tile_pos: ", tile_pos)
 		
+		last_tile_pos = tile_pos
+		
 		#var test_distance = UIHelpers.tile_pos_distance(Vector2i(5, 5), tile_pos)		
 		#print("distance: ", test_distance)
 		
 		if !in_unit_animation_mode:
 			if !in_select_target_mode:
 				tile_clicked.emit(tile_pos)
-				
-				# hack for unit stats to update
-				tile_hovered.emit(tile_pos)
 			else:
 				if order_parameters.target_type == Gameplay.TargetTypes.TILE:
 					order_given.emit(order_parameters.ability_id, tile_pos)
