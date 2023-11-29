@@ -8,7 +8,8 @@
 [ext_resource type="BusAsset" uid="uid://che52q2erpywd" path="res://addons/FMOD/editor/resources/busses/{fa278c3e-3b9b-4a99-ba7a-cc395eb02b53}.tres" id="5_e6m0w"]
 [ext_resource type="EventAsset" uid="uid://c8v61cq5hpm6x" path="res://addons/FMOD/editor/resources/events/{5335d2d5-6192-4f27-8b9c-2f03acf58a1e}.tres" id="6_igj6q"]
 [ext_resource type="BusAsset" uid="uid://cdym8q80fl8p" path="res://addons/FMOD/editor/resources/busses/{deba9fc2-d6c3-486a-8649-8e95638f77df}.tres" id="7_5lf7f"]
-[ext_resource type="BusAsset" uid="uid://cx7rmhkh7fubi" path="res://addons/FMOD/editor/resources/busses/{0d8c3d9d-9f66-4739-a65c-5ba5c080e57d}.tres" id="7_36wdg"]
+[ext_resource type="BusAsset" uid="uid://cxe30wi0kmuig" path="res://addons/FMOD/editor/resources/busses/{c204119f-25e7-455b-beb1-360af54daff3}.tres" id="7_arj2u"]
+[ext_resource type="BusAsset" uid="uid://brrw4a2cd0gku" path="res://addons/FMOD/editor/resources/busses/{841351c3-a9a8-4ea2-9752-9d0c76382e25}.tres" id="8_4ayh7"]
 [ext_resource type="EventAsset" uid="uid://by5npdydbye3b" path="res://addons/FMOD/editor/resources/events/{ec98efaf-dbe1-4e47-88c6-2b9dc984a7db}.tres" id="8_ox44k"]
 [ext_resource type="EventAsset" uid="uid://plp54liax7th" path="res://addons/FMOD/editor/resources/events/{53a7a743-72c4-45cd-8acf-4ed9a2e8b49f}.tres" id="9_hwdxk"]
 [ext_resource type="EventAsset" uid="uid://d2basb5ke8ft8" path="res://addons/FMOD/editor/resources/events/{075248e6-776a-46a9-a3d6-0daa4ab1d1d2}.tres" id="11_6etls"]
@@ -37,11 +38,6 @@
 [ext_resource type="EventAsset" uid="uid://d01pu4vb1bkwx" path="res://addons/FMOD/editor/resources/events/{914dbbe9-cfde-4218-aead-c3d1faa901fe}.tres" id="26_6m43m"]
 [ext_resource type="EventAsset" uid="uid://duh8h17bytb0g" path="res://addons/FMOD/editor/resources/events/{d31585c5-84f5-46fd-a32a-2fdb3568f9b7}.tres" id="27_5jo1a"]
 [ext_resource type="EventAsset" uid="uid://bq1a57r7lhqn1" path="res://addons/FMOD/editor/resources/events/{83ea7205-5830-47ca-ae24-a11f9f29a5d0}.tres" id="34_nqdvh"]
-
-[sub_resource type="BusAsset" id="BusAsset_8bx53"]
-path = "bus:/New Master Bus"
-guid = "{0df3f20b-3f4e-4880-ba4d-2f3501b8b6c5}"
-name = "New Master Bus"
 
 [resource]
 banks = {
@@ -80,9 +76,9 @@ events = {
 }
 busses = {
 "{0cd9aea3-efbd-4ed5-ab6e-d64379284214}": ExtResource("4_i05h2"),
-"{0d8c3d9d-9f66-4739-a65c-5ba5c080e57d}": ExtResource("7_36wdg"),
-"{0df3f20b-3f4e-4880-ba4d-2f3501b8b6c5}": SubResource("BusAsset_8bx53"),
 "{56137743-9306-4ce6-95f0-784bd6e210e6}": ExtResource("4_t3o7o"),
+"{841351c3-a9a8-4ea2-9752-9d0c76382e25}": ExtResource("8_4ayh7"),
+"{c204119f-25e7-455b-beb1-360af54daff3}": ExtResource("7_arj2u"),
 "{d6b204da-ff03-412d-be8e-60acb614cf75}": ExtResource("3_b2tvu"),
 "{deba9fc2-d6c3-486a-8649-8e95638f77df}": ExtResource("7_5lf7f"),
 "{fa278c3e-3b9b-4a99-ba7a-cc395eb02b53}": ExtResource("5_e6m0w")
@@ -334,41 +330,41 @@ event_tree = [{
 }]
 bus_tree = [{
 "children": [{
-"children": [{
 "children": [],
 "item_type": 4,
 "node_name": "Dx Bus",
-"path": "bus:/New Master Bus/Dx Bus",
+"path": "bus:/Dx Bus",
 "resource": ExtResource("4_i05h2")
 }, {
 "children": [],
 "item_type": 4,
 "node_name": "Music Bus",
-"path": "bus:/New Master Bus/Music Bus",
+"path": "bus:/Music Bus",
 "resource": ExtResource("4_t3o7o")
 }, {
 "children": [],
 "item_type": 4,
 "node_name": "Reverb",
-"path": "bus:/New Master Bus/Reverb",
+"path": "bus:/Reverb",
 "resource": ExtResource("5_e6m0w")
 }, {
+"children": [{
 "children": [],
 "item_type": 4,
-"node_name": "Sfx Bus",
-"path": "bus:/New Master Bus/Sfx Bus",
-"resource": ExtResource("7_36wdg")
+"node_name": "Ability Bus",
+"path": "bus:/SFX Bus/Ability Bus",
+"resource": ExtResource("8_4ayh7")
 }, {
 "children": [],
 "item_type": 4,
 "node_name": "Ui Bus",
-"path": "bus:/New Master Bus/Ui Bus",
+"path": "bus:/SFX Bus/Ui Bus",
 "resource": ExtResource("7_5lf7f")
 }],
 "item_type": 4,
-"node_name": "New Master Bus",
-"path": "bus:/New Master Bus",
-"resource": SubResource("BusAsset_8bx53")
+"node_name": "SFX Bus",
+"path": "bus:/SFX Bus",
+"resource": ExtResource("7_arj2u")
 }],
 "item_type": 4,
 "node_name": "bus:",

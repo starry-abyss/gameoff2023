@@ -1,0 +1,6 @@
+[gd_resource type="BusAsset" format=3 uid="uid://brrw4a2cd0gku"]
+
+[resource]
+path = "bus:/SFX Bus/Ability Bus"
+guid = "{841351c3-a9a8-4ea2-9752-9d0c76382e25}"
+name = "Ability Bus"

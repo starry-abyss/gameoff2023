@@ -26,8 +26,8 @@ func _ready():
 	team_1_color_button.color_changed.connect(_on_color_picker_button_color_changed)
 	team_2_color_button.color_changed.connect(_on_color_picker_button_2_color_changed)
 	
-	music_slider.value = FMODStudioModule.get_studio_system().get_bus("bus:/New Master Bus/Music Bus").get_volume().volume * 100
-	sfx_slider.value = FMODStudioModule.get_studio_system().get_bus("bus:/New Master Bus/Sfx Bus").get_volume().volume * 100
+	music_slider.value = FMODStudioModule.get_studio_system().get_bus("bus:/Music Bus").get_volume().volume * 100
+	sfx_slider.value = FMODStudioModule.get_studio_system().get_bus("bus:/SFX Bus").get_volume().volume * 100
 	master_slider.value = FMODStudioModule.get_studio_system().get_bus("bus:/").get_volume().volume * 100
 	
 	music_slider.value_changed.connect(_on_volume_music_value_changed)
@@ -65,14 +65,14 @@ func fullscreen_changed(value):
 	StaticData.fullscreen = value
 
 func _on_volume_music_value_changed(value):
-	var bus = FMODStudioModule.get_studio_system().get_bus("bus:/New Master Bus/Music Bus")
+	var bus = FMODStudioModule.get_studio_system().get_bus("bus:/Music Bus")
 	#if bus:
 	bus.set_volume(value / 100.0)
 	
 	UIHelpers.audio_event("Ui/Ui_Slider")
 
 func _on_volume_sfx_value_changed(value):
-	var bus = FMODStudioModule.get_studio_system().get_bus("bus:/New Master Bus/Sfx Bus")
+	var bus = FMODStudioModule.get_studio_system().get_bus("bus:/SFX Bus")
 	#if bus:
 	bus.set_volume(value / 100.0)
 	
