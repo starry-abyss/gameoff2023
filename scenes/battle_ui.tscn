@@ -58,61 +58,124 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -265.0
-offset_top = -223.0
-offset_right = 265.0
+offset_top = -233.0
+offset_right = 330.0
 offset_bottom = -23.0
 grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("3_7nk56")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Panel"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="VBoxContainer" type="Control" parent="CanvasLayer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Panel/VBoxContainer"]
-layout_mode = 2
+[node name="Control" type="Control" parent="CanvasLayer/Panel/VBoxContainer"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
 
-[node name="SelectedUnitStatsPanel" parent="CanvasLayer/Panel/VBoxContainer/HBoxContainer" instance=ExtResource("6_yuq0d")]
+[node name="SelectedUnitStatsPanel" parent="CanvasLayer/Panel/VBoxContainer/Control" instance=ExtResource("6_yuq0d")]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_right = -217.0
+grow_horizontal = 2
 full_hp_ap = true
 
-[node name="ability_buttons" type="HBoxContainer" parent="CanvasLayer/Panel/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 10
-alignment = 1
-
-[node name="end_turn" type="Button" parent="CanvasLayer"]
+[node name="select_idle_unit" type="Button" parent="CanvasLayer/Panel/VBoxContainer/Control"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 2.08165e-12)
-offset_left = 924.0
-offset_top = 465.0
-offset_right = 1124.0
-offset_bottom = 496.0
-theme = ExtResource("3_7nk56")
-shortcut = SubResource("Shortcut_wykwr")
-text = "End turn"
-
-[node name="select_idle_unit" type="Button" parent="CanvasLayer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 2.08165e-12)
-offset_left = 655.0
-offset_top = 484.0
-offset_right = 855.0
-offset_bottom = 514.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = 6.0
+offset_bottom = 36.0
+grow_horizontal = 0
 theme = ExtResource("3_7nk56")
 text = "Next idle unit"
 
-[node name="cancel_select_target" type="Button" parent="CanvasLayer"]
+[node name="Control2" type="Control" parent="CanvasLayer/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(2.08165e-12, 140)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -145.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(2.08165e-12, 2.08165e-12)
+
+[node name="ability_buttons" type="HBoxContainer" parent="CanvasLayer/Panel/VBoxContainer/Control2"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="ai_turn_message" type="Label" parent="CanvasLayer/Panel/VBoxContainer/Control2"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_x7kol")
+theme_override_font_sizes/font_size = 64
+text = "AI's turn"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="cancel_select_target" type="Button" parent="CanvasLayer/Panel/VBoxContainer/Control2"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 2.08165e-12)
-offset_left = 437.0
-offset_top = 560.0
-offset_right = 706.0
-offset_bottom = 590.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -134.5
+offset_top = -15.0
+offset_right = 134.5
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("3_7nk56")
 text = "Cancel selecting target"
+
+[node name="end_turn" type="Button" parent="CanvasLayer/Panel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 2.08165e-12)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 35.0
+offset_top = -99.0
+offset_right = 235.0
+offset_bottom = -69.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("3_7nk56")
+shortcut = SubResource("Shortcut_wykwr")
+text = "End turn"
 
 [node name="end_game_message" type="Label" parent="CanvasLayer"]
 offset_left = 14.0
@@ -130,15 +193,6 @@ offset_left = 861.0
 offset_top = 538.0
 offset_right = 961.0
 offset_bottom = 638.0
-
-[node name="ai_turn_message" type="Label" parent="CanvasLayer"]
-offset_left = 418.0
-offset_top = 497.0
-offset_right = 733.0
-offset_bottom = 570.0
-theme_override_fonts/font = ExtResource("3_x7kol")
-theme_override_font_sizes/font_size = 64
-text = "AI's turn"
 
 [node name="SelectedUnitIndicator" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.2, 2.08165e-12)

@@ -2,8 +2,8 @@ extends Node3D
 
 @onready var tooltip_panel = $CanvasLayer/TooltipPanel
 @onready var selected_unit_indicator = $SelectedUnitIndicator
-@onready var select_idle_unit = $CanvasLayer/select_idle_unit
-@onready var end_turn = $CanvasLayer/end_turn
+@onready var select_idle_unit = %select_idle_unit
+@onready var end_turn = %end_turn
 @onready var draw_3d = $Draw3d
 @onready var selected_unit_avatar: Panel = $CanvasLayer/SelectedUnitAvatar
 @onready var selected_unit_stats_panel: Panel = %SelectedUnitStatsPanel
@@ -65,8 +65,8 @@ func _ready():
 		button.connect("on_highlight", _on_ability_button_highlight)
 		button.connect("on_unhighlight", _on_ability_button_unhighlight)
 	
-	$CanvasLayer/cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)	
-	$CanvasLayer/cancel_select_target.is_back_button = true
+	%cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)	
+	%cancel_select_target.is_back_button = true
 
 	for ability_id in StaticData.ability_stats.keys():
 		add_ability_button(ability_id)
@@ -82,7 +82,7 @@ func _ready():
 	_on_unit_show_stats(null, false)
 
 func change_actions_disabled(disable: bool):
-	select_idle_unit.disabled = disable
+	%select_idle_unit.disabled = disable
 	end_turn.disabled = disable
 
 func update_selection_indicator(unit: Unit):
@@ -93,12 +93,12 @@ func update_selection_indicator(unit: Unit):
 		selected_unit_indicator.position = unit.position + Vector3(0, unit_aabb.size.y, 0)
 
 func update_abilities_buttons_general_visibility():
-	$CanvasLayer/cancel_select_target.visible = !in_unit_animation_mode && in_select_target_mode && selected_unit_indicator.visible && !is_ai_turn
+	%cancel_select_target.visible = !in_unit_animation_mode && in_select_target_mode && selected_unit_indicator.visible && !is_ai_turn
 	%ability_buttons.visible = !in_select_target_mode && selected_unit_indicator.visible && !is_ai_turn
 	#selected_unit_label.visible = %ability_buttons.visible
 	#$CanvasLayer/Panel/Panel/function_list_label.visible = %ability_buttons.visible
 	
-	$CanvasLayer/ai_turn_message.visible = is_ai_turn
+	%ai_turn_message.visible = is_ai_turn
 	%end_turn.visible = !is_ai_turn
 	%select_idle_unit.visible = !is_ai_turn
 	#%SelectedUnitStatsPanel.visible = !is_ai_turn
@@ -134,7 +134,7 @@ func add_ability_button(ability_id: String):
 	button.theme = load("res://themes/ui.tres")
 	
 	button.name = ability_id
-	button.custom_minimum_size = Vector2(120, 120)
+	button.custom_minimum_size = Vector2(140, 140)
 
 		#icon.material.set_shader_parameter("tint", Color.GREEN)
 	
@@ -218,7 +218,7 @@ func update_ability_button_text(ability_id: String, selected_unit: Unit):
 	var button = %ability_buttons.get_node(ability_id)
 	button.text = make_ap_string(ability_id, stats.ap) + cooldown_text \
 		#+ "\nargument: " + Gameplay.TargetTypes.keys()[stats.target] \
-		+ "\n\n\n\n\n\n" + stats.name
+		+ "\n\n\n\n\n\n\n" + stats.name
 
 func _on_show_path(unit: Unit, path: Array):
 	if in_select_target_mode && (order_parameters.ability_id != "move"):
@@ -357,9 +357,9 @@ func change_theme_color():
 	update_abilities_buttons_icon_tint()
 	
 	var ui_nodes = [
-	$CanvasLayer/end_turn, 
-	$CanvasLayer/select_idle_unit, 
-	$CanvasLayer/cancel_select_target, 
+	%end_turn, 
+	%select_idle_unit, 
+	%cancel_select_target, 
 	$CanvasLayer/Panel, 
 	tooltip_panel,
 	selected_unit_avatar,
@@ -380,7 +380,7 @@ func _on_battle_end(who_won: Gameplay.HackingGroups):
 	if who_won == Gameplay.HackingGroups.PINK:
 		$CanvasLayer/end_game_message.text = "Rebels win!"
 	else:
-		$CanvasLayer/end_game_message.text = "Cyber police wins!"
+		$CanvasLayer/end_game_message.text = "Cyber Police wins!"
 	
 func _on_unit_click(unit: Unit):
 	# for now we'll use tile click for this purpose
@@ -468,6 +468,9 @@ func _unhandled_input(event):
 		if !in_unit_animation_mode:
 			if !in_select_target_mode:
 				tile_clicked.emit(tile_pos)
+				
+				# hack for unit stats to update
+				tile_hovered.emit(tile_pos)
 			else:
 				if order_parameters.target_type == Gameplay.TargetTypes.TILE:
 					order_given.emit(order_parameters.ability_id, tile_pos)

@@ -26,6 +26,8 @@ var distances = []
 var cached_path = []
 var destination_for_cached_path = Vector2i(-1, -1)
 
+var loser = HackingGroups.NEUTRAL
+
 const NotCalculated = -1
 const Unreachable = -2 # for blocking attacks through firewalls
 
@@ -966,6 +968,8 @@ func hurt_unit(target: Unit, amount: int):
 	calculate_distances()
 
 func end_battle(who_lost: HackingGroups):
+	loser = who_lost
+	
 	var units_array = units.duplicate()
 	for unit in units_array:
 		if unit.group == who_lost:
@@ -1140,6 +1144,11 @@ func end_turn(silent = false):
 					for_all_tile_pos_around(unit.tile_pos, \
 						func(tile_pos): spawn_unit(tile_pos, UnitTypes.WORM, unit.group))
 	
+	# skip turn of the defeated group
+	if loser == current_turn_group:
+		end_turn()
+		return
+	
 	#update_firewalls()
 	if !silent:
 		battle_ui._on_playing_group_changed(current_turn_group, is_ai_turn())
@@ -1207,19 +1216,19 @@ func _override_other_ui_theme_with_color(color):
 func _ready():
 	_on_reset_camera_pressed()
 	
-	battle_ui.get_node("CanvasLayer/end_turn").connect("pressed", func():
+	battle_ui.end_turn.connect("pressed", func():
 		if !is_ai_turn():
 			end_turn())
 	
-	battle_ui.get_node("CanvasLayer/end_turn").connect("mouse_entered", func():
+	battle_ui.end_turn.connect("mouse_entered", func():
 		if !is_ai_turn():
 			highlight_idle_units())
 	
-	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("pressed", func():
+	battle_ui.select_idle_unit.connect("pressed", func():
 		if !is_ai_turn():
 			select_next_unit())
 	
-	battle_ui.get_node("CanvasLayer/select_idle_unit").connect("mouse_entered", func():
+	battle_ui.select_idle_unit.connect("mouse_entered", func():
 		if !is_ai_turn():
 			highlight_idle_units())
 	
@@ -1389,7 +1398,7 @@ func ai_new_turn():
 				ai_enemy_kernel = u
 	
 	assert(ai_kernel != null)
-	assert(ai_enemy_kernel != null)
+	#assert(ai_enemy_kernel != null)
 	
 	ai_towers_repeat_far = ai_towers.duplicate()
 	ai_kernel_repair = [ ai_kernel, ai_kernel ]
@@ -1475,6 +1484,12 @@ func get_walkable_neighbor_tiles(tile_pos):
 		
 	return walkable_tiles
 
+func get_distance_to_enemy_base(tile_pos):
+	if ai_enemy_kernel == null:
+		return 99999999
+	
+	return UIHelpers.tile_pos_distance(ai_enemy_kernel.tile_pos, tile_pos)
+
 func ai_next_step():
 	var filter_enemy_1 = func(tile_pos):
 		return ai_find_weakest_enemy(tile_pos, 1)
@@ -1510,8 +1525,8 @@ func ai_next_step():
 				return
 		elif t.ap >= 2:
 			var role = randf() * (ai_worm_chance_double + ai_worm_chance_virus)
-			var distance_to_enemy_base = UIHelpers.tile_pos_distance(ai_enemy_kernel.tile_pos, t.tile_pos)
-				
+			var distance_to_enemy_base = get_distance_to_enemy_base(t.tile_pos)
+			
 			if distance_to_enemy_base <= 6 || role > ai_worm_chance_double:
 				ai_make_step(t, "self_modify_to_virus", null)
 				return

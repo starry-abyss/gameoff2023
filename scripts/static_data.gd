@@ -25,9 +25,9 @@ extends Node
 	Gameplay.UnitTypes.CENTRAL_NODE: { "name": "Kernel node", "hp_max": 60, "ap_max": 6, "abilities": ["repair","reset","spawn_worms","self_repair"] },
 	Gameplay.UnitTypes.TOWER_NODE: { "name": "Anti-malware node", "hp_max": 25, "ap_max": 9, "abilities": ["tower_attack"] },
 	
-	Gameplay.UnitTypes.WORM: { "name": "Worm", "hp_max": 1, "ap_max": 3, "abilities": ["move","scale","self_modify_to_virus","self_modify_to_trojan"] },
-	Gameplay.UnitTypes.TROJAN: { "name": "Trojan", "hp_max": 6, "ap_max": 8, "abilities": ["move","capture_tower","backdoor"] },
-	Gameplay.UnitTypes.VIRUS: { "name": "Virus", "hp_max": 15, "ap_max": 5, "abilities": ["move","virus_attack","integrate","spread"] },
+	Gameplay.UnitTypes.WORM: { "name": "Worm malware", "hp_max": 1, "ap_max": 3, "abilities": ["move","scale","self_modify_to_virus","self_modify_to_trojan"] },
+	Gameplay.UnitTypes.TROJAN: { "name": "Trojan malware", "hp_max": 6, "ap_max": 8, "abilities": ["move","capture_tower","backdoor"] },
+	Gameplay.UnitTypes.VIRUS: { "name": "Virus malware", "hp_max": 15, "ap_max": 5, "abilities": ["move","virus_attack","integrate","spread"] },
 	}
 
 # sometimes abilities make AP drop right to zero, this table only shows the minimum AP cost

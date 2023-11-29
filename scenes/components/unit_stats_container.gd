@@ -12,8 +12,14 @@ func _ready():
 		%HP.text = "Hit Points"
 		%AP.text = "Action Points"
 
+func _process(delta):
+	if full_hp_ap:
+		# center vertically
+		unit_label.position.y = (size.y - unit_label.size.y) * 0.5
+
 func _display_unit_stats(unit: Unit, current_group: Gameplay.HackingGroups, is_selected: bool):
 	unit_label.text = StaticData.unit_stats[unit.type].name
+	
 	if is_selected:
 		unit_label.add_theme_color_override("font_color", Color("#00ff00"))
 	else:
@@ -27,7 +33,7 @@ func _display_unit_stats(unit: Unit, current_group: Gameplay.HackingGroups, is_s
 			if unit.group == Gameplay.HackingGroups.PINK:
 				info_label.text = "> Rebels group"
 			else:
-				info_label.text = "> Cyber police group"
+				info_label.text = "> Cyber Police group"
 			
 			if StaticData.show_tutorial_hints:
 				if is_selected:
@@ -39,6 +45,12 @@ func _display_unit_stats(unit: Unit, current_group: Gameplay.HackingGroups, is_s
 			#	info_label.text = "> Selected"
 			#else:
 			info_label.text = ""
+			
+			UIHelpers.override_ui_node_theme_font_size(unit_label, 20)
+			
+			# for it to be shorter
+			unit_label.text = unit_label.text.replace(" node", "")
+			unit_label.text = unit_label.text.replace(" malware", "")
 		
 		hp_label.text = "%s / %s" % [unit.hp, unit.hp_max]
 		
@@ -50,6 +62,9 @@ func _display_unit_stats(unit: Unit, current_group: Gameplay.HackingGroups, is_s
 		
 		%HP.visible = false
 		%AP.visible = false
+	
+	# hack for fixed position and fixed to fit the info
+	hp_label.text = hp_label.text.rpad(7)
 	
 	if unit.group != Gameplay.HackingGroups.NEUTRAL:
 		ap_label.text = "%s / %s" % [unit.ap, unit.ap_max]
