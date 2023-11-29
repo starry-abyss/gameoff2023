@@ -85,6 +85,7 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_right = -217.0
+offset_bottom = 0.0
 grow_horizontal = 2
 full_hp_ap = true
 
@@ -134,8 +135,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
 theme_override_fonts/font = ExtResource("3_x7kol")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 56
 text = "AI's turn"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -177,15 +179,30 @@ theme = ExtResource("3_7nk56")
 shortcut = SubResource("Shortcut_wykwr")
 text = "End turn"
 
-[node name="end_game_message" type="Label" parent="CanvasLayer"]
-offset_left = 14.0
-offset_top = 190.0
-offset_right = 1138.0
-offset_bottom = 263.0
+[node name="Panel2" type="Panel" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -265.0
+offset_top = 20.0
+offset_right = 330.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme = ExtResource("3_7nk56")
+
+[node name="end_game_message" type="Label" parent="CanvasLayer/Panel2"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_x7kol")
-theme_override_font_sizes/font_size = 64
-text = "TEST"
+theme_override_font_sizes/font_size = 56
+text = "Cyber Police wins!"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SelectedUnitAvatar" parent="CanvasLayer" instance=ExtResource("5_wvsta")]
 visible = false

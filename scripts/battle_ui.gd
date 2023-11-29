@@ -47,7 +47,7 @@ var is_ai_turn = false
 var last_tile_pos = Vector2i(0, 0)
 
 func _ready():
-	$CanvasLayer/end_game_message.visible = false
+	%end_game_message.get_parent().visible = false
 	
 	for button in find_children("", "Button"):
 		button.set_script(preload("res://scripts/button.gd"))
@@ -360,7 +360,8 @@ func change_theme_color():
 	%end_turn, 
 	%select_idle_unit, 
 	%cancel_select_target, 
-	$CanvasLayer/Panel, 
+	$CanvasLayer/Panel,
+	$CanvasLayer/Panel2,
 	tooltip_panel,
 	selected_unit_avatar,
 	selected_unit_stats_panel,
@@ -375,12 +376,12 @@ func change_theme_color():
 
 
 func _on_battle_end(who_won: Gameplay.HackingGroups):
-	$CanvasLayer/end_game_message.visible = true
+	%end_game_message.get_parent().visible = true
 	
 	if who_won == Gameplay.HackingGroups.PINK:
-		$CanvasLayer/end_game_message.text = "Rebels win!"
+		%end_game_message.text = "Rebels win!"
 	else:
-		$CanvasLayer/end_game_message.text = "Cyber Police wins!"
+		%end_game_message.text = "Cyber Police wins!"
 	
 func _on_unit_click(unit: Unit):
 	# for now we'll use tile click for this purpose
@@ -462,6 +463,9 @@ func _unhandled_input(event):
 		
 		last_tile_pos = tile_pos
 		
+		#if in_select_target_mode:
+		#	_on_ability_button_highlight(order_parameters.ability_id, "test")
+		#else:
 		#var test_distance = UIHelpers.tile_pos_distance(Vector2i(5, 5), tile_pos)		
 		#print("distance: ", test_distance)
 		

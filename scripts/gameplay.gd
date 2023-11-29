@@ -762,6 +762,12 @@ func order_ability_capture_tower(target: Unit, imaginary = false) -> bool:
 		UIHelpers.audio_event3d("SFX/Trojan/SFX_CaptureNode", selected_unit.tile_pos)
 		selected_unit.on_attacking(target, selected_unit.global_position)
 		
+		if target.type == UnitTypes.CENTRAL_NODE:
+			for_all_tile_pos_around(target.tile_pos, func(tile1): \
+				for_all_tile_pos_around(tile1, func(tile2): \
+					for_all_tile_pos_around(tile2, func(tile3): \
+						get_tile(tile3).group = selected_unit.group)))
+		
 		remove_unit(selected_unit)
 		
 		update_firewalls()
@@ -1143,9 +1149,10 @@ func end_turn(silent = false):
 					
 					for_all_tile_pos_around(unit.tile_pos, \
 						func(tile_pos):
-							spawn_unit(tile_pos, UnitTypes.WORM, unit.group)
-							var new_unit = find_unit_by_tile_pos(tile_pos)
-							battle_ui._on_unit_spawn(new_unit)
+							var success = spawn_unit(tile_pos, UnitTypes.WORM, unit.group)
+							if success:
+								var new_unit = find_unit_by_tile_pos(tile_pos)
+								battle_ui._on_unit_spawn(new_unit)
 							)
 	
 	# skip turn of the defeated group
