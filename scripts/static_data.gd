@@ -198,13 +198,15 @@ extends Node
 		""" },
 	
 	"integrate": { "text": """
-		Consumes a chosen Worm from a neighbor tile. Action Points are increased by 3 then until the next turn.
+		Consumes a chosen Worm from a neighbor tile. Action Points are increased by 3 then, even above the limit, until the next turn.
 		
 		Only one Worm per turn can be integrated by each Virus.
 		
 		This is the only way to perform 'attack_n_spread' action (on the same turn).
 		""" },
 	"spread": { "text": """
+		The only way to perform 'attack_n_spread' is to first use 'integrate' on the same turn.
+		
 		Deals the damage to an enemy on a neighbor tile.
 		The damage is also spread instantly along the chain for enemy units on next neighbor tiles.
 		
