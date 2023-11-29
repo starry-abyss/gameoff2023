@@ -401,7 +401,10 @@ func _process(delta):
 			on_spawn = false
 			spawn_timer = 0
 			material.set_shader_parameter("spawn_y_range", Vector2(-10, 10))
-			
+	else:
+		spawn_timer = 0
+		material.set_shader_parameter("spawn_y_range", Vector2(-10, 10))
+	
 	if to_be_removed:
 		destroy_timer += delta
 		

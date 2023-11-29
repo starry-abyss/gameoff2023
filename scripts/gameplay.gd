@@ -386,7 +386,7 @@ func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups, imagi
 		
 		unit.on_click.connect(battle_ui._on_unit_click)
 		
-		battle_ui._on_unit_spawn(unit)
+		#battle_ui._on_unit_spawn(unit)
 		
 		#unit.hp = 1
 	
@@ -1142,7 +1142,11 @@ func end_turn(silent = false):
 					UIHelpers.audio_event3d("SFX/Kernel Node/SFX_GenerateWorms", unit.tile_pos)
 					
 					for_all_tile_pos_around(unit.tile_pos, \
-						func(tile_pos): spawn_unit(tile_pos, UnitTypes.WORM, unit.group))
+						func(tile_pos):
+							spawn_unit(tile_pos, UnitTypes.WORM, unit.group)
+							var new_unit = find_unit_by_tile_pos(tile_pos)
+							battle_ui._on_unit_spawn(new_unit)
+							)
 	
 	# skip turn of the defeated group
 	if loser == current_turn_group:
