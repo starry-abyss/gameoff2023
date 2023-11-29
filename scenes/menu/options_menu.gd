@@ -34,10 +34,10 @@ func _ready():
 	sfx_slider.value_changed.connect(_on_volume_sfx_value_changed)
 	master_slider.value_changed.connect(_on_volume_master_value_changed)
 	
-	fullscreen.button_pressed = StaticData.fullscreen
+	fullscreen.checked = StaticData.fullscreen
 	fullscreen.toggled.connect(fullscreen_changed)
 	
-	hints_enabled.button_pressed = StaticData.show_tutorial_hints
+	hints_enabled.checked = StaticData.show_tutorial_hints
 	hints_enabled.toggled.connect(show_tutorial_hints_changed)
 	
 	if hide_background_effect:
@@ -96,7 +96,7 @@ func _on_color_picker_button_2_color_changed(color):
 
 
 func change_theme_color(color):
-	var ui_nodes = [$Panel, $Back, music_slider, sfx_slider, master_slider, background, team_1_color_button, team_2_color_button, options]
+	var ui_nodes = [%HintsEnabled, %Fullscreen, $Panel, $Back, music_slider, sfx_slider, master_slider, background, team_1_color_button, team_2_color_button, options]
 	UIHelpers.override_ui_node_theme_with_color(ui_nodes, color)
 
 

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/menu/options_menu.gd" id="1_mumff"]
 [ext_resource type="Shader" path="res://shaders/blur.gdshader" id="2_t0fcv"]
+[ext_resource type="PackedScene" uid="uid://1rig7qjbh2cj" path="res://scenes/components/styled_checkbox.tscn" id="4_5647p"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="5_ncrul"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_drc0s"]
@@ -10,9 +11,6 @@ shader_parameter/lod = 3.123
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qg0hq"]
 bg_color = Color(0.266667, 0.313726, 0.521569, 0.580392)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x4euk"]
-bg_color = Color(0, 0.964706, 0.984314, 1)
 
 [node name="OptionsMenu" type="Control"]
 layout_mode = 3
@@ -270,47 +268,29 @@ color = Color(1, 1, 1, 1)
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control6"]
-layout_mode = 0
-offset_left = 204.0
-offset_top = 3.0
-offset_right = 222.0
-offset_bottom = 21.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_x4euk")
-
-[node name="HintsEnabled" type="CheckBox" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control6"]
+[node name="HintsEnabled" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control6" instance=ExtResource("4_5647p")]
 unique_name_in_owner = true
-self_modulate = Color(0, 0.964706, 0.984314, 1)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -24.0
-offset_bottom = 24.0
+offset_left = -18.0
+offset_right = 0.0
 grow_horizontal = 0
-button_pressed = true
+checked = true
 
 [node name="Control7" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control7"]
-layout_mode = 0
-offset_left = 204.0
-offset_top = 3.0
-offset_right = 222.0
-offset_bottom = 21.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_x4euk")
-
-[node name="Fullscreen" type="CheckBox" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control7"]
+[node name="Fullscreen" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control7" instance=ExtResource("4_5647p")]
 unique_name_in_owner = true
-self_modulate = Color(0, 0.964706, 0.984314, 1)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -24.0
-offset_bottom = 24.0
+offset_left = -18.0
+offset_right = 0.0
 grow_horizontal = 0
 
 [node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer"]

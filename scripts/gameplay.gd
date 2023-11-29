@@ -1201,7 +1201,7 @@ func on_group_color_change(group: Gameplay.HackingGroups, color: Color):
 
 
 func _override_other_ui_theme_with_color(color):
-	UIHelpers.override_ui_node_theme_with_color([options, $CanvasLayer/EndBattle, $CanvasLayer/RestartBattle, $CanvasLayer/ResetCamera], color)
+	UIHelpers.override_ui_node_theme_with_color([options, $CanvasLayer/VBoxContainer/ResetCamera, $CanvasLayer/VBoxContainer/EndBattle, $CanvasLayer/VBoxContainer/RestartBattle], color)
 
 
 func _ready():
@@ -1329,10 +1329,7 @@ func _ready():
 	pass
 
 
-# FIXME for test usage!
 func _process(delta: float) -> void:
-	if !is_ai_turn() && Input.is_action_just_pressed("End Turn"):
-		end_turn()
 	
 	#var map_center = (UIHelpers.tile_pos_to_world_pos(Vector2i(13, 9)) + UIHelpers.tile_pos_to_world_pos(Vector2i(14, 9))) / 2.0
 	#$Camera3D/StudioListener3D.global_position = Vector3(map_center.x, 0.0, map_center.y)

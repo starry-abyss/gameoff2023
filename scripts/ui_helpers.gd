@@ -165,7 +165,8 @@ func override_ui_node_theme_with_color(nodes: Array, color: Color):
 			grabber_area_highlight_style_box.bg_color = color.darkened(0.2)
 			grabber_area_highlight_style_box.border_color = color
 			node.add_theme_stylebox_override("grabber_area_highlight", grabber_area_highlight_style_box)
-
+		elif node is StyledCheckbox:
+			node.override_color(color)
 
 func override_ui_node_theme_font_size(node, font_size: int):	
 	node.add_theme_font_size_override("font_size", font_size)

@@ -3,7 +3,7 @@ extends Control
 
 signal go_to_options_menu
 
-
+@onready var credits: Control = $Credits
 @onready var glitch_effect: Sprite2D = $Effect
 @onready var show_glitch_effect_timer = $Timer
 
@@ -28,3 +28,7 @@ func _on_quit_pressed():
 func _on_timer_timeout():
 	glitch_effect.visible = false
 	get_tree().change_scene_to_file("res://maps/test1.tscn")
+	
+
+func _on_credits_pressed() -> void:
+	credits.visible = true

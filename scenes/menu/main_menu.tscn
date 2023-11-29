@@ -1,9 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://d0psqdiovqmy8"]
+[gd_scene load_steps=8 format=3 uid="uid://d0psqdiovqmy8"]
 
 [ext_resource type="Script" path="res://scenes/menu/main_menu.gd" id="1_46h0q"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="3_c1x3u"]
 [ext_resource type="Shader" path="res://shaders/glitch.gdshader" id="3_kfdc0"]
 [ext_resource type="Texture2D" uid="uid://dgfw5dh42i3qk" path="res://icon.svg" id="4_tu3lh"]
+[ext_resource type="PackedScene" uid="uid://1rig7qjbh2cj" path="res://scenes/components/styled_checkbox.tscn" id="5_1btrk"]
+[ext_resource type="PackedScene" uid="uid://dkyrq71ky3d7k" path="res://scenes/menu/credits.tscn" id="6_ki7ii"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_31tw3"]
 shader = ExtResource("3_kfdc0")
@@ -25,10 +27,10 @@ script = ExtResource("1_46h0q")
 [node name="Quit" type="Button" parent="."]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-offset_left = 28.0
-offset_top = 598.0
-offset_right = 128.0
-offset_bottom = 625.0
+offset_left = 1026.0
+offset_top = 594.0
+offset_right = 1126.0
+offset_bottom = 624.0
 theme = ExtResource("3_c1x3u")
 text = "Quit"
 expand_icon = true
@@ -70,17 +72,22 @@ theme = ExtResource("3_c1x3u")
 text = "Options"
 expand_icon = true
 
+[node name="Margin2" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_bottom = 10
+
+[node name="Credits" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme = ExtResource("3_c1x3u")
+text = "Credits"
+expand_icon = true
+
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
 
-[node name="Effect" type="Sprite2D" parent="."]
-visible = false
-material = SubResource("ShaderMaterial_31tw3")
-position = Vector2(573.5, 323.5)
-scale = Vector2(8.96094, 5.03906)
-texture = ExtResource("4_tu3lh")
-
 [node name="ControllerLabel1" type="Label" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 353.0
 offset_top = 473.0
@@ -89,24 +96,8 @@ offset_bottom = 492.0
 text = "Rebels
 "
 
-[node name="pink_controller" type="OptionButton" parent="."]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 420.0
-offset_top = 469.0
-offset_right = 537.0
-offset_bottom = 499.0
-theme = ExtResource("3_c1x3u")
-flat = true
-alignment = 1
-item_count = 2
-selected = 1
-popup/item_0/text = "(Human)"
-popup/item_0/id = 0
-popup/item_1/text = "(AI)"
-popup/item_1/id = 1
-
 [node name="ControllerLabel3" type="Label" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 552.0
 offset_top = 475.0
@@ -115,6 +106,7 @@ offset_bottom = 494.0
 text = "vs"
 
 [node name="ControllerLabel2" type="Label" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 609.0
 offset_top = 474.0
@@ -122,15 +114,135 @@ offset_right = 719.0
 offset_bottom = 493.0
 text = "Cyber Police"
 
-[node name="blue_controller" type="OptionButton" parent="."]
-unique_name_in_owner = true
+[node name="Panel" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 729.0
-offset_top = 468.0
-offset_right = 846.0
-offset_bottom = 498.0
+offset_left = 298.0
+offset_top = 469.0
+offset_right = 861.0
+offset_bottom = 637.0
 theme = ExtResource("3_c1x3u")
-flat = true
+
+[node name="PlayerVSPlayerHBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 290.0
+offset_top = 498.0
+offset_right = 858.0
+offset_bottom = 548.0
+
+[node name="Rebels" type="HBoxContainer" parent="PlayerVSPlayerHBoxContainer"]
+layout_mode = 2
+
+[node name="ControllerLabel1" type="Label" parent="PlayerVSPlayerHBoxContainer/Rebels"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Rebels
+"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerVSPlayerHBoxContainer/Rebels"]
+visible = false
+custom_minimum_size = Vector2(120, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Control" parent="PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer" instance=ExtResource("5_1btrk")]
+layout_mode = 2
+size_flags_horizontal = 8
+checked = true
+
+[node name="Label" type="Label" parent="PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer/Control"]
+layout_mode = 0
+offset_left = -46.0
+offset_right = -6.0
+offset_bottom = 19.0
+text = "(AI)"
+horizontal_alignment = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control2" parent="PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer" instance=ExtResource("5_1btrk")]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer/Control2"]
+layout_mode = 0
+offset_left = -67.0
+offset_right = -6.0
+offset_bottom = 19.0
+text = "(Human)"
+horizontal_alignment = 2
+
+[node name="pink_controller" type="OptionButton" parent="PlayerVSPlayerHBoxContainer/Rebels"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_c1x3u")
+alignment = 1
+item_count = 2
+selected = 1
+popup/item_0/text = "(Human)"
+popup/item_0/id = 0
+popup/item_1/text = "(AI)"
+popup/item_1/id = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayerVSPlayerHBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PlayerVSPlayerHBoxContainer/MarginContainer"]
+layout_mode = 2
+text = "vs"
+horizontal_alignment = 1
+
+[node name="CyberPolice" type="HBoxContainer" parent="PlayerVSPlayerHBoxContainer"]
+layout_mode = 2
+
+[node name="ControllerLabel1" type="Label" parent="PlayerVSPlayerHBoxContainer/CyberPolice"]
+layout_mode = 2
+text = "Cyber Police"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayerVSPlayerHBoxContainer/CyberPolice"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerVSPlayerHBoxContainer/CyberPolice"]
+visible = false
+custom_minimum_size = Vector2(120, 50)
+layout_mode = 2
+alignment = 1
+
+[node name="Control" parent="PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer" instance=ExtResource("5_1btrk")]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer/Control"]
+layout_mode = 0
+offset_left = 24.0
+offset_right = 64.0
+offset_bottom = 19.0
+text = "(AI)"
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control2" parent="PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer" instance=ExtResource("5_1btrk")]
+layout_mode = 2
+checked = true
+
+[node name="Label" type="Label" parent="PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer/Control2"]
+layout_mode = 0
+offset_left = 24.0
+offset_right = 85.0
+offset_bottom = 19.0
+text = "(Human)"
+
+[node name="blue_controller" type="OptionButton" parent="PlayerVSPlayerHBoxContainer/CyberPolice"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_c1x3u")
 alignment = 1
 item_count = 2
 selected = 0
@@ -142,13 +254,25 @@ popup/item_1/id = 1
 [node name="ControllerHint" type="Label" parent="."]
 layout_mode = 0
 offset_left = 329.0
-offset_top = 575.0
+offset_top = 565.0
 offset_right = 822.0
-offset_bottom = 633.0
+offset_bottom = 623.0
 text = "Rebels always go first. For educational purposes the recommended mode is Rebels (AI) vs Cyber Police (Human)."
 autowrap_mode = 2
+
+[node name="Credits" parent="." instance=ExtResource("6_ki7ii")]
+visible = false
+layout_mode = 1
+
+[node name="Effect" type="Sprite2D" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_31tw3")
+position = Vector2(573.5, 323.5)
+scale = Vector2(8.96094, 5.03906)
+texture = ExtResource("4_tu3lh")
 
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Credits" to="." method="_on_credits_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://khbj7vpou3mu"]
+[gd_scene load_steps=13 format=3 uid="uid://khbj7vpou3mu"]
 
 [ext_resource type="Script" path="res://scripts/battle_ui.gd" id="1_wpfyh"]
 [ext_resource type="PackedScene" uid="uid://boljanqb1ln7c" path="res://scenes/selected_unit_stats.tscn" id="2_j36x1"]
@@ -8,6 +8,14 @@
 [ext_resource type="Script" path="res://scenes/SelectedUnitIndicator.gd" id="4_h3s35"]
 [ext_resource type="PackedScene" uid="uid://cxwuitxg37k3d" path="res://scenes/components/selected_unit_avatar.tscn" id="5_wvsta"]
 [ext_resource type="PackedScene" uid="uid://b420toe6tohxy" path="res://scenes/components/unit_stats_container.tscn" id="6_yuq0d"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_h2l6t"]
+device = -1
+keycode = 69
+unicode = 101
+
+[sub_resource type="Shortcut" id="Shortcut_wykwr"]
+events = [SubResource("InputEventKey_h2l6t")]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_meo4c"]
 shading_mode = 0
@@ -84,6 +92,7 @@ offset_top = 465.0
 offset_right = 1124.0
 offset_bottom = 496.0
 theme = ExtResource("3_7nk56")
+shortcut = SubResource("Shortcut_wykwr")
 text = "End turn"
 
 [node name="select_idle_unit" type="Button" parent="CanvasLayer"]

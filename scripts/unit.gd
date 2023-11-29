@@ -392,9 +392,10 @@ func _process(delta):
 			
 	if on_spawn:
 		spawn_timer += delta
-		var y_min = (aabb as AABB).size.y * spawn_timer / StaticData.spawn_animation_duration
-		var y_max = y_min + (aabb as AABB).size.y * 0.3
-		var spawn_y_range = Vector2(y_min, y_max)
+		var y_max = (aabb as AABB).size.y * spawn_timer / StaticData.spawn_animation_duration
+		var spawn_y_highlight_range = (aabb as AABB).size.y * 0.2
+		var spawn_y_range = Vector2((aabb as AABB).position.y, (aabb as AABB).position.y + y_max)
+		material.set_shader_parameter("spawn_y_highlight_range", spawn_y_highlight_range)
 		material.set_shader_parameter("spawn_y_range", spawn_y_range)
 		if spawn_timer >= StaticData.spawn_animation_duration:
 			on_spawn = false
@@ -408,7 +409,7 @@ func _process(delta):
 		#scale = Vector3(new_scale, new_scale, new_scale)
 		new_scale = ease(new_scale, 0.4)
 		
-		material.set_shader_parameter("emission_color", Color(material.get_shader_parameter("emission_color"), new_scale))
+		material.set_shader_parameter("opacity", new_scale)
 		
 		if destroy_timer >= StaticData.turn_animation_duration:
 			queue_free()

@@ -38,14 +38,14 @@ theme_override_font_sizes/font_size = 20
 text = "Button Name"
 horizontal_alignment = 1
 
+[node name="AuthorInfo" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Author placeholder"
+autowrap_mode = 2
+
 [node name="Tooltip" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Description placeholder"
-autowrap_mode = 2
-
-[node name="Additional Info" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Author placeholder"
 autowrap_mode = 2
