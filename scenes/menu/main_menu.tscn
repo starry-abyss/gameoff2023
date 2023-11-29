@@ -5,7 +5,7 @@
 [ext_resource type="Shader" path="res://shaders/glitch.gdshader" id="3_kfdc0"]
 [ext_resource type="Texture2D" uid="uid://dgfw5dh42i3qk" path="res://icon.svg" id="4_tu3lh"]
 [ext_resource type="PackedScene" path="res://scenes/components/styled_checkbox.tscn" id="5_1btrk"]
-[ext_resource type="PackedScene" path="res://scenes/menu/credits.tscn" id="6_ki7ii"]
+[ext_resource type="PackedScene" uid="uid://bladnifrmnpk" path="res://scenes/menu/credits.tscn" id="6_ki7ii"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_31tw3"]
 shader = ExtResource("3_kfdc0")

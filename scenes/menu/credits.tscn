@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://dkyrq71ky3d7k"]
+[gd_scene load_steps=3 format=3 uid="uid://bladnifrmnpk"]
 
 [ext_resource type="Script" path="res://scenes/menu/credits.gd" id="1_8rvqx"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="2_yi2dl"]
@@ -44,9 +44,22 @@ text = "Credits"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer"]
+[node name="MarginContainer" type="Control" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(2.08165e-12, 40)
 layout_mode = 2
-theme_override_constants/margin_top = 50
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/MarginContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "Team"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
 layout_mode = 2
@@ -172,16 +185,46 @@ theme_override_constants/margin_left = 105
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 
+[node name="Label4" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Technology
+
+
+"
+horizontal_alignment = 2
+
+[node name="Label3" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Music tracks
+
+
+"
+horizontal_alignment = 2
+
 [node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "electric.gdshader"
+theme_override_font_sizes/font_size = 12
+text = "Electric shader"
 horizontal_alignment = 2
 
 [node name="Label2" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "glitch.gdshader"
+theme_override_font_sizes/font_size = 12
+text = "Glitch shader (menu)"
+horizontal_alignment = 2
+
+[node name="Label5" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Font"
+horizontal_alignment = 2
+
+[node name="Label6" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Hex tile model"
 horizontal_alignment = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer/HBoxContainer2"]
@@ -192,30 +235,86 @@ theme_override_constants/margin_right = 20
 [node name="VBoxContainer2" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer2/MarginContainer"]
 layout_mode = 2
 
+[node name="Label4" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "-
+
+
+"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "-
+
+
+"
+horizontal_alignment = 1
+
 [node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/MarginContainer/VBoxContainer2"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 12
 text = "-"
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/MarginContainer/VBoxContainer2"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 12
+text = "-"
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "-"
+horizontal_alignment = 1
+
+[node name="Label6" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "-"
 horizontal_alignment = 1
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="Panel/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 
+[node name="Label4" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/VBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Godot Engine, FMOD Studio by Firelight Technologies Pty Ltd.,
+https://github.com/alessandrofama/fmod-for-godot
+
+"
+
+[node name="Label3" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/VBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "by Alexandr Zhelanov https://www.youtube.com/c/AlexandrZhelanovsMusic 
+https://soundcloud.com/alexandr-zhelanov
+
+"
+
 [node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/VBoxContainer3"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "https://ko-fi.com/E1E44AWTA"
+theme_override_font_sizes/font_size = 12
+text = "https://bitbucket.org/arlez80/proc-electric-current-shader"
 
 [node name="Label2" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/VBoxContainer3"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "https://www.shadertoy.com/view/Ms3XWH"
+theme_override_font_sizes/font_size = 12
+text = "by Gaktan https://www.shadertoy.com/view/Ms3XWH"
+
+[node name="Label5" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/VBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "by Carrois Apostrophe https://fonts.google.com/specimen/Share+Tech+Mono"
+
+[node name="Label6" type="Label" parent="Panel/VBoxContainer/HBoxContainer2/VBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "by Kenney.nl https://opengameart.org/content/hexagon-kit"
 
 [node name="BackToMainMenu" type="Button" parent="Panel"]
 custom_minimum_size = Vector2(100, 0)
