@@ -901,6 +901,8 @@ func order_ability_backdoor(target_tile_pos: Vector2i, imaginary = false) -> boo
 				&& is_tile_walkable(tile_pos_to):
 					teleport_unit(unit_from, tile_pos_to)
 					
+					battle_ui._on_unit_spawn(unit_from)
+					
 					# after teleporting each unit will have only 1 AP at max to re-group
 					if unit_from.ap > 1:
 						unit_from.ap = 1

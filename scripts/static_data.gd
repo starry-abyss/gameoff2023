@@ -255,7 +255,7 @@ extends Node
 		But if any of the Trojan neighbor tiles is occupied, no malware is teleported in that particular tile.
 		Unlike other actions it's possible to teleport through any firewalls.
 		
-		All teleported units' Action Points are reduced to one (at maximum) until the next turn.
+		All teleported units' Action Points are reduced to 1 (at maximum) until the next turn.
 		
 		The period of unavailability after use, in turns, is shown on the button.
 		""" },
