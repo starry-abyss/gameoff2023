@@ -35,6 +35,9 @@ func _ready():
 		button.set_process(true)
 		#button.mouse_entered.connect(_on_button_highlight)
 	
+	#UIHelpers.override_ui_node_theme_with_color(find_children("", "Button"), StaticData.main_menu_color)
+	$OptionsMenu.change_theme_color(StaticData.main_menu_color)
+	
 	for x in range(MAP_SIZE.x):
 		for y in range(MAP_SIZE.y):
 			add_tile(Vector2i(x, y))
@@ -48,7 +51,6 @@ func _ready():
 		#var mesh_instances = tile.find_children("", "MeshInstance3D")
 		#for mi in mesh_instances:
 			#mi.material_override = material
-	
 
 func _process(delta):
 	viewport.size = viewport_container.size

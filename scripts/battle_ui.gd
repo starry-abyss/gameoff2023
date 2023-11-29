@@ -354,6 +354,8 @@ func update_abilities_buttons_icon_tint():
 			button.get_node("icon").material.set_shader_parameter("tint", color)
 
 func change_theme_color():
+	update_abilities_buttons_icon_tint()
+	
 	var ui_nodes = [
 	$CanvasLayer/end_turn, 
 	$CanvasLayer/select_idle_unit, 

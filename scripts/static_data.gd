@@ -6,6 +6,8 @@ extends Node
 @export var tile_good_target: Color = Color("#757575")
 @export var tile_bad_target: Color = Color("#202020")
 
+@export var main_menu_color: Color = Color("#00ff00")
+
 @export var hurt_animation_duration: float = 4
 @export var spawn_animation_duration: float = 2
 @export var turn_animation_duration: float = 1.0
@@ -30,22 +32,22 @@ extends Node
 
 # sometimes abilities make AP drop right to zero, this table only shows the minimum AP cost
 @export var ability_stats = {
-	"move": { "name": "move", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 0 },
+	"move": { "icon": "move", "name": "move", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 0 },
 	
-	"virus_attack": { "name": "attack_short", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 4, "attack_extra": 2, "attack_range": 1 },
-	"tower_attack": { "name": "attack_long", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 6, "attack_extra": 2, "attack_range": 2 },
+	"virus_attack": { "icon": "virus attack", "name": "attack_short", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 4, "attack_extra": 2, "attack_range": 1 },
+	"tower_attack": { "icon": "tower attack", "name": "attack_long", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 6, "attack_extra": 2, "attack_range": 2 },
 	
 	"scale": { "icon": "duplicate 2", "name": "duplicate", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 1 },
 	"self_modify_to_virus": { "icon": "virus grid", "name": "mutate_to_virus", "target": Gameplay.TargetTypes.SELF, "ap": 2, "cooldown": 0 },
 	"self_modify_to_trojan": { "icon": "trojan", "name": "mutate_to_trojan", "target": Gameplay.TargetTypes.SELF, "ap": 3, "cooldown": 0 },
 	
-	"integrate": { "name": "integrate", "target": Gameplay.TargetTypes.UNIT, "ap": -3, "cooldown": 1 },
-	"spread": { "name": "attack_n_spread", "target": Gameplay.TargetTypes.UNIT, "ap": 6, "cooldown": 0, "attack": 3, "attack_extra": 2 },
+	"integrate": { "icon": "integrate", "name": "integrate", "target": Gameplay.TargetTypes.UNIT, "ap": -3, "cooldown": 1 },
+	"spread": { "icon": "spread", "name": "attack_n_spread", "target": Gameplay.TargetTypes.UNIT, "ap": 6, "cooldown": 0, "attack": 3, "attack_extra": 2 },
 	
-	"repair": { "name": "patch", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "restored_hp": 4 },
-	"reset": { "name": "reset_area", "target": Gameplay.TargetTypes.TILE, "ap": 6, "cooldown": 5 },
-	"spawn_worms": { "name": "generate_worms", "target": Gameplay.TargetTypes.SELF, "ap": 0, "cooldown": 5 },
-	"self_repair": { "name": "self_maintain", "target": Gameplay.TargetTypes.SELF, "ap": 0, "cooldown": 0, "restored_hp": 6 },
+	"repair": { "icon": "repair", "name": "patch", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "restored_hp": 4 },
+	"reset": { "icon": "reset", "name": "reset_area", "target": Gameplay.TargetTypes.TILE, "ap": 6, "cooldown": 5 },
+	"spawn_worms": { "icon": "spawn worm", "name": "generate_worms", "target": Gameplay.TargetTypes.SELF, "ap": 0, "cooldown": 5 },
+	"self_repair": { "icon": "self heal", "name": "self_maintain", "target": Gameplay.TargetTypes.SELF, "ap": 0, "cooldown": 0, "restored_hp": 6 },
 	
 	"capture_tower": { "icon": "capture", "name": "capture_node", "target": Gameplay.TargetTypes.UNIT, "ap": 4, "cooldown": 0 },
 	"backdoor": { "icon": "backdoor", "name": "open_port", "target": Gameplay.TargetTypes.TILE, "ap": 2, "cooldown": 3 },
