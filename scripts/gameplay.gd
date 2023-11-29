@@ -1329,10 +1329,7 @@ func _ready():
 	pass
 
 
-# FIXME for test usage!
 func _process(delta: float) -> void:
-	if !is_ai_turn() && Input.is_action_just_pressed("End Turn"):
-		end_turn()
 	
 	#var map_center = (UIHelpers.tile_pos_to_world_pos(Vector2i(13, 9)) + UIHelpers.tile_pos_to_world_pos(Vector2i(14, 9))) / 2.0
 	#$Camera3D/StudioListener3D.global_position = Vector3(map_center.x, 0.0, map_center.y)
