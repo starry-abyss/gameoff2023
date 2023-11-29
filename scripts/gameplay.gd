@@ -706,6 +706,8 @@ func order_ability_scale(target_tile_pos: Vector2i, imaginary = false) -> bool:
 		new_worm.hp = selected_unit.hp
 		new_worm.cooldowns["scale"] = StaticData.ability_stats["scale"].cooldown
 		
+		new_worm.on_attacking(new_worm.tile_pos, selected_unit.global_position)
+		
 		UIHelpers.audio_event3d("SFX/Worms/SFX_Double", selected_unit.tile_pos)
 	
 	return true
@@ -753,6 +755,7 @@ func order_ability_capture_tower(target: Unit, imaginary = false) -> bool:
 		target.hp = target.hp_max
 		
 		UIHelpers.audio_event3d("SFX/Trojan/SFX_CaptureNode", selected_unit.tile_pos)
+		selected_unit.on_attacking(target, selected_unit.global_position)
 		
 		remove_unit(selected_unit)
 		
@@ -777,6 +780,8 @@ func order_ability_integrate(target: Unit, imaginary = false) -> bool:
 		return false
 	
 	if !imaginary:
+		target.on_attacking(selected_unit, target.global_position)
+		
 		remove_unit(target)
 		
 		UIHelpers.audio_event3d("SFX/Virus/SFX_Integrate", selected_unit.tile_pos)
@@ -835,7 +840,7 @@ func order_ability_spread(target: Unit, imaginary = false) -> bool:
 					
 					pos_to_explore_stack.append(pos_to_explore_next)
 		
-		selected_unit.on_attacking(target)
+		selected_unit.on_attacking(target, selected_unit.global_position)
 		UIHelpers.audio_event3d("SFX/Virus/SFX_Spread", selected_unit.tile_pos)
 	
 	return true
@@ -1012,7 +1017,7 @@ func order_attack(target: Unit, imaginary: bool, ability_stats) -> bool:
 				var attack_power = ability_stats.attack + randi_range(0, ability_stats.attack_extra)
 				hurt_unit(target, attack_power)
 				
-				selected_unit.on_attacking(target)
+				selected_unit.on_attacking(target, selected_unit.global_position)
 				
 				if selected_unit.type == UnitTypes.TOWER_NODE:
 					UIHelpers.audio_event3d("SFX/Anti Virus Node/SFX_DamageRange", selected_unit.tile_pos)

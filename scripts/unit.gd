@@ -40,6 +40,7 @@ var tower_ball_current = null
 var attack_timer = 0.0
 var is_attacking = false
 var attack_target_pos = Vector3(0.0, 0.0, 0.0)
+var attack_start_pos = Vector3(0.0, 0.0, 0.0)
 
 var emission_color: Color
 
@@ -277,11 +278,20 @@ func _ready():
 func _on_click():
 	on_click.emit(self)
 
-func on_attacking(target: Unit):
+func on_attacking(target, start_pos):
 	is_attacking = true
 	
-	var unit_aabb = Utils.get_aabb(target.model)
-	attack_target_pos = target.global_position + Vector3(0.0, unit_aabb.size.y * 0.5, 0.0)
+	attack_start_pos = start_pos
+	
+	if target is Unit:
+		var unit_aabb = Utils.get_aabb(target.model)
+		attack_target_pos = target.global_position + Vector3(0.0, unit_aabb.size.y * 0.5, 0.0)
+	elif target is Vector2i:
+		var wp = UIHelpers.tile_pos_to_world_pos(target)
+		attack_target_pos = Vector3(wp.x, 0.0, wp.y)
+	else:
+		# this branch shouldn't happen
+		assert(false)
 	
 	if type == Gameplay.UnitTypes.TOWER_NODE:
 		#if tower_ball_current == null:
@@ -305,8 +315,13 @@ func on_hurt():
 	material.set_shader_parameter("glitch_y_range", glitch_y_range)
 	
 func _process(delta):
+	# used for attacks and for other gradual movement as well
 	if is_attacking:
 		attack_timer += delta
+		
+		#var wp = UIHelpers.tile_pos_to_world_pos(tile_pos)
+		#var original_pos = Vector3(wp.x, 0.0, wp.y)
+		
 		var progress = max(0.0, attack_timer * 1.0) / StaticData.attack_animation_duration
 		
 		if type == Gameplay.UnitTypes.TOWER_NODE:
@@ -316,9 +331,16 @@ func _process(delta):
 		elif type == Gameplay.UnitTypes.VIRUS:
 			if model != null:
 				rotation.y = progress * PI * 2.0
-				var wp = UIHelpers.tile_pos_to_world_pos(tile_pos)
-				var original_pos = Vector3(wp.x, 0.0, wp.y)
-				global_position = original_pos.lerp((attack_target_pos + original_pos) * 0.5, sin(progress * PI))
+				
+				global_position = attack_start_pos.lerp((attack_target_pos + attack_start_pos) * 0.5, sin(progress * PI))
+		elif type == Gameplay.UnitTypes.TROJAN:
+			var fast_progress = progress * 3.0
+			if fast_progress > 1.0:
+				fast_progress = 1.0
+			
+			global_position = attack_start_pos.lerp(attack_target_pos, fast_progress)
+		else:
+			global_position = attack_start_pos.lerp(attack_target_pos, ease(progress, 3.6))
 		
 		if attack_timer >= StaticData.attack_animation_duration:
 			if type == Gameplay.UnitTypes.TOWER_NODE:
@@ -326,6 +348,9 @@ func _process(delta):
 				tower_ball_current = null
 			elif type == Gameplay.UnitTypes.VIRUS:
 				update_model_pos()
+			else:
+				if !to_be_removed:
+					update_model_pos()
 			
 			is_attacking = false
 			attack_timer = 0.0

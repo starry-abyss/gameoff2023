@@ -323,7 +323,8 @@ func _on_unit_hp_change(unit: Unit, delta_hp: int):
 	else:
 		label.get_node("Label").text = "" + str(delta_hp)
 	
-	label.global_position = unit.global_position + Vector3(0.0, 2.0, 0.0)
+	var unit_aabb = Utils.get_aabb(unit.model)
+	label.global_position = unit.global_position + Vector3(0.0, unit_aabb.size.y, 0.0)
 	
 func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn: bool):
 	change_theme_color()
@@ -422,8 +423,7 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 		
 		tiles_tint_reset()
 	
-	#if !is_ai_turn:
-	#	_on_unit_show_stats(selected_unit, true)
+	update_selected_unit_stats(selected_unit)
 	update_abilities_buttons(selected_unit)
 
 func tiles_tint_reset():
