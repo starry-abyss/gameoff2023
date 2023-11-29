@@ -86,13 +86,6 @@ expand_icon = true
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
 
-[node name="Effect" type="Sprite2D" parent="."]
-visible = false
-material = SubResource("ShaderMaterial_31tw3")
-position = Vector2(573.5, 323.5)
-scale = Vector2(8.96094, 5.03906)
-texture = ExtResource("4_tu3lh")
-
 [node name="ControllerLabel1" type="Label" parent="."]
 visible = false
 layout_mode = 0
@@ -270,6 +263,13 @@ autowrap_mode = 2
 [node name="Credits" parent="." instance=ExtResource("6_ki7ii")]
 visible = false
 layout_mode = 1
+
+[node name="Effect" type="Sprite2D" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_31tw3")
+position = Vector2(573.5, 323.5)
+scale = Vector2(8.96094, 5.03906)
+texture = ExtResource("4_tu3lh")
 
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
