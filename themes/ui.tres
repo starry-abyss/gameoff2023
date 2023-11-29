@@ -1,6 +1,8 @@
-[gd_resource type="Theme" load_steps=16 format=3 uid="uid://bcihimekk2fq0"]
+[gd_resource type="Theme" load_steps=20 format=3 uid="uid://bcihimekk2fq0"]
 
 [ext_resource type="Texture2D" uid="uid://pa1uh0dktctp" path="res://art/slider.png" id="1_0kq6q"]
+[ext_resource type="Texture2D" uid="uid://bdrttler2aif0" path="res://art/radio_checked.png" id="1_jjxd0"]
+[ext_resource type="Texture2D" uid="uid://bdlqh5r4l7qu3" path="res://art/radio_unchecked.png" id="2_hw4oa"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wqbs"]
 content_margin_left = 10.0
@@ -159,6 +161,28 @@ expand_margin_top = 10.0
 expand_margin_right = 10.0
 expand_margin_bottom = 10.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eppsw"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.0117647, 0.929412, 0.796078, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ipff7"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.0117647, 0.929412, 0.796078, 1)
+border_blend = true
+
 [resource]
 Button/colors/font_disabled_color = Color(0.760784, 0.760784, 0.760784, 0.65098)
 Button/font_sizes/font_size = 20
@@ -167,6 +191,8 @@ Button/styles/focus = SubResource("StyleBoxFlat_0ck54")
 Button/styles/hover = SubResource("StyleBoxFlat_djlsa")
 Button/styles/normal = SubResource("StyleBoxFlat_en2rl")
 Button/styles/pressed = SubResource("StyleBoxFlat_fb3bs")
+CheckBox/icons/radio_checked = ExtResource("1_jjxd0")
+CheckBox/icons/radio_unchecked = ExtResource("2_hw4oa")
 CheckBox/styles/normal = SubResource("StyleBoxFlat_c7u2n")
 ColorPickerButton/styles/focus = SubResource("StyleBoxFlat_d5yg2")
 ColorPickerButton/styles/hover = SubResource("StyleBoxFlat_cqwn0")
@@ -178,3 +204,6 @@ HSlider/styles/grabber_area = SubResource("StyleBoxFlat_sj4ik")
 HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_rhynm")
 HSlider/styles/slider = SubResource("StyleBoxFlat_qqiqy")
 Panel/styles/panel = SubResource("StyleBoxFlat_q87cu")
+PopupMenu/icons/radio_checked = ExtResource("1_jjxd0")
+PopupMenu/styles/hover = SubResource("StyleBoxFlat_eppsw")
+PopupMenu/styles/panel = SubResource("StyleBoxFlat_ipff7")
