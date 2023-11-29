@@ -1,6 +1,6 @@
 [gd_resource type="BusAsset" format=3 uid="uid://drharlmk2a7g5"]
 
 [resource]
-path = "bus:/New Master Bus/Dx Bus"
+path = "bus:/Dx Bus"
 guid = "{0cd9aea3-efbd-4ed5-ab6e-d64379284214}"
 name = "Dx Bus"
