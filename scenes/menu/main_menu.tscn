@@ -121,37 +121,30 @@ offset_right = 719.0
 offset_bottom = 493.0
 text = "Cyber Police"
 
-[node name="ControllerHint" type="Label" parent="."]
+[node name="Panel" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 329.0
-offset_top = 575.0
-offset_right = 822.0
-offset_bottom = 633.0
-text = "Rebels always go first. For educational purposes the recommended mode is Rebels (AI) vs Cyber Police (Human)."
-autowrap_mode = 2
+offset_left = 298.0
+offset_top = 469.0
+offset_right = 861.0
+offset_bottom = 637.0
+theme = ExtResource("3_c1x3u")
 
 [node name="PlayerVSPlayerHBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 276.0
-offset_top = 457.0
-offset_right = 884.0
-offset_bottom = 507.0
+offset_left = 290.0
+offset_top = 498.0
+offset_right = 858.0
+offset_bottom = 548.0
 
 [node name="Rebels" type="HBoxContainer" parent="PlayerVSPlayerHBoxContainer"]
 layout_mode = 2
 
-[node name="pink_controller" type="OptionButton" parent="PlayerVSPlayerHBoxContainer/Rebels"]
-unique_name_in_owner = true
+[node name="ControllerLabel1" type="Label" parent="PlayerVSPlayerHBoxContainer/Rebels"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme = ExtResource("3_c1x3u")
-flat = true
-alignment = 1
-item_count = 2
-selected = 1
-popup/item_0/text = "(Human)"
-popup/item_0/id = 0
-popup/item_1/text = "(AI)"
-popup/item_1/id = 1
+text = "Rebels
+"
+horizontal_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PlayerVSPlayerHBoxContainer/Rebels"]
 visible = false
@@ -188,17 +181,17 @@ offset_bottom = 19.0
 text = "(Human)"
 horizontal_alignment = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayerVSPlayerHBoxContainer/Rebels"]
-custom_minimum_size = Vector2(20, 0)
+[node name="pink_controller" type="OptionButton" parent="PlayerVSPlayerHBoxContainer/Rebels"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ControllerLabel1" type="Label" parent="PlayerVSPlayerHBoxContainer/Rebels"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Rebels
-"
-horizontal_alignment = 1
+theme = ExtResource("3_c1x3u")
+alignment = 1
+item_count = 2
+selected = 1
+popup/item_0/text = "(Human)"
+popup/item_0/id = 0
+popup/item_1/text = "(AI)"
+popup/item_1/id = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="PlayerVSPlayerHBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
@@ -257,7 +250,6 @@ text = "(Human)"
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("3_c1x3u")
-flat = true
 alignment = 1
 item_count = 2
 selected = 0
@@ -265,6 +257,15 @@ popup/item_0/text = "(Human)"
 popup/item_0/id = 0
 popup/item_1/text = "(AI)"
 popup/item_1/id = 1
+
+[node name="ControllerHint" type="Label" parent="."]
+layout_mode = 0
+offset_left = 329.0
+offset_top = 565.0
+offset_right = 822.0
+offset_bottom = 623.0
+text = "Rebels always go first. For educational purposes the recommended mode is Rebels (AI) vs Cyber Police (Human)."
+autowrap_mode = 2
 
 [node name="Credits" parent="." instance=ExtResource("6_ki7ii")]
 visible = false

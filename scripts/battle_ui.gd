@@ -402,8 +402,6 @@ func _on_ability_button_clicked(ability_id: String, target_type: Gameplay.Target
 		order_parameters.target_type = target_type
 
 func _on_ability_button_highlight(name: String, label: String, hide_stats = false):
-	#TODO add author name
-	#var author_name = StaticData.tooltips[name].author_pink if current_group == Gameplay.HackingGroups.PINK else StaticData.tooltips[name].author_blue
 	var title = ""
 	if StaticData.ability_stats.has(name):
 		title = StaticData.ability_stats[name].name
@@ -413,7 +411,8 @@ func _on_ability_button_highlight(name: String, label: String, hide_stats = fals
 	var show_tooltip = StaticData.show_tutorial_hints || name == "Options"
 	
 	if StaticData.tooltips.has(name) && show_tooltip:
-		tooltip_panel.show_tooltip(title, StaticData.tooltips[name].text, "")
+		var author_name = _get_ability_author_name(name)
+		tooltip_panel.show_tooltip(title, StaticData.tooltips[name].text, author_name)
 	else:
 		tooltip_panel.hide_tooltip()
 	
@@ -422,6 +421,15 @@ func _on_ability_button_highlight(name: String, label: String, hide_stats = fals
 
 func _on_ability_button_unhighlight():
 	tooltip_panel.hide_tooltip()
+
+func _get_ability_author_name(ability_name):
+	var name = ""
+	var dictionary = (StaticData.tooltips[ability_name] as Dictionary)
+	if current_group == Gameplay.HackingGroups.PINK and dictionary.get("author_pink") != null:
+			name = dictionary.get("author_pink")
+	elif current_group == Gameplay.HackingGroups.BLUE and dictionary.get("author_blue") != null:
+			name = dictionary.get("author_blue")
+	return name
 
 func _on_cancel_select_target_button_clicked():
 	in_select_target_mode = false

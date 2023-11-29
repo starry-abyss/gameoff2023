@@ -1201,7 +1201,7 @@ func on_group_color_change(group: Gameplay.HackingGroups, color: Color):
 
 
 func _override_other_ui_theme_with_color(color):
-	UIHelpers.override_ui_node_theme_with_color([options, $CanvasLayer/EndBattle, $CanvasLayer/RestartBattle, $CanvasLayer/ResetCamera], color)
+	UIHelpers.override_ui_node_theme_with_color([options, $CanvasLayer/VBoxContainer/ResetCamera, $CanvasLayer/VBoxContainer/EndBattle, $CanvasLayer/VBoxContainer/RestartBattle], color)
 
 
 func _ready():
