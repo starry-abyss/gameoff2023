@@ -582,7 +582,8 @@ func select_unit(unit_to_select: Unit, no_ui = false):
 	if selected_unit != unit_to_select:
 		#UIHelpers.audio_event("Ui/Ui_UnitChanged")
 		if unit_to_select != null:
-			UIHelpers.audio_event("Ui/Ui_Accept")
+			if !no_ui:
+				UIHelpers.audio_event("Ui/Ui_Accept")
 	
 	selected_unit = unit_to_select
 	calculate_distances()
@@ -973,8 +974,6 @@ func hurt_unit(target: Unit, amount: int, is_instantly_damage_label: bool = fals
 			target.group = HackingGroups.NEUTRAL
 			update_firewalls()
 			
-			UIHelpers.audio_event3d("SFX/Kernel Node/SFX_KernelDamage", target.tile_pos)
-		
 		if this_is_the_end:
 			end_battle(unit_group_originally)
 	
@@ -1125,8 +1124,7 @@ func flip_group(group: HackingGroups) -> HackingGroups:
 		return HackingGroups.BLUE
 
 func end_turn(silent = false):
-	if !silent:
-		select_unit(null)
+	select_unit(null, silent)
 	
 	# end of turn
 	for unit in units:
@@ -1307,7 +1305,25 @@ func _ready():
 	#spawn_unit(Vector2i(13, 2), UnitTypes.TROJAN, HackingGroups.PINK)
 	#spawn_unit(Vector2i(14, 3), UnitTypes.TROJAN, HackingGroups.PINK)
 	
+	
+	
+	
 	var pink_offset = Vector2i(4, 4)
+	
+	
+	
+	
+	spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(2, 1), UnitTypes.VIRUS, HackingGroups.PINK)
+	spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(2, -1), UnitTypes.VIRUS, HackingGroups.PINK)
+	spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(-1, 1), UnitTypes.VIRUS, HackingGroups.PINK)
+	spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(-2, 2), UnitTypes.VIRUS, HackingGroups.PINK)
+	spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(1, -1), UnitTypes.VIRUS, HackingGroups.PINK)
+	spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(1, -2), UnitTypes.VIRUS, HackingGroups.PINK)
+	
+	
+	
+	
+	
 	
 	spawn_unit(pink_offset + Vector2i(5, 5), UnitTypes.CENTRAL_NODE, HackingGroups.PINK)
 	spawn_unit(pink_offset + Vector2i(6, 8), UnitTypes.TOWER_NODE, HackingGroups.PINK)
@@ -1370,7 +1386,11 @@ var ai_towers = []
 var ai_towers_repeat_far = []
 var ai_kernel_repair = []
 var ai_worms = []
+
 var ai_virii = []
+var ai_virii_on_base = []
+var ai_virii_attack = []
+
 var ai_trojans = []
 
 var ai_kernel = null
@@ -1391,7 +1411,11 @@ func ai_new_turn():
 	ai_towers_repeat_far = []
 	ai_kernel_repair = []
 	ai_worms = []
+	
 	ai_virii = []
+	ai_virii_on_base = []
+	ai_virii_attack = []
+	
 	ai_trojans = []
 	
 	ai_kernel = null
@@ -1415,6 +1439,12 @@ func ai_new_turn():
 			if u.type == UnitTypes.CENTRAL_NODE:
 				ai_enemy_kernel = u
 	
+	for v in ai_virii:
+		if UIHelpers.tile_pos_distance(ai_kernel.tile_pos, v.tile_pos) <= 3:
+			ai_virii_on_base.append(v)
+		else:
+			ai_virii_attack.append(v)
+	
 	assert(ai_kernel != null)
 	#assert(ai_enemy_kernel != null)
 	
@@ -1430,9 +1460,126 @@ func ai_new_turn():
 	ai_time_for_step = true
 	pass
 
-func get_group_density(tile_pos, group):
-	pass
+func ai_get_group_density(tile_pos, group, except_nodes = false):
+	var lambda_context = { "amount_of_units": 0, "amount_of_hp": 0 }
+	
+	var compute_for_tile = func(tile_pos):
+		var e = find_unit_by_tile_pos(tile_pos)
+		if e != null && e.group == group:
+			if !except_nodes || !e.is_static():
+				lambda_context.amount_of_units += 1
+				lambda_context.amount_of_hp += e.hp
+	
+	for_all_tile_pos_around(tile_pos, compute_for_tile)
+	
+	return lambda_context.amount_of_units
 
+func ai_get_relative_density(tile_pos, except_nodes = false):
+	return ai_get_group_density(tile_pos, flip_group(current_turn_group), except_nodes) - ai_get_group_density(tile_pos, current_turn_group, except_nodes)
+
+func ai_scan_and_apply_reset() -> bool:
+	if ai_kernel.ap <= 0:
+		return false
+	
+	if ai_kernel.get_cooldown("reset") > 0:
+		return false
+	
+	var lambda_context = { "relative_density": -1, "tile_pos": Vector2i(0, 0) }
+	
+	var lambda = func(tile_pos):
+		var relative_density = ai_get_relative_density(tile_pos, true)
+		var enemy_density = ai_get_group_density(tile_pos, flip_group(current_turn_group), true)
+		if enemy_density >= 3 && relative_density >= 2:
+			if lambda_context.relative_density < relative_density:
+				lambda_context.relative_density = relative_density
+				lambda_context.tile_pos = tile_pos
+	
+	for_all_tile_pos_around(ai_kernel.tile_pos, func(tile1): \
+		for_all_tile_pos_around(tile1, func(tile2): \
+			for_all_tile_pos_around(tile2, lambda)))
+	
+	if lambda_context.relative_density > -1:
+		ai_make_step(ai_kernel, "reset", lambda_context.tile_pos)
+		return true
+	else:
+		return false
+
+func ai_nearest_reachable_tile(unit: Unit, tile_pos):
+	if selected_unit != unit:
+		select_unit(unit, true)
+	
+	var nearest_tile = null
+	var min_distance = 99999999
+	
+	for i in range(tiles.size()):
+		var tile_pos_to_explore = tile_index_to_tile_pos(i)
+		if order_ability_move(tile_pos_to_explore, true):
+			var distance = UIHelpers.tile_pos_distance(tile_pos, tile_pos_to_explore)
+			if nearest_tile == null || min_distance > distance:
+				min_distance = distance
+				nearest_tile = tile_pos_to_explore
+	
+	return nearest_tile
+
+# TODO:
+# have a set of 6 hard-coded points near each enemy tower (relative to enemy kernel)
+# consider only three nearest ones (to a Virus),
+#		prefer already captured or neutral, 
+#		otherwise prefer ones with our highest density,
+#		otherwise choose at random
+# gather near the chosen point
+# attack when gain enough density
+# if already neutralized two adjacent enemy towers at once, attack the Kernel or units which cover the Kernel
+# take some horses in advance, so it's fast to capture towers
+
+# TODO:
+# if there are more than one heavily damaged units near each other on the enemy base, 
+#		consider teleporting as many as possible of them with base's horses to base
+#		(but don't teleport not so much damaged)
+# if slightly not enough density, move a horse there and then use teleport
+func ai_scan_and_move_far(unit: Unit):
+	#var distance_to_enemy_base = get_distance_to_enemy_base(tile_pos_to_explore)
+	#if distance_to_enemy_base <= 6:
+		pass
+
+func ai_try_move_to_enemy(unit: Unit, enemy: Unit):
+	var nearest_tile = ai_nearest_reachable_tile(unit, enemy.tile_pos)
+	
+	#if UIHelpers.tile_pos_distance(nearest_tile, unit.pos) <= 1:
+	#	return true
+	
+	if nearest_tile == null:
+		return false
+	
+	#select_unit(unit, true)
+	#if order_ability_move(nearest_tile, true):
+	ai_make_step(unit, "move", nearest_tile)
+	return true
+	
+	#return false
+
+func ai_try_attack_enemy(unit: Unit, enemy: Unit):
+	select_unit(unit, true)
+	if order_ability_virus_attack(enemy, true):
+		ai_make_step(unit, "virus_attack", enemy)
+		return true
+	
+	return false
+	
+func ai_move_outside_base(unit: Unit):
+	select_unit(unit, true)
+	
+	for i in range(tiles.size()):
+		var tile_pos_to_explore = tile_index_to_tile_pos(i)
+		if UIHelpers.tile_pos_distance(ai_kernel.tile_pos, tile_pos_to_explore) > 3 \
+		&& ai_get_distance_to_enemy_base(tile_pos_to_explore) <= 6 \
+		&& order_ability_move(tile_pos_to_explore, true):
+			ai_make_step(unit, "move", tile_pos_to_explore)
+			return true
+	
+	return false
+
+# TODO: outdated function name
 func ai_find_weakest(tile_pos, distance, group, condition):
 	var lambda_context = { "weakest_enemy": null }
 	
@@ -1458,6 +1605,18 @@ func ai_find_weakest(tile_pos, distance, group, condition):
 func ai_find_weakest_enemy(tile_pos, distance):
 	var condition = func(new_unit, unit):
 		return unit == null || unit.hp > new_unit.hp
+	
+	return ai_find_weakest(tile_pos, distance, flip_group(current_turn_group), condition)
+
+func ai_find_tower_enemy(tile_pos, distance):
+	var condition = func(new_unit, unit):
+		return new_unit.type == UnitTypes.TOWER_NODE && (unit == null || unit.hp > new_unit.hp)
+	
+	return ai_find_weakest(tile_pos, distance, flip_group(current_turn_group), condition)
+
+func ai_find_weakest_enemy_near_base(tile_pos, distance):
+	var condition = func(new_unit, unit):
+		return UIHelpers.tile_pos_distance(ai_kernel.tile_pos, new_unit.tile_pos) <= 4 && (unit == null || unit.hp > new_unit.hp)
 	
 	return ai_find_weakest(tile_pos, distance, flip_group(current_turn_group), condition)
 
@@ -1502,26 +1661,29 @@ func get_walkable_neighbor_tiles(tile_pos):
 		
 	return walkable_tiles
 
-func get_distance_to_enemy_base(tile_pos):
+func ai_get_distance_to_enemy_base(tile_pos):
 	if ai_enemy_kernel == null:
 		return 99999999
 	
 	return UIHelpers.tile_pos_distance(ai_enemy_kernel.tile_pos, tile_pos)
 
 func ai_next_step():
-	var filter_enemy_1 = func(tile_pos):
-		return ai_find_weakest_enemy(tile_pos, 1)
-	if ai_execute_order_for_array(ai_towers, "tower_attack", filter_enemy_1):
+	if ai_scan_and_apply_reset():
 		return
 	
-	var filter_enemy_2 = func(tile_pos):
-		return ai_find_weakest_enemy(tile_pos, 2)
-	if ai_execute_order_for_array(ai_towers_repeat_far, "tower_attack", filter_enemy_2):
-		return
+	if false:
+		var filter_enemy_1 = func(tile_pos):
+			return ai_find_weakest_enemy(tile_pos, 1)
+		if ai_execute_order_for_array(ai_towers, "tower_attack", filter_enemy_1):
+			return
+		
+		var filter_enemy_2 = func(tile_pos):
+			return ai_find_weakest_enemy(tile_pos, 2)
+		if ai_execute_order_for_array(ai_towers_repeat_far, "tower_attack", filter_enemy_2):
+			return
 	
-	
-	
-	while ai_worms.size() > 0:
+	#while ai_worms.size() > 0:
+	while false:
 		var t = ai_worms[-1]
 		if t.ap >= 3:
 			#var target = target_filter.call(t.tile_pos)
@@ -1543,7 +1705,7 @@ func ai_next_step():
 				return
 		elif t.ap >= 2:
 			var role = randf() * (ai_worm_chance_double + ai_worm_chance_virus)
-			var distance_to_enemy_base = get_distance_to_enemy_base(t.tile_pos)
+			var distance_to_enemy_base = ai_get_distance_to_enemy_base(t.tile_pos)
 			
 			if distance_to_enemy_base <= 6 || role > ai_worm_chance_double:
 				ai_make_step(t, "self_modify_to_virus", null)
@@ -1561,6 +1723,64 @@ func ai_next_step():
 		else:
 			ai_worms.erase(t)
 			continue
+	
+	if ai_scan_and_apply_reset():
+		return
+	
+	while ai_virii_on_base.size() > 0:
+		var t = ai_virii_on_base[-1]
+		
+		#if t.ap <= 1
+		
+		# TODO: don't try to attack or move through enemy firewall (it can be near our base)
+		
+		var enemy = ai_find_tower_enemy(t.tile_pos, 3)
+		if enemy == null:
+			enemy = ai_find_weakest_enemy_near_base(t.tile_pos, 3)
+		
+		if enemy != null:
+			if UIHelpers.tile_pos_distance(enemy.tile_pos, t.tile_pos) <= 1:
+				if ai_try_attack_enemy(t, enemy):
+					# TODO: maybe eat Worm and attack again or spread
+					ai_virii_on_base.erase(t)
+					return
+			else:
+				if ai_try_move_to_enemy(t, enemy):
+					return
+			
+			# don't further move if enemy is near
+			ai_virii_on_base.erase(t)
+			continue
+		
+		if ai_virii_on_base.size() >= 5:
+			if ai_move_outside_base(t):
+				ai_virii_on_base.erase(t)
+				return
+		
+		ai_virii_on_base.erase(t)
+		continue
+	
+	while ai_virii_attack.size() > 0:
+		var t = ai_virii_attack[-1]
+		
+		# TODO: don't try to attack or move through enemy firewall
+		# TODO: go away after attack ?
+		var enemy = ai_find_tower_enemy(t.tile_pos, 1)
+		if enemy == null:
+			enemy = ai_find_weakest_enemy(t.tile_pos, 1)
+		
+		if enemy != null:
+			if UIHelpers.tile_pos_distance(enemy.tile_pos, t.tile_pos) <= 1:
+				if ai_try_attack_enemy(t, enemy):
+					# TODO: maybe eat Worm and attack again or spread
+					ai_virii_attack.erase(t)
+					return
+		
+		ai_virii_attack.erase(t)
+		continue
+	
+	if ai_scan_and_apply_reset():
+		return
 	
 	# better in the end, because it adds possibilities to choose Reset instead
 	var filter_friend_3 = func(tile_pos):
@@ -1598,6 +1818,7 @@ func ai_make_step(unit: Unit, ability_id: String, target):
 	#ai_visual_delay(StaticData.turn_animation_duration + 0.1)
 	await get_tree().create_timer(StaticData.turn_animation_duration + 0.1).timeout
 	
+	select_unit(null, true)
 	ai_time_for_step = true
 	
 

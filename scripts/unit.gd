@@ -323,7 +323,10 @@ func wait_for_hurt(time):
 	
 	
 func on_hurt():
-	UIHelpers.audio_event3d("SFX/GeneralEvents/UnitDamage", tile_pos)
+	if is_static() && hp <= 0:
+		UIHelpers.audio_event3d("SFX/Kernel Node/SFX_KernelDamage", tile_pos)
+	else:
+		UIHelpers.audio_event3d("SFX/GeneralEvents/UnitDamage", tile_pos)
 	
 	#is_hurt = true
 	timeout_callback_helper.call_after_time(on_hurt_end, StaticData.hurt_animation_duration)
