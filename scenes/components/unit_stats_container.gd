@@ -25,8 +25,10 @@ func _display_unit_stats(unit: Unit, current_group: Gameplay.HackingGroups, is_s
 	else:
 		unit_label.add_theme_color_override("font_color", Color.WHITE)
 	
-	info_label.add_theme_color_override("font_color", \
-		UIHelpers.group_to_color(unit.group).lightened(0.15))
+	var text_color = UIHelpers.group_to_color(unit.group)
+	text_color.s += 0.1
+	text_color.v += 2.0 #0.15
+	info_label.add_theme_color_override("font_color", text_color)
 	
 	if unit.group != Gameplay.HackingGroups.NEUTRAL:
 		if !full_hp_ap:
