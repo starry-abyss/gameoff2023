@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://khbj7vpou3mu"]
+[gd_scene load_steps=14 format=3 uid="uid://khbj7vpou3mu"]
 
 [ext_resource type="Script" path="res://scripts/battle_ui.gd" id="1_wpfyh"]
+[ext_resource type="PackedScene" uid="uid://b36pjfoq2efay" path="res://scenes/timeout_callback_helper.tscn" id="2_eaaqo"]
 [ext_resource type="PackedScene" uid="uid://boljanqb1ln7c" path="res://scenes/selected_unit_stats.tscn" id="2_j36x1"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="3_7nk56"]
 [ext_resource type="PackedScene" uid="uid://b41dl1bx7tp07" path="res://scenes/draw_3d.tscn" id="3_ji5a4"]
@@ -35,6 +36,8 @@ font_size = 64
 script = ExtResource("1_wpfyh")
 metadata/_edit_vertical_guides_ = [10.0, 1142.0]
 metadata/_edit_horizontal_guides_ = [466.0]
+
+[node name="TimeoutCallbackHelper" parent="." instance=ExtResource("2_eaaqo")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

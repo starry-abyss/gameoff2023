@@ -45,8 +45,10 @@ var current_group: Gameplay.HackingGroups
 var is_ai_turn = false
 
 var last_tile_pos = Vector2i(0, 0)
+var timeout_callback_helper
 
 func _ready():
+	timeout_callback_helper = get_tree().get_nodes_in_group("TimeoutCallbackHelper")[0]
 	%end_game_message.get_parent().visible = false
 	
 	for button in find_children("", "Button"):
@@ -438,7 +440,8 @@ func _on_cancel_select_target_button_clicked():
 func _on_order_processed(success: bool, selected_unit: Unit):
 	if success:
 		in_select_target_mode = false
-		
+		in_unit_animation_mode = true
+		timeout_callback_helper.call_after_time(func callback(): in_unit_animation_mode = false, StaticData.turn_animation_duration)
 		tiles_tint_reset()
 	
 	update_selected_unit_stats(selected_unit)
