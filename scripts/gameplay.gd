@@ -348,7 +348,7 @@ func remove_tile(tile_pos: Vector2i):
 		if unit != null:
 			remove_unit(unit)
 
-func remove_unit(unit: Unit):
+func remove_unit(unit: Unit, is_instant_animation = false):
 	if unit == selected_unit:
 		select_unit(null)
 	
@@ -356,7 +356,11 @@ func remove_unit(unit: Unit):
 	unit.on_click.disconnect(battle_ui._on_unit_click)
 	unit.to_be_removed = true
 	
-	battle_ui._on_unit_destroy(unit)
+	if is_instant_animation:
+		battle_ui._on_unit_destroy(unit)
+	else:
+		var timeout_callback_helper = get_tree().get_nodes_in_group("TimeoutCallbackHelper")[0]
+		timeout_callback_helper.call_after_time(func callback(): battle_ui._on_unit_destroy(unit), StaticData.attack_animation_duration * 0.5)
 
 func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups, imaginary = false) -> bool:
 	if is_tile_pos_out_of_bounds(tile_pos):
@@ -819,7 +823,7 @@ func check_ability_spread(target: Unit) -> bool:
 func execute_ability_spread(target: Unit) -> void:
 	var ability_stats = StaticData.ability_stats["spread"]
 	var attack_power = ability_stats.attack + randi_range(0, ability_stats.attack_extra)
-	hurt_unit(target, attack_power)
+	hurt_unit(target, attack_power, true)
 
 func order_ability_spread(target: Unit, imaginary = false) -> bool:
 	if !check_ability_spread(target):
@@ -948,13 +952,16 @@ func hurt_unit(target: Unit, amount: int, is_instantly_damage_label: bool = fals
 	target.hp = max(target.hp - amount, 0)
 	
 	var damage = hp_before - target.hp
-	target.wait_for_hurt(StaticData.attack_animation_duration)
 	if damage > 0:
 		if is_instantly_damage_label:
+			target.on_hurt()
+			
 			battle_ui._on_unit_hp_change(target, -damage)
 		else:
+			target.wait_for_hurt(StaticData.attack_animation_duration * 0.5)
+			
 			var timeout_callback_helper = get_tree().get_nodes_in_group("TimeoutCallbackHelper")[0]
-			timeout_callback_helper.call_after_time(func callback(): battle_ui._on_unit_hp_change(target, -damage), StaticData.attack_animation_duration)
+			timeout_callback_helper.call_after_time(func callback(): battle_ui._on_unit_hp_change(target, -damage), StaticData.attack_animation_duration * 0.5)
 	
 	if target.hp == 0:
 		var this_is_the_end = (target.type == UnitTypes.CENTRAL_NODE)
@@ -969,7 +976,7 @@ func hurt_unit(target: Unit, amount: int, is_instantly_damage_label: bool = fals
 		var unit_group_originally = target.group
 		
 		if target.can_be_destroyed():
-			remove_unit(target)
+			remove_unit(target, is_instantly_damage_label)
 		else:
 			target.group = HackingGroups.NEUTRAL
 			update_firewalls()
@@ -1148,17 +1155,19 @@ func end_turn(silent = false):
 				
 				heal_unit(unit, StaticData.ability_stats["self_repair"].restored_hp)
 				
-				if (!unit.cooldowns.has("spawn_worms") || unit.cooldowns["spawn_worms"] <= 0):
-					unit.cooldowns["spawn_worms"] = StaticData.ability_stats["spawn_worms"].cooldown
-					UIHelpers.audio_event3d("SFX/Kernel Node/SFX_GenerateWorms", unit.tile_pos)
-					
-					for_all_tile_pos_around(unit.tile_pos, \
-						func(tile_pos):
-							var success = spawn_unit(tile_pos, UnitTypes.WORM, unit.group)
-							if success:
-								var new_unit = find_unit_by_tile_pos(tile_pos)
-								battle_ui._on_unit_spawn(new_unit)
-							)
+				# don't pre-spawn Worms for Blue
+				if !silent:
+					if (!unit.cooldowns.has("spawn_worms") || unit.cooldowns["spawn_worms"] <= 0):
+						unit.cooldowns["spawn_worms"] = StaticData.ability_stats["spawn_worms"].cooldown
+						UIHelpers.audio_event3d("SFX/Kernel Node/SFX_GenerateWorms", unit.tile_pos)
+						
+						for_all_tile_pos_around(unit.tile_pos, \
+							func(tile_pos):
+								var success = spawn_unit(tile_pos, UnitTypes.WORM, unit.group)
+								if success:
+									var new_unit = find_unit_by_tile_pos(tile_pos)
+									battle_ui._on_unit_spawn(new_unit)
+								)
 	
 	# skip turn of the defeated group
 	if loser == current_turn_group:
