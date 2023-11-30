@@ -1423,8 +1423,49 @@ func ai_new_turn():
 	ai_time_for_step = true
 	pass
 
-func get_group_density(tile_pos, group):
-	pass
+func ai_get_group_density(tile_pos, group, except_nodes = false):
+	var lambda_context = { "amount_of_units": 0, "amount_of_hp": 0 }
+	
+	var compute_for_tile = func(tile_pos):
+		var e = find_unit_by_tile_pos(tile_pos)
+		if e != null && e.group == group:
+			if !except_nodes || !e.is_static():
+				lambda_context.amount_of_units += 1
+				lambda_context.amount_of_hp += e.hp
+	
+	for_all_tile_pos_around(tile_pos, compute_for_tile)
+	
+	return lambda_context.amount_of_units
+
+func ai_get_relative_density(tile_pos, except_nodes = false):
+	return ai_get_group_density(tile_pos, flip_group(current_turn_group), except_nodes) - ai_get_group_density(tile_pos, current_turn_group, except_nodes)
+
+func ai_scan_and_apply_reset() -> bool:
+	if ai_kernel.ap <= 0:
+		return false
+	
+	if ai_kernel.get_cooldown("reset") > 0:
+		return false
+	
+	var lambda_context = { "relative_density": -1, "tile_pos": Vector2i(0, 0) }
+	
+	var lambda = func(tile_pos):
+		var relative_density = ai_get_relative_density(tile_pos, true)
+		var enemy_density = ai_get_group_density(tile_pos, flip_group(current_turn_group), true)
+		if enemy_density >= 3 && relative_density >= 2:
+			if lambda_context.relative_density < relative_density:
+				lambda_context.relative_density = relative_density
+				lambda_context.tile_pos = tile_pos
+	
+	for_all_tile_pos_around(ai_kernel.tile_pos, func(tile1): \
+		for_all_tile_pos_around(tile1, func(tile2): \
+			for_all_tile_pos_around(tile2, lambda)))
+	
+	if lambda_context.relative_density > -1:
+		ai_make_step(ai_kernel, "reset", lambda_context.tile_pos)
+		return true
+	else:
+		return false
 
 func ai_find_weakest(tile_pos, distance, group, condition):
 	var lambda_context = { "weakest_enemy": null }
@@ -1502,6 +1543,9 @@ func get_distance_to_enemy_base(tile_pos):
 	return UIHelpers.tile_pos_distance(ai_enemy_kernel.tile_pos, tile_pos)
 
 func ai_next_step():
+	if ai_scan_and_apply_reset():
+		return
+	
 	var filter_enemy_1 = func(tile_pos):
 		return ai_find_weakest_enemy(tile_pos, 1)
 	if ai_execute_order_for_array(ai_towers, "tower_attack", filter_enemy_1):
@@ -1512,9 +1556,8 @@ func ai_next_step():
 	if ai_execute_order_for_array(ai_towers_repeat_far, "tower_attack", filter_enemy_2):
 		return
 	
-	
-	
 	while ai_worms.size() > 0:
+	#while false:
 		var t = ai_worms[-1]
 		if t.ap >= 3:
 			#var target = target_filter.call(t.tile_pos)
@@ -1554,6 +1597,18 @@ func ai_next_step():
 		else:
 			ai_worms.erase(t)
 			continue
+	
+	if ai_scan_and_apply_reset():
+		return
+	
+	#while ai_virii.size() > 0:
+	#	var t = ai_virii[-1]
+		
+	
+	
+	
+	if ai_scan_and_apply_reset():
+		return
 	
 	# better in the end, because it adds possibilities to choose Reset instead
 	var filter_friend_3 = func(tile_pos):
