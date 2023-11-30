@@ -762,6 +762,9 @@ func order_ability_capture_tower(target: Unit, imaginary = false) -> bool:
 	if !imaginary:
 		target.group = selected_unit.group
 		
+		var timeout_callback_helper = get_tree().get_nodes_in_group("TimeoutCallbackHelper")[0]
+		timeout_callback_helper.call_after_time(func callback(): target.update_tint(), StaticData.attack_animation_duration / 3.0)
+		
 		target.hp = target.hp_max
 		
 		UIHelpers.audio_event3d("SFX/Trojan/SFX_CaptureNode", selected_unit.tile_pos)
@@ -980,6 +983,9 @@ func hurt_unit(target: Unit, amount: int, is_instantly_damage_label: bool = fals
 		else:
 			target.group = HackingGroups.NEUTRAL
 			update_firewalls()
+			
+			var timeout_callback_helper = get_tree().get_nodes_in_group("TimeoutCallbackHelper")[0]
+			timeout_callback_helper.call_after_time(func callback(): target.update_tint(), StaticData.attack_animation_duration * 0.7)
 			
 		if this_is_the_end:
 			end_battle(unit_group_originally)

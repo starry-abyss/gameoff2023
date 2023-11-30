@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://d0psqdiovqmy8"]
+[gd_scene load_steps=11 format=3 uid="uid://d0psqdiovqmy8"]
 
 [ext_resource type="Script" path="res://scenes/menu/main_menu.gd" id="1_46h0q"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="3_c1x3u"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://ctt6qlsgabcys" path="res://assets/FMOD_LOGOS/FMOD Logo White - Black Background.png" id="5_ocswh"]
 [ext_resource type="Texture2D" uid="uid://lw6v6npn2r21" path="res://assets/godot_logo.svg" id="6_eikba"]
 [ext_resource type="PackedScene" uid="uid://bladnifrmnpk" path="res://scenes/menu/credits.tscn" id="6_ki7ii"]
+[ext_resource type="Texture2D" uid="uid://15agq5jbrw1x" path="res://art/Title_Name.png" id="9_u86vk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_31tw3"]
 shader = ExtResource("3_kfdc0")
@@ -291,6 +292,11 @@ material = SubResource("ShaderMaterial_31tw3")
 position = Vector2(573.5, 323.5)
 scale = Vector2(8.96094, 5.03906)
 texture = ExtResource("4_tu3lh")
+
+[node name="TitleName" type="Sprite2D" parent="."]
+position = Vector2(582, 130)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("9_u86vk")
 
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]

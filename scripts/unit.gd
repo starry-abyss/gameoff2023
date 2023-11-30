@@ -12,8 +12,9 @@ extends Node3D
 
 @export var group: Gameplay.HackingGroups = Gameplay.HackingGroups.NEUTRAL:
 	set(new_value):
-		if group != new_value:
-			set_tint(UIHelpers.group_to_color(new_value))
+		# color change is going to be delayed to sync with the animation
+		#if group != new_value:
+		#	set_tint(UIHelpers.group_to_color(new_value))
 		group = new_value
 		
 		restore_tower_balls()
@@ -145,7 +146,7 @@ func load_model(model_scene_name: String):
 	#for camera in cameras:
 	#	camera.queue_free()
 	
-	set_tint(UIHelpers.group_to_color(group))
+	update_tint()
 	
 	aabb = Utils.get_aabb(model)
 	
@@ -204,7 +205,10 @@ func load_stats(which_type: Gameplay.UnitTypes):
 			attack_range = 1
 		else:
 			attack_range = 0
-	
+
+func update_tint():
+	set_tint(UIHelpers.group_to_color(group))
+
 func set_tint(color: Color):
 	if material != null:
 		if type == Gameplay.UnitTypes.TOWER_NODE:
