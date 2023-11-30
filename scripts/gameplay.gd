@@ -948,7 +948,8 @@ func hurt_unit(target: Unit, amount: int):
 	var damage = hp_before - target.hp
 	target.wait_for_hurt(StaticData.attack_animation_duration)
 	if damage > 0:
-		battle_ui._on_unit_hp_change(target, -damage)
+		var timeout_callback_helper = get_tree().get_nodes_in_group("TimeoutCallbackHelper")[0]
+		timeout_callback_helper.call_after_time(func callback(): battle_ui._on_unit_hp_change(target, -damage), StaticData.attack_animation_duration)
 	
 	if target.hp == 0:
 		var this_is_the_end = (target.type == UnitTypes.CENTRAL_NODE)
