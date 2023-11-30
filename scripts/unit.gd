@@ -326,7 +326,7 @@ func on_hurt():
 	UIHelpers.audio_event3d("SFX/GeneralEvents/UnitDamage", tile_pos)
 	
 	#is_hurt = true
-	timeout_callback_helper.call_after_time(on_hurt_end, StaticData.attack_animation_duration)
+	timeout_callback_helper.call_after_time(on_hurt_end, StaticData.hurt_animation_duration)
 	
 	material.set_shader_parameter("show_glitch", true)
 	

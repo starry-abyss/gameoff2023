@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=81 format=3 uid="uid://cp6br63jv8s4k"]
+[gd_resource type="VisualShader" load_steps=83 format=3 uid="uid://cp6br63jv8s4k"]
 
 [ext_resource type="Texture2D" uid="uid://crpu6dnhj7cr6" path="res://shaders/noise_texture_2d.tres" id="1_4td3i"]
 
@@ -281,6 +281,14 @@ operator = 1
 
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_kndi4"]
 
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_qi0tk"]
+parameter_name = "opacity"
+default_value_enabled = true
+default_value = 1.0
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_c2qjn"]
+operator = 7
+
 [resource]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
@@ -295,6 +303,7 @@ uniform float glitch_scale = 0.5;
 uniform sampler2D tex_vtx_32;
 uniform vec2 spawn_y_range = vec2(-1.000000, 1.000000);
 uniform float spawn_y_highlight_range;
+uniform float opacity = 1;
 uniform vec4 emission_color : source_color = vec4(0.164706, 0.556863, 0.027451, 0.250980);
 uniform float emission_amount : hint_range(0, 16) = 5;
 
@@ -473,8 +482,16 @@ void vertex() {
 	float n_out64p0 = n_out49p0 + n_out57p0;
 
 
+// FloatParameter:65
+	float n_out65p0 = opacity;
+
+
+// FloatOp:66
+	float n_out66p0 = min(n_out64p0, n_out65p0);
+
+
 // VaryingSetter:52
-	vertex_alpha = n_out64p0;
+	vertex_alpha = n_out66p0;
 
 
 }
@@ -516,6 +533,7 @@ void fragment() {
 
 }
 "
+graph_offset = Vector2(332.612, -874.573)
 varyings/vertex_alpha = "0,0"
 nodes/vertex/0/position = Vector2(2400, 1120)
 nodes/vertex/20/node = SubResource("VisualShaderNodeInput_67w01")
@@ -555,36 +573,40 @@ nodes/vertex/44/position = Vector2(-1540, 1900)
 nodes/vertex/45/node = SubResource("VisualShaderNodeFloatOp_ad5v0")
 nodes/vertex/45/position = Vector2(-860, 2000)
 nodes/vertex/46/node = SubResource("VisualShaderNodeInput_vk314")
-nodes/vertex/46/position = Vector2(-760, -1060)
+nodes/vertex/46/position = Vector2(-840, -2240)
 nodes/vertex/47/node = SubResource("VisualShaderNodeVec2Parameter_cskab")
-nodes/vertex/47/position = Vector2(-760, -1420)
+nodes/vertex/47/position = Vector2(-840, -1880)
 nodes/vertex/48/node = SubResource("VisualShaderNodeSwitch_gqmph")
-nodes/vertex/48/position = Vector2(0, -1300)
+nodes/vertex/48/position = Vector2(160, -2240)
 nodes/vertex/49/node = SubResource("VisualShaderNodeSwitch_0lumw")
-nodes/vertex/49/position = Vector2(260, -1300)
+nodes/vertex/49/position = Vector2(560, -2240)
 nodes/vertex/50/node = SubResource("VisualShaderNodeCompare_0y1t8")
-nodes/vertex/50/position = Vector2(-220, -1080)
+nodes/vertex/50/position = Vector2(-180, -2260)
 nodes/vertex/51/node = SubResource("VisualShaderNodeCompare_fv353")
-nodes/vertex/51/position = Vector2(-220, -1320)
+nodes/vertex/51/position = Vector2(-180, -1700)
 nodes/vertex/52/node = SubResource("VisualShaderNodeVaryingSetter_g53wg")
-nodes/vertex/52/position = Vector2(760, -980)
+nodes/vertex/52/position = Vector2(2060, -1220)
 nodes/vertex/55/node = SubResource("VisualShaderNodeFloatParameter_adi0n")
-nodes/vertex/55/position = Vector2(-760, -760)
+nodes/vertex/55/position = Vector2(-840, -1220)
 nodes/vertex/57/node = SubResource("VisualShaderNodeSwitch_qidbr")
-nodes/vertex/57/position = Vector2(260, -760)
+nodes/vertex/57/position = Vector2(960, -1360)
 nodes/vertex/59/node = SubResource("VisualShaderNodeSwitch_5v16r")
-nodes/vertex/59/position = Vector2(0, -760)
+nodes/vertex/59/position = Vector2(560, -1360)
 nodes/vertex/60/node = SubResource("VisualShaderNodeInput_s1juc")
-nodes/vertex/60/position = Vector2(-760, -520)
+nodes/vertex/60/position = Vector2(-840, -800)
 nodes/vertex/61/node = SubResource("VisualShaderNodeCompare_fthdn")
-nodes/vertex/61/position = Vector2(-220, -780)
+nodes/vertex/61/position = Vector2(160, -1420)
 nodes/vertex/62/node = SubResource("VisualShaderNodeCompare_hfxrd")
-nodes/vertex/62/position = Vector2(-220, -540)
+nodes/vertex/62/position = Vector2(-180, -840)
 nodes/vertex/63/node = SubResource("VisualShaderNodeFloatOp_gjg1c")
-nodes/vertex/63/position = Vector2(-420, -800)
+nodes/vertex/63/position = Vector2(-180, -1320)
 nodes/vertex/64/node = SubResource("VisualShaderNodeFloatOp_kndi4")
-nodes/vertex/64/position = Vector2(480, -1020)
-nodes/vertex/connections = PackedInt32Array(22, 0, 0, 0, 20, 2, 22, 1, 20, 3, 22, 2, 20, 1, 21, 0, 25, 0, 21, 1, 32, 0, 25, 1, 34, 0, 35, 0, 36, 0, 25, 0, 38, 0, 36, 0, 37, 0, 36, 2, 35, 0, 36, 1, 20, 2, 40, 0, 20, 2, 41, 0, 39, 1, 40, 1, 39, 2, 41, 1, 40, 0, 42, 0, 41, 0, 42, 1, 42, 0, 43, 0, 20, 1, 43, 2, 21, 0, 43, 1, 43, 0, 22, 0, 44, 0, 35, 2, 44, 0, 45, 0, 45, 0, 35, 1, 51, 0, 48, 0, 50, 0, 48, 1, 47, 1, 51, 1, 48, 0, 49, 0, 47, 2, 50, 1, 46, 2, 51, 0, 46, 2, 50, 0, 61, 0, 59, 0, 62, 0, 59, 1, 59, 0, 57, 0, 60, 2, 61, 0, 60, 2, 62, 0, 47, 2, 63, 0, 55, 0, 63, 1, 63, 0, 61, 1, 57, 0, 64, 1, 49, 0, 64, 0, 64, 0, 52, 0, 47, 2, 62, 1)
+nodes/vertex/64/position = Vector2(1340, -1400)
+nodes/vertex/65/node = SubResource("VisualShaderNodeFloatParameter_qi0tk")
+nodes/vertex/65/position = Vector2(1120, -1000)
+nodes/vertex/66/node = SubResource("VisualShaderNodeFloatOp_c2qjn")
+nodes/vertex/66/position = Vector2(1760, -1260)
+nodes/vertex/connections = PackedInt32Array(22, 0, 0, 0, 20, 2, 22, 1, 20, 3, 22, 2, 20, 1, 21, 0, 25, 0, 21, 1, 32, 0, 25, 1, 34, 0, 35, 0, 36, 0, 25, 0, 38, 0, 36, 0, 37, 0, 36, 2, 35, 0, 36, 1, 20, 2, 40, 0, 20, 2, 41, 0, 39, 1, 40, 1, 39, 2, 41, 1, 40, 0, 42, 0, 41, 0, 42, 1, 42, 0, 43, 0, 20, 1, 43, 2, 21, 0, 43, 1, 43, 0, 22, 0, 44, 0, 35, 2, 44, 0, 45, 0, 45, 0, 35, 1, 51, 0, 48, 0, 50, 0, 48, 1, 47, 1, 51, 1, 48, 0, 49, 0, 47, 2, 50, 1, 46, 2, 51, 0, 46, 2, 50, 0, 61, 0, 59, 0, 62, 0, 59, 1, 59, 0, 57, 0, 60, 2, 61, 0, 60, 2, 62, 0, 47, 2, 63, 0, 55, 0, 63, 1, 63, 0, 61, 1, 57, 0, 64, 1, 49, 0, 64, 0, 47, 2, 62, 1, 65, 0, 66, 1, 64, 0, 66, 0, 66, 0, 52, 0)
 nodes/fragment/0/position = Vector2(2400, 420)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_7xppv")
 nodes/fragment/2/position = Vector2(-600, 200)
@@ -659,7 +681,7 @@ nodes/fragment/44/position = Vector2(20, 3820)
 nodes/fragment/45/node = SubResource("VisualShaderNodeInput_7txdt")
 nodes/fragment/45/position = Vector2(-1760, -200)
 nodes/fragment/46/node = SubResource("VisualShaderNodeVec2Parameter_efcc6")
-nodes/fragment/46/position = Vector2(-1720, -600)
+nodes/fragment/46/position = Vector2(-1780, -720)
 nodes/fragment/47/node = SubResource("VisualShaderNodeCompare_tydgj")
 nodes/fragment/47/position = Vector2(-1220, -580)
 nodes/fragment/48/node = SubResource("VisualShaderNodeCompare_mmh7x")
