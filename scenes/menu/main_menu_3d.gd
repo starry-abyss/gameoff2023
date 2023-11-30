@@ -44,7 +44,6 @@ func _ready():
 			
 	_retint_tiles()
 	_generate_random_unit()
-	spawn_unit(Vector2i(3, 3), 0, HackingGroups.PINK)
 	#for tile in tiles:
 		#var material = ShaderMaterial.new()
 		#material.shader = glowing_outline_shader
@@ -68,9 +67,9 @@ func _generate_random_unit():
 			var tile_pos = Vector2i(x, y)
 			var random = randf_range(0, 1)
 			if random > 0.9:
-				spawn_unit(tile_pos, randi_range(0, 4), HackingGroups.BLUE)
+				spawn_unit(tile_pos, randi_range(2, 4), HackingGroups.BLUE)
 			elif random < 0.1:
-				spawn_unit(tile_pos, randi_range(0, 4), HackingGroups.PINK)
+				spawn_unit(tile_pos, randi_range(2, 4), HackingGroups.PINK)
 		
 	
 

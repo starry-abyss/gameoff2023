@@ -122,6 +122,15 @@ func quit_the_game():
 	get_tree().quit()
 
 
+func get_ui_theme_node_recurrsively(root, node_list = []):
+	if root is Control and (root as Control).theme != null:
+		node_list.append(root)
+		
+	for child in root.get_children():
+		get_ui_theme_node_recurrsively(child, node_list)
+	return node_list
+
+
 func override_ui_node_theme_with_color(nodes: Array, color: Color):	
 	for node in nodes:		
 		#node.add_theme_color_override("font_color", color)
@@ -167,6 +176,15 @@ func override_ui_node_theme_with_color(nodes: Array, color: Color):
 			node.add_theme_stylebox_override("grabber_area_highlight", grabber_area_highlight_style_box)
 		elif node is StyledCheckbox:
 			node.override_color(color)
+		elif node is PopupMenu:
+			var panel_style_box = (node.get_theme_stylebox("panel") as StyleBoxFlat).duplicate()
+			panel_style_box.border_color = color
+			node.add_theme_stylebox_override("panel", panel_style_box)
+			
+			var hover_style_box = (node.get_theme_stylebox("hover") as StyleBoxFlat).duplicate()
+			hover_style_box.bg_color = color.darkened(0.2)
+			hover_style_box.border_color = color
+			node.add_theme_stylebox_override("hover", hover_style_box)
 
 func override_ui_node_theme_font_size(node, font_size: int):	
 	node.add_theme_font_size_override("font_size", font_size)

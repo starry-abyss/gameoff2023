@@ -731,7 +731,7 @@ func order_ability_reset(target_tile_pos: Vector2i, imaginary = false) -> bool:
 			if unit != null && !unit.is_static():
 				#remove_unit(unit)
 				# same as remove, but should trigger the damage visualization
-				hurt_unit(unit, 99999999)
+				hurt_unit(unit, 99999999, true)
 		
 		apply_reset.call(target_tile_pos)
 		for_all_tile_pos_around(target_tile_pos, apply_reset)
@@ -938,7 +938,8 @@ func heal_unit(target: Unit, amount: int):
 	if hp_change > 0:
 		battle_ui._on_unit_hp_change(target, hp_change)
 
-func hurt_unit(target: Unit, amount: int):
+
+func hurt_unit(target: Unit, amount: int, is_instantly_damage_label: bool = false):
 	if amount <= 0:
 		return
 	
@@ -948,8 +949,11 @@ func hurt_unit(target: Unit, amount: int):
 	var damage = hp_before - target.hp
 	target.wait_for_hurt(StaticData.attack_animation_duration)
 	if damage > 0:
-		var timeout_callback_helper = get_tree().get_nodes_in_group("TimeoutCallbackHelper")[0]
-		timeout_callback_helper.call_after_time(func callback(): battle_ui._on_unit_hp_change(target, -damage), StaticData.attack_animation_duration)
+		if is_instantly_damage_label:
+			battle_ui._on_unit_hp_change(target, -damage)
+		else:
+			var timeout_callback_helper = get_tree().get_nodes_in_group("TimeoutCallbackHelper")[0]
+			timeout_callback_helper.call_after_time(func callback(): battle_ui._on_unit_hp_change(target, -damage), StaticData.attack_animation_duration)
 	
 	if target.hp == 0:
 		var this_is_the_end = (target.type == UnitTypes.CENTRAL_NODE)
@@ -985,7 +989,7 @@ func end_battle(who_lost: HackingGroups):
 			unit.group = HackingGroups.NEUTRAL
 			
 			if !unit.is_static():
-				hurt_unit(unit, 99999999)
+				hurt_unit(unit, 99999999, true)
 		
 			if unit.type == UnitTypes.TOWER_NODE:
 				unit.hp = 0

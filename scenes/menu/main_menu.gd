@@ -8,6 +8,12 @@ signal go_to_options_menu
 @onready var show_glitch_effect_timer = $Timer
 
 
+func _ready():
+	var list = []
+	UIHelpers.get_ui_theme_node_recurrsively(self, list)
+	UIHelpers.override_ui_node_theme_with_color(list, StaticData.main_menu_color)
+
+
 func _on_play_pressed():
 	StaticData.who_controls_pink = %pink_controller.selected
 	StaticData.who_controls_blue = %blue_controller.selected
