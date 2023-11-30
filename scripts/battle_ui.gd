@@ -314,7 +314,7 @@ func _on_unit_destroy(unit: Unit):
 	pass
 
 func _on_unit_spawn(unit: Unit):
-	unit.on_spawn = true
+	unit.start_spawn()
 	pass
 
 func _on_unit_hp_change(unit: Unit, delta_hp: int):

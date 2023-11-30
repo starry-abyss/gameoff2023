@@ -82,7 +82,7 @@ func spawn_unit(tile_pos: Vector2i, type: UnitTypes, group: HackingGroups):
 	units.append(unit)
 	unit.update_model_pos()
 	unit_container.add_child(unit)
-	unit.on_spawn = true
+	unit.start_spawn()
 	
 	# to hide the hack with angles we are using in the game
 	unit.model.get_child(0).rotation_degrees.x = 0

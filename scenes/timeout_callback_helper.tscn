@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b36pjfoq2efay"]
+
+[ext_resource type="Script" path="res://scenes/timeout_callback_helper.gd" id="1_gsl7u"]
+
+[node name="TimeoutCallbackHelper" type="Node3D" groups=["TimeoutCallbackHelper"]]
+script = ExtResource("1_gsl7u")

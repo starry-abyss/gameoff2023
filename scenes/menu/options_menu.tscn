@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/menu/options_menu.gd" id="1_mumff"]
 [ext_resource type="Shader" path="res://shaders/blur.gdshader" id="2_t0fcv"]
-[ext_resource type="PackedScene" path="res://scenes/components/styled_checkbox.tscn" id="4_5647p"]
+[ext_resource type="PackedScene" uid="uid://1rig7qjbh2cj" path="res://scenes/components/styled_checkbox.tscn" id="4_5647p"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="5_ncrul"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_drc0s"]

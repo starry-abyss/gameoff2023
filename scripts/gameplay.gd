@@ -946,7 +946,7 @@ func hurt_unit(target: Unit, amount: int):
 	target.hp = max(target.hp - amount, 0)
 	
 	var damage = hp_before - target.hp
-	target.on_hurt()
+	target.wait_for_hurt(StaticData.attack_animation_duration)
 	if damage > 0:
 		battle_ui._on_unit_hp_change(target, -damage)
 	

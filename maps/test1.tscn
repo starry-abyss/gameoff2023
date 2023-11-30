@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://cxaqvfti58xoq"]
+[gd_scene load_steps=13 format=3 uid="uid://cxaqvfti58xoq"]
 
 [ext_resource type="PackedScene" uid="uid://c7k4uu8silsa6" path="res://scenes/battle_area.tscn" id="1_mgdil"]
 [ext_resource type="Script" path="res://scripts/gameplay.gd" id="1_nrikt"]
+[ext_resource type="PackedScene" uid="uid://b36pjfoq2efay" path="res://scenes/timeout_callback_helper.tscn" id="2_yuteo"]
 [ext_resource type="PackedScene" uid="uid://khbj7vpou3mu" path="res://scenes/battle_ui.tscn" id="3_iddt0"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="4_shixd"]
 [ext_resource type="PackedScene" uid="uid://chr8t35qwnt7j" path="res://scenes/menu/options_menu.tscn" id="6_xh7ly"]
@@ -59,6 +60,8 @@ shader_parameter/colorOffsetIntensity = 0.0
 
 [node name="Test1" type="Node3D"]
 script = ExtResource("1_nrikt")
+
+[node name="TimeoutCallbackHelper" parent="." instance=ExtResource("2_yuteo")]
 
 [node name="camera_bounds" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.82016, 0, 0.658081)

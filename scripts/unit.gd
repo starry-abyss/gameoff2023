@@ -53,6 +53,8 @@ var idle_animation_offset = 0.0
 
 var tower_balls = []
 
+var timeout_callback_helper
+
 # TODO: add this for Central nodes to restore tile coloring after capture
 @export var tile_ownership_radius = 0
 
@@ -273,6 +275,7 @@ func type_changed_set_up(new_type: Gameplay.UnitTypes):
 		antenna.rotate_y(randf() * PI * 2.0)
 
 func _ready():
+	timeout_callback_helper = get_tree().get_nodes_in_group("TimeoutCallbackHelper")[0]
 	#if Engine.is_editor_hint():
 	type_changed_set_up(type)
 
@@ -310,10 +313,21 @@ func on_attacking(target, start_pos):
 	else:
 		attack_target_pos.y = 0.0
 
+
+func on_hurt_end():
+	material.set_shader_parameter("show_glitch", false)
+	
+
+func wait_for_hurt(time):
+	timeout_callback_helper.call_after_time(on_hurt, time)
+	
+	
 func on_hurt():
 	UIHelpers.audio_event3d("SFX/GeneralEvents/UnitDamage", tile_pos)
 	
-	is_hurt = true
+	#is_hurt = true
+	timeout_callback_helper.call_after_time(on_hurt_end, StaticData.attack_animation_duration)
+	
 	material.set_shader_parameter("show_glitch", true)
 	
 	const y_range = 0.3
@@ -324,7 +338,19 @@ func on_hurt():
 	var y_pos = aabb.position.y
 	var glitch_y_range = Vector2(y_min + y_pos, y_max + y_pos)
 	material.set_shader_parameter("glitch_y_range", glitch_y_range)
-	
+
+
+func start_spawn():
+	on_spawn = true
+	timeout_callback_helper.call_after_time(on_spawn_end, StaticData.spawn_animation_duration)
+
+
+func on_spawn_end():
+	on_spawn = false
+	spawn_timer = 0
+	material.set_shader_parameter("spawn_y_range", Vector2(-10, 10))
+
+
 func _process(delta):
 	# used for attacks and for other gradual movement as well
 	if is_attacking:
@@ -383,12 +409,12 @@ func _process(delta):
 			is_mutating = false
 			mutation_timer = 0.0
 	
-	if is_hurt:
-		hurt_timer += delta
-		if hurt_timer >= StaticData.hurt_animation_duration:
-			material.set_shader_parameter("show_glitch", false)
-			is_hurt = false
-			hurt_timer = 0
+	#if is_hurt:
+		#hurt_timer += delta
+		#if hurt_timer >= StaticData.hurt_animation_duration:
+			#material.set_shader_parameter("show_glitch", false)
+			#is_hurt = false
+			#hurt_timer = 0
 			
 	if on_spawn:
 		spawn_timer += delta
@@ -397,10 +423,10 @@ func _process(delta):
 		var spawn_y_range = Vector2((aabb as AABB).position.y, (aabb as AABB).position.y + y_max)
 		material.set_shader_parameter("spawn_y_highlight_range", spawn_y_highlight_range)
 		material.set_shader_parameter("spawn_y_range", spawn_y_range)
-		if spawn_timer >= StaticData.spawn_animation_duration:
-			on_spawn = false
-			spawn_timer = 0
-			material.set_shader_parameter("spawn_y_range", Vector2(-10, 10))
+		#if spawn_timer >= StaticData.spawn_animation_duration:
+			#on_spawn = false
+			#spawn_timer = 0
+			#material.set_shader_parameter("spawn_y_range", Vector2(-10, 10))
 	else:
 		spawn_timer = 0
 		material.set_shader_parameter("spawn_y_range", Vector2(-10, 10))
