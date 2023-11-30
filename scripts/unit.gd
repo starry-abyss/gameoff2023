@@ -303,7 +303,7 @@ func on_attacking(target, start_pos):
 	
 	if target is Unit:
 		var unit_aabb = Utils.get_aabb(target.model)
-		attack_target_pos = target.global_position + Vector3(0.0, unit_aabb.size.y * 0.5, 0.0)
+		attack_target_pos = target.global_position + Vector3(0.0, (unit_aabb.size.y + Utils.get_y_offset(target.type)) * 0.5, 0.0)
 	elif target is Vector2i:
 		var wp = UIHelpers.tile_pos_to_world_pos(target)
 		attack_target_pos = Vector3(wp.x, 0.0, wp.y)

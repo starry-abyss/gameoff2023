@@ -263,10 +263,6 @@ offset_bottom = 623.0
 text = "Rebels always go first. For educational purposes the recommended mode is Rebels (AI) vs Cyber Police (Human)."
 autowrap_mode = 2
 
-[node name="Credits" parent="." instance=ExtResource("6_ki7ii")]
-visible = false
-layout_mode = 1
-
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 2
@@ -297,6 +293,10 @@ texture = ExtResource("4_tu3lh")
 position = Vector2(582, 130)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("9_u86vk")
+
+[node name="Credits" parent="." instance=ExtResource("6_ki7ii")]
+visible = false
+layout_mode = 1
 
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]

@@ -69,6 +69,8 @@ func _ready():
 	
 	%cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)	
 	%cancel_select_target.is_back_button = true
+	
+	%select_idle_unit.no_press_sound = true
 
 	for ability_id in StaticData.ability_stats.keys():
 		add_ability_button(ability_id)
@@ -92,7 +94,7 @@ func update_selection_indicator(unit: Unit):
 	
 	if unit != null:
 		var unit_aabb = Utils.get_aabb(unit.model)
-		selected_unit_indicator.position = unit.position + Vector3(0, unit_aabb.size.y, 0)
+		selected_unit_indicator.position = unit.position + Vector3(0, unit_aabb.size.y + Utils.get_y_offset(unit.type), 0)
 
 func update_abilities_buttons_general_visibility():
 	%cancel_select_target.visible = !in_unit_animation_mode && in_select_target_mode && selected_unit_indicator.visible && !is_ai_turn
@@ -331,7 +333,7 @@ func _on_unit_hp_change(unit: Unit, delta_hp: int):
 	
 	var unit_aabb = Utils.get_aabb(unit.model)
 	label.global_position = unit.global_position\
-	 + Vector3(0.0, unit_aabb.size.y, 0.0)
+	 + Vector3(0.0, unit_aabb.size.y + Utils.get_y_offset(unit.type), 0.0)
 	
 func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn: bool):
 	change_theme_color()
@@ -447,6 +449,7 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 	
 	update_selected_unit_stats(selected_unit)
 	update_abilities_buttons(selected_unit)
+	update_selection_indicator(selected_unit)
 	
 	# hack for unit stats to update
 	tile_hovered.emit(last_tile_pos)
