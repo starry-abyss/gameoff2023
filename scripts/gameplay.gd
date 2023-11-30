@@ -968,8 +968,6 @@ func hurt_unit(target: Unit, amount: int):
 			target.group = HackingGroups.NEUTRAL
 			update_firewalls()
 			
-			UIHelpers.audio_event3d("SFX/Kernel Node/SFX_KernelDamage", target.tile_pos)
-		
 		if this_is_the_end:
 			end_battle(unit_group_originally)
 	

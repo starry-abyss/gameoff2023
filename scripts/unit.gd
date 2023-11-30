@@ -311,7 +311,10 @@ func on_attacking(target, start_pos):
 		attack_target_pos.y = 0.0
 
 func on_hurt():
-	UIHelpers.audio_event3d("SFX/GeneralEvents/UnitDamage", tile_pos)
+	if is_static() && hp <= 0:
+		UIHelpers.audio_event3d("SFX/Kernel Node/SFX_KernelDamage", tile_pos)
+	else:
+		UIHelpers.audio_event3d("SFX/GeneralEvents/UnitDamage", tile_pos)
 	
 	is_hurt = true
 	material.set_shader_parameter("show_glitch", true)
