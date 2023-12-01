@@ -455,6 +455,11 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 		in_unit_animation_mode = true
 		timeout_callback_helper.call_after_time(func callback(): 
 			in_unit_animation_mode = false
+			
+			# make sure unit is shown on proper tile after its movement
+			if selected_unit != null:
+				selected_unit.update_model_pos()
+			
 			update_abilities_buttons(selected_unit), 
 			StaticData.turn_animation_duration)
 		tiles_tint_reset()
