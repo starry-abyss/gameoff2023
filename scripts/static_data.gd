@@ -70,8 +70,8 @@ extends Node
 		To end your turn, click the End turn button.
 		
 		Click this button to change options, or to end or restart the battle.
-		""", 
-		"author_pink": "@space_rat", "author_blue": "Mike Denton" },
+		""" }, 
+		#"author_pink": "@space_rat", "author_blue": "Mike Denton" },
 	
 	"firewall": { "text": """
 		Firewalls block all enemy units from moving and damaging through them.
@@ -82,15 +82,17 @@ extends Node
 		The only way to put down a firewall is to damage one of the two Anti-malware nodes to 0 Hit Points.
 		""" },
 	"tower_node": { "text": """
-		Anti-malware nodes can damage enemy units at the range of 2 tiles. At the start of the battle it can't reach any enemies.
+		Anti-malware nodes can damage enemy units at the range of 2 tiles. At the start of the battle they can't reach any enemies.
 		
 		If two Anti-malware nodes belong to the same group and stand on a straight line,
 		a double firewall is created between them.
 		
-		If Hit Points reach 0, all neighbor firewalls are down too.
+		Firewalls block all enemy units from moving and damaging through them.
 		
-		The cost of every action in unit's Action Points is shown at the top of the button.
-		This node has only one action type and button.
+		They are automatically created on a straight line between two Anti-malware nodes.
+		For this Anti-malware nodes have to belong to the same group.
+		
+		If Hit Points reach 0, all neighbor firewalls are down too.
 		""" },
 	"central_node": { "text": """
 		The Kernel node contains rootkits allowing us to control the computer of 
@@ -209,11 +211,13 @@ extends Node
 	"spread": { "text": """
 		The only way to perform 'attack_n_spread' is to first use 'boost' on the same turn.
 		
-		Deals the damage to an enemy on a neighbor tile.
-		The damage is also spread instantly along the chain for enemy units on next neighbor tiles.
+		Deals the damage to an enemy malware on a neighbor tile.
+		The damage is also spread instantly along the chain for enemy malware on next neighbor tiles.
 		
 		The total maximum distance is unlimited.
 		This action won't work through enemy firewalls, free tiles and friendly units.
+		
+		Also it doesn't work with nodes, such as Kernel and Anti-malware.
 		
 		Possible damage amount is shown on the button.
 		""" },
