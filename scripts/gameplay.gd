@@ -1500,6 +1500,14 @@ func ai_new_turn():
 				ai_enemy_side_towers_score.append(score)
 				
 				score -= density_score * 2 # score lower for density for Trojan
+				
+				var count_trojans = 0
+				for tr0 in ai_trojans:
+					if UIHelpers.tile_pos_distance(p, tr0.tile_pos) <= 2:
+						count_trojans += 1
+						
+				score -= count_trojans * 10
+				
 				ai_enemy_side_towers_score_trojans.append(score)
 				
 				break
@@ -1803,56 +1811,6 @@ func ai_next_step():
 		if ai_execute_order_for_array(ai_towers_repeat_far, "tower_attack", filter_enemy_2):
 			return
 	
-	while ai_trojans.size() > 0:
-		var t = ai_trojans[-1]
-		
-		var nearest_tower = ai_find_tower_neutral(t.tile_pos, 1)
-		
-		if nearest_tower != null:
-			ai_make_step(t, "capture_tower", nearest_tower)
-			ai_trojans.erase(t)
-			return
-		else:
-			nearest_tower = ai_find_tower_neutral(t.tile_pos, 5)
-			
-			if nearest_tower != null:
-				if ai_try_move_to_enemy(t, nearest_tower):
-					return
-		
-		var on_base = false
-		var trojans_on_base = 0
-		for tr0 in ai_trojans:
-			if UIHelpers.tile_pos_distance(ai_kernel.tile_pos, tr0.tile_pos) <= 3:
-				trojans_on_base += 1
-				if tr0 == t:
-					on_base = true
-		
-		if trojans_on_base > 3 || !on_base:
-			
-			var score_index = 0
-			for i in range(ai_enemy_side_towers_score_trojans.size()):
-				if ai_enemy_side_towers_score_trojans[score_index] < ai_enemy_side_towers_score_trojans[i]:
-					score_index = i
-			
-			var points = ai_points_pink if current_turn_group == HackingGroups.BLUE else ai_points_blue
-		
-			var target_point = points[score_index]
-			
-			if UIHelpers.tile_pos_distance(target_point, t.tile_pos) <= 2:
-				if ai_get_group_density(t.tile_pos, current_turn_group, true) <= 3:
-					if ai_scan_and_apply_backdoor(t):
-						pass
-				
-				ai_trojans.erase(t)
-				continue
-			else:
-				if ai_try_move_to_pos(t, target_point):
-					#ai_virii_attack.erase(t)
-					return
-		
-		ai_trojans.erase(t)
-		continue
-	
 	while ai_virii_on_base.size() > 0:
 		var t = ai_virii_on_base[-1]
 		
@@ -1935,6 +1893,63 @@ func ai_next_step():
 		
 		
 		ai_virii_attack.erase(t)
+		continue
+	
+	# Virus can neutralize a tower, so Trojan is going afterwards
+	while ai_trojans.size() > 0:
+		var t = ai_trojans[-1]
+		
+		var nearest_tower = ai_find_tower_neutral(t.tile_pos, 1)
+		
+		if nearest_tower != null:
+			ai_make_step(t, "capture_tower", nearest_tower)
+			ai_trojans.erase(t)
+			return
+		else:
+			nearest_tower = ai_find_tower_neutral(t.tile_pos, 5)
+			
+			if nearest_tower != null:
+				var already_have_trojan = false
+				for tr0 in ai_trojans:
+					if UIHelpers.tile_pos_distance(nearest_tower.tile_pos, tr0.tile_pos) <= 1:
+						already_have_trojan = true
+				
+				if !already_have_trojan:
+					if ai_try_move_to_enemy(t, nearest_tower):
+						return
+		
+		var on_base = false
+		var trojans_on_base = 0
+		for tr0 in ai_trojans:
+			if UIHelpers.tile_pos_distance(ai_kernel.tile_pos, tr0.tile_pos) <= 3:
+				trojans_on_base += 1
+				if tr0 == t:
+					on_base = true
+		
+		if trojans_on_base > 3 || !on_base:
+			
+			var score_index = 0
+			for i in range(ai_enemy_side_towers_score_trojans.size()):
+				if ai_enemy_side_towers_score_trojans[score_index] < ai_enemy_side_towers_score_trojans[i]:
+					score_index = i
+			
+			var points = ai_points_pink if current_turn_group == HackingGroups.BLUE else ai_points_blue
+		
+			var target_point = points[score_index]
+			
+			if UIHelpers.tile_pos_distance(target_point, t.tile_pos) <= 2:
+				if ai_get_group_density(t.tile_pos, current_turn_group, true) <= 3:
+					if ai_scan_and_apply_backdoor(t):
+						pass
+				
+				ai_trojans.erase(t)
+				continue
+			else:
+				if ai_try_move_to_pos(t, target_point):
+					#ai_virii_attack.erase(t)
+					return
+		
+		ai_trojans.erase(t)
 		continue
 	
 	if ai_scan_and_apply_reset():
