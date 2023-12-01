@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://d0psqdiovqmy8"]
+[gd_scene load_steps=13 format=3 uid="uid://d0psqdiovqmy8"]
 
 [ext_resource type="Script" path="res://scenes/menu/main_menu.gd" id="1_46h0q"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="3_c1x3u"]
@@ -6,9 +6,16 @@
 [ext_resource type="Texture2D" uid="uid://dgfw5dh42i3qk" path="res://icon.svg" id="4_tu3lh"]
 [ext_resource type="PackedScene" uid="uid://1rig7qjbh2cj" path="res://scenes/components/styled_checkbox.tscn" id="5_1btrk"]
 [ext_resource type="Texture2D" uid="uid://ctt6qlsgabcys" path="res://assets/FMOD_LOGOS/FMOD Logo White - Black Background.png" id="5_ocswh"]
+[ext_resource type="Shader" path="res://shaders/sprite2d_glitch.gdshader" id="6_5ae8e"]
 [ext_resource type="Texture2D" uid="uid://lw6v6npn2r21" path="res://assets/godot_logo.svg" id="6_eikba"]
 [ext_resource type="PackedScene" uid="uid://bladnifrmnpk" path="res://scenes/menu/credits.tscn" id="6_ki7ii"]
 [ext_resource type="Texture2D" uid="uid://15agq5jbrw1x" path="res://art/Title_Name.png" id="9_u86vk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l1f56"]
+shader = ExtResource("6_5ae8e")
+shader_parameter/speed = 0.3
+shader_parameter/tint = Vector4(0, 1, 0, 1)
+shader_parameter/span = 0.3
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_31tw3"]
 shader = ExtResource("3_kfdc0")
@@ -29,11 +36,18 @@ script = ExtResource("1_46h0q")
 
 [node name="Quit" type="Button" parent="."]
 custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-offset_left = 1026.0
-offset_top = 594.0
-offset_right = 1126.0
-offset_bottom = 624.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -126.0
+offset_top = -51.0
+offset_right = -26.0
+offset_bottom = -21.0
+grow_horizontal = 0
+grow_vertical = 0
 theme = ExtResource("3_c1x3u")
 text = "Quit"
 expand_icon = true
@@ -46,9 +60,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -150.0
-offset_top = -121.5
+offset_top = -163.0
 offset_right = 150.0
-offset_bottom = 121.5
+offset_bottom = 163.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_top = 100
@@ -118,42 +132,48 @@ offset_bottom = 493.0
 text = "Cyber Police"
 
 [node name="Panel" type="Panel" parent="."]
-layout_mode = 0
-offset_left = 298.0
-offset_top = 469.0
-offset_right = 861.0
-offset_bottom = 637.0
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -281.5
+offset_top = -168.0
+offset_right = 281.5
+grow_horizontal = 2
+grow_vertical = 0
 theme = ExtResource("3_c1x3u")
 
-[node name="PlayerVSPlayerHBoxContainer" type="HBoxContainer" parent="."]
+[node name="PlayerVSPlayerHBoxContainer" type="HBoxContainer" parent="Panel"]
 layout_mode = 0
-offset_left = 290.0
-offset_top = 498.0
-offset_right = 858.0
-offset_bottom = 548.0
+offset_left = -8.0
+offset_top = 29.0
+offset_right = 560.0
+offset_bottom = 79.0
 
-[node name="Rebels" type="HBoxContainer" parent="PlayerVSPlayerHBoxContainer"]
+[node name="Rebels" type="HBoxContainer" parent="Panel/PlayerVSPlayerHBoxContainer"]
 layout_mode = 2
 
-[node name="ControllerLabel1" type="Label" parent="PlayerVSPlayerHBoxContainer/Rebels"]
+[node name="ControllerLabel1" type="Label" parent="Panel/PlayerVSPlayerHBoxContainer/Rebels"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Rebels
 "
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerVSPlayerHBoxContainer/Rebels"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PlayerVSPlayerHBoxContainer/Rebels"]
 visible = false
 custom_minimum_size = Vector2(120, 50)
 layout_mode = 2
 alignment = 1
 
-[node name="Control" parent="PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer" instance=ExtResource("5_1btrk")]
+[node name="Control" parent="Panel/PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer" instance=ExtResource("5_1btrk")]
 layout_mode = 2
 size_flags_horizontal = 8
 checked = true
 
-[node name="Label" type="Label" parent="PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer/Control"]
+[node name="Label" type="Label" parent="Panel/PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer/Control"]
 layout_mode = 0
 offset_left = -46.0
 offset_right = -6.0
@@ -161,15 +181,15 @@ offset_bottom = 19.0
 text = "(AI)"
 horizontal_alignment = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Control2" parent="PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer" instance=ExtResource("5_1btrk")]
+[node name="Control2" parent="Panel/PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer" instance=ExtResource("5_1btrk")]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Label" type="Label" parent="PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer/Control2"]
+[node name="Label" type="Label" parent="Panel/PlayerVSPlayerHBoxContainer/Rebels/VBoxContainer/Control2"]
 layout_mode = 0
 offset_left = -67.0
 offset_right = -6.0
@@ -177,7 +197,7 @@ offset_bottom = 19.0
 text = "(Human)"
 horizontal_alignment = 2
 
-[node name="pink_controller" type="OptionButton" parent="PlayerVSPlayerHBoxContainer/Rebels"]
+[node name="pink_controller" type="OptionButton" parent="Panel/PlayerVSPlayerHBoxContainer/Rebels"]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("3_c1x3u")
@@ -189,61 +209,61 @@ popup/item_0/id = 0
 popup/item_1/text = "(AI)"
 popup/item_1/id = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayerVSPlayerHBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PlayerVSPlayerHBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PlayerVSPlayerHBoxContainer/MarginContainer"]
+[node name="Label" type="Label" parent="Panel/PlayerVSPlayerHBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 36
 text = "vs"
 horizontal_alignment = 1
 
-[node name="CyberPolice" type="HBoxContainer" parent="PlayerVSPlayerHBoxContainer"]
+[node name="CyberPolice" type="HBoxContainer" parent="Panel/PlayerVSPlayerHBoxContainer"]
 layout_mode = 2
 
-[node name="ControllerLabel1" type="Label" parent="PlayerVSPlayerHBoxContainer/CyberPolice"]
+[node name="ControllerLabel1" type="Label" parent="Panel/PlayerVSPlayerHBoxContainer/CyberPolice"]
 layout_mode = 2
 text = "Cyber Police"
 horizontal_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayerVSPlayerHBoxContainer/CyberPolice"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PlayerVSPlayerHBoxContainer/CyberPolice"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerVSPlayerHBoxContainer/CyberPolice"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/PlayerVSPlayerHBoxContainer/CyberPolice"]
 visible = false
 custom_minimum_size = Vector2(120, 50)
 layout_mode = 2
 alignment = 1
 
-[node name="Control" parent="PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer" instance=ExtResource("5_1btrk")]
+[node name="Control" parent="Panel/PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer" instance=ExtResource("5_1btrk")]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer/Control"]
+[node name="Label" type="Label" parent="Panel/PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer/Control"]
 layout_mode = 0
 offset_left = 24.0
 offset_right = 64.0
 offset_bottom = 19.0
 text = "(AI)"
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Control2" parent="PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer" instance=ExtResource("5_1btrk")]
+[node name="Control2" parent="Panel/PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer" instance=ExtResource("5_1btrk")]
 layout_mode = 2
 checked = true
 
-[node name="Label" type="Label" parent="PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer/Control2"]
+[node name="Label" type="Label" parent="Panel/PlayerVSPlayerHBoxContainer/CyberPolice/VBoxContainer/Control2"]
 layout_mode = 0
 offset_left = 24.0
 offset_right = 85.0
 offset_bottom = 19.0
 text = "(Human)"
 
-[node name="blue_controller" type="OptionButton" parent="PlayerVSPlayerHBoxContainer/CyberPolice"]
+[node name="blue_controller" type="OptionButton" parent="Panel/PlayerVSPlayerHBoxContainer/CyberPolice"]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("3_c1x3u")
@@ -255,12 +275,18 @@ popup/item_0/id = 0
 popup/item_1/text = "(AI)"
 popup/item_1/id = 1
 
-[node name="ControllerHint" type="Label" parent="."]
-layout_mode = 0
-offset_left = 329.0
-offset_top = 565.0
-offset_right = 822.0
-offset_bottom = 623.0
+[node name="ControllerHint" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -246.5
+offset_top = -58.0
+offset_right = 246.5
+grow_horizontal = 2
+grow_vertical = 0
 text = "Rebels always go first. AI implemenation is experimental."
 autowrap_mode = 2
 
@@ -283,21 +309,29 @@ position = Vector2(50, 93)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("6_eikba")
 
-[node name="Effect" type="Sprite2D" parent="."]
-visible = false
-material = SubResource("ShaderMaterial_31tw3")
-position = Vector2(573.5, 323.5)
-scale = Vector2(8.96094, 5.03906)
-texture = ExtResource("4_tu3lh")
+[node name="Control2" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
 
-[node name="TitleName" type="Sprite2D" parent="."]
-position = Vector2(582, 130)
+[node name="TitleName" type="Sprite2D" parent="Control2"]
+material = SubResource("ShaderMaterial_l1f56")
+position = Vector2(0, 130)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("9_u86vk")
 
 [node name="Credits" parent="." instance=ExtResource("6_ki7ii")]
 visible = false
 layout_mode = 1
+
+[node name="Effect" type="Sprite2D" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_31tw3")
+position = Vector2(573.5, 323.5)
+scale = Vector2(8.96094, 5.03906)
+texture = ExtResource("4_tu3lh")
 
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
