@@ -1328,12 +1328,12 @@ func _ready():
 	
 	
 	
-	spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(2, 1), UnitTypes.VIRUS, HackingGroups.PINK)
-	spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(2, -1), UnitTypes.VIRUS, HackingGroups.PINK)
-	spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(-1, 1), UnitTypes.VIRUS, HackingGroups.PINK)
-	spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(-2, 2), UnitTypes.VIRUS, HackingGroups.PINK)
-	spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(1, -1), UnitTypes.VIRUS, HackingGroups.PINK)
-	spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(1, -2), UnitTypes.VIRUS, HackingGroups.PINK)
+	#spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(2, 1), UnitTypes.VIRUS, HackingGroups.PINK)
+	#spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(2, -1), UnitTypes.VIRUS, HackingGroups.PINK)
+	#spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(-1, 1), UnitTypes.VIRUS, HackingGroups.PINK)
+	#spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(-2, 2), UnitTypes.VIRUS, HackingGroups.PINK)
+	#spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(1, -1), UnitTypes.VIRUS, HackingGroups.PINK)
+	#spawn_unit(pink_offset + Vector2i(5, 5) + Vector2i(1, -2), UnitTypes.VIRUS, HackingGroups.PINK)
 	
 	
 	
@@ -1367,6 +1367,9 @@ func _ready():
 		for_all_tile_pos_around(tile1, func(tile2): \
 			for_all_tile_pos_around(tile2, func(tile3): \
 				get_tile(tile3).group = HackingGroups.BLUE)))
+				
+				
+	#hurt_unit(find_unit_by_tile_pos(blue_offset + Vector2i(2, 5)), 10)
 	
 	#remove_unit(find_unit_by_tile_pos(Vector2i(6, 2)))
 	
@@ -1418,6 +1421,14 @@ const ai_reset_use_min_score = 1
 const ai_worm_chance_double = 0.6
 const ai_worm_chance_virus = 0.3
 
+const ai_points_pink = [ Vector2i(5, 2), Vector2i(12, 2), Vector2i(5, 16), Vector2i(12, 16) ] #, Vector2i(2, 9) ]
+const ai_points_blue = [ Vector2i(14, 2), Vector2i(21, 2), Vector2i(14, 16), Vector2i(21, 16) ] #, Vector2i(25, 9) ]
+
+var ai_enemy_all_towers = []
+# uses the same index as in ai_points_pink/ai_points_blue
+var ai_enemy_side_towers = []
+var ai_enemy_side_towers_score = []
+
 func ai_new_turn():
 	randomize()
 	
@@ -1432,6 +1443,10 @@ func ai_new_turn():
 	ai_virii_attack = []
 	
 	ai_trojans = []
+	
+	ai_enemy_all_towers = []
+	ai_enemy_side_towers = []
+	ai_enemy_side_towers_score = []
 	
 	ai_kernel = null
 	ai_enemy_kernel = null
@@ -1451,8 +1466,36 @@ func ai_new_turn():
 			#else:
 			#	ai_malware.append(u)
 		else:
+			# enemy or neutralized
 			if u.type == UnitTypes.CENTRAL_NODE:
 				ai_enemy_kernel = u
+			elif u.type == UnitTypes.TOWER_NODE:
+				ai_enemy_all_towers.append(u)
+	
+	# points near enemy base
+	var points = ai_points_pink if current_turn_group == HackingGroups.BLUE else ai_points_blue
+	for i in range(points.size()):
+		var p = points[i]
+		
+		var found = false
+		for t in ai_enemy_all_towers:
+			if UIHelpers.tile_pos_distance(p, t.tile_pos) <= 5:
+				ai_enemy_side_towers.append(t)
+				found = true
+				
+				var score = randi_range(0, 5)
+				score += ai_get_group_density(p, current_turn_group) * 2
+				
+				if t.group == HackingGroups.NEUTRAL:
+					score += 20
+				
+				score += (t.hp_max - t.hp) * 3
+				
+				ai_enemy_side_towers_score.append(score)
+				
+				break
+		
+		assert(found)
 	
 	for v in ai_virii:
 		if UIHelpers.tile_pos_distance(ai_kernel.tile_pos, v.tile_pos) <= 3:
@@ -1556,6 +1599,20 @@ func ai_scan_and_move_far(unit: Unit):
 	#var distance_to_enemy_base = get_distance_to_enemy_base(tile_pos_to_explore)
 	#if distance_to_enemy_base <= 6:
 		pass
+
+func ai_try_move_to_pos(unit: Unit, tile_pos):
+	var nearest_tile = ai_nearest_reachable_tile(unit, tile_pos)
+	
+	#if UIHelpers.tile_pos_distance(nearest_tile, unit.pos) <= 1:
+	#	return true
+	
+	if nearest_tile == null:
+		return false
+	
+	#select_unit(unit, true)
+	#if order_ability_move(nearest_tile, true):
+	ai_make_step(unit, "move", nearest_tile)
+	return true
 
 func ai_try_move_to_enemy(unit: Unit, enemy: Unit):
 	var nearest_tile = ai_nearest_reachable_tile(unit, enemy.tile_pos)
@@ -1697,8 +1754,8 @@ func ai_next_step():
 		if ai_execute_order_for_array(ai_towers_repeat_far, "tower_attack", filter_enemy_2):
 			return
 	
-	#while ai_worms.size() > 0:
-	while false:
+	while ai_worms.size() > 0:
+	#while false:
 		var t = ai_worms[-1]
 		if t.ap >= 3:
 			#var target = target_filter.call(t.tile_pos)
@@ -1761,6 +1818,7 @@ func ai_next_step():
 					return
 			else:
 				if ai_try_move_to_enemy(t, enemy):
+					#ai_virii_on_base.erase(t)
 					return
 			
 			# don't further move if enemy is near
@@ -1777,7 +1835,7 @@ func ai_next_step():
 	
 	while ai_virii_attack.size() > 0:
 		var t = ai_virii_attack[-1]
-		
+
 		# TODO: don't try to attack or move through enemy firewall
 		# TODO: go away after attack ?
 		var enemy = ai_find_tower_enemy(t.tile_pos, 1)
@@ -1790,6 +1848,33 @@ func ai_next_step():
 					# TODO: maybe eat Worm and attack again or spread
 					ai_virii_attack.erase(t)
 					return
+		
+		var score_index = 0
+		for i in range(ai_enemy_side_towers_score.size()):
+			if ai_enemy_side_towers_score[score_index] < ai_enemy_side_towers_score[i]:
+				score_index = i
+		
+		var points = ai_points_pink if current_turn_group == HackingGroups.BLUE else ai_points_blue
+	
+		var target_point = points[score_index]
+		
+		if ai_get_group_density(target_point, current_turn_group) >= 3:
+			var tower = ai_enemy_side_towers[score_index]
+			if ai_get_group_density(tower.tile_pos, current_turn_group) < 3:
+				if ai_try_move_to_enemy(t, tower):
+					return
+			else:
+				ai_virii_attack.erase(t)
+				return
+			
+		elif UIHelpers.tile_pos_distance(target_point, t.tile_pos) <= 2:
+
+			ai_virii_attack.erase(t)
+			return
+		elif ai_try_move_to_pos(t, target_point):
+			ai_virii_attack.erase(t)
+			return
+		
 		
 		ai_virii_attack.erase(t)
 		continue

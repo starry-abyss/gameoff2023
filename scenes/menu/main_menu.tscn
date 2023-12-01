@@ -183,7 +183,7 @@ layout_mode = 2
 theme = ExtResource("3_c1x3u")
 alignment = 1
 item_count = 2
-selected = 1
+selected = 0
 popup/item_0/text = "(Human)"
 popup/item_0/id = 0
 popup/item_1/text = "(AI)"
@@ -195,6 +195,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="PlayerVSPlayerHBoxContainer/MarginContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 36
 text = "vs"
 horizontal_alignment = 1
 
@@ -260,7 +261,7 @@ offset_left = 329.0
 offset_top = 565.0
 offset_right = 822.0
 offset_bottom = 623.0
-text = "Rebels always go first. For educational purposes the recommended mode is Rebels (AI) vs Cyber Police (Human)."
+text = "Rebels always go first. AI implemenation is experimental."
 autowrap_mode = 2
 
 [node name="Control" type="Control" parent="."]

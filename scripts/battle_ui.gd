@@ -296,6 +296,9 @@ func update_selected_unit_avatar(unit: Unit):
 		selected_unit_avatar.hide_avatar()
 
 func update_selected_unit_stats(unit: Unit):
+	if is_ai_turn:
+		unit = null
+	
 	if unit == null:
 		selected_unit_stats_panel.visible = false
 	else:

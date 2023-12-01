@@ -41,7 +41,7 @@ extends Node
 	"self_modify_to_virus": { "icon": "virus grid", "name": "mutate_to_virus", "target": Gameplay.TargetTypes.SELF, "ap": 2, "cooldown": 0 },
 	"self_modify_to_trojan": { "icon": "trojan", "name": "mutate_to_trojan", "target": Gameplay.TargetTypes.SELF, "ap": 3, "cooldown": 0 },
 	
-	"integrate": { "icon": "integrate", "name": "integrate", "target": Gameplay.TargetTypes.UNIT, "ap": -3, "cooldown": 1 },
+	"integrate": { "icon": "integrate", "name": "boost", "target": Gameplay.TargetTypes.UNIT, "ap": -3, "cooldown": 1 },
 	"spread": { "icon": "spread", "name": "attack_n_spread", "target": Gameplay.TargetTypes.UNIT, "ap": 6, "cooldown": 0, "attack": 3, "attack_extra": 2 },
 	
 	"repair": { "icon": "repair", "name": "patch", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "restored_hp": 4 },
@@ -50,7 +50,7 @@ extends Node
 	"self_repair": { "icon": "self heal", "name": "self_maintain", "target": Gameplay.TargetTypes.SELF, "ap": 0, "cooldown": 0, "restored_hp": 6 },
 	
 	"capture_tower": { "icon": "capture", "name": "capture_node", "target": Gameplay.TargetTypes.UNIT, "ap": 4, "cooldown": 0 },
-	"backdoor": { "icon": "backdoor", "name": "open_port", "target": Gameplay.TargetTypes.TILE, "ap": 2, "cooldown": 3 },
+	"backdoor": { "icon": "backdoor", "name": "open_backdoor", "target": Gameplay.TargetTypes.TILE, "ap": 2, "cooldown": 3 },
 	}
 	
 @export var tile_size = Vector2(1.30, 1.30 * sin(PI / 3.0))
@@ -117,14 +117,14 @@ extends Node
 	"virus": { "text": """
 		The Virus malware can move and can attack enemy units in the range of 1.
 		
-		Also it can integrate friendly Worms to temporarily gain more Action Points, even beyond the limit!
-		Integrating a Worm is the only way to then perform 'attack_n_spread'.
+		Also it can consume friendly Worms to temporarily gain more Action Points, even beyond the limit!
+		Using 'boost' is the only way to then perform 'attack_n_spread'.
 		""" },
 	"trojan": { "text": """
 		The Trojan malware can move fast but cannot attack.
 		
 		It can capture an enemy Anti-malware node.
-		It can open a backdoor port to move friendly malware to the Trojan over long distances.
+		It can open a backdoor to move friendly malware to the Trojan over long distances.
 		""" },
 	
 	"end_turn": { "text": """
@@ -155,11 +155,12 @@ extends Node
 	"move": { "text": """
 		Unlike nodes, malware can move.
 		Maximum distance depends on the amount of Action Points left for the malware.
+		
 		It's impossible to walk through other units or through enemy firewalls.
 		
 		For this action it's not required to click the action button first - you can click the target on the battle field right away.
 		
-		To move malware instantly at long distances use Trojan's 'open_port' action instead.
+		To move malware instantly at long distances use Trojan's 'open_backdoor' action instead.
 		""" },
 	
 	"virus_attack": { "text": """
@@ -200,12 +201,12 @@ extends Node
 	"integrate": { "text": """
 		Consumes a chosen Worm from a neighbor tile. Action Points are increased by 3 then, even above the limit, until the next turn.
 		
-		Only one Worm per turn can be integrated by each Virus.
+		Only one Worm per turn can be consumed by each Virus.
 		
 		This is the only way to perform 'attack_n_spread' action (on the same turn).
 		""" },
 	"spread": { "text": """
-		The only way to perform 'attack_n_spread' is to first use 'integrate' on the same turn.
+		The only way to perform 'attack_n_spread' is to first use 'boost' on the same turn.
 		
 		Deals the damage to an enemy on a neighbor tile.
 		The damage is also spread instantly along the chain for enemy units on next neighbor tiles.
@@ -226,13 +227,13 @@ extends Node
 		""" },
 	"reset": { "text": """
 		Performs a reset on 7 selected tiles eliminating all malware there regardless of their group.
+		
 		Nodes are unaffected. The central tile of the 7 must be located on the territory marked with the Kernel group's color.
 		
 		The period of unavailability after use, in turns, is shown on the button.
 	""" },
 	"spawn_worms": { "text": """
-		Automatically generates up to 6 Worms on neighbor tiles.
-		If any of neighbor tiles is occupied, no Worm is generated on that tile.
+		Automatically generates up to 6 Worms on neighbor tiles. If any of neighbor tiles is occupied, no Worm is generated on that tile.
 		
 		The period of unavailability after use, in turns, is shown on the button.
 	""" },
@@ -244,6 +245,7 @@ extends Node
 	
 	"capture_tower": { "text": """
 		To capture an enemy Anti-malware node, firstly damage it down to 0 HP.
+		
 		Secondly, move the Trojan near the node (then of the neutral group) and use this action on it.
 	""" },
 	"backdoor": { "text": """

@@ -442,13 +442,13 @@ func _process(delta):
 	if to_be_removed:
 		destroy_timer += delta
 		
-		var new_scale = max(0.0, StaticData.turn_animation_duration - destroy_timer * 1.5) / StaticData.turn_animation_duration
+		var new_scale = max(0.0, StaticData.hurt_animation_duration - destroy_timer * 1.5) / StaticData.hurt_animation_duration
 		#scale = Vector3(new_scale, new_scale, new_scale)
 		new_scale = ease(new_scale, 0.4)
 		
 		material.set_shader_parameter("opacity", new_scale)
 		
-		if destroy_timer >= StaticData.turn_animation_duration:
+		if destroy_timer >= StaticData.hurt_animation_duration:
 			queue_free()
 	
 	if type == Gameplay.UnitTypes.VIRUS && model != null:
