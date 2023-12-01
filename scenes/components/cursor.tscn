@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://deecnu68ymfmu"]
+
+[ext_resource type="Texture2D" uid="uid://bijor6oevor31" path="res://art/cursor.png" id="1_nk217"]
+[ext_resource type="Script" path="res://scenes/components/cursor.gd" id="2_raqox"]
+
+[node name="Cursor" type="Sprite2D"]
+self_modulate = Color(0, 1, 0, 1)
+z_index = 4096
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_nk217")
+centered = false
+script = ExtResource("2_raqox")

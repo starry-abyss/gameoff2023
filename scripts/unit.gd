@@ -43,6 +43,8 @@ var is_attacking = false
 var attack_target_pos = Vector3(0.0, 0.0, 0.0)
 var attack_start_pos = Vector3(0.0, 0.0, 0.0)
 
+var is_healing = false
+var healing_timer = 0.0
 var is_mutating = false
 var mutation_timer = 0.0
 var start_mutation_scale_x = 0.3
@@ -287,6 +289,7 @@ func _ready():
 	
 	idle_animation_offset = randf_range(0.0, 2 * PI)
 	
+	
 func _on_click():
 	on_click.emit(self)
 
@@ -359,6 +362,18 @@ func on_spawn_end():
 	material.set_shader_parameter("spawn_y_range", Vector2(-10, 10))
 
 
+func on_heal():
+	is_healing = true
+	change_heal_animation_state(true)
+
+
+func change_heal_animation_state(show_healing_color: bool):
+	if !is_healing:
+		return
+	material.set_shader_parameter("is_healing", show_healing_color)
+	timeout_callback_helper.call_after_time(func callback(): change_heal_animation_state(!show_healing_color), StaticData.heal_animation_duration / 5)
+
+
 func _process(delta):
 	# used for attacks and for other gradual movement as well
 	if is_attacking:
@@ -417,6 +432,13 @@ func _process(delta):
 			is_mutating = false
 			mutation_timer = 0.0
 	
+	if is_healing:
+		healing_timer += delta
+		if healing_timer >= StaticData.heal_animation_duration:
+			is_healing = false
+			material.set_shader_parameter("is_healing", false)
+			healing_timer = 0.0
+	
 	#if is_hurt:
 		#hurt_timer += delta
 		#if hurt_timer >= StaticData.hurt_animation_duration:
@@ -448,7 +470,7 @@ func _process(delta):
 		
 		material.set_shader_parameter("opacity", new_scale)
 		
-		if destroy_timer >= StaticData.hurt_animation_duration:
+		if destroy_timer >= StaticData.turn_animation_duration:
 			queue_free()
 	
 	if type == Gameplay.UnitTypes.VIRUS && model != null:
