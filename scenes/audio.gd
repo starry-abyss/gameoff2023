@@ -2,6 +2,8 @@ extends Node
 
 @export var event: EventAsset
 
+signal quit_game
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#FMODRuntime.play_one_shot(event)
@@ -14,7 +16,8 @@ func _ready():
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		UIHelpers.quit_the_game()
+		quit_game.emit()
+		#UIHelpers.quit_the_game()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

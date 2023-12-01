@@ -33,7 +33,7 @@ Utils="*res://scripts/utils.gd"
 
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
-mouse_cursor/custom_image="res://assets/kenney_ui-pack-space-expansion/PNG/cursor_hand.png"
+mouse_cursor/custom_image="res://art/cursor_64.png"
 
 [fmod]
 

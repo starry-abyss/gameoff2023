@@ -4,7 +4,9 @@ extends Node3D
 @onready var battle_area = %battle_area
 @onready var battle_ui = %battle_ui
 @onready var options_menu: Control = $CanvasLayer/OptionsMenu
-@onready var options: Button = $CanvasLayer/Options
+@onready var instructions_and_menu: Panel = $CanvasLayer/InstructionsAndMenu
+@onready var quit_confirmation: Control = $CanvasLayer/QuitConfirmation
+
 
 enum UnitTypes { CENTRAL_NODE, TOWER_NODE, WORM, TROJAN, VIRUS }
 enum TargetTypes { UNIT, TILE, SELF }
@@ -944,6 +946,7 @@ func heal_unit(target: Unit, amount: int):
 	
 	var hp_change = target.hp - hp_before
 	if hp_change > 0:
+		target.on_heal()
 		battle_ui._on_unit_hp_change(target, hp_change)
 
 
@@ -980,6 +983,7 @@ func hurt_unit(target: Unit, amount: int, is_instantly_damage_label: bool = fals
 		
 		if target.can_be_destroyed():
 			remove_unit(target, is_instantly_damage_label)
+			
 		else:
 			target.group = HackingGroups.NEUTRAL
 			update_firewalls()
@@ -1211,14 +1215,6 @@ func for_all_tile_pos_around(tile_pos: Vector2i, f: Callable):
 			f.call(adj_tile_pos_absolute)
 
 
-func _on_back_pressed() -> void:
-	options_menu.visible = false
-	
-	
-func _on_options_pressed() -> void:
-	options_menu.visible = true
-
-
 func _init_group_color():
 	if current_turn_group == Gameplay.HackingGroups.PINK:
 		on_group_color_change(current_turn_group, StaticData.color_pink)
@@ -1241,7 +1237,10 @@ func on_group_color_change(group: Gameplay.HackingGroups, color: Color):
 
 
 func _override_other_ui_theme_with_color(color):
-	UIHelpers.override_ui_node_theme_with_color([options, $CanvasLayer/VBoxContainer/ResetCamera, $CanvasLayer/VBoxContainer/EndBattle, $CanvasLayer/VBoxContainer/RestartBattle], color)
+	var list = []
+	UIHelpers.get_ui_theme_node_recurrsively(self, list)
+	UIHelpers.override_ui_node_theme_with_color(list, color)
+	#UIHelpers.override_ui_node_theme_with_color([options, $CanvasLayer/VBoxContainer/ResetCamera, $CanvasLayer/VBoxContainer/EndBattle, $CanvasLayer/VBoxContainer/RestartBattle], color)
 
 
 func _ready():
@@ -1283,7 +1282,9 @@ func _ready():
 	battle_ui.connect("order_given", give_order)
 	battle_ui.connect("animation_finished", func(): select_unit(selected_unit))
 	options_menu.connect("on_group_color_change", on_group_color_change)
-	options_menu.connect("on_back_pressed", _on_back_pressed)
+	options_menu.connect("on_back_pressed", _on_options_menu_back_pressed)
+	
+	Music.connect("quit_game", _quit_game)
 	
 	tiles.resize(map_size.x * map_size.y)
 	distances.resize(tiles.size())
@@ -2096,3 +2097,23 @@ func _on_restart_battle_pressed() -> void:
 func _on_reset_camera_pressed() -> void:
 	$Camera3D.position = Vector3(15, 40, 38)
 	$Camera3D.size = 40
+
+
+func _on_instructions_and_menu_pressed() -> void:
+	instructions_and_menu.visible = true
+
+
+func _on_back_pressed() -> void:
+	instructions_and_menu.visible = false
+
+
+func _on_options_pressed() -> void:
+	options_menu.visible = true
+
+
+func _on_options_menu_back_pressed() -> void:
+	options_menu.visible = false
+
+
+func _quit_game():
+	quit_confirmation.visible = true

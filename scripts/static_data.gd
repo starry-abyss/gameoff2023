@@ -9,6 +9,7 @@ extends Node
 @export var main_menu_color: Color = Color("#00ff00")
 
 @export var hurt_animation_duration: float = 0.5
+@export var heal_animation_duration: float = 0.5
 @export var spawn_animation_duration: float = 1
 @export var turn_animation_duration: float = 1.0
 @export var attack_animation_duration: float = 0.4

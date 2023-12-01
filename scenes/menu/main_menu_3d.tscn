@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://cb3uqsoio4rkb"]
+[gd_scene load_steps=8 format=3 uid="uid://cb3uqsoio4rkb"]
 
 [ext_resource type="Script" path="res://scenes/menu/main_menu_3d.gd" id="1_a3f1n"]
 [ext_resource type="PackedScene" uid="uid://d0psqdiovqmy8" path="res://scenes/menu/main_menu.tscn" id="1_a3sli"]
 [ext_resource type="PackedScene" uid="uid://chr8t35qwnt7j" path="res://scenes/menu/options_menu.tscn" id="3_fxltc"]
 [ext_resource type="PackedScene" uid="uid://b36pjfoq2efay" path="res://scenes/timeout_callback_helper.tscn" id="4_pioap"]
+[ext_resource type="PackedScene" uid="uid://cswkd5qaekry6" path="res://scenes/menu/quit_confirmation.tscn" id="5_yb86w"]
 
 [sub_resource type="GDScript" id="GDScript_chp1w"]
 script/source = "extends Label3D
@@ -71,6 +72,9 @@ environment = SubResource("Environment_oktuc")
 [node name="MainMenu" parent="." instance=ExtResource("1_a3sli")]
 
 [node name="OptionsMenu" parent="." instance=ExtResource("3_fxltc")]
+visible = false
+
+[node name="QuitConfirmation" parent="." instance=ExtResource("5_yb86w")]
 visible = false
 
 [node name="Timer" type="Timer" parent="."]
