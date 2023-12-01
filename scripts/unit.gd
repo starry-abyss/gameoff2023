@@ -43,6 +43,8 @@ var is_attacking = false
 var attack_target_pos = Vector3(0.0, 0.0, 0.0)
 var attack_start_pos = Vector3(0.0, 0.0, 0.0)
 
+var is_healing = false
+var healing_timer = 0.0
 var is_mutating = false
 var mutation_timer = 0.0
 var start_mutation_scale_x = 0.3
@@ -287,6 +289,7 @@ func _ready():
 	
 	idle_animation_offset = randf_range(0.0, 2 * PI)
 	
+	
 func _on_click():
 	on_click.emit(self)
 
@@ -416,6 +419,14 @@ func _process(delta):
 			
 			is_mutating = false
 			mutation_timer = 0.0
+	
+	if is_healing:
+		healing_timer += delta
+		
+		if healing_timer >= StaticData.heal_animation_duration:
+			material.set_shader_parameter("is_healing", false)
+			is_healing = false
+			healing_timer = 0.0
 	
 	#if is_hurt:
 		#hurt_timer += delta

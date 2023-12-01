@@ -944,6 +944,7 @@ func heal_unit(target: Unit, amount: int):
 	
 	var hp_change = target.hp - hp_before
 	if hp_change > 0:
+		target.is_healing = true
 		battle_ui._on_unit_hp_change(target, hp_change)
 
 

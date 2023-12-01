@@ -1,16 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cp1ta1mvpvrpk"]
-
-[ext_resource type="Shader" uid="uid://cp6br63jv8s4k" path="res://shaders/glowing_outline_shader.tres" id="1_up8a2"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cp1ta1mvpvrpk"]
 
 [resource]
 resource_local_to_scene = true
-render_priority = 0
-shader = ExtResource("1_up8a2")
-shader_parameter/glitch_y_range = Vector2(-1, 1)
-shader_parameter/show_glitch = false
-shader_parameter/glitch_scale = 0.5
-shader_parameter/spawn_y_range = Vector2(-1, 1)
-shader_parameter/spawn_y_highlight_range = 0.3
-shader_parameter/opacity = 1.0
-shader_parameter/emission_color = Color(0.121569, 0.533333, 0.490196, 0.25098)
-shader_parameter/emission_amount = 5.0
