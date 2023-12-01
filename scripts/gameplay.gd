@@ -1743,7 +1743,7 @@ func ai_next_step():
 	if ai_scan_and_apply_reset():
 		return
 	
-	if false:
+	if true:
 		var filter_enemy_1 = func(tile_pos):
 			return ai_find_weakest_enemy(tile_pos, 1)
 		if ai_execute_order_for_array(ai_towers, "tower_attack", filter_enemy_1):
