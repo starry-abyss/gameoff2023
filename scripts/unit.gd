@@ -470,7 +470,7 @@ func _process(delta):
 		
 		material.set_shader_parameter("opacity", new_scale)
 		
-		if destroy_timer >= StaticData.hurt_animation_duration:
+		if destroy_timer >= StaticData.turn_animation_duration:
 			queue_free()
 	
 	if type == Gameplay.UnitTypes.VIRUS && model != null:

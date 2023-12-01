@@ -13,6 +13,7 @@ const MAP_SIZE = Vector2(5, 5)
 @onready var timer = $Timer
 @onready var glowing_outline_shader: VisualShader = preload("res://shaders/glowing_outline_shader.tres")
 @onready var unit_container = $Node3D/UnitContainer
+@onready var quit_confirmation: Control = $QuitConfirmation
 
 enum UnitTypes { CENTRAL_NODE, TOWER_NODE, WORM, TROJAN, VIRUS }
 enum HackingGroups { PINK, BLUE, NEUTRAL }
@@ -22,6 +23,7 @@ var units = []
 
 
 func _ready():
+	Music.connect("quit_game", _quit_game)
 	tiles.resize(MAP_SIZE.x * MAP_SIZE.y)
 	
 	main_menu.go_to_options_menu.connect(_go_to_options_menu)
@@ -37,6 +39,7 @@ func _ready():
 	
 	#UIHelpers.override_ui_node_theme_with_color(find_children("", "Button"), StaticData.main_menu_color)
 	$OptionsMenu.change_theme_color(StaticData.main_menu_color)
+	$QuitConfirmation.change_theme_color(StaticData.main_menu_color)
 	
 	for x in range(MAP_SIZE.x):
 		for y in range(MAP_SIZE.y):
@@ -128,3 +131,7 @@ func _retint_tiles():
 
 func tile_pos_to_tile_index(tile_pos: Vector2i) -> int:
 	return tile_pos.y * MAP_SIZE.x + tile_pos.x
+
+
+func _quit_game():
+	quit_confirmation.visible = true

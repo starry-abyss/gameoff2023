@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cxaqvfti58xoq"]
+[gd_scene load_steps=14 format=3 uid="uid://cxaqvfti58xoq"]
 
 [ext_resource type="PackedScene" uid="uid://c7k4uu8silsa6" path="res://scenes/battle_area.tscn" id="1_mgdil"]
 [ext_resource type="Script" path="res://scripts/gameplay.gd" id="1_nrikt"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://khbj7vpou3mu" path="res://scenes/battle_ui.tscn" id="3_iddt0"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="4_shixd"]
 [ext_resource type="PackedScene" uid="uid://chr8t35qwnt7j" path="res://scenes/menu/options_menu.tscn" id="6_xh7ly"]
+[ext_resource type="PackedScene" uid="uid://cswkd5qaekry6" path="res://scenes/menu/quit_confirmation.tscn" id="7_6yhuw"]
 [ext_resource type="Shader" path="res://shaders/glitch.gdshader" id="8_bq4h5"]
 [ext_resource type="Texture2D" uid="uid://dgfw5dh42i3qk" path="res://icon.svg" id="9_fr0wu"]
 
@@ -73,6 +74,8 @@ unique_name_in_owner = true
 
 [node name="battle_ui" parent="." instance=ExtResource("3_iddt0")]
 unique_name_in_owner = true
+metadata/_edit_vertical_guides_ = [10.0, 1142.0]
+metadata/_edit_horizontal_guides_ = [466.0]
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, -6.50845e-16, 1.74393e-16, 1.74393e-16, 0.5, 0.866026, -6.50845e-16, -0.866026, 0.5, 15, 40, 38)
@@ -97,43 +100,109 @@ environment = SubResource("Environment_mk85x")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
-offset_left = 960.0
-offset_top = 508.0
-offset_right = 1140.0
-offset_bottom = 597.0
-
-[node name="ResetCamera" type="Button" parent="CanvasLayer/VBoxContainer"]
+[node name="ResetCamera" type="Button" parent="CanvasLayer"]
 custom_minimum_size = Vector2(180, 2.08165e-12)
+offset_left = 957.0
+offset_top = 590.0
+offset_right = 1137.0
+offset_bottom = 620.0
+theme = ExtResource("4_shixd")
+text = "Reset camera"
+
+[node name="InstructionsAndMenuButton" type="Button" parent="CanvasLayer"]
+custom_minimum_size = Vector2(200, 2.08165e-12)
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 236.0
+offset_bottom = 40.0
+theme = ExtResource("4_shixd")
+text = "Instructions / Menu"
+expand_icon = true
+
+[node name="InstructionsAndMenu" type="Panel" parent="CanvasLayer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -225.0
+offset_top = -225.0
+offset_right = 225.0
+offset_bottom = 225.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_shixd")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/InstructionsAndMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -129.0
+offset_top = -144.0
+offset_right = 129.0
+offset_bottom = 144.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Options" type="Button" parent="CanvasLayer/InstructionsAndMenu/VBoxContainer"]
+custom_minimum_size = Vector2(200, 2.08165e-12)
 layout_mode = 2
 theme = ExtResource("4_shixd")
-text = "Reset Camera"
+text = "Options"
+expand_icon = true
 
-[node name="EndBattle" type="Button" parent="CanvasLayer/VBoxContainer"]
+[node name="EndBattle" type="Button" parent="CanvasLayer/InstructionsAndMenu/VBoxContainer"]
 custom_minimum_size = Vector2(180, 2.08165e-12)
 layout_mode = 2
 theme = ExtResource("4_shixd")
 text = "End battle"
 
-[node name="RestartBattle" type="Button" parent="CanvasLayer/VBoxContainer"]
+[node name="RestartBattle" type="Button" parent="CanvasLayer/InstructionsAndMenu/VBoxContainer"]
 custom_minimum_size = Vector2(180, 2.08165e-12)
 layout_mode = 2
 theme = ExtResource("4_shixd")
 text = "Restart battle"
 
-[node name="Options" type="Button" parent="CanvasLayer"]
-custom_minimum_size = Vector2(200, 2.08165e-12)
-offset_left = 9.0
-offset_top = 10.0
-offset_right = 267.0
-offset_bottom = 40.0
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/InstructionsAndMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 100
+
+[node name="Back" type="Button" parent="CanvasLayer/InstructionsAndMenu"]
+custom_minimum_size = Vector2(180, 2.08165e-12)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = 146.0
+offset_right = 90.0
+offset_bottom = 173.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("4_shixd")
-text = "Instructions / Options"
-expand_icon = true
+text = "Back"
 
 [node name="OptionsMenu" parent="CanvasLayer" instance=ExtResource("6_xh7ly")]
 visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 0.0
+offset_right = 0.0
 show_options_button = true
+
+[node name="QuitConfirmation" parent="CanvasLayer" instance=ExtResource("7_6yhuw")]
+visible = false
 
 [node name="Effect" type="Sprite2D" parent="."]
 visible = false
@@ -142,7 +211,9 @@ position = Vector2(573.5, 323.5)
 scale = Vector2(8.96094, 5.03906)
 texture = ExtResource("9_fr0wu")
 
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/ResetCamera" to="." method="_on_reset_camera_pressed"]
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/EndBattle" to="." method="_on_end_battle_pressed"]
-[connection signal="pressed" from="CanvasLayer/VBoxContainer/RestartBattle" to="." method="_on_restart_battle_pressed"]
-[connection signal="pressed" from="CanvasLayer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="CanvasLayer/ResetCamera" to="." method="_on_reset_camera_pressed"]
+[connection signal="pressed" from="CanvasLayer/InstructionsAndMenuButton" to="." method="_on_instructions_and_menu_pressed"]
+[connection signal="pressed" from="CanvasLayer/InstructionsAndMenu/VBoxContainer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="CanvasLayer/InstructionsAndMenu/VBoxContainer/EndBattle" to="." method="_on_end_battle_pressed"]
+[connection signal="pressed" from="CanvasLayer/InstructionsAndMenu/VBoxContainer/RestartBattle" to="." method="_on_restart_battle_pressed"]
+[connection signal="pressed" from="CanvasLayer/InstructionsAndMenu/Back" to="." method="_on_back_pressed"]
