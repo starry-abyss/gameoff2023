@@ -1428,6 +1428,7 @@ var ai_enemy_all_towers = []
 # uses the same index as in ai_points_pink/ai_points_blue
 var ai_enemy_side_towers = []
 var ai_enemy_side_towers_score = []
+var ai_enemy_side_towers_score_trojans = []
 
 func ai_new_turn():
 	randomize()
@@ -1447,6 +1448,7 @@ func ai_new_turn():
 	ai_enemy_all_towers = []
 	ai_enemy_side_towers = []
 	ai_enemy_side_towers_score = []
+	ai_enemy_side_towers_score_trojans = []
 	
 	ai_kernel = null
 	ai_enemy_kernel = null
@@ -1484,7 +1486,11 @@ func ai_new_turn():
 				found = true
 				
 				var score = randi_range(0, 5)
-				score += ai_get_group_density(p, current_turn_group) * 2
+				
+				# score higher for density for Virus
+				var density_score = ai_get_group_density(p, current_turn_group) * 2
+				
+				score += density_score
 				
 				if t.group == HackingGroups.NEUTRAL:
 					score += 20
@@ -1493,9 +1499,17 @@ func ai_new_turn():
 				
 				ai_enemy_side_towers_score.append(score)
 				
+				score -= density_score * 2 # score lower for density for Trojan
+				ai_enemy_side_towers_score_trojans.append(score)
+				
 				break
-		
-		assert(found)
+				
+		if !found:
+			ai_enemy_side_towers.append(null)
+			ai_enemy_side_towers_score.append(-999999)
+			ai_enemy_side_towers_score_trojans.append(-999999)
+			
+		#assert(found)
 	
 	for v in ai_virii:
 		if UIHelpers.tile_pos_distance(ai_kernel.tile_pos, v.tile_pos) <= 3:
@@ -1558,6 +1572,34 @@ func ai_scan_and_apply_reset() -> bool:
 	
 	if lambda_context.relative_density > -1:
 		ai_make_step(ai_kernel, "reset", lambda_context.tile_pos)
+		return true
+	else:
+		return false
+
+func ai_scan_and_apply_backdoor(trojan: Unit) -> bool:
+	#if ai_kernel.ap <= 0:
+	#	return false
+	
+	if trojan.get_cooldown("backdoor") > 0:
+		return false
+	
+	var lambda_context = { "friend_density": -1, "tile_pos": Vector2i(0, 0) }
+	
+	var lambda = func(tile_pos):
+		#var relative_density = ai_get_relative_density(tile_pos, true)
+		var friend_density = ai_get_group_density(tile_pos, current_turn_group, true)
+		var enemy_density = ai_get_group_density(tile_pos, flip_group(current_turn_group), true)
+		if enemy_density <= 2 && friend_density >= 3: #relative_density >= 2:
+			if lambda_context.friend_density < friend_density:
+				lambda_context.friend_density = friend_density
+				lambda_context.tile_pos = tile_pos
+	
+	for_all_tile_pos_around(ai_kernel.tile_pos, func(tile1): \
+		for_all_tile_pos_around(tile1, func(tile2): \
+			for_all_tile_pos_around(tile2, lambda)))
+	
+	if lambda_context.friend_density > -1:
+		ai_make_step(trojan, "backdoor", lambda_context.tile_pos)
 		return true
 	else:
 		return false
@@ -1776,7 +1818,38 @@ func ai_next_step():
 			if nearest_tower != null:
 				if ai_try_move_to_enemy(t, nearest_tower):
 					return
+		
+		var on_base = false
+		var trojans_on_base = 0
+		for tr0 in ai_trojans:
+			if UIHelpers.tile_pos_distance(ai_kernel.tile_pos, tr0.tile_pos) <= 3:
+				trojans_on_base += 1
+				if tr0 == t:
+					on_base = true
+		
+		if trojans_on_base > 3 || !on_base:
 			
+			var score_index = 0
+			for i in range(ai_enemy_side_towers_score_trojans.size()):
+				if ai_enemy_side_towers_score_trojans[score_index] < ai_enemy_side_towers_score_trojans[i]:
+					score_index = i
+			
+			var points = ai_points_pink if current_turn_group == HackingGroups.BLUE else ai_points_blue
+		
+			var target_point = points[score_index]
+			
+			if UIHelpers.tile_pos_distance(target_point, t.tile_pos) <= 2:
+				if ai_get_group_density(t.tile_pos, current_turn_group, true) <= 3:
+					if ai_scan_and_apply_backdoor(t):
+						pass
+				
+				ai_trojans.erase(t)
+				continue
+			else:
+				if ai_try_move_to_pos(t, target_point):
+					#ai_virii_attack.erase(t)
+					return
+		
 		ai_trojans.erase(t)
 		continue
 	
@@ -1841,6 +1914,10 @@ func ai_next_step():
 		
 		if ai_get_group_density(target_point, current_turn_group) >= 3:
 			var tower = ai_enemy_side_towers[score_index]
+			if tower == null:
+				ai_virii_attack.erase(t)
+				return
+			
 			if ai_get_group_density(tower.tile_pos, current_turn_group) < 3:
 				if ai_try_move_to_enemy(t, tower):
 					return
