@@ -362,6 +362,18 @@ func on_spawn_end():
 	material.set_shader_parameter("spawn_y_range", Vector2(-10, 10))
 
 
+func on_heal():
+	is_healing = true
+	change_heal_animation_state(true)
+
+
+func change_heal_animation_state(show_healing_color: bool):
+	if !is_healing:
+		return
+	material.set_shader_parameter("is_healing", show_healing_color)
+	timeout_callback_helper.call_after_time(func callback(): change_heal_animation_state(!show_healing_color), StaticData.heal_animation_duration / 5)
+
+
 func _process(delta):
 	# used for attacks and for other gradual movement as well
 	if is_attacking:
@@ -422,10 +434,9 @@ func _process(delta):
 	
 	if is_healing:
 		healing_timer += delta
-		
 		if healing_timer >= StaticData.heal_animation_duration:
-			material.set_shader_parameter("is_healing", false)
 			is_healing = false
+			material.set_shader_parameter("is_healing", false)
 			healing_timer = 0.0
 	
 	#if is_hurt:

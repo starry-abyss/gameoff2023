@@ -944,7 +944,7 @@ func heal_unit(target: Unit, amount: int):
 	
 	var hp_change = target.hp - hp_before
 	if hp_change > 0:
-		target.is_healing = true
+		target.on_heal()
 		battle_ui._on_unit_hp_change(target, hp_change)
 
 
@@ -980,7 +980,9 @@ func hurt_unit(target: Unit, amount: int, is_instantly_damage_label: bool = fals
 		var unit_group_originally = target.group
 		
 		if target.can_be_destroyed():
-			remove_unit(target, is_instantly_damage_label)
+			var timeout_callback_helper = get_tree().get_nodes_in_group("TimeoutCallbackHelper")[0]
+			timeout_callback_helper.call_after_time(func callback(): remove_unit(target, is_instantly_damage_label), StaticData.attack_animation_duration)
+			
 		else:
 			target.group = HackingGroups.NEUTRAL
 			update_firewalls()
