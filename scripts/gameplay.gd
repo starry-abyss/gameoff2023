@@ -1686,6 +1686,13 @@ func ai_find_tower_enemy(tile_pos, distance):
 	
 	return ai_find_weakest(tile_pos, distance, flip_group(current_turn_group), condition)
 
+func ai_find_tower_neutral(tile_pos, distance):
+	var condition = func(new_unit, unit):
+		return new_unit.type == UnitTypes.TOWER_NODE \
+		&& (unit == null || UIHelpers.tile_pos_distance(unit.tile_pos, tile_pos) > UIHelpers.tile_pos_distance(new_unit.tile_pos, tile_pos))
+	
+	return ai_find_weakest(tile_pos, distance, HackingGroups.NEUTRAL, condition)
+
 func ai_find_weakest_enemy_near_base(tile_pos, distance):
 	var condition = func(new_unit, unit):
 		return UIHelpers.tile_pos_distance(ai_kernel.tile_pos, new_unit.tile_pos) <= 4 && (unit == null || unit.hp > new_unit.hp)
@@ -1754,50 +1761,24 @@ func ai_next_step():
 		if ai_execute_order_for_array(ai_towers_repeat_far, "tower_attack", filter_enemy_2):
 			return
 	
-	while ai_worms.size() > 0:
-	#while false:
-		var t = ai_worms[-1]
-		if t.ap >= 3:
-			#var target = target_filter.call(t.tile_pos)
-			
-			var role = randf()
-			if role > ai_worm_chance_double + ai_worm_chance_virus:
-				ai_make_step(t, "self_modify_to_trojan", null)
-				return
-			else:
-				var wt = get_walkable_neighbor_tiles(t.tile_pos)
-				if wt.size() > 0:
-					var direction = randi_range(0, wt.size()-1)
-					#if direction != wt.size():
-					var new_tile = wt[direction]
-					ai_make_step(t, "move", new_tile)
-					return
-				
-				ai_make_step(t, "self_modify_to_virus", null)
-				return
-		elif t.ap >= 2:
-			var role = randf() * (ai_worm_chance_double + ai_worm_chance_virus)
-			var distance_to_enemy_base = ai_get_distance_to_enemy_base(t.tile_pos)
-			
-			if distance_to_enemy_base <= 6 || role > ai_worm_chance_double:
-				ai_make_step(t, "self_modify_to_virus", null)
-				return
-			else:
-				var wt = get_walkable_neighbor_tiles(t.tile_pos)
-				if wt.size() > 0:
-					var direction = randi_range(0, wt.size() - 1)
-					var new_tile = wt[direction]
-					ai_make_step(t, "scale", new_tile)
-				else:
-					# this branch should never happen actually
-					ai_make_step(t, "self_modify_to_virus", null)
-					return
+	while ai_trojans.size() > 0:
+		var t = ai_trojans[-1]
+		
+		var nearest_tower = ai_find_tower_neutral(t.tile_pos, 1)
+		
+		if nearest_tower != null:
+			ai_make_step(t, "capture_tower", nearest_tower)
+			ai_trojans.erase(t)
+			return
 		else:
-			ai_worms.erase(t)
-			continue
-	
-	if ai_scan_and_apply_reset():
-		return
+			nearest_tower = ai_find_tower_neutral(t.tile_pos, 5)
+			
+			if nearest_tower != null:
+				if ai_try_move_to_enemy(t, nearest_tower):
+					return
+			
+		ai_trojans.erase(t)
+		continue
 	
 	while ai_virii_on_base.size() > 0:
 		var t = ai_virii_on_base[-1]
@@ -1878,6 +1859,51 @@ func ai_next_step():
 		
 		ai_virii_attack.erase(t)
 		continue
+	
+	if ai_scan_and_apply_reset():
+		return
+	
+	while ai_worms.size() > 0:
+	#while false:
+		var t = ai_worms[-1]
+		if t.ap >= 3:
+			#var target = target_filter.call(t.tile_pos)
+			
+			var role = randf()
+			if role > ai_worm_chance_double + ai_worm_chance_virus:
+				ai_make_step(t, "self_modify_to_trojan", null)
+				return
+			else:
+				var wt = get_walkable_neighbor_tiles(t.tile_pos)
+				if wt.size() > 0:
+					var direction = randi_range(0, wt.size()-1)
+					#if direction != wt.size():
+					var new_tile = wt[direction]
+					ai_make_step(t, "move", new_tile)
+					return
+				
+				ai_make_step(t, "self_modify_to_virus", null)
+				return
+		elif t.ap >= 2:
+			var role = randf() * (ai_worm_chance_double + ai_worm_chance_virus)
+			var distance_to_enemy_base = ai_get_distance_to_enemy_base(t.tile_pos)
+			
+			if distance_to_enemy_base <= 6 || role > ai_worm_chance_double:
+				ai_make_step(t, "self_modify_to_virus", null)
+				return
+			else:
+				var wt = get_walkable_neighbor_tiles(t.tile_pos)
+				if wt.size() > 0:
+					var direction = randi_range(0, wt.size() - 1)
+					var new_tile = wt[direction]
+					ai_make_step(t, "scale", new_tile)
+				else:
+					# this branch should never happen actually
+					ai_make_step(t, "self_modify_to_virus", null)
+					return
+		else:
+			ai_worms.erase(t)
+			continue
 	
 	if ai_scan_and_apply_reset():
 		return
