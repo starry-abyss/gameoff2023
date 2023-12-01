@@ -1732,13 +1732,14 @@ func ai_find_weakest_enemy(tile_pos, distance):
 
 func ai_find_tower_enemy(tile_pos, distance):
 	var condition = func(new_unit, unit):
-		return new_unit.type == UnitTypes.TOWER_NODE && (unit == null || unit.hp > new_unit.hp)
+		return (new_unit.type == UnitTypes.TOWER_NODE || new_unit.type == UnitTypes.CENTRAL_NODE) \
+		 && (unit == null || unit.hp > new_unit.hp)
 	
 	return ai_find_weakest(tile_pos, distance, flip_group(current_turn_group), condition)
 
 func ai_find_tower_neutral(tile_pos, distance):
 	var condition = func(new_unit, unit):
-		return new_unit.type == UnitTypes.TOWER_NODE \
+		return (new_unit.type == UnitTypes.TOWER_NODE || new_unit.type == UnitTypes.CENTRAL_NODE) \
 		&& (unit == null || UIHelpers.tile_pos_distance(unit.tile_pos, tile_pos) > UIHelpers.tile_pos_distance(new_unit.tile_pos, tile_pos))
 	
 	return ai_find_weakest(tile_pos, distance, HackingGroups.NEUTRAL, condition)
@@ -1888,6 +1889,19 @@ func ai_next_step():
 					return
 				ai_virii_attack.erase(t)
 				return	
+		
+		# most important part
+		if ai_enemy_kernel != null:
+			#if UIHelpers.tile_pos_distance(ai_enemy_kernel, t.tile_pos) <= 1:
+			#	if ai_try_attack_enemy(t, ai_enemy_kernel):
+			#		ai_virii_attack.erase(t)
+			#		return
+			if UIHelpers.tile_pos_distance(ai_enemy_kernel, t.tile_pos) <= 4:
+				var nearest_tower = ai_find_tower_neutral(t.tile_pos, 2)
+				# have a firewall turned off here
+				if nearest_tower != null:
+					if ai_try_move_to_enemy(t, ai_enemy_kernel):
+						return
 		
 		var score_index = 0
 		for i in range(ai_enemy_side_towers_score.size()):
