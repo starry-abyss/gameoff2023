@@ -1512,6 +1512,10 @@ func ai_new_turn():
 				
 				var count_trojans = 0
 				for tr0 in ai_trojans:
+					# hack
+					if tr0 == null:
+						continue
+					
 					if UIHelpers.tile_pos_distance(p, tr0.tile_pos) <= 2:
 						count_trojans += 1
 						
@@ -1968,6 +1972,10 @@ func ai_next_step():
 	while ai_trojans.size() > 0:
 		var t = ai_trojans[-1]
 		
+		if !is_instance_valid(t):
+			ai_trojans.erase(t)
+			continue
+		
 		var nearest_tower = ai_find_tower_neutral(t.tile_pos, 1)
 		
 		if nearest_tower != null:
@@ -1980,6 +1988,10 @@ func ai_next_step():
 			if nearest_tower != null:
 				var already_have_trojan = false
 				for tr0 in ai_trojans:
+					# hack
+					if tr0 == null:
+						continue
+					
 					if UIHelpers.tile_pos_distance(nearest_tower.tile_pos, tr0.tile_pos) <= 1:
 						already_have_trojan = true
 				
@@ -1990,6 +2002,10 @@ func ai_next_step():
 		var on_base = false
 		var trojans_on_base = 0
 		for tr0 in ai_trojans:
+			# hack
+			if tr0 == null:
+				continue
+			
 			if UIHelpers.tile_pos_distance(ai_kernel.tile_pos, tr0.tile_pos) <= 3:
 				trojans_on_base += 1
 				if tr0 == t:
