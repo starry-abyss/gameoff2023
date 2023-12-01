@@ -447,7 +447,10 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 	if success:
 		in_select_target_mode = false
 		in_unit_animation_mode = true
-		timeout_callback_helper.call_after_time(func callback(): in_unit_animation_mode = false, StaticData.turn_animation_duration)
+		timeout_callback_helper.call_after_time(func callback(): 
+			in_unit_animation_mode = false
+			update_abilities_buttons(selected_unit), 
+			StaticData.turn_animation_duration)
 		tiles_tint_reset()
 	
 	update_selected_unit_stats(selected_unit)
