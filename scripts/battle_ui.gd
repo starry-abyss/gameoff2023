@@ -325,6 +325,10 @@ func _on_unit_spawn(unit: Unit):
 	pass
 
 func _on_unit_hp_change(unit: Unit, delta_hp: int):
+	# hack to not crash here
+	if unit == null:
+		return
+	
 	var label = preload("res://scenes/hp_change.tscn").instantiate()
 	add_child(label)
 	

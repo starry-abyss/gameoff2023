@@ -3,8 +3,11 @@ extends Node3D
 
 #FIXME: queue free timer after timeout
 func call_after_time(callable: Callable, time: float):
-	#if callable.is_null():
-	#	return
+	
+	if callable.get_object() == null:
+		return
+		
+		
 	
 	var _timer = Timer.new()
 	_timer.wait_time = time

@@ -960,11 +960,15 @@ func hurt_unit(target: Unit, amount: int, is_instantly_damage_label: bool = fals
 	var damage = hp_before - target.hp
 	if damage > 0:
 		if is_instantly_damage_label:
-			target.on_hurt()
+			# hack to not crash
+			if target.hp > 0:
+				target.on_hurt()
 			
 			battle_ui._on_unit_hp_change(target, -damage)
 		else:
-			target.wait_for_hurt(StaticData.attack_animation_duration * 0.5)
+			# hack to not crash
+			if target.hp > 0:
+				target.wait_for_hurt(StaticData.attack_animation_duration * 0.5)
 			
 			var timeout_callback_helper = get_tree().get_nodes_in_group("TimeoutCallbackHelper")[0]
 			timeout_callback_helper.call_after_time(func callback(): battle_ui._on_unit_hp_change(target, -damage), StaticData.attack_animation_duration * 0.5)
@@ -1663,6 +1667,11 @@ func ai_try_move_to_pos(unit: Unit, tile_pos):
 	
 	if nearest_tile == null:
 		return false
+		
+	# hack to not go back and forth
+	if UIHelpers.tile_pos_distance(nearest_tile, tile_pos) > 1 \
+	 && UIHelpers.tile_pos_distance(nearest_tile, unit.tile_pos) <= 1:
+		return false
 	
 	#select_unit(unit, true)
 	#if order_ability_move(nearest_tile, true):
@@ -1676,6 +1685,11 @@ func ai_try_move_to_enemy(unit: Unit, enemy: Unit):
 	#	return true
 	
 	if nearest_tile == null:
+		return false
+	
+	# hack to not go back and forth
+	if UIHelpers.tile_pos_distance(nearest_tile, enemy.tile_pos) > 1 \
+	 && UIHelpers.tile_pos_distance(nearest_tile, unit.tile_pos) <= 1:
 		return false
 	
 	#select_unit(unit, true)
@@ -1778,9 +1792,9 @@ func ai_find_worm_and_eat(virus):
 		
 		var worm_maybe = find_unit_by_tile_pos(pos_to_explore)
 		if worm_maybe != null && worm_maybe.type == UnitTypes.WORM:
-			ai_make_step(virus, "integrate", worm_maybe)
-			
 			ai_worms.erase(worm_maybe)
+			
+			ai_make_step(virus, "integrate", worm_maybe)
 			return true
 	
 	return false
@@ -2013,6 +2027,12 @@ func ai_next_step():
 	while ai_worms.size() > 0:
 	#while false:
 		var t = ai_worms[-1]
+		
+		# hack to not crash
+		if !is_instance_valid(t):
+			ai_worms.erase(t)
+			continue
+		
 		if t.ap >= 3:
 			#var target = target_filter.call(t.tile_pos)
 			
