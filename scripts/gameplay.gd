@@ -1761,7 +1761,19 @@ func ai_find_most_damaged_friend(tile_pos, distance):
 		return unit_damage < new_unit_damage
 	
 	return ai_find_weakest(tile_pos, distance, current_turn_group, condition)
+
+func ai_find_worm_and_eat(virus):
+	var tile_neighbors = UIHelpers.get_tile_neighbor_list(virus.tile_pos)
+	for adj_tile_pos in tile_neighbors:
+		var pos_to_explore = virus.tile_pos + adj_tile_pos
+		
+		var worm_maybe = find_unit_by_tile_pos(pos_to_explore)
+		if worm_maybe != null && worm_maybe.type == UnitTypes.WORM:
+			ai_make_step(virus, "integrate", worm_maybe)
+			return true
 	
+	return false
+
 func ai_execute_order_for_array(array, order_id, target_filter):
 	while array.size() > 0:
 		var t = array[-1]
@@ -1818,16 +1830,28 @@ func ai_next_step():
 		
 		# TODO: don't try to attack or move through enemy firewall (it can be near our base)
 		
+		var enemy_is_tower = true
+		
 		var enemy = ai_find_tower_enemy(t.tile_pos, 3)
 		if enemy == null:
 			enemy = ai_find_weakest_enemy_near_base(t.tile_pos, 3)
+			enemy_is_tower = false
 		
 		if enemy != null:
 			if UIHelpers.tile_pos_distance(enemy.tile_pos, t.tile_pos) <= 1:
-				if ai_try_attack_enemy(t, enemy):
-					# TODO: maybe eat Worm and attack again or spread
+				if t.ap >= 6:
+					ai_make_step(t, "spread", enemy)
 					ai_virii_on_base.erase(t)
 					return
+				elif t.ap >= 3 && ai_get_group_density(enemy.tile_pos, flip_group(current_turn_group), true) >= 3:
+					if ai_find_worm_and_eat(t):
+						return
+				
+				if ai_try_attack_enemy(t, enemy):
+					# maybe eat Worm and attack again
+					return
+				ai_virii_on_base.erase(t)
+				return
 			else:
 				if ai_try_move_to_enemy(t, enemy):
 					#ai_virii_on_base.erase(t)
@@ -1847,19 +1871,23 @@ func ai_next_step():
 	
 	while ai_virii_attack.size() > 0:
 		var t = ai_virii_attack[-1]
+		
+		var enemy_is_tower = true
 
 		# TODO: don't try to attack or move through enemy firewall
 		# TODO: go away after attack ?
 		var enemy = ai_find_tower_enemy(t.tile_pos, 1)
 		if enemy == null:
 			enemy = ai_find_weakest_enemy(t.tile_pos, 1)
+			enemy_is_tower = false
 		
 		if enemy != null:
 			if UIHelpers.tile_pos_distance(enemy.tile_pos, t.tile_pos) <= 1:
 				if ai_try_attack_enemy(t, enemy):
-					# TODO: maybe eat Worm and attack again or spread
-					ai_virii_attack.erase(t)
+					# maybe eat Worm and attack again
 					return
+				ai_virii_attack.erase(t)
+				return	
 		
 		var score_index = 0
 		for i in range(ai_enemy_side_towers_score.size()):
@@ -1877,6 +1905,9 @@ func ai_next_step():
 				return
 			
 			if ai_get_group_density(tower.tile_pos, current_turn_group) < 3:
+				if ai_find_worm_and_eat(t):
+					return
+				
 				if ai_try_move_to_enemy(t, tower):
 					return
 			else:
