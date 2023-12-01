@@ -1,6 +1,7 @@
 extends Panel
 
 @export var full_hp_ap = false
+var is_ai_turn = false
 
 @onready var unit_label: Label = $HBoxContainer/VBoxContainer/UnitLabel
 @onready var info_label: Label = $HBoxContainer/VBoxContainer/InfoLabel
@@ -37,7 +38,7 @@ func _display_unit_stats(unit: Unit, current_group: Gameplay.HackingGroups, is_s
 			else:
 				info_label.text = "> Cyber Police group"
 			
-			if StaticData.show_tutorial_hints:
+			if StaticData.show_tutorial_hints && !is_ai_turn:
 				if is_selected:
 					info_label.text += " " # "\n> Selected"
 				elif current_group == unit.group:

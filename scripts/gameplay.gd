@@ -1039,6 +1039,10 @@ func order_attack(target: Unit, imaginary: bool, ability_stats) -> bool:
 	if target.group != flip_group(selected_unit.group):
 		return false
 	
+	# hack (or not) for AI imaginary orders
+	if selected_unit.ap < ability_stats.ap:
+		return false
+	
 	# to block attack through firewalls, but it only works with range 1 attacks
 	# TODO: for range 2+ attacks need to cast rays as an extra step
 	var distance = distances[tile_pos_to_tile_index(target.tile_pos)]
@@ -1765,6 +1769,9 @@ func ai_find_most_damaged_friend(tile_pos, distance):
 	return ai_find_weakest(tile_pos, distance, current_turn_group, condition)
 
 func ai_find_worm_and_eat(virus):
+	if virus.get_cooldown("integrate") > 0:
+		return false
+	
 	var tile_neighbors = UIHelpers.get_tile_neighbor_list(virus.tile_pos)
 	for adj_tile_pos in tile_neighbors:
 		var pos_to_explore = virus.tile_pos + adj_tile_pos
@@ -1772,6 +1779,8 @@ func ai_find_worm_and_eat(virus):
 		var worm_maybe = find_unit_by_tile_pos(pos_to_explore)
 		if worm_maybe != null && worm_maybe.type == UnitTypes.WORM:
 			ai_make_step(virus, "integrate", worm_maybe)
+			
+			ai_worms.erase(worm_maybe)
 			return true
 	
 	return false
@@ -1897,7 +1906,7 @@ func ai_next_step():
 			#	if ai_try_attack_enemy(t, ai_enemy_kernel):
 			#		ai_virii_attack.erase(t)
 			#		return
-			if UIHelpers.tile_pos_distance(ai_enemy_kernel, t.tile_pos) <= 4:
+			if UIHelpers.tile_pos_distance(ai_enemy_kernel.tile_pos, t.tile_pos) <= 4:
 				var nearest_tower = ai_find_tower_neutral(t.tile_pos, 2)
 				# have a firewall turned off here
 				if nearest_tower != null:

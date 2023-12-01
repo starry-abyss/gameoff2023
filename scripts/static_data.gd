@@ -11,7 +11,7 @@ extends Node
 @export var hurt_animation_duration: float = 0.5
 @export var heal_animation_duration: float = 0.5
 @export var spawn_animation_duration: float = 1
-@export var turn_animation_duration: float = 1.0
+@export var turn_animation_duration: float = 0.1 # 1.0
 @export var attack_animation_duration: float = 0.4
 @export var mutation_animation_duration: float = 0.4
 @export var move_animation_duration_per_tile: float = 0.2
