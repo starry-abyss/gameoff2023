@@ -74,8 +74,6 @@ unique_name_in_owner = true
 
 [node name="battle_ui" parent="." instance=ExtResource("3_iddt0")]
 unique_name_in_owner = true
-metadata/_edit_vertical_guides_ = [10.0, 1142.0]
-metadata/_edit_horizontal_guides_ = [466.0]
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, -6.50845e-16, 1.74393e-16, 1.74393e-16, 0.5, 0.866026, -6.50845e-16, -0.866026, 0.5, 15, 40, 38)

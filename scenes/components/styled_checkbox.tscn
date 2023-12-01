@@ -1,19 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://1rig7qjbh2cj"]
+[gd_scene load_steps=4 format=3 uid="uid://1rig7qjbh2cj"]
 
 [ext_resource type="Script" path="res://scenes/components/styled_checkbox.gd" id="1_g5hxm"]
+[ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="2_e1rku"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x4euk"]
 bg_color = Color(1, 1, 1, 1)
 
 [node name="Control" type="Control"]
-custom_minimum_size = Vector2(18, 18)
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 18.0
-offset_bottom = 18.0
+offset_right = 30.0
+offset_bottom = 30.0
 script = ExtResource("1_g5hxm")
 
 [node name="Panel" type="Panel" parent="."]
+visible = false
 self_modulate = Color(0, 0.964706, 0.984314, 1)
 layout_mode = 0
 offset_right = 18.0
@@ -25,7 +27,9 @@ self_modulate = Color(0, 0.964706, 0.984314, 1)
 layout_mode = 1
 offset_left = -3.0
 offset_top = -3.0
-offset_right = 21.0
-offset_bottom = 21.0
+offset_right = 33.0
+offset_bottom = 33.0
+theme = ExtResource("2_e1rku")
+flat = true
 
 [connection signal="toggled" from="Checkbox" to="." method="_on_checkbox_toggled"]

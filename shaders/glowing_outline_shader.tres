@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=86 format=3 uid="uid://cp6br63jv8s4k"]
+[gd_resource type="VisualShader" load_steps=92 format=3 uid="uid://cp6br63jv8s4k"]
 
 [ext_resource type="Texture2D" uid="uid://crpu6dnhj7cr6" path="res://shaders/noise_texture_2d.tres" id="1_4td3i"]
 
@@ -161,6 +161,21 @@ op_type = 4
 
 [sub_resource type="VisualShaderNodeDotProduct" id="VisualShaderNodeDotProduct_hve1h"]
 
+[sub_resource type="VisualShaderNodeVaryingGetter" id="VisualShaderNodeVaryingGetter_715w6"]
+varying_name = "is_in_highlight_range"
+varying_type = 1
+
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_xmghx"]
+default_input_values = [0, false, 1, Vector3(1, 1, 1), 2, Vector3(0, 0, 0)]
+op_type = 4
+
+[sub_resource type="VisualShaderNodeColorConstant" id="VisualShaderNodeColorConstant_ax2em"]
+constant = Color(10, 10, 10, 1)
+
+[sub_resource type="VisualShaderNodeCompare" id="VisualShaderNodeCompare_m2ebf"]
+default_input_values = [0, 0, 1, 1, 2, 1e-05]
+type = 1
+
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_rd2wc"]
 input_name = "normal"
 
@@ -299,6 +314,14 @@ default_value = 1.0
 [sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_c2qjn"]
 operator = 2
 
+[sub_resource type="VisualShaderNodeSwitch" id="VisualShaderNodeSwitch_gsk5c"]
+default_input_values = [0, false, 1, 1, 2, 0]
+op_type = 1
+
+[sub_resource type="VisualShaderNodeVaryingSetter" id="VisualShaderNodeVaryingSetter_2wki7"]
+varying_name = "is_in_highlight_range"
+varying_type = 1
+
 [resource]
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
@@ -306,6 +329,7 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_s
 
 // Varyings
 varying float vertex_alpha;
+varying flat int is_in_highlight_range;
 
 uniform vec2 glitch_y_range = vec2(-1.000000, 1.000000);
 uniform bool show_glitch = false;
@@ -505,6 +529,21 @@ void vertex() {
 	vertex_alpha = n_out66p0;
 
 
+	int n_out67p0;
+// Switch:67
+	int n_in67p1 = 1;
+	int n_in67p2 = 0;
+	if (n_out59p0) {
+		n_out67p0 = n_in67p1;
+	} else {
+		n_out67p0 = n_in67p2;
+	}
+
+
+// VaryingSetter:68
+	is_in_highlight_range = n_out67p0;
+
+
 }
 
 void fragment() {
@@ -526,6 +565,9 @@ void fragment() {
 
 // VectorOp:5
 	vec3 n_out5p0 = vec3(n_out2p0.xyz) * vec3(n_out3p0);
+	float n_out5p1 = n_out5p0.r;
+	float n_out5p2 = n_out5p0.g;
+	float n_out5p3 = n_out5p0.b;
 
 
 // VaryingGetter:55
@@ -549,16 +591,35 @@ void fragment() {
 	float n_out56p0 = vertex_alpha;
 
 
+// VaryingGetter:64
+	int n_out64p0 = is_in_highlight_range;
+
+
+// Compare:67
+	int n_in67p1 = 1;
+	bool n_out67p0 = n_out64p0 == n_in67p1;
+
+
+// ColorConstant:66
+	vec4 n_out66p0 = vec4(10.000000, 10.000000, 10.000000, 1.000000);
+
+
+	vec3 n_out65p0;
+// Switch:65
+	n_out65p0 = mix(n_out51p0, vec3(n_out66p0.xyz), float(n_out67p0));
+
+
 // Output:0
 	ALBEDO = n_out59p0;
 	ALPHA = n_out56p0;
-	EMISSION = n_out59p0;
+	EMISSION = n_out65p0;
 
 
 }
 "
-graph_offset = Vector2(453.185, -147.149)
+graph_offset = Vector2(988.613, 266.395)
 varyings/vertex_alpha = "0,0"
+varyings/is_in_highlight_range = "0,1"
 nodes/vertex/0/position = Vector2(2400, 1120)
 nodes/vertex/20/node = SubResource("VisualShaderNodeInput_67w01")
 nodes/vertex/20/position = Vector2(-1540, 400)
@@ -630,7 +691,11 @@ nodes/vertex/65/node = SubResource("VisualShaderNodeFloatParameter_qi0tk")
 nodes/vertex/65/position = Vector2(1120, -1000)
 nodes/vertex/66/node = SubResource("VisualShaderNodeFloatOp_c2qjn")
 nodes/vertex/66/position = Vector2(1760, -1260)
-nodes/vertex/connections = PackedInt32Array(22, 0, 0, 0, 20, 2, 22, 1, 20, 3, 22, 2, 20, 1, 21, 0, 25, 0, 21, 1, 32, 0, 25, 1, 34, 0, 35, 0, 36, 0, 25, 0, 38, 0, 36, 0, 37, 0, 36, 2, 35, 0, 36, 1, 20, 2, 40, 0, 20, 2, 41, 0, 39, 1, 40, 1, 39, 2, 41, 1, 40, 0, 42, 0, 41, 0, 42, 1, 42, 0, 43, 0, 20, 1, 43, 2, 21, 0, 43, 1, 43, 0, 22, 0, 44, 0, 35, 2, 44, 0, 45, 0, 45, 0, 35, 1, 51, 0, 48, 0, 50, 0, 48, 1, 47, 1, 51, 1, 48, 0, 49, 0, 47, 2, 50, 1, 46, 2, 51, 0, 46, 2, 50, 0, 61, 0, 59, 0, 62, 0, 59, 1, 59, 0, 57, 0, 60, 2, 61, 0, 60, 2, 62, 0, 47, 2, 63, 0, 55, 0, 63, 1, 63, 0, 61, 1, 57, 0, 64, 1, 49, 0, 64, 0, 47, 2, 62, 1, 65, 0, 66, 1, 64, 0, 66, 0, 66, 0, 52, 0)
+nodes/vertex/67/node = SubResource("VisualShaderNodeSwitch_gsk5c")
+nodes/vertex/67/position = Vector2(740, -1180)
+nodes/vertex/68/node = SubResource("VisualShaderNodeVaryingSetter_2wki7")
+nodes/vertex/68/position = Vector2(940, -1140)
+nodes/vertex/connections = PackedInt32Array(22, 0, 0, 0, 20, 2, 22, 1, 20, 3, 22, 2, 20, 1, 21, 0, 25, 0, 21, 1, 32, 0, 25, 1, 34, 0, 35, 0, 36, 0, 25, 0, 38, 0, 36, 0, 37, 0, 36, 2, 35, 0, 36, 1, 20, 2, 40, 0, 20, 2, 41, 0, 39, 1, 40, 1, 39, 2, 41, 1, 40, 0, 42, 0, 41, 0, 42, 1, 42, 0, 43, 0, 20, 1, 43, 2, 21, 0, 43, 1, 43, 0, 22, 0, 44, 0, 35, 2, 44, 0, 45, 0, 45, 0, 35, 1, 51, 0, 48, 0, 50, 0, 48, 1, 47, 1, 51, 1, 48, 0, 49, 0, 47, 2, 50, 1, 46, 2, 51, 0, 46, 2, 50, 0, 61, 0, 59, 0, 62, 0, 59, 1, 59, 0, 57, 0, 60, 2, 61, 0, 60, 2, 62, 0, 47, 2, 63, 0, 55, 0, 63, 1, 63, 0, 61, 1, 57, 0, 64, 1, 49, 0, 64, 0, 47, 2, 62, 1, 65, 0, 66, 1, 64, 0, 66, 0, 66, 0, 52, 0, 59, 0, 67, 0, 67, 0, 68, 0)
 nodes/fragment/0/position = Vector2(2700, 440)
 nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_7xppv")
 nodes/fragment/2/position = Vector2(-600, 200)
@@ -715,9 +780,9 @@ nodes/fragment/49/position = Vector2(-920, -500)
 nodes/fragment/50/node = SubResource("VisualShaderNodeSwitch_458wm")
 nodes/fragment/50/position = Vector2(-620, -480)
 nodes/fragment/51/node = SubResource("VisualShaderNodeVectorOp_txvoh")
-nodes/fragment/51/position = Vector2(1720, 520)
+nodes/fragment/51/position = Vector2(1680, 420)
 nodes/fragment/52/node = SubResource("VisualShaderNodeVectorCompose_t31ih")
-nodes/fragment/52/position = Vector2(1300, 620)
+nodes/fragment/52/position = Vector2(1360, 620)
 nodes/fragment/54/node = SubResource("VisualShaderNodeInput_123mf")
 nodes/fragment/54/position = Vector2(-1720, 0)
 nodes/fragment/55/node = SubResource("VisualShaderNodeVaryingGetter_rw2uf")
@@ -730,5 +795,13 @@ nodes/fragment/58/node = SubResource("VisualShaderNodeBooleanParameter_uc65a")
 nodes/fragment/58/position = Vector2(1380, 60)
 nodes/fragment/59/node = SubResource("VisualShaderNodeSwitch_e2hto")
 nodes/fragment/59/position = Vector2(2200, 0)
-nodes/fragment/connections = PackedInt32Array(2, 0, 5, 0, 9, 0, 10, 0, 4, 0, 10, 1, 2, 0, 11, 0, 11, 3, 12, 1, 10, 0, 12, 0, 16, 0, 15, 0, 6, 0, 9, 1, 13, 0, 19, 1, 19, 0, 14, 0, 14, 0, 22, 1, 8, 0, 6, 1, 7, 0, 21, 1, 22, 0, 24, 2, 24, 0, 20, 0, 18, 0, 24, 0, 7, 0, 25, 0, 25, 0, 18, 2, 25, 1, 18, 0, 25, 2, 18, 1, 34, 0, 36, 1, 12, 0, 36, 0, 29, 0, 37, 0, 37, 1, 34, 2, 26, 0, 35, 0, 26, 0, 34, 0, 35, 0, 34, 1, 7, 0, 6, 0, 34, 0, 38, 1, 39, 0, 43, 1, 41, 0, 43, 0, 40, 0, 44, 1, 41, 0, 44, 0, 47, 0, 49, 0, 48, 0, 49, 1, 46, 1, 47, 1, 49, 0, 50, 0, 46, 2, 48, 1, 5, 0, 51, 0, 3, 0, 5, 1, 45, 2, 48, 0, 45, 2, 47, 0, 55, 0, 52, 2, 55, 0, 52, 1, 55, 0, 52, 0, 52, 0, 51, 1, 56, 0, 0, 1, 58, 0, 59, 0, 57, 0, 59, 1, 51, 0, 59, 2, 59, 0, 0, 0, 59, 0, 0, 5)
+nodes/fragment/64/node = SubResource("VisualShaderNodeVaryingGetter_715w6")
+nodes/fragment/64/position = Vector2(1540, 720)
+nodes/fragment/65/node = SubResource("VisualShaderNodeSwitch_xmghx")
+nodes/fragment/65/position = Vector2(2140, 600)
+nodes/fragment/66/node = SubResource("VisualShaderNodeColorConstant_ax2em")
+nodes/fragment/66/position = Vector2(1860, 580)
+nodes/fragment/67/node = SubResource("VisualShaderNodeCompare_m2ebf")
+nodes/fragment/67/position = Vector2(1860, 700)
+nodes/fragment/connections = PackedInt32Array(2, 0, 5, 0, 9, 0, 10, 0, 4, 0, 10, 1, 2, 0, 11, 0, 11, 3, 12, 1, 10, 0, 12, 0, 16, 0, 15, 0, 6, 0, 9, 1, 13, 0, 19, 1, 19, 0, 14, 0, 14, 0, 22, 1, 8, 0, 6, 1, 7, 0, 21, 1, 22, 0, 24, 2, 24, 0, 20, 0, 18, 0, 24, 0, 7, 0, 25, 0, 25, 0, 18, 2, 25, 1, 18, 0, 25, 2, 18, 1, 34, 0, 36, 1, 12, 0, 36, 0, 29, 0, 37, 0, 37, 1, 34, 2, 26, 0, 35, 0, 26, 0, 34, 0, 35, 0, 34, 1, 7, 0, 6, 0, 34, 0, 38, 1, 39, 0, 43, 1, 41, 0, 43, 0, 40, 0, 44, 1, 41, 0, 44, 0, 47, 0, 49, 0, 48, 0, 49, 1, 46, 1, 47, 1, 49, 0, 50, 0, 46, 2, 48, 1, 5, 0, 51, 0, 3, 0, 5, 1, 45, 2, 48, 0, 45, 2, 47, 0, 55, 0, 52, 2, 55, 0, 52, 1, 55, 0, 52, 0, 52, 0, 51, 1, 56, 0, 0, 1, 58, 0, 59, 0, 57, 0, 59, 1, 59, 0, 0, 0, 51, 0, 65, 2, 66, 0, 65, 1, 51, 0, 59, 2, 64, 0, 67, 0, 67, 0, 65, 0, 65, 0, 0, 5)
 metadata/_edit_res_path = "res://shaders/glowing_outline_shader.tres"

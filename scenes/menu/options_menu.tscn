@@ -274,8 +274,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -18.0
+offset_left = -30.0
+offset_top = -5.0
 offset_right = 0.0
+offset_bottom = 25.0
 grow_horizontal = 0
 checked = true
 
@@ -289,8 +291,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -18.0
+offset_left = -30.0
+offset_top = -5.0
 offset_right = 0.0
+offset_bottom = 25.0
 grow_horizontal = 0
 
 [node name="Back" type="Button" parent="."]
