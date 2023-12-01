@@ -58,7 +58,7 @@ extends Node
 @export var map_origin = Vector2(1.0, 1.0)
 
 @export var tooltips = {
-	"Options": { "text": """
+	"InstructionsAndMenuButton": { "text": """
 		The goal is to put down the enemy Kernel node. Start with duplicating Worms and mutating them.
 		
 		Use left mouse button to select units (nodes and malware) on your base (has the same color as panel borders).

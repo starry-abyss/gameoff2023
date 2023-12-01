@@ -417,7 +417,7 @@ func _on_ability_button_highlight(name: String, label: String, hide_stats = fals
 	else:
 		title = label
 	
-	var show_tooltip = StaticData.show_tutorial_hints || name == "Options"
+	var show_tooltip = StaticData.show_tutorial_hints || name == "InstructionsAndMenuButton"
 	
 	if StaticData.tooltips.has(name) && show_tooltip:
 		var author_name = _get_ability_author_name(name)
