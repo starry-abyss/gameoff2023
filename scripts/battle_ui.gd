@@ -105,11 +105,13 @@ func update_abilities_buttons_general_visibility():
 	%ai_turn_message.visible = is_ai_turn
 	%end_turn.visible = !is_ai_turn
 	%select_idle_unit.visible = !is_ai_turn
+	
+	for button in %ability_buttons.get_children():
+		button.disabled = button.locked || in_unit_animation_mode
+	
 	#%SelectedUnitStatsPanel.visible = !is_ai_turn
 
 func update_abilities_buttons(selected_unit: Unit):
-	update_abilities_buttons_general_visibility()
-	
 	if selected_unit != null:
 		var stats = StaticData.unit_stats[selected_unit.type]
 		for button in %ability_buttons.get_children():
@@ -117,7 +119,7 @@ func update_abilities_buttons(selected_unit: Unit):
 			var ability_stats = StaticData.ability_stats[ability_id]
 			if stats.has("abilities"):
 				button.visible = stats.abilities.has(ability_id)
-				button.disabled = selected_unit.ap < ability_stats.ap \
+				button.locked = selected_unit.ap < ability_stats.ap \
 					|| selected_unit.get_cooldown(ability_id) > 0 \
 					|| ability_stats.ap == 0
 				
@@ -128,7 +130,8 @@ func update_abilities_buttons(selected_unit: Unit):
 	if in_unit_animation_mode:
 		for button in %ability_buttons.get_children():
 			button.disabled = true
-			
+	
+	update_abilities_buttons_general_visibility()
 	update_abilities_buttons_icon_tint()
 
 func add_ability_button(ability_id: String):
@@ -453,6 +456,13 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 	if success:
 		in_select_target_mode = false
 		in_unit_animation_mode = true
+		
+		update_selected_unit_stats(selected_unit)
+		update_abilities_buttons(selected_unit)
+		update_selection_indicator(selected_unit)
+	
+		tiles_tint_reset()
+		
 		timeout_callback_helper.call_after_time(func callback(): 
 			in_unit_animation_mode = false
 			
@@ -460,13 +470,9 @@ func _on_order_processed(success: bool, selected_unit: Unit):
 			if selected_unit != null:
 				selected_unit.update_model_pos()
 			
-			update_abilities_buttons(selected_unit), 
+			update_abilities_buttons_general_visibility(), 
 			StaticData.turn_animation_duration)
-		tiles_tint_reset()
-	
-	update_selected_unit_stats(selected_unit)
-	update_abilities_buttons(selected_unit)
-	update_selection_indicator(selected_unit)
+		
 	
 	# hack for unit stats to update
 	tile_hovered.emit(last_tile_pos)

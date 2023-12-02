@@ -6,6 +6,9 @@ signal on_unhighlight
 var is_back_button = false
 var no_press_sound = false
 
+# for abilities
+var locked = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	mouse_entered.connect(_on_highlight)
