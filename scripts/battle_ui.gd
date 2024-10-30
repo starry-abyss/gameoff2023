@@ -23,6 +23,7 @@ signal unit_clicked
 signal order_given
 
 signal animation_finished
+signal reset_camera
 
 var in_unit_animation_mode = false:
 	set(new_value):
@@ -66,6 +67,8 @@ func _ready():
 		
 		button.connect("on_highlight", _on_ability_button_highlight)
 		button.connect("on_unhighlight", _on_ability_button_unhighlight)
+	
+	%ResetCamera.pressed.connect(func(): reset_camera.emit())
 	
 	%cancel_select_target.pressed.connect(_on_cancel_select_target_button_clicked)	
 	%cancel_select_target.is_back_button = true
@@ -517,7 +520,10 @@ func _unhandled_input(event):
 	elif event is InputEventMouseMotion:
 		if Input.is_action_pressed("Scroll Mouse"):
 			var camera = get_viewport().get_camera_3d()
-			camera.global_position += Vector3(event.relative.x, 0.0, event.relative.y)
+			
+			const scroll_speed = 0.3
+			
+			camera.global_position += Vector3(event.relative.x, 0.0, event.relative.y) * scroll_speed
 			return
 		
 		#print("Mouse Motion at: ", event.position)

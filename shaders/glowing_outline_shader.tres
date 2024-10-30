@@ -328,8 +328,8 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_s
 
 
 // Varyings
-varying float vertex_alpha;
-varying flat int is_in_highlight_range;
+varying float var_vertex_alpha;
+varying flat int var_is_in_highlight_range;
 
 uniform vec2 glitch_y_range = vec2(-1.000000, 1.000000);
 uniform bool show_glitch = false;
@@ -526,7 +526,7 @@ void vertex() {
 
 
 // VaryingSetter:52
-	vertex_alpha = n_out66p0;
+	var_vertex_alpha = n_out66p0;
 
 
 	int n_out67p0;
@@ -541,7 +541,7 @@ void vertex() {
 
 
 // VaryingSetter:68
-	is_in_highlight_range = n_out67p0;
+	var_is_in_highlight_range = n_out67p0;
 
 
 }
@@ -568,7 +568,7 @@ void fragment() {
 
 
 // VaryingGetter:55
-	float n_out55p0 = vertex_alpha;
+	float n_out55p0 = var_vertex_alpha;
 
 
 // VectorCompose:52
@@ -585,11 +585,11 @@ void fragment() {
 
 
 // VaryingGetter:56
-	float n_out56p0 = vertex_alpha;
+	float n_out56p0 = var_vertex_alpha;
 
 
 // VaryingGetter:64
-	int n_out64p0 = is_in_highlight_range;
+	int n_out64p0 = var_is_in_highlight_range;
 
 
 // Compare:67

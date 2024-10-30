@@ -98,15 +98,6 @@ environment = SubResource("Environment_mk85x")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="ResetCamera" type="Button" parent="CanvasLayer"]
-custom_minimum_size = Vector2(180, 2.08165e-12)
-offset_left = 957.0
-offset_top = 590.0
-offset_right = 1137.0
-offset_bottom = 620.0
-theme = ExtResource("4_shixd")
-text = "Reset camera"
-
 [node name="InstructionsAndMenuButton" type="Button" parent="CanvasLayer"]
 custom_minimum_size = Vector2(200, 2.08165e-12)
 offset_left = 10.0
@@ -209,7 +200,6 @@ position = Vector2(573.5, 323.5)
 scale = Vector2(8.96094, 5.03906)
 texture = ExtResource("9_fr0wu")
 
-[connection signal="pressed" from="CanvasLayer/ResetCamera" to="." method="_on_reset_camera_pressed"]
 [connection signal="pressed" from="CanvasLayer/InstructionsAndMenuButton" to="." method="_on_instructions_and_menu_pressed"]
 [connection signal="pressed" from="CanvasLayer/InstructionsAndMenu/VBoxContainer/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="CanvasLayer/InstructionsAndMenu/VBoxContainer/EndBattle" to="." method="_on_end_battle_pressed"]

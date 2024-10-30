@@ -173,6 +173,17 @@ grow_vertical = 2
 theme = ExtResource("3_7nk56")
 text = "End turn"
 
+[node name="ResetCamera" type="Button" parent="CanvasLayer/Panel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 2.08165e-12)
+layout_mode = 0
+offset_left = 646.0
+offset_top = 175.0
+offset_right = 826.0
+offset_bottom = 205.0
+theme = ExtResource("3_7nk56")
+text = "Reset camera"
+
 [node name="Panel2" type="Panel" parent="CanvasLayer"]
 anchors_preset = 5
 anchor_left = 0.5

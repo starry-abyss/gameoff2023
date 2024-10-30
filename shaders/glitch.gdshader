@@ -33,7 +33,7 @@ void fragment()
     	o *= offsetIntensity;
         uv.x += verticalBar(d, UV.y, o);
     }
-    
+
     float UVY = uv.y;
     UVY *= noiseQuality;
     UVY = float(int(UVY)) * (1.0 / noiseQuality);
@@ -42,7 +42,7 @@ void fragment()
 
     vec2 offsetR = vec2(0.009 * sin(TIME), 0.0) * colorOffsetIntensity;
     vec2 offsetG = vec2(0.0073 * (cos(TIME * 0.97)), 0.0) * colorOffsetIntensity;
-    
+
     float r = texture(SCREEN_TEXTURE, uv + offsetR).r;
     float g = texture(SCREEN_TEXTURE, uv + offsetG).g;
     float b = texture(SCREEN_TEXTURE, uv).b;

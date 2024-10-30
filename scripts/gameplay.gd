@@ -1254,6 +1254,8 @@ func _override_other_ui_theme_with_color(color):
 func _ready():
 	_on_reset_camera_pressed()
 	
+	battle_ui.reset_camera.connect(_on_reset_camera_pressed)
+	
 	battle_ui.end_turn.connect("pressed", func():
 		if !is_ai_turn():
 			end_turn())

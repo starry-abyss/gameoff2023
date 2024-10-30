@@ -202,10 +202,9 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("3_c1x3u")
 alignment = 1
-item_count = 2
 selected = 1
+item_count = 2
 popup/item_0/text = "(Human)"
-popup/item_0/id = 0
 popup/item_1/text = "(AI)"
 popup/item_1/id = 1
 
@@ -268,10 +267,9 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("3_c1x3u")
 alignment = 1
-item_count = 2
 selected = 0
+item_count = 2
 popup/item_0/text = "(Human)"
-popup/item_0/id = 0
 popup/item_1/text = "(AI)"
 popup/item_1/id = 1
 
