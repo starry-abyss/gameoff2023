@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 
-const CAMERA_ROTATE_SPEED = 1
+const CAMERA_ROTATE_SPEED = 0.2
 const MAP_SIZE = Vector2(5, 5)
 
 @onready var viewport_container = $Node3D/SubViewportContainer

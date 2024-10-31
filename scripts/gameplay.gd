@@ -1256,6 +1256,14 @@ func _ready():
 	
 	battle_ui.reset_camera.connect(_on_reset_camera_pressed)
 	
+	options_menu.scroll_speed_change.connect(func(m, k):
+		var camera = get_viewport().get_camera_3d()
+		
+		assert(camera != null)
+		
+		battle_ui.scroll_speed_mouse = m
+		camera.scroll_speed_keyboard = k)
+	
 	battle_ui.end_turn.connect("pressed", func():
 		if !is_ai_turn():
 			end_turn())

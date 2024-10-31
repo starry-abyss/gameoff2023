@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://cxaqvfti58xoq"]
+[gd_scene load_steps=16 format=3 uid="uid://cxaqvfti58xoq"]
 
 [ext_resource type="PackedScene" uid="uid://c7k4uu8silsa6" path="res://scenes/battle_area.tscn" id="1_mgdil"]
 [ext_resource type="Script" path="res://scripts/gameplay.gd" id="1_nrikt"]
 [ext_resource type="PackedScene" uid="uid://b36pjfoq2efay" path="res://scenes/timeout_callback_helper.tscn" id="2_yuteo"]
 [ext_resource type="PackedScene" uid="uid://khbj7vpou3mu" path="res://scenes/battle_ui.tscn" id="3_iddt0"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="4_shixd"]
+[ext_resource type="Texture2D" uid="uid://15agq5jbrw1x" path="res://art/Title_Name.png" id="6_dcndi"]
 [ext_resource type="PackedScene" uid="uid://chr8t35qwnt7j" path="res://scenes/menu/options_menu.tscn" id="6_xh7ly"]
 [ext_resource type="PackedScene" uid="uid://cswkd5qaekry6" path="res://scenes/menu/quit_confirmation.tscn" id="7_6yhuw"]
 [ext_resource type="Shader" path="res://shaders/glitch.gdshader" id="8_bq4h5"]
@@ -15,25 +16,24 @@
 [sub_resource type="GDScript" id="GDScript_bx5im"]
 script/source = "extends Camera3D
 
-
-const CAMERA_SCROLL_SPEED = 5
-const CAMERA_SIZE_MIN = 15
-const CAMERA_SIZE_MAX = 50
+const CAMERA_SIZE_MIN = 25
+const CAMERA_SIZE_MAX = 60
 const CAMERA_SIZE_ZOOM_STEP = 2
 
+var scroll_speed_keyboard = 15
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	var movement = Vector3.ZERO
 	
 	if Input.is_action_pressed(\"Scroll Up\"):
-		movement.z -= CAMERA_SCROLL_SPEED * delta
+		movement.z -= scroll_speed_keyboard * delta
 	if Input.is_action_pressed(\"Scroll Right\"):
-		movement.x += CAMERA_SCROLL_SPEED * delta
+		movement.x += scroll_speed_keyboard * delta
 	if Input.is_action_pressed(\"Scroll Down\"):
-		movement.z += CAMERA_SCROLL_SPEED * delta
+		movement.z += scroll_speed_keyboard * delta
 	if Input.is_action_pressed(\"Scroll Left\"):
-		movement.x -= CAMERA_SCROLL_SPEED * delta
+		movement.x -= scroll_speed_keyboard * delta
 		
 	if Input.is_action_just_pressed(\"Zoom In\"):
 		size = clamp(size - CAMERA_SIZE_ZOOM_STEP, CAMERA_SIZE_MIN, CAMERA_SIZE_MAX)
@@ -50,6 +50,8 @@ glow_intensity = 0.2
 glow_strength = 1.5
 glow_mix = 0.439
 glow_blend_mode = 0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sltjk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a0hti"]
 shader = ExtResource("8_bq4h5")
@@ -123,6 +125,15 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4_shixd")
 
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/InstructionsAndMenu"]
+layout_mode = 0
+offset_left = 112.0
+offset_top = 24.0
+offset_right = 2420.0
+offset_bottom = 1192.0
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("6_dcndi")
+
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/InstructionsAndMenu"]
 layout_mode = 1
 anchors_preset = 8
@@ -131,9 +142,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -129.0
-offset_top = -144.0
+offset_top = -70.0
 offset_right = 129.0
-offset_bottom = 144.0
+offset_bottom = 218.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
@@ -146,17 +157,21 @@ theme = ExtResource("4_shixd")
 text = "Options"
 expand_icon = true
 
-[node name="EndBattle" type="Button" parent="CanvasLayer/InstructionsAndMenu/VBoxContainer"]
-custom_minimum_size = Vector2(180, 2.08165e-12)
+[node name="HSeparator" type="HSeparator" parent="CanvasLayer/InstructionsAndMenu/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("4_shixd")
-text = " End battle "
+theme_override_styles/separator = SubResource("StyleBoxEmpty_sltjk")
 
 [node name="RestartBattle" type="Button" parent="CanvasLayer/InstructionsAndMenu/VBoxContainer"]
 custom_minimum_size = Vector2(180, 2.08165e-12)
 layout_mode = 2
 theme = ExtResource("4_shixd")
 text = "Restart battle"
+
+[node name="EndBattle" type="Button" parent="CanvasLayer/InstructionsAndMenu/VBoxContainer"]
+custom_minimum_size = Vector2(180, 2.08165e-12)
+layout_mode = 2
+theme = ExtResource("4_shixd")
+text = " End battle "
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/InstructionsAndMenu/VBoxContainer"]
 layout_mode = 2
@@ -202,6 +217,6 @@ texture = ExtResource("9_fr0wu")
 
 [connection signal="pressed" from="CanvasLayer/InstructionsAndMenuButton" to="." method="_on_instructions_and_menu_pressed"]
 [connection signal="pressed" from="CanvasLayer/InstructionsAndMenu/VBoxContainer/Options" to="." method="_on_options_pressed"]
-[connection signal="pressed" from="CanvasLayer/InstructionsAndMenu/VBoxContainer/EndBattle" to="." method="_on_end_battle_pressed"]
 [connection signal="pressed" from="CanvasLayer/InstructionsAndMenu/VBoxContainer/RestartBattle" to="." method="_on_restart_battle_pressed"]
+[connection signal="pressed" from="CanvasLayer/InstructionsAndMenu/VBoxContainer/EndBattle" to="." method="_on_end_battle_pressed"]
 [connection signal="pressed" from="CanvasLayer/InstructionsAndMenu/Back" to="." method="_on_back_pressed"]

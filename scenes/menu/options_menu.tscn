@@ -81,6 +81,7 @@ layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = -12
 
 [node name="Control4" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(120, 40)
@@ -147,6 +148,32 @@ size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 20
 text = "Cyber police color"
 
+[node name="Control8" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/Control8"]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 56.0
+offset_bottom = 19.0
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 20
+text = "Mouse scroll"
+
+[node name="Control9" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer/Control9"]
+layout_mode = 2
+offset_left = 4.0
+offset_right = 56.0
+offset_bottom = 19.0
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 20
+text = "Keyboard scroll"
+
 [node name="Control6" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
@@ -176,6 +203,7 @@ text = "Fullscreen"
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = -12
 
 [node name="Control" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(120, 40)
@@ -264,6 +292,46 @@ grow_horizontal = 0
 theme = ExtResource("5_ncrul")
 color = Color(1, 1, 1, 1)
 
+[node name="Control8" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+
+[node name="ScrollSpeedMouse" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control8"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -176.0
+offset_bottom = 16.0
+grow_horizontal = 0
+size_flags_vertical = 4
+theme = ExtResource("5_ncrul")
+min_value = 0.01
+max_value = 2.0
+step = 0.01
+value = 0.31
+exp_edit = true
+
+[node name="Control9" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+
+[node name="ScrollSpeedKeyboard" type="HSlider" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2/Control9"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -176.0
+offset_bottom = 16.0
+grow_horizontal = 0
+size_flags_vertical = 4
+theme = ExtResource("5_ncrul")
+min_value = 10.0
+value = 15.0
+exp_edit = true
+
 [node name="Control6" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
@@ -324,6 +392,11 @@ offset_right = 1136.0
 offset_bottom = 45.0
 theme = ExtResource("5_ncrul")
 text = "Options"
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Options" to="." method="_on_options_pressed"]

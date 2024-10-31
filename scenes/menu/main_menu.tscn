@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://d0psqdiovqmy8"]
+[gd_scene load_steps=11 format=3 uid="uid://d0psqdiovqmy8"]
 
 [ext_resource type="Script" path="res://scenes/menu/main_menu.gd" id="1_46h0q"]
 [ext_resource type="Theme" uid="uid://bcihimekk2fq0" path="res://themes/ui.tres" id="3_c1x3u"]
@@ -6,16 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://dgfw5dh42i3qk" path="res://icon.svg" id="4_tu3lh"]
 [ext_resource type="PackedScene" uid="uid://1rig7qjbh2cj" path="res://scenes/components/styled_checkbox.tscn" id="5_1btrk"]
 [ext_resource type="Texture2D" uid="uid://ctt6qlsgabcys" path="res://assets/FMOD_LOGOS/FMOD Logo White - Black Background.png" id="5_ocswh"]
-[ext_resource type="Shader" path="res://shaders/sprite2d_glitch.gdshader" id="6_5ae8e"]
 [ext_resource type="Texture2D" uid="uid://lw6v6npn2r21" path="res://assets/godot_logo.svg" id="6_eikba"]
 [ext_resource type="PackedScene" uid="uid://bladnifrmnpk" path="res://scenes/menu/credits.tscn" id="6_ki7ii"]
 [ext_resource type="Texture2D" uid="uid://15agq5jbrw1x" path="res://art/Title_Name.png" id="9_u86vk"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_l1f56"]
-shader = ExtResource("6_5ae8e")
-shader_parameter/speed = 0.3
-shader_parameter/tint = Vector4(0, 1, 0, 1)
-shader_parameter/span = 0.3
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_31tw3"]
 shader = ExtResource("3_kfdc0")
@@ -50,54 +43,6 @@ grow_horizontal = 0
 grow_vertical = 0
 theme = ExtResource("3_c1x3u")
 text = "Quit"
-expand_icon = true
-
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -163.0
-offset_right = 150.0
-offset_bottom = 163.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_top = 100
-theme_override_constants/margin_bottom = 100
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
-layout_mode = 2
-
-[node name="Play" type="Button" parent="MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-theme = ExtResource("3_c1x3u")
-text = "Play"
-expand_icon = true
-
-[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_bottom = 10
-
-[node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-theme = ExtResource("3_c1x3u")
-text = "Options"
-expand_icon = true
-
-[node name="Margin2" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_bottom = 10
-
-[node name="Credits" type="Button" parent="MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-theme = ExtResource("3_c1x3u")
-text = "Credits"
 expand_icon = true
 
 [node name="Timer" type="Timer" parent="."]
@@ -138,9 +83,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -281.5
-offset_top = -168.0
-offset_right = 281.5
+offset_left = -281.0
+offset_top = -219.0
+offset_right = 295.0
+offset_bottom = -122.0
 grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("3_c1x3u")
@@ -148,9 +94,9 @@ theme = ExtResource("3_c1x3u")
 [node name="PlayerVSPlayerHBoxContainer" type="HBoxContainer" parent="Panel"]
 layout_mode = 0
 offset_left = -8.0
-offset_top = 29.0
+offset_top = 10.0
 offset_right = 560.0
-offset_bottom = 79.0
+offset_bottom = 60.0
 
 [node name="Rebels" type="HBoxContainer" parent="Panel/PlayerVSPlayerHBoxContainer"]
 layout_mode = 2
@@ -275,18 +221,88 @@ popup/item_1/id = 1
 
 [node name="ControllerHint" type="Label" parent="Panel"]
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = -1
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.861206
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -246.5
-offset_top = -58.0
-offset_right = 246.5
+anchor_bottom = 0.861206
+offset_left = -254.0
+offset_top = -12.537
+offset_right = 271.0
+offset_bottom = 12.463
 grow_horizontal = 2
 grow_vertical = 0
-text = "Rebels always go first. AI implemenation is experimental."
+text = "Rebels always go first. Both sides have the same abilities."
 autowrap_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -269.0
+offset_top = -8.0
+offset_right = 147.0
+offset_bottom = 232.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="Control" parent="MarginContainer"]
+layout_mode = 2
+anchors_preset = 0
+offset_top = 100.0
+offset_right = 416.0
+offset_bottom = 140.0
+
+[node name="Play" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+offset_left = 192.0
+offset_top = 151.0
+offset_right = 342.0
+offset_bottom = 201.0
+theme = ExtResource("3_c1x3u")
+text = "Play"
+expand_icon = true
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+offset_left = 67.0
+offset_right = 67.0
+offset_bottom = 40.0
+theme_override_constants/margin_bottom = 10
+
+[node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+offset_left = 719.0
+offset_top = 97.0
+offset_right = 819.0
+offset_bottom = 127.0
+theme = ExtResource("3_c1x3u")
+text = "Options"
+expand_icon = true
+
+[node name="Margin2" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+offset_left = 172.0
+offset_right = 172.0
+offset_bottom = 40.0
+theme_override_constants/margin_bottom = 10
+
+[node name="Credits" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+offset_left = 719.0
+offset_top = 139.0
+offset_right = 819.0
+offset_bottom = 169.0
+theme = ExtResource("3_c1x3u")
+text = "Credits"
+expand_icon = true
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
@@ -303,7 +319,7 @@ scale = Vector2(0.13, 0.13)
 texture = ExtResource("5_ocswh")
 
 [node name="Sprite2D2" type="Sprite2D" parent="Control"]
-position = Vector2(50, 93)
+position = Vector2(58, 95)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("6_eikba")
 
@@ -315,9 +331,8 @@ anchor_right = 0.5
 grow_horizontal = 2
 
 [node name="TitleName" type="Sprite2D" parent="Control2"]
-material = SubResource("ShaderMaterial_l1f56")
-position = Vector2(0, 130)
-scale = Vector2(0.2, 0.2)
+position = Vector2(2, 102)
+scale = Vector2(0.15, 0.15)
 texture = ExtResource("9_u86vk")
 
 [node name="Credits" parent="." instance=ExtResource("6_ki7ii")]
@@ -332,7 +347,7 @@ scale = Vector2(8.96094, 5.03906)
 texture = ExtResource("4_tu3lh")
 
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Credits" to="." method="_on_credits_pressed"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

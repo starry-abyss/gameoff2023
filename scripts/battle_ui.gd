@@ -25,6 +25,8 @@ signal order_given
 signal animation_finished
 signal reset_camera
 
+var scroll_speed_mouse = 0.3
+
 var in_unit_animation_mode = false:
 	set(new_value):
 		in_unit_animation_mode = new_value
@@ -87,6 +89,20 @@ func _ready():
 	#get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
 	
 	_on_unit_show_stats(null, false)
+
+func limit_camera_scroll():
+	const limits = Rect2(6, 22, 25, 24)
+	var camera = get_viewport().get_camera_3d()
+	
+	if camera.global_position.x < limits.position.x:
+		camera.global_position.x = limits.position.x
+	elif camera.global_position.x > limits.end.x:
+		camera.global_position.x = limits.end.x
+	
+	if camera.global_position.z < limits.position.y:
+		camera.global_position.z = limits.position.y
+	elif camera.global_position.z > limits.end.y:
+		camera.global_position.z = limits.end.y
 
 func change_actions_disabled(disable: bool):
 	%select_idle_unit.disabled = disable
@@ -521,9 +537,8 @@ func _unhandled_input(event):
 		if Input.is_action_pressed("Scroll Mouse"):
 			var camera = get_viewport().get_camera_3d()
 			
-			const scroll_speed = 0.3
-			
-			camera.global_position += Vector3(event.relative.x, 0.0, event.relative.y) * scroll_speed
+			camera.global_position += Vector3(event.relative.x, 0.0, event.relative.y) * scroll_speed_mouse
+			limit_camera_scroll()
 			return
 		
 		#print("Mouse Motion at: ", event.position)
@@ -556,7 +571,8 @@ func _process(delta):
 	if !movement_path_timer.is_stopped():
 		movement_path_follow.progress_ratio = (movement_path_timer.wait_time - movement_path_timer.time_left) / movement_path_timer.wait_time
 		animated_unit.position = animated_unit_start_pos + movement_path_follow_node.global_position
-	pass
+	
+	limit_camera_scroll()
 	
 func _on_timer_timeout():
 	animated_unit.update_model_pos()
