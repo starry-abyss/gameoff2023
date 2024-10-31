@@ -76,6 +76,74 @@ offset_right = 719.0
 offset_bottom = 493.0
 text = "Cyber Police"
 
+[node name="MarginContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -269.0
+offset_top = -8.0
+offset_right = 147.0
+offset_bottom = 232.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="Control" parent="MarginContainer"]
+layout_mode = 2
+anchors_preset = 0
+offset_top = 100.0
+offset_right = 416.0
+offset_bottom = 140.0
+
+[node name="Play" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+offset_left = 192.0
+offset_top = 151.0
+offset_right = 342.0
+offset_bottom = 201.0
+theme = ExtResource("3_c1x3u")
+text = "Play"
+expand_icon = true
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+offset_left = 67.0
+offset_right = 67.0
+offset_bottom = 40.0
+theme_override_constants/margin_bottom = 10
+
+[node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+offset_left = 719.0
+offset_top = 97.0
+offset_right = 819.0
+offset_bottom = 127.0
+theme = ExtResource("3_c1x3u")
+text = "Options"
+expand_icon = true
+
+[node name="Margin2" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+offset_left = 172.0
+offset_right = 172.0
+offset_bottom = 40.0
+theme_override_constants/margin_bottom = 10
+
+[node name="Credits" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+offset_left = 719.0
+offset_top = 139.0
+offset_right = 819.0
+offset_bottom = 169.0
+theme = ExtResource("3_c1x3u")
+text = "Credits"
+expand_icon = true
+
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 7
@@ -235,74 +303,6 @@ grow_vertical = 0
 text = "Rebels always go first. Both sides have the same abilities."
 autowrap_mode = 2
 metadata/_edit_use_anchors_ = true
-
-[node name="MarginContainer" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -269.0
-offset_top = -8.0
-offset_right = 147.0
-offset_bottom = 232.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="Control" parent="MarginContainer"]
-layout_mode = 2
-anchors_preset = 0
-offset_top = 100.0
-offset_right = 416.0
-offset_bottom = 140.0
-
-[node name="Play" type="Button" parent="MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-offset_left = 192.0
-offset_top = 151.0
-offset_right = 342.0
-offset_bottom = 201.0
-theme = ExtResource("3_c1x3u")
-text = "Play"
-expand_icon = true
-
-[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-offset_left = 67.0
-offset_right = 67.0
-offset_bottom = 40.0
-theme_override_constants/margin_bottom = 10
-
-[node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-offset_left = 719.0
-offset_top = 97.0
-offset_right = 819.0
-offset_bottom = 127.0
-theme = ExtResource("3_c1x3u")
-text = "Options"
-expand_icon = true
-
-[node name="Margin2" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-offset_left = 172.0
-offset_right = 172.0
-offset_bottom = 40.0
-theme_override_constants/margin_bottom = 10
-
-[node name="Credits" type="Button" parent="MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-offset_left = 719.0
-offset_top = 139.0
-offset_right = 819.0
-offset_bottom = 169.0
-theme = ExtResource("3_c1x3u")
-text = "Credits"
-expand_icon = true
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
