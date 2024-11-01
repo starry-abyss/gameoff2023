@@ -134,4 +134,4 @@ func tile_pos_to_tile_index(tile_pos: Vector2i) -> int:
 
 
 func _quit_game():
-	quit_confirmation.visible = true
+	quit_confirmation.show_dialog(YesNoDialog.YesAction.Quit)

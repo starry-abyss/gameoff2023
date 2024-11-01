@@ -2142,11 +2142,11 @@ func ai_make_step(unit: Unit, ability_id: String, target):
 	
 
 func _on_end_battle_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/menu/main_menu_3d.tscn")
+	quit_confirmation.show_dialog(YesNoDialog.YesAction.Menu)
 
 
 func _on_restart_battle_pressed() -> void:
-	get_tree().change_scene_to_file("res://maps/test1.tscn")
+	quit_confirmation.show_dialog(YesNoDialog.YesAction.Restart)
 
 
 func _on_reset_camera_pressed() -> void:
@@ -2171,4 +2171,4 @@ func _on_options_menu_back_pressed() -> void:
 
 
 func _quit_game():
-	quit_confirmation.visible = true
+	quit_confirmation.show_dialog(YesNoDialog.YesAction.Quit)
