@@ -5,7 +5,7 @@ extends Node3D
 @onready var battle_ui = %battle_ui
 @onready var options_menu: Control = $CanvasLayer/OptionsMenu
 @onready var instructions_and_menu: Panel = $CanvasLayer/InstructionsAndMenu
-@onready var quit_confirmation: Control = $CanvasLayer/QuitConfirmation
+@onready var quit_confirmation: Control = %QuitConfirmation
 
 
 enum UnitTypes { CENTRAL_NODE, TOWER_NODE, WORM, TROJAN, VIRUS }

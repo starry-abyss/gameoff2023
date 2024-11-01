@@ -74,7 +74,11 @@ environment = SubResource("Environment_oktuc")
 [node name="OptionsMenu" parent="." instance=ExtResource("3_fxltc")]
 visible = false
 
-[node name="QuitConfirmation" parent="." instance=ExtResource("5_yb86w")]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="QuitConfirmation" parent="CanvasLayer" instance=ExtResource("5_yb86w")]
+unique_name_in_owner = true
 visible = false
 
 [node name="Timer" type="Timer" parent="."]

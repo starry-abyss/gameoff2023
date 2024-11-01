@@ -205,7 +205,11 @@ offset_left = 0.0
 offset_right = 0.0
 show_options_button = true
 
-[node name="QuitConfirmation" parent="CanvasLayer" instance=ExtResource("7_6yhuw")]
+[node name="CanvasLayer" type="CanvasLayer" parent="CanvasLayer"]
+layer = 10
+
+[node name="QuitConfirmation" parent="CanvasLayer/CanvasLayer" instance=ExtResource("7_6yhuw")]
+unique_name_in_owner = true
 visible = false
 
 [node name="Effect" type="Sprite2D" parent="."]

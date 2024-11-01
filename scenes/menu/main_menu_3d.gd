@@ -13,7 +13,7 @@ const MAP_SIZE = Vector2(5, 5)
 @onready var timer = $Timer
 @onready var glowing_outline_shader: VisualShader = preload("res://shaders/glowing_outline_shader.tres")
 @onready var unit_container = $Node3D/UnitContainer
-@onready var quit_confirmation: Control = $QuitConfirmation
+@onready var quit_confirmation: Control = %QuitConfirmation
 
 enum UnitTypes { CENTRAL_NODE, TOWER_NODE, WORM, TROJAN, VIRUS }
 enum HackingGroups { PINK, BLUE, NEUTRAL }
@@ -38,8 +38,8 @@ func _ready():
 		#button.mouse_entered.connect(_on_button_highlight)
 	
 	#UIHelpers.override_ui_node_theme_with_color(find_children("", "Button"), StaticData.main_menu_color)
-	$OptionsMenu.change_theme_color(StaticData.main_menu_color)
-	$QuitConfirmation.change_theme_color(StaticData.main_menu_color)
+	options_menu.change_theme_color(StaticData.main_menu_color)
+	quit_confirmation.change_theme_color(StaticData.main_menu_color)
 	
 	for x in range(MAP_SIZE.x):
 		for y in range(MAP_SIZE.y):
