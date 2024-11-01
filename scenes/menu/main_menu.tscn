@@ -28,6 +28,7 @@ grow_vertical = 2
 script = ExtResource("1_46h0q")
 
 [node name="Quit" type="Button" parent="."]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 1
 anchors_preset = 3
@@ -116,6 +117,7 @@ offset_bottom = 40.0
 theme_override_constants/margin_bottom = 10
 
 [node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 offset_left = 719.0
@@ -134,6 +136,7 @@ offset_bottom = 40.0
 theme_override_constants/margin_bottom = 10
 
 [node name="Credits" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 offset_left = 719.0
@@ -304,7 +307,8 @@ text = "Rebels always go first. Both sides have the same abilities."
 autowrap_mode = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="Control" type="Control" parent="."]
+[node name="Logos" type="Control" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -313,12 +317,12 @@ offset_top = -143.0
 offset_right = 208.0
 grow_vertical = 0
 
-[node name="Sprite2D" type="Sprite2D" parent="Control"]
+[node name="Sprite2D" type="Sprite2D" parent="Logos"]
 position = Vector2(162, 110)
 scale = Vector2(0.13, 0.13)
 texture = ExtResource("5_ocswh")
 
-[node name="Sprite2D2" type="Sprite2D" parent="Control"]
+[node name="Sprite2D2" type="Sprite2D" parent="Logos"]
 position = Vector2(58, 95)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("6_eikba")

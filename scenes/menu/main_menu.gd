@@ -14,6 +14,12 @@ func _ready():
 	UIHelpers.override_ui_node_theme_with_color(list, StaticData.main_menu_color)
 
 
+func _process(delta: float) -> void:
+	%Quit.visible = !credits.visible
+	%Options.visible = !credits.visible
+	%Credits.visible = !credits.visible
+	%Logos.visible = !credits.visible
+
 func _on_play_pressed():
 	StaticData.who_controls_pink = %pink_controller.selected
 	StaticData.who_controls_blue = %blue_controller.selected
