@@ -33,7 +33,12 @@ var attack: int = 0
 var attack_extra: int = 0
 var attack_range: int = 0
 var ap_cost_of_attack: int = 1
-var ap: int = 3
+var ap: int = 3:
+	set(value):
+		ap = value
+		
+		update_tint()
+
 var ap_max: int = 3
 var cooldowns = {}
 
@@ -239,6 +244,10 @@ func set_tint(color: Color):
 			#color.v *= 0.85
 			#color.s *= 0.8
 		
+		if ap == 0 && group != Gameplay.HackingGroups.NEUTRAL:
+			color.v *= 0.4
+			color.s *= 2.0
+		
 		material.set_shader_parameter("emission_color", color)
 	pass
 
@@ -269,8 +278,8 @@ func set_initial_facing():
 			m.rotation_degrees.y = 0
 
 func type_changed_set_up(new_type: Gameplay.UnitTypes):
-	load_stats(new_type)
 	load_model(type_to_model_scene_name(new_type))
+	load_stats(new_type)
 	
 	if new_type == Gameplay.UnitTypes.TOWER_NODE && model != null:
 		var sides: MeshInstance3D = model.find_child("Sides")

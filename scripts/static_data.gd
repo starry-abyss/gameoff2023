@@ -135,9 +135,15 @@ extends Node
 		
 		All friendly units will restore Action Points.
 		The ready status of their actions will be increased by 1.
+		
+		Tiles under units with spare Action Points are highlighted when hovering mouse over this button.
 		""" },
 	"select_idle_unit": { "text": """
 		Click to select next friendly unit with spare Action Points.
+		
+		If some unit is glowing dark, it doesn't have spare Action Points.
+		
+		Tiles under units with spare Action Points are highlighted when hovering mouse over this button.
 		""" },
 	"cancel_select_target": { "text": """
 		Click to exit target selection mode.
