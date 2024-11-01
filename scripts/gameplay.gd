@@ -2155,11 +2155,20 @@ func _on_reset_camera_pressed() -> void:
 
 
 func _on_instructions_and_menu_pressed() -> void:
-	instructions_and_menu.visible = true
+	if instructions_and_menu.visible:
+		_on_back_pressed()
+	else:
+		instructions_and_menu.visible = true
+		get_tree().set_pause(true)
+		
+		battle_ui.get_node("CanvasLayer").visible = !instructions_and_menu.visible
 
 
 func _on_back_pressed() -> void:
 	instructions_and_menu.visible = false
+	get_tree().set_pause(false)
+	
+	battle_ui.get_node("CanvasLayer").visible = !instructions_and_menu.visible
 
 
 func _on_options_pressed() -> void:
@@ -2168,6 +2177,7 @@ func _on_options_pressed() -> void:
 
 func _on_options_menu_back_pressed() -> void:
 	options_menu.visible = false
+	
 
 
 func _quit_game():

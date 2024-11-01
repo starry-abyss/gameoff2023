@@ -48,6 +48,7 @@ void fragment() {
 shader = SubResource("Shader_kaoo2")
 
 [node name="QuitConfirmation" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

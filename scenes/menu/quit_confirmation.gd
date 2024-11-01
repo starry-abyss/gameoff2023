@@ -16,6 +16,8 @@ func show_dialog(yes_action: YesAction):
 		%Label.text = "Really end the battle?"
 
 func _on_yes_pressed() -> void:
+	get_tree().set_pause(false)
+	
 	if yes_action == YesAction.Quit:
 		UIHelpers.quit_the_game()
 	elif yes_action == YesAction.Restart:
