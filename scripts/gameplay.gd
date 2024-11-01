@@ -508,7 +508,7 @@ func hover_tile(tile_pos: Vector2i):
 	
 	var hovered_unit = find_unit_by_tile_pos(tile_pos)
 	if hovered_unit != null:
-		battle_ui._on_unit_show_stats(hovered_unit, hovered_unit == selected_unit)
+		battle_ui._on_unit_show_stats(hovered_unit, hovered_unit == selected_unit and !is_ai_turn())
 	else:
 		battle_ui._on_unit_show_stats(null, false)
 		
@@ -551,7 +551,8 @@ func give_order(ability_id: String, target, imaginary = false) -> bool:
 		target = find_unit_by_tile_pos(target)
 		if target == null:
 			if !imaginary:
-				battle_ui._on_order_processed(result, selected_unit)
+				if !is_ai_turn():
+					battle_ui._on_order_processed(result, selected_unit)
 			return result
 	
 	var stats = StaticData.ability_stats[ability_id]
@@ -576,7 +577,9 @@ func give_order(ability_id: String, target, imaginary = false) -> bool:
 	if !imaginary:
 		if result:
 			calculate_distances()
-		battle_ui._on_order_processed(result, selected_unit)
+			
+		if !is_ai_turn():
+			battle_ui._on_order_processed(result, selected_unit)
 	
 	return result
 
@@ -594,10 +597,11 @@ func select_unit(unit_to_select: Unit, no_ui = false):
 	selected_unit = unit_to_select
 	calculate_distances()
 	
-	if no_ui:
-		battle_ui._on_unit_selection_changed(null)
-	else:
-		battle_ui._on_unit_selection_changed(selected_unit)
+	if !is_ai_turn():
+		if no_ui:
+			battle_ui._on_unit_selection_changed(null)
+		else:
+			battle_ui._on_unit_selection_changed(selected_unit)
 		#if !is_ai_turn():
 		#	battle_ui._on_unit_show_stats(selected_unit, true)
 
@@ -1197,6 +1201,8 @@ func end_turn(silent = false):
 		battle_ui._on_playing_group_changed(current_turn_group, is_ai_turn())
 		_init_group_color()
 	
+	battle_ui._on_unit_selection_changed(null)
+	
 	if is_ai_turn():
 		ai_new_turn()
 
@@ -1252,6 +1258,7 @@ func _override_other_ui_theme_with_color(color):
 
 
 func _ready():
+	instructions_and_menu.visible = false
 	_on_reset_camera_pressed()
 	
 	battle_ui.reset_camera.connect(_on_reset_camera_pressed)
@@ -1263,6 +1270,8 @@ func _ready():
 		
 		battle_ui.scroll_speed_mouse = m
 		camera.scroll_speed_keyboard = k)
+	
+	options_menu.force_update_options()
 	
 	battle_ui.end_turn.connect("pressed", func():
 		if !is_ai_turn():

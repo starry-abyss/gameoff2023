@@ -54,6 +54,7 @@ func _ready():
 		
 		button.is_back_button = true
 
+func force_update_options():
 	scroll_speed_change.emit(%ScrollSpeedMouse.value, %ScrollSpeedKeyboard.value)
 
 func show_tutorial_hints_changed(value):

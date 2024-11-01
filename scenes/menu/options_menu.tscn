@@ -311,7 +311,7 @@ theme = ExtResource("5_ncrul")
 min_value = 0.01
 max_value = 2.0
 step = 0.01
-value = 0.31
+value = 0.1
 exp_edit = true
 
 [node name="Control9" type="Control" parent="MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer2"]
@@ -330,6 +330,7 @@ grow_horizontal = 0
 size_flags_vertical = 4
 theme = ExtResource("5_ncrul")
 min_value = 10.0
+max_value = 25.0
 value = 15.0
 exp_edit = true
 

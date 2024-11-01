@@ -375,7 +375,7 @@ func _on_playing_group_changed(current_group: Gameplay.HackingGroups, is_ai_turn
 	hovered_unit_stats_panel.is_ai_turn = is_ai_turn
 	
 	# hack for unit stats to update
-	tile_hovered.emit(last_tile_pos)
+	#tile_hovered.emit(last_tile_pos)
 
 func update_abilities_buttons_icon_tint():
 	for button in %ability_buttons.get_children():
