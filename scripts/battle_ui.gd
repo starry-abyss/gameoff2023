@@ -38,6 +38,9 @@ var in_select_target_mode = false:
 	set(new_value):
 		in_select_target_mode = new_value
 		
+		#if has_node(%select_target_message_panel):
+		%select_target_message_panel.visible = in_select_target_mode
+		
 		update_abilities_buttons_general_visibility()
 		
 var order_parameters = {}

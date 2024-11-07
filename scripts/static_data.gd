@@ -146,7 +146,7 @@ extends Node
 		Tiles under units with spare Action Points are highlighted when hovering mouse over this button.
 		""" },
 	"cancel_select_target": { "text": """
-		Click to exit target selection mode.
+		Click to exit target selection mode. Can also be done by right-clicking the battle field.
 		
 		After that it will be possible to select other abilities or units.
 		""" },
