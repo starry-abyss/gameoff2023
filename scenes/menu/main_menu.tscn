@@ -27,25 +27,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_46h0q")
 
-[node name="Quit" type="Button" parent="."]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -126.0
-offset_top = -51.0
-offset_right = -26.0
-offset_bottom = -21.0
-grow_horizontal = 0
-grow_vertical = 0
-theme = ExtResource("3_c1x3u")
-text = "Quit"
-expand_icon = true
-
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
 
@@ -79,17 +60,18 @@ text = "Cyber Police"
 
 [node name="MarginContainer" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_bottom = 1.0
 offset_left = -269.0
-offset_top = -8.0
+offset_top = -332.0
 offset_right = 147.0
-offset_bottom = 232.0
+offset_bottom = -92.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="Control" parent="MarginContainer"]
 layout_mode = 2
@@ -109,13 +91,6 @@ theme = ExtResource("3_c1x3u")
 text = "Play"
 expand_icon = true
 
-[node name="Margin" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-offset_left = 67.0
-offset_right = 67.0
-offset_bottom = 40.0
-theme_override_constants/margin_bottom = 10
-
 [node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 30)
@@ -128,13 +103,6 @@ theme = ExtResource("3_c1x3u")
 text = "Options"
 expand_icon = true
 
-[node name="Margin2" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-offset_left = 172.0
-offset_right = 172.0
-offset_bottom = 40.0
-theme_override_constants/margin_bottom = 10
-
 [node name="Credits" type="Button" parent="MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 30)
@@ -145,6 +113,25 @@ offset_right = 819.0
 offset_bottom = 169.0
 theme = ExtResource("3_c1x3u")
 text = "Credits"
+expand_icon = true
+
+[node name="Quit" type="Button" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 303.0
+offset_top = 141.0
+offset_right = 403.0
+offset_bottom = 171.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("3_c1x3u")
+text = "Quit"
 expand_icon = true
 
 [node name="Panel" type="Panel" parent="."]
@@ -350,8 +337,8 @@ position = Vector2(573.5, 323.5)
 scale = Vector2(8.96094, 5.03906)
 texture = ExtResource("4_tu3lh")
 
-[connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Credits" to="." method="_on_credits_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]

@@ -20,6 +20,8 @@ signal scroll_speed_change
 @onready var hints_enabled = %HintsEnabled
 @onready var fullscreen = %Fullscreen
 
+static var settings_load = true
+
 func _ready():
 	team_1_color_button.color = StaticData.color_pink
 	team_2_color_button.color = StaticData.color_blue
@@ -53,6 +55,29 @@ func _ready():
 		button.set_process(true)
 		
 		button.is_back_button = true
+	
+	if settings_load:
+		var config = ConfigFile.new()
+		var err = config.load("user://options.cfg")
+
+		# If the file didn't load, ignore it.
+		if err == OK:
+			master_slider.value = config.get_value("options", "VolumeMaster")
+			music_slider.value = config.get_value("options", "VolumeMusic")
+			sfx_slider.value = config.get_value("options", "VolumeSFX")
+			
+			team_1_color_button.color = config.get_value("options", "TeamColor1")
+			team_2_color_button.color = config.get_value("options", "TeamColor2")
+			
+			%ScrollSpeedMouse.value = config.get_value("options", "ScrollSpeedMouse")
+			%ScrollSpeedKeyboard.value = config.get_value("options", "ScrollSpeedKeyboard")
+			
+			hints_enabled.checked = config.get_value("options", "HintsEnabled")
+			fullscreen.checked = config.get_value("options", "Fullscreen")
+			
+			force_update_options()
+			_on_color_picker_button_color_changed(team_1_color_button.color)
+			_on_color_picker_button_2_color_changed(team_2_color_button.color)
 
 func force_update_options():
 	scroll_speed_change.emit(%ScrollSpeedMouse.value, %ScrollSpeedKeyboard.value)
@@ -117,7 +142,24 @@ func _on_back_pressed():
 	on_back_pressed.emit()
 	#set_content_visible(false)
 	#options.disabled = false
-
+	
+	if true:
+		var config = ConfigFile.new()
+		
+		config.set_value("options", "VolumeMaster", master_slider.value)
+		config.set_value("options", "VolumeMusic", music_slider.value)
+		config.set_value("options", "VolumeSFX", sfx_slider.value)
+		
+		config.set_value("options", "TeamColor1", team_1_color_button.color)
+		config.set_value("options", "TeamColor2", team_2_color_button.color)
+		
+		config.set_value("options", "ScrollSpeedMouse", %ScrollSpeedMouse.value)
+		config.set_value("options", "ScrollSpeedKeyboard", %ScrollSpeedKeyboard.value)
+		
+		config.set_value("options", "HintsEnabled", hints_enabled.checked)
+		config.set_value("options", "Fullscreen", fullscreen.checked)
+		
+		config.save("user://options.cfg")
 
 #func set_content_visible(visible: bool):
 	#$Panel.visible = visible
