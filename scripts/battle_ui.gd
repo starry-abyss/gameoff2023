@@ -127,6 +127,7 @@ func update_abilities_buttons_general_visibility():
 	%ai_turn_message.visible = is_ai_turn
 	%end_turn.visible = !is_ai_turn
 	%select_idle_unit.visible = !is_ai_turn
+	%SelectedUnitStatsPanel.visible = !is_ai_turn
 	
 	for button in %ability_buttons.get_children():
 		button.disabled = button.locked || in_unit_animation_mode
@@ -302,17 +303,22 @@ func _on_unit_move(unit: Unit, path: Array):
 	UIHelpers.audio_event3d("SFX/Virus/SFX_VirusMove", animated_unit.tile_pos)
 	#UIHelpers.audio_event("SFX/Virus/SFX_VirusMove")
 
-func _on_unit_selection_changed(unit: Unit):
+func _on_unit_selection_changed(unit: Unit, no_tooltip_update := false):
 	#if unit == null:
 	in_select_target_mode = false
 	
 	tiles_tint_reset()
 	
 	update_selected_unit_avatar(unit)
-	update_selected_unit_stats(unit)
+	
+	if not no_tooltip_update:
+		update_selected_unit_stats(unit)
 	update_selection_indicator(unit)
 	update_abilities_buttons(unit)
 	#update_abilities_buttons_general_visibility()
+	
+	if unit == null:
+		%SelectedUnitStatsPanel.visible = false
 
 func update_selected_unit_avatar(unit: Unit):
 	if unit != null:
@@ -568,17 +574,19 @@ func _unhandled_input(event):
 				tiles_need_tint.emit(order_parameters.ability_id, tile_pos)
 		
 func _process(delta):
-	if animated_unit != null:
-		update_selection_indicator(animated_unit)
-	
 	if !movement_path_timer.is_stopped():
 		movement_path_follow.progress_ratio = (movement_path_timer.wait_time - movement_path_timer.time_left) / movement_path_timer.wait_time
 		animated_unit.position = animated_unit_start_pos + movement_path_follow_node.global_position
+	
+	if animated_unit != null:
+		update_selection_indicator(animated_unit)
 	
 	limit_camera_scroll()
 	
 func _on_timer_timeout():
 	animated_unit.update_model_pos()
+	update_selection_indicator(animated_unit)
+	
 	in_unit_animation_mode = false
 	
 	#if animated_unit != null:

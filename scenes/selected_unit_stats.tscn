@@ -42,10 +42,10 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Author placeholder"
-autowrap_mode = 2
+autowrap_mode = 3
 
 [node name="Tooltip" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Description placeholder"
-autowrap_mode = 2
+autowrap_mode = 3

@@ -84,33 +84,30 @@ extends Node
 	"tower_node": { "text": """
 		Anti-malware nodes can damage enemy units at the range of 2 tiles. At the start of the battle they can't reach any enemies.
 		
-		If two Anti-malware nodes belong to the same group and stand on a straight line,
-		a double firewall is created between them.
-		
 		Firewalls block all enemy units from moving and damaging through them.
 		
-		They are automatically created on a straight line between two Anti-malware nodes.
-		For this Anti-malware nodes have to belong to the same group.
+		They are automatically created on a straight line between two Anti-malware nodes. For this Anti-malware nodes have to belong to the same group.
 		
 		If Hit Points reach 0, all neighbor firewalls are down too.
 		""" },
 	"central_node": { "text": """
-		The Kernel node contains rootkits allowing us to control the computer of 
-		a random internet guy.
+		The Kernel node contains rootkits allowing us to control the computer of a random internet guy.
 		
 		The group which loses the Kernel node - all damaged down to 0 Hit Points - loses the battle.
 		
 		The Kernel node has actions just like other units, some of them performed automatically when
 		available.
+		
 		To perform non-automatic actions first click on the action button below and then - on the target tile on the map.
 		
 		The cost of every action in unit's Action Points is shown at the top of the button.
 		""" },
 	
 	"worm": { "text": """
-		The Worm malware can duplicate themselves, can move and can be mutated to other types of units.
+		The Worm malware can duplicate itself, can move and can be mutated to other types of units.
 		
 		To perform these actions first click on the action button below and then - on the target tile on the map.
+		
 		Mutation actions are performed on the Worm in place, so there is no step of choosing the target.
 		
 		The cost of every action in unit's Action Points is shown at the top of the button.
@@ -121,19 +118,22 @@ extends Node
 		The Virus malware can move and can attack enemy units in the range of 1.
 		
 		Also it can consume friendly Worms to temporarily gain more Action Points, even beyond the limit!
+		
 		Using 'boost' is the only way to then perform 'attack_n_spread'.
 		""" },
 	"trojan": { "text": """
 		The Trojan malware can move fast but cannot attack.
 		
-		It can capture an enemy Anti-malware node.
-		It can open a backdoor to move friendly malware to the Trojan over long distances.
+		Can capture an enemy Anti-malware node.
+		
+		Can open a backdoor to move friendly malware to the Trojan over long distances.
 		""" },
 	
 	"end_turn": { "text": """
 		Click to end your turn and start the enemy's turn.
 		
 		All friendly units will restore Action Points.
+		
 		The ready status of their actions will be increased by 1.
 		
 		Tiles under units with spare Action Points are highlighted when hovering mouse over this button.
@@ -163,7 +163,8 @@ extends Node
 	
 	"move": { "text": """
 		Unlike nodes, malware can move.
-		Maximum distance depends on the amount of Action Points left for the malware.
+		
+		Maximum movement distance depends on the amount of Action Points left for the malware.
 		
 		It's impossible to walk through other units or through enemy firewalls.
 		
@@ -174,6 +175,7 @@ extends Node
 	
 	"virus_attack": { "text": """
 		Deals the damage to an enemy unit on a neighbor tile.
+		
 		This action won't work through enemy firewalls, so attack Anti-malware nodes first.
 		
 		For this action it's not required to click the action button first - you can click the target on the battle field right away.
@@ -182,6 +184,7 @@ extends Node
 		""" },
 	"tower_attack": { "text": """
 		Deals the damage to an enemy unit within the distance of 2 tiles.
+		
 		Note that there are enough Action Points for every Anti-malware to perform this action 3 times each turn.
 		
 		For this action it's not required to click the action button first - you can click the target on the battle field right away.
@@ -230,6 +233,7 @@ extends Node
 	
 	"repair": { "text": """
 		Restores a few Hit Points of the chosen friendly unit, except itself.
+		
 		The target unit must be located on the territory marked with the Kernel group's color.
 		
 		The Kernel's own Hit Points are partially restored at the beginning of every turn with 'maintain'.
@@ -240,6 +244,8 @@ extends Node
 		Performs a reset on 7 selected tiles eliminating all malware there regardless of their group.
 		
 		Nodes are unaffected. The central tile of the 7 must be located on the territory marked with the Kernel group's color.
+		
+		Be careful that it will also eliminate friendly malware as well!
 		
 		The period of unavailability after use, in turns, is shown on the button.
 	""" },

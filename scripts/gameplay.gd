@@ -597,13 +597,13 @@ func select_unit(unit_to_select: Unit, no_ui = false):
 	selected_unit = unit_to_select
 	calculate_distances()
 	
-	if !is_ai_turn():
-		if no_ui:
-			battle_ui._on_unit_selection_changed(null)
-		else:
-			battle_ui._on_unit_selection_changed(selected_unit)
-		#if !is_ai_turn():
-		#	battle_ui._on_unit_show_stats(selected_unit, true)
+	#if !is_ai_turn():
+	if no_ui:
+		battle_ui._on_unit_selection_changed(null, is_ai_turn())
+	else:
+		battle_ui._on_unit_selection_changed(selected_unit, is_ai_turn())
+	#if !is_ai_turn():
+	#	battle_ui._on_unit_show_stats(selected_unit, true)
 
 func select_next_unit():
 	var units_in_the_same_group_before_selected_unit = []
@@ -1201,7 +1201,7 @@ func end_turn(silent = false):
 		battle_ui._on_playing_group_changed(current_turn_group, is_ai_turn())
 		_init_group_color()
 	
-	battle_ui._on_unit_selection_changed(null)
+	battle_ui._on_unit_selection_changed(null, is_ai_turn())
 	
 	if is_ai_turn():
 		ai_new_turn()
