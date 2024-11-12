@@ -33,6 +33,9 @@ var loser = HackingGroups.NEUTRAL
 const NotCalculated = -1
 const Unreachable = -2 # for blocking attacks through firewalls
 
+var ai_unit_turn_timeout = 0.0
+var ai_unit_turn_timeout_max = 5.0
+
 func calculate_distances():
 	# invalidate the path cache
 	destination_for_cached_path = Vector2i(-1, -1)
@@ -597,6 +600,9 @@ func select_unit(unit_to_select: Unit, no_ui = false):
 	selected_unit = unit_to_select
 	calculate_distances()
 	
+	if is_ai_turn() && unit_to_select != null:
+		ai_unit_turn_timeout = ai_unit_turn_timeout_max
+	
 	#if !is_ai_turn():
 	if no_ui:
 		battle_ui._on_unit_selection_changed(null, is_ai_turn())
@@ -1072,7 +1078,7 @@ func order_attack(target: Unit, imaginary: bool, ability_stats) -> bool:
 				elif selected_unit.type == UnitTypes.VIRUS:
 					UIHelpers.audio_event3d("SFX/Virus/SFX_Damage", selected_unit.tile_pos)
 				
-				print("attack power: ", attack_power)
+				#print("attack power: ", attack_power)
 			
 			return true
 	
@@ -1154,6 +1160,9 @@ func flip_group(group: HackingGroups) -> HackingGroups:
 
 func end_turn(silent = false):
 	select_unit(null, silent)
+	
+	if is_ai_turn():
+		ai_unit_turn_timeout = ai_unit_turn_timeout_max
 	
 	# end of turn
 	for unit in units:
@@ -1425,6 +1434,13 @@ func _process(delta: float) -> void:
 	
 	if is_ai_turn() && ai_time_for_step:
 		ai_next_step()
+	
+	if is_ai_turn():
+		ai_unit_turn_timeout -= delta
+		if ai_unit_turn_timeout <= 0.0:
+			ai_unit_turn_timeout = ai_unit_turn_timeout_max
+			
+			end_turn()
 
 # here goes the code for AI controller
 #var ai_malware = []
@@ -1874,6 +1890,10 @@ func ai_next_step():
 	while ai_virii_on_base.size() > 0:
 		var t = ai_virii_on_base[-1]
 		
+		if !is_instance_valid(t):
+			ai_virii_on_base.erase(t)
+			continue
+		
 		#if t.ap <= 1
 		
 		# TODO: don't try to attack or move through enemy firewall (it can be near our base)
@@ -1919,6 +1939,10 @@ func ai_next_step():
 	
 	while ai_virii_attack.size() > 0:
 		var t = ai_virii_attack[-1]
+		
+		if !is_instance_valid(t):
+			ai_virii_attack.erase(t)
+			continue
 		
 		var enemy_is_tower = true
 
@@ -2133,7 +2157,7 @@ func ai_make_step(unit: Unit, ability_id: String, target):
 	#	hover_tile(target)
 	
 	#ai_visual_delay(0.2)
-	await get_tree().create_timer(0.2).timeout
+	await get_tree().create_timer(0.2 * StaticData.turn_animation_duration).timeout
 	
 	select_unit(unit)
 	assert(selected_unit != null)
@@ -2144,7 +2168,7 @@ func ai_make_step(unit: Unit, ability_id: String, target):
 	
 	
 	#ai_visual_delay(StaticData.turn_animation_duration + 0.1)
-	await get_tree().create_timer(StaticData.turn_animation_duration + 0.1).timeout
+	await get_tree().create_timer(StaticData.turn_animation_duration * 1.1).timeout
 	
 	select_unit(null, true)
 	ai_time_for_step = true

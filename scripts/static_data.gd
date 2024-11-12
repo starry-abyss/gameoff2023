@@ -8,13 +8,13 @@ extends Node
 
 @export var main_menu_color: Color = Color("#00ff00")
 
-@export var hurt_animation_duration: float = 0.5
-@export var heal_animation_duration: float = 0.5
-@export var spawn_animation_duration: float = 1
-@export var turn_animation_duration: float = 0.2
-@export var attack_animation_duration: float = 0.4
-@export var mutation_animation_duration: float = 0.4
-@export var move_animation_duration_per_tile: float = 0.2
+@export var turn_animation_duration: float = 0.0001
+@export var hurt_animation_duration: float = 0.5 * turn_animation_duration
+@export var heal_animation_duration: float = 0.5 * turn_animation_duration
+@export var spawn_animation_duration: float = 1 * turn_animation_duration
+@export var attack_animation_duration: float = 0.4 * turn_animation_duration
+@export var mutation_animation_duration: float = 0.4 * turn_animation_duration
+@export var move_animation_duration_per_tile: float = 0.2 * turn_animation_duration
 
 @export var who_controls_blue: Gameplay.ControllerType = Gameplay.ControllerType.PLAYER
 @export var who_controls_pink: Gameplay.ControllerType = Gameplay.ControllerType.PLAYER

@@ -78,9 +78,15 @@ func _ready():
 			force_update_options()
 			_on_color_picker_button_color_changed(team_1_color_button.color)
 			_on_color_picker_button_2_color_changed(team_2_color_button.color)
+	
+	sync_sfx_and_dx()
 
 func force_update_options():
 	scroll_speed_change.emit(%ScrollSpeedMouse.value, %ScrollSpeedKeyboard.value)
+
+func sync_sfx_and_dx():
+	FMODStudioModule.get_studio_system().get_bus("bus:/Dx Bus").get_volume().volume = \
+		FMODStudioModule.get_studio_system().get_bus("bus:/SFX Bus").get_volume().volume
 
 func show_tutorial_hints_changed(value):
 	StaticData.show_tutorial_hints = value
@@ -104,6 +110,8 @@ func _on_volume_sfx_value_changed(value):
 	var bus = FMODStudioModule.get_studio_system().get_bus("bus:/SFX Bus")
 	#if bus:
 	bus.set_volume(value / 100.0)
+	
+	sync_sfx_and_dx()
 	
 	UIHelpers.audio_event("Ui/Ui_Slider")
 
