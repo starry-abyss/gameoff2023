@@ -310,6 +310,9 @@ func tile_index_to_tile_pos(index: int) -> Vector2i:
 	return Vector2i(index % map_size.x, index / map_size.x)
 
 func tile_pos_to_tile_index(tile_pos: Vector2i) -> int:
+	if is_tile_pos_out_of_bounds(tile_pos):
+		return -1
+	
 	return tile_pos.y * map_size.x + tile_pos.x
 
 func is_tile_pos_out_of_bounds(tile_pos: Vector2i):
@@ -1323,7 +1326,9 @@ func _ready():
 	Music.connect("quit_game", _quit_game)
 	
 	tiles.resize(map_size.x * map_size.y)
-	distances.resize(tiles.size())
+	
+	# hack: +1 for the index -1 to point to an unused index, to work around crashes
+	distances.resize(tiles.size() + 1)
 	for x in range(map_size.x):
 		for y in range(map_size.y):
 			add_tile(Vector2i(x, y))

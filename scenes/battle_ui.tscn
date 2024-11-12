@@ -206,6 +206,7 @@ theme = ExtResource("3_7nk56")
 min_value = 1.0
 max_value = 10000.0
 value = 1.0
+exp_edit = true
 
 [node name="ResetCamera" type="Button" parent="CanvasLayer/Panel"]
 unique_name_in_owner = true
