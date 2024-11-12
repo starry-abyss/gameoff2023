@@ -54,6 +54,8 @@ var last_tile_pos = Vector2i(0, 0)
 var timeout_callback_helper
 
 func _ready():
+	%TurnSpeed.value_changed.connect(change_turn_speed)
+	
 	timeout_callback_helper = get_tree().get_nodes_in_group("TimeoutCallbackHelper")[0]
 	%end_game_message.get_parent().visible = false
 	
@@ -106,6 +108,9 @@ func limit_camera_scroll():
 		camera.global_position.z = limits.position.y
 	elif camera.global_position.z > limits.end.y:
 		camera.global_position.z = limits.end.y
+
+func change_turn_speed(new_value):
+	StaticData.turn_animation_duration = 1.0 / new_value
 
 func change_actions_disabled(disable: bool):
 	%select_idle_unit.disabled = disable
