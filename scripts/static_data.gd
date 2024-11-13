@@ -46,25 +46,25 @@ var move_animation_duration_per_tile: float:
 
 # sometimes abilities make AP drop right to zero, this table only shows the minimum AP cost
 @export var ability_stats = {
-	"move": { "icon": "move", "name": "move", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 0 },
+	"move": { "icon": "move", "key": "M", "name": "move", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 0 },
 	
-	"virus_attack": { "icon": "virus attack", "name": "attack_short", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 4, "attack_extra": 2, "attack_range": 1 },
-	"tower_attack": { "icon": "tower attack", "name": "attack_long", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 6, "attack_extra": 2, "attack_range": 2 },
+	"virus_attack": { "icon": "virus attack", "key": "A", "name": "attack_short", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 4, "attack_extra": 2, "attack_range": 1 },
+	"tower_attack": { "icon": "tower attack", "key": "A", "name": "attack_long", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "attack": 6, "attack_extra": 2, "attack_range": 2 },
 	
-	"scale": { "icon": "duplicate 2", "name": "duplicate", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 1 },
-	"self_modify_to_virus": { "icon": "virus grid", "name": "mutate_to_virus", "target": Gameplay.TargetTypes.SELF, "ap": 2, "cooldown": 0 },
-	"self_modify_to_trojan": { "icon": "trojan", "name": "mutate_to_trojan", "target": Gameplay.TargetTypes.SELF, "ap": 3, "cooldown": 0 },
+	"scale": { "icon": "duplicate 2", "key": "D", "name": "duplicate", "target": Gameplay.TargetTypes.TILE, "ap": 1, "cooldown": 1 },
+	"self_modify_to_virus": { "icon": "virus grid", "key": "V", "name": "mutate_to_virus", "target": Gameplay.TargetTypes.SELF, "ap": 2, "cooldown": 0 },
+	"self_modify_to_trojan": { "icon": "trojan", "key": "T", "name": "mutate_to_trojan", "target": Gameplay.TargetTypes.SELF, "ap": 3, "cooldown": 0 },
 	
-	"integrate": { "icon": "integrate", "name": "boost", "target": Gameplay.TargetTypes.UNIT, "ap": -3, "cooldown": 1 },
-	"spread": { "icon": "spread", "name": "attack_n_spread", "target": Gameplay.TargetTypes.UNIT, "ap": 6, "cooldown": 0, "attack": 3, "attack_extra": 2 },
+	"integrate": { "icon": "integrate", "key": "B", "name": "boost", "target": Gameplay.TargetTypes.UNIT, "ap": -3, "cooldown": 1 },
+	"spread": { "icon": "spread", "key": "S", "name": "attack_n_spread", "target": Gameplay.TargetTypes.UNIT, "ap": 6, "cooldown": 0, "attack": 3, "attack_extra": 2 },
 	
-	"repair": { "icon": "repair", "name": "patch", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "restored_hp": 4 },
-	"reset": { "icon": "reset", "name": "reset_area", "target": Gameplay.TargetTypes.TILE, "ap": 6, "cooldown": 5 },
+	"repair": { "icon": "repair", "key": "P", "name": "patch", "target": Gameplay.TargetTypes.UNIT, "ap": 3, "cooldown": 0, "restored_hp": 4 },
+	"reset": { "icon": "reset", "key": "R", "name": "reset_area", "target": Gameplay.TargetTypes.TILE, "ap": 6, "cooldown": 5 },
 	"spawn_worms": { "icon": "spawn worm", "name": "generate_worms", "target": Gameplay.TargetTypes.SELF, "ap": 0, "cooldown": 5 },
 	"self_repair": { "icon": "self heal", "name": "self_maintain", "target": Gameplay.TargetTypes.SELF, "ap": 0, "cooldown": 0, "restored_hp": 6 },
 	
-	"capture_tower": { "icon": "capture", "name": "capture_node", "target": Gameplay.TargetTypes.UNIT, "ap": 4, "cooldown": 0 },
-	"backdoor": { "icon": "backdoor", "name": "open_backdoor", "target": Gameplay.TargetTypes.TILE, "ap": 2, "cooldown": 3 },
+	"capture_tower": { "icon": "capture", "key": "C", "name": "capture_node", "target": Gameplay.TargetTypes.UNIT, "ap": 4, "cooldown": 0 },
+	"backdoor": { "icon": "backdoor", "key": "B", "name": "open_backdoor", "target": Gameplay.TargetTypes.TILE, "ap": 2, "cooldown": 3 },
 	}
 	
 @export var tile_size = Vector2(1.30, 1.30 * sin(PI / 3.0))
@@ -111,7 +111,7 @@ var move_animation_duration_per_tile: float:
 		The Kernel node has actions just like other units, some of them performed automatically when
 		available.
 		
-		To perform non-automatic actions first click on the action button below and then - on the target tile on the map.
+		To perform non-automatic actions for the selected node, click on the action button at the bottom and then - on the target tile. When the tile under mouse is highlighted brightly, it means that the target is valid (taking into account spare Action Points).
 		
 		The cost of every action in unit's Action Points (AP) is shown at the top of the button.
 		""" },
@@ -119,7 +119,7 @@ var move_animation_duration_per_tile: float:
 	"worm": { "text": """
 		The Worm malware can duplicate itself, can move and can be mutated to other types of units.
 		
-		To perform these actions first click on the action button below and then - on the target tile on the map. When tile under mouse is highlighted brightly, it means that the target is valid (taking into account spare Action Points). [color=green]And read tooltips for shortcuts![/color]
+		To perform these actions for the selected node, click on the action button at the bottom and then - on the target tile. When the tile under mouse is highlighted brightly, it means that the target is valid (taking into account spare Action Points).
 		
 		Mutation actions are performed on the Worm in place, so there is no step of choosing the target.
 		
@@ -151,8 +151,8 @@ var move_animation_duration_per_tile: float:
 		
 		Tiles under units with spare Action Points are highlighted when hovering mouse over this button.
 		""" },
-	"select_idle_unit": { "text": """
-		Shortcut: [color=green]Tab[/color]
+	"select_idle_unit": { "text": """Shortcut: [color=green]Tab[/color]
+		
 		
 		Click to select next friendly unit with spare Action Points.
 		
@@ -160,19 +160,19 @@ var move_animation_duration_per_tile: float:
 		
 		Tiles under units with spare Action Points are highlighted when hovering mouse over this button.
 		""" },
-	"cancel_select_target": { "text": """
-		Shortcut: [color=green]Esc[/color]
+	"cancel_select_target": { "text": """Shortcut: [color=green]Esc[/color]
+		
 		
 		Click to exit target selection mode. Can also be done by [color=green]right-clicking[/color] the battle field.
 		
 		After that it will be possible to select other abilities or units.
 		""" },
-	"ResetCamera": { "text": """
-		Shortcut: [color=green]Backspace[/color]
+	"ResetCamera": { "text": """Shortcut: [color=green]Backspace[/color]
+		
 		
 		Click to reset the camera.
 		
-		To move camera you can use [color=green]WASD[/color] or [color=green]arrow keys[/color] or [color=green]move mouse while holding its right or middle button[/color].
+		To move camera you can use [color=green]arrow keys[/color] or [color=green]move mouse while holding its right or middle button[/color].
 		
 		And to zoom in and out you can use [color=green]+[/color] and [color=green]-[/color] keys or [color=green]mouse wheel[/color].
 		
@@ -249,7 +249,7 @@ var move_animation_duration_per_tile: float:
 		
 		Also it doesn't work with nodes, such as Kernel and Anti-malware.
 		
-		Possible damage amount is shown on the button.
+		Possible damage amount per every affected enemy malware is shown on the button.
 		""" },
 	
 	"repair": { "text": """
@@ -296,8 +296,6 @@ var move_animation_duration_per_tile: float:
 		Unlike other actions it's possible to teleport through any firewalls.
 		
 		All teleported units' Action Points are reduced to 1 (at maximum) until the next turn.
-		
-		The period of unavailability after use, in turns, is shown on the button.
 		""" },
 	
 	}

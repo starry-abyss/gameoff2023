@@ -454,8 +454,12 @@ func _on_ability_button_clicked(ability_id: String, target_type: Gameplay.Target
 
 func _on_ability_button_highlight(name: String, label: String, hide_stats = false):
 	var title = ""
+	var tooltip_text = StaticData.tooltips[name].text if StaticData.tooltips.has(name) else ""
+	
 	if StaticData.ability_stats.has(name):
 		title = StaticData.ability_stats[name].name
+		if StaticData.ability_stats[name].has("key"):
+			tooltip_text = "Shortcut: [color=green]" + StaticData.ability_stats[name].key + "[/color]\n\n" + tooltip_text
 	else:
 		title = label
 	
@@ -463,7 +467,8 @@ func _on_ability_button_highlight(name: String, label: String, hide_stats = fals
 	
 	if StaticData.tooltips.has(name) && show_tooltip:
 		var author_name = _get_ability_author_name(name)
-		tooltip_panel.show_tooltip(title, StaticData.tooltips[name].text, author_name)
+		
+		tooltip_panel.show_tooltip(title, tooltip_text, author_name)
 	else:
 		tooltip_panel.hide_tooltip()
 	
@@ -514,7 +519,19 @@ func tiles_tint_reset():
 	tiles_need_tint.emit("", Vector2i(0, 0), false, false)
 
 func _unhandled_input(event):
-	if event is InputEventMouseButton && event.pressed \
+	if event is InputEventKey && event.pressed && !event.is_echo():
+		var key_event = event as InputEventKey
+		
+		if %ability_buttons.visible:
+			for button in %ability_buttons.get_children():
+				if button.visible && !button.disabled:
+					if StaticData.ability_stats[button.name].has("key"):
+						if key_event.as_text_keycode() == StaticData.ability_stats[button.name].key:
+							button.pressed.emit()
+							
+							print(key_event.as_text_keycode())
+	
+	elif event is InputEventMouseButton && event.pressed \
 		&& event.button_index == MOUSE_BUTTON_LEFT:
 		#print("Mouse Click/Unclick at: ", event.position)
 
@@ -599,5 +616,3 @@ func _on_timer_timeout():
 	animated_unit = null
 	
 	animation_finished.emit()
-
-	

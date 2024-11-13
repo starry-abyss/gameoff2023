@@ -46,7 +46,7 @@ text = "Author placeholder"
 autowrap_mode = 3
 
 [node name="Tooltip" type="RichTextLabel" parent="VBoxContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 350)
+custom_minimum_size = Vector2(250, 400)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/bold_italics_font_size = 12
