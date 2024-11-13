@@ -445,6 +445,8 @@ func _on_unit_click(unit: Unit):
 			order_given.emit(order_parameters.ability_id, unit)
 
 func _on_ability_button_clicked(ability_id: String, target_type: Gameplay.TargetTypes):
+	_on_hide_path()
+	
 	if target_type == Gameplay.TargetTypes.SELF:
 		order_given.emit(ability_id, null)
 	else:

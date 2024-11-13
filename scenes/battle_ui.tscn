@@ -254,7 +254,7 @@ offset_bottom = 205.0
 theme = ExtResource("3_7nk56")
 shortcut = SubResource("Shortcut_bq2ip")
 shortcut_in_tooltip = false
-text = "Reset camera"
+text = "Set up camera"
 
 [node name="select_target_message_panel" type="Panel" parent="CanvasLayer"]
 unique_name_in_owner = true
