@@ -119,7 +119,7 @@ var move_animation_duration_per_tile: float:
 	"worm": { "text": """
 		The Worm malware can duplicate itself, can move and can be mutated to other types of units.
 		
-		To perform these actions for the selected node, click on the action button at the bottom and then - on the target tile. When the tile under mouse is highlighted brightly, it means that the target is valid (taking into account spare Action Points).
+		To perform these actions for the selected malware, click on the action button at the bottom and then - on the target tile. When the tile under mouse is highlighted brightly, it means that the target is valid (taking into account spare Action Points).
 		
 		Mutation actions are performed on the Worm in place, so there is no step of choosing the target.
 		
