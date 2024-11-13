@@ -396,7 +396,7 @@ func update_abilities_buttons_icon_tint():
 	for button in %ability_buttons.get_children():
 		if button.has_node("icon"):
 			var color = UIHelpers.group_to_color(current_group)
-			if button.disabled:
+			if button.locked:
 				color.s -= 0.5
 				color.v += 1.0
 			else:
