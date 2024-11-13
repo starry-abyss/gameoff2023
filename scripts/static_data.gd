@@ -74,7 +74,7 @@ var move_animation_duration_per_tile: float:
 	"InstructionsAndMenuButton": { "text": """
 		The goal is to put down the enemy Kernel node. Start with duplicating Worms and mutating them.
 		
-		Use left mouse button to select units (nodes and malware) on your base (has the same color as panel borders).
+		Use [color=green]left mouse button[/color] to select units (nodes and malware) on your base (has the same color as panel borders).
 		
 		After a unit is selected, it can perform actions.
 		
@@ -113,17 +113,17 @@ var move_animation_duration_per_tile: float:
 		
 		To perform non-automatic actions first click on the action button below and then - on the target tile on the map.
 		
-		The cost of every action in unit's Action Points is shown at the top of the button.
+		The cost of every action in unit's Action Points (AP) is shown at the top of the button.
 		""" },
 	
 	"worm": { "text": """
 		The Worm malware can duplicate itself, can move and can be mutated to other types of units.
 		
-		To perform these actions first click on the action button below and then - on the target tile on the map.
+		To perform these actions first click on the action button below and then - on the target tile on the map. When tile under mouse is highlighted brightly, it means that the target is valid (taking into account spare Action Points). [color=green]And read tooltips for shortcuts![/color]
 		
 		Mutation actions are performed on the Worm in place, so there is no step of choosing the target.
 		
-		The cost of every action in unit's Action Points is shown at the top of the button.
+		The cost of every action in unit's Action Points (AP) is shown at the top of the button.
 		
 		From time to time Kernel node generates new Worms.
 		""" },
@@ -152,23 +152,31 @@ var move_animation_duration_per_tile: float:
 		Tiles under units with spare Action Points are highlighted when hovering mouse over this button.
 		""" },
 	"select_idle_unit": { "text": """
+		Shortcut: [color=green]Tab[/color]
+		
 		Click to select next friendly unit with spare Action Points.
 		
-		If some unit is glowing dark, it doesn't have spare Action Points.
+		If some unit is dimmed, it has no more spare Action Points.
 		
 		Tiles under units with spare Action Points are highlighted when hovering mouse over this button.
 		""" },
 	"cancel_select_target": { "text": """
-		Click to exit target selection mode. Can also be done by right-clicking the battle field.
+		Shortcut: [color=green]Esc[/color]
+		
+		Click to exit target selection mode. Can also be done by [color=green]right-clicking[/color] the battle field.
 		
 		After that it will be possible to select other abilities or units.
 		""" },
 	"ResetCamera": { "text": """
+		Shortcut: [color=green]Backspace[/color]
+		
 		Click to reset the camera.
 		
-		To move camera you can use WASD or arrow keys or move mouse while holding its right button.
+		To move camera you can use [color=green]WASD[/color] or [color=green]arrow keys[/color] or [color=green]move mouse while holding its right or middle button[/color].
 		
-		And to zoom in and out you can use + and - keys or mouse wheel.
+		And to zoom in and out you can use [color=green]+[/color] and [color=green]-[/color] keys or [color=green]mouse wheel[/color].
+		
+		The camera movement speed can be changed in the Options menu separately for mouse and keyboard.
 		""" },
 	#"Options": { "text": """
 	#	Click this button to change settings, or to end or restart the battle.
@@ -181,7 +189,7 @@ var move_animation_duration_per_tile: float:
 		
 		It's impossible to walk through other units or through enemy firewalls.
 		
-		For this action it's not required to click the action button first - you can click the target on the battle field right away.
+		[color=green]For this action it's not required to click the action button first - you can click the target on the battle field right away.[/color]
 		
 		To move malware instantly at long distances use Trojan's 'open_backdoor' action instead.
 		""" },
@@ -191,16 +199,16 @@ var move_animation_duration_per_tile: float:
 		
 		This action won't work through enemy firewalls, so attack Anti-malware nodes first.
 		
-		For this action it's not required to click the action button first - you can click the target on the battle field right away.
+		[color=green]For this action it's not required to click the action button first - you can click the target on the battle field right away.[/color]
 		
 		Possible damage amount is shown on the button.
 		""" },
 	"tower_attack": { "text": """
 		Deals the damage to an enemy unit within the distance of 2 tiles.
 		
-		Note that there are enough Action Points for every Anti-malware to perform this action 3 times each turn.
+		Note that there are enough Action Points (AP) for every Anti-malware to perform this action 3 times each turn.
 		
-		For this action it's not required to click the action button first - you can click the target on the battle field right away.
+		[color=green]For this action it's not required to click the action button first - you can click the target on the battle field right away.[/color]
 		
 		Possible damage amount is shown on the button.
 		""" },

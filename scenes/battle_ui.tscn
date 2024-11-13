@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://khbj7vpou3mu"]
+[gd_scene load_steps=18 format=3 uid="uid://khbj7vpou3mu"]
 
 [ext_resource type="Script" path="res://scripts/battle_ui.gd" id="1_wpfyh"]
 [ext_resource type="PackedScene" uid="uid://b36pjfoq2efay" path="res://scenes/timeout_callback_helper.tscn" id="2_eaaqo"]
@@ -9,6 +9,26 @@
 [ext_resource type="Script" path="res://scenes/SelectedUnitIndicator.gd" id="4_h3s35"]
 [ext_resource type="PackedScene" uid="uid://cxwuitxg37k3d" path="res://scenes/components/selected_unit_avatar.tscn" id="5_wvsta"]
 [ext_resource type="PackedScene" uid="uid://b420toe6tohxy" path="res://scenes/components/unit_stats_container.tscn" id="6_yuq0d"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_gftpw"]
+keycode = 4194306
+
+[sub_resource type="Shortcut" id="Shortcut_ya5tb"]
+events = [SubResource("InputEventKey_gftpw")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_dq1bg"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_kreb6"]
+events = [SubResource("InputEventKey_dq1bg")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_qbj53"]
+device = -1
+keycode = 4194308
+
+[sub_resource type="Shortcut" id="Shortcut_bq2ip"]
+events = [SubResource("InputEventKey_qbj53")]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_meo4c"]
 shading_mode = 0
@@ -93,10 +113,12 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -200.0
-offset_top = 6.0
-offset_bottom = 36.0
+offset_top = 8.0
+offset_bottom = 38.0
 grow_horizontal = 0
 theme = ExtResource("3_7nk56")
+shortcut = SubResource("Shortcut_ya5tb")
+shortcut_in_tooltip = false
 text = "Next idle unit"
 
 [node name="Control2" type="Control" parent="CanvasLayer/Panel/VBoxContainer"]
@@ -139,6 +161,8 @@ offset_bottom = 15.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_7nk56")
+shortcut = SubResource("Shortcut_kreb6")
+shortcut_in_tooltip = false
 text = "Cancel selected action"
 
 [node name="ai_turn_message" type="Label" parent="CanvasLayer/Panel"]
@@ -166,12 +190,13 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = 52.0
-offset_top = -99.0
+offset_top = -97.0
 offset_right = 232.0
-offset_bottom = -69.0
+offset_bottom = -67.0
 grow_horizontal = 0
 grow_vertical = 2
 theme = ExtResource("3_7nk56")
+shortcut_in_tooltip = false
 text = "End turn"
 
 [node name="TurnSpeedSettings" type="Control" parent="CanvasLayer/Panel"]
@@ -219,6 +244,8 @@ offset_top = 175.0
 offset_right = 826.0
 offset_bottom = 205.0
 theme = ExtResource("3_7nk56")
+shortcut = SubResource("Shortcut_bq2ip")
+shortcut_in_tooltip = false
 text = "Reset camera"
 
 [node name="select_target_message_panel" type="Panel" parent="CanvasLayer"]

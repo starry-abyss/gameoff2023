@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cxaqvfti58xoq"]
+[gd_scene load_steps=18 format=3 uid="uid://cxaqvfti58xoq"]
 
 [ext_resource type="PackedScene" uid="uid://c7k4uu8silsa6" path="res://scenes/battle_area.tscn" id="1_mgdil"]
 [ext_resource type="Script" path="res://scripts/gameplay.gd" id="1_nrikt"]
@@ -52,6 +52,13 @@ glow_mix = 0.439
 glow_blend_mode = 0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sltjk"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_dq1bg"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_kvbyb"]
+events = [SubResource("InputEventKey_dq1bg")]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a0hti"]
 shader = ExtResource("8_bq4h5")
@@ -109,6 +116,7 @@ offset_top = 10.0
 offset_right = 236.0
 offset_bottom = 40.0
 theme = ExtResource("4_shixd")
+shortcut_in_tooltip = false
 text = "Instructions / Menu"
 expand_icon = true
 
@@ -194,6 +202,8 @@ offset_bottom = 208.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4_shixd")
+shortcut = SubResource("Shortcut_kvbyb")
+shortcut_in_tooltip = false
 text = "Back"
 
 [node name="OptionsMenu" parent="CanvasLayer" instance=ExtResource("6_xh7ly")]

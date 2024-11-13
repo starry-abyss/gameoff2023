@@ -58,7 +58,6 @@ func draw_point(pos:Vector3, radius = 0.1, color = Color.WHITE_SMOKE):
 	material.albedo_color = color
 	
 	add_child(mesh_instance)
-
 "
 
 [node name="Draw3d" type="Node3D"]

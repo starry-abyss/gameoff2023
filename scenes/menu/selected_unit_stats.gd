@@ -2,7 +2,7 @@ extends Control
 
 
 @onready var title_label: Label = $VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/Title
-@onready var tooltip_label: Label = $VBoxContainer/MarginContainer/VBoxContainer/Tooltip
+@onready var tooltip_label = $VBoxContainer/MarginContainer/VBoxContainer/Tooltip
 @onready var author_info_label: Label = $VBoxContainer/MarginContainer/VBoxContainer/AuthorInfo
 
 
