@@ -22,6 +22,8 @@ signal scroll_speed_change
 
 static var settings_load = true
 
+static var default_settings = {}
+
 func _ready():
 	team_1_color_button.color = StaticData.color_pink
 	team_2_color_button.color = StaticData.color_blue
@@ -43,6 +45,8 @@ func _ready():
 	hints_enabled.checked = StaticData.show_tutorial_hints
 	hints_enabled.toggled.connect(show_tutorial_hints_changed)
 	
+	%Reset.pressed.connect(reset_to_default)
+	
 	if hide_background_effect:
 		background.visible = false
 	
@@ -55,6 +59,20 @@ func _ready():
 		button.set_process(true)
 		
 		button.is_back_button = true
+	
+	if default_settings.is_empty():
+		default_settings["VolumeMaster"] = master_slider.value
+		default_settings["VolumeMusic"] = music_slider.value
+		default_settings["VolumeSFX"] = sfx_slider.value
+		
+		default_settings["TeamColor1"] = team_1_color_button.color
+		default_settings["TeamColor2"] = team_2_color_button.color
+		
+		default_settings["ScrollSpeedMouse"] = %ScrollSpeedMouse.value
+		default_settings["ScrollSpeedKeyboard"] = %ScrollSpeedKeyboard.value
+		
+		default_settings["HintsEnabled"] = hints_enabled.checked
+		default_settings["Fullscreen"] = fullscreen.checked
 	
 	if settings_load:
 		var config = ConfigFile.new()
@@ -80,6 +98,24 @@ func _ready():
 			_on_color_picker_button_2_color_changed(team_2_color_button.color)
 	
 	sync_sfx_and_dx()
+
+func reset_to_default():
+	master_slider.value = default_settings["VolumeMaster"]
+	music_slider.value = default_settings["VolumeMusic"]
+	sfx_slider.value = default_settings["VolumeSFX"]
+	
+	team_1_color_button.color = default_settings["TeamColor1"]
+	team_2_color_button.color = default_settings["TeamColor2"]
+	
+	%ScrollSpeedMouse.value = default_settings["ScrollSpeedMouse"]
+	%ScrollSpeedKeyboard.value = default_settings["ScrollSpeedKeyboard"]
+	
+	hints_enabled.checked = default_settings["HintsEnabled"]
+	fullscreen.checked = default_settings["Fullscreen"]
+	
+	force_update_options()
+	_on_color_picker_button_color_changed(team_1_color_button.color)
+	_on_color_picker_button_2_color_changed(team_2_color_button.color)
 
 func force_update_options():
 	scroll_speed_change.emit(%ScrollSpeedMouse.value, %ScrollSpeedKeyboard.value)
@@ -133,7 +169,7 @@ func _on_color_picker_button_2_color_changed(color):
 
 
 func change_theme_color(color):
-	var ui_nodes = [%HintsEnabled, %Fullscreen, $Panel, $Back, \
+	var ui_nodes = [%HintsEnabled, %Fullscreen, $Panel, $Back, %Reset, \
 	music_slider, sfx_slider, master_slider, background, \
 	team_1_color_button, team_2_color_button, options, %ScrollSpeedKeyboard, %ScrollSpeedMouse]
 	UIHelpers.override_ui_node_theme_with_color(ui_nodes, color)

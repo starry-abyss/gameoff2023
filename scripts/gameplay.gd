@@ -133,6 +133,9 @@ func calculate_distances():
 		#for i in range(tiles.size()):
 		#	if tiles[i] != null:
 		#		tiles[i]._on_show_debug_distance(distances[i])
+	
+	# for hack's sake
+	distances[-1] = 9999999
 	pass
 
 # return an index to be used with the array returned from UIHelpers.get_tile_neighbor_list()

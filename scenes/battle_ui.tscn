@@ -25,6 +25,7 @@ font = ExtResource("3_x7kol")
 font_size = 64
 
 [node name="battle_ui" type="Node3D"]
+process_mode = 3
 script = ExtResource("1_wpfyh")
 metadata/_edit_vertical_guides_ = [10.0, 1142.0]
 metadata/_edit_horizontal_guides_ = [466.0]
@@ -181,6 +182,7 @@ offset_right = 689.0
 offset_bottom = 156.0
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel/TurnSpeedSettings"]
+layout_mode = 0
 offset_left = 6.0
 offset_top = -7.0
 offset_right = 168.0
@@ -204,7 +206,7 @@ grow_horizontal = 0
 size_flags_vertical = 4
 theme = ExtResource("3_7nk56")
 min_value = 1.0
-max_value = 10000.0
+max_value = 500.0
 value = 1.0
 exp_edit = true
 

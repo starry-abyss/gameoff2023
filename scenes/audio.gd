@@ -12,6 +12,8 @@ func _ready():
 	#UIHelpers.audio_set_parameter("Winner", Gameplay.HackingGroups.BLUE)
 	
 	UIHelpers.audio_event("Music/MusicPlaylist")
+	
+	get_node("/root/FMODRuntime").process_mode = Node.PROCESS_MODE_ALWAYS
 	pass # Replace with function body.
 
 func _notification(what):
