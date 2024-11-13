@@ -206,6 +206,7 @@ func add_ability_button(ability_id: String):
 		icon.texture = load("res://art/icons/" + stats.icon + ".png")
 		icon.name = "icon"
 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		button.add_child(icon)
 		
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
