@@ -1820,6 +1820,10 @@ func ai_find_most_damaged_friend(tile_pos, distance):
 	var condition = func(new_unit, unit):
 		var new_unit_damage = new_unit.hp_max - new_unit.hp
 		
+		# prevent AI getting stuck when Kernel tries to repair itself
+		if new_unit.type == Gameplay.UnitTypes.CENTRAL_NODE:
+			return false
+		
 		if unit == null && new_unit_damage > 0:
 			return true
 		

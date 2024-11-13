@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://khbj7vpou3mu"]
+[gd_scene load_steps=20 format=3 uid="uid://khbj7vpou3mu"]
 
 [ext_resource type="Script" path="res://scripts/battle_ui.gd" id="1_wpfyh"]
 [ext_resource type="PackedScene" uid="uid://b36pjfoq2efay" path="res://scenes/timeout_callback_helper.tscn" id="2_eaaqo"]
@@ -22,6 +22,13 @@ keycode = 4194305
 
 [sub_resource type="Shortcut" id="Shortcut_kreb6"]
 events = [SubResource("InputEventKey_dq1bg")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_3x3i3"]
+device = -1
+keycode = 4194309
+
+[sub_resource type="Shortcut" id="Shortcut_3v4is"]
+events = [SubResource("InputEventKey_3x3i3")]
 
 [sub_resource type="InputEventKey" id="InputEventKey_qbj53"]
 device = -1
@@ -196,6 +203,7 @@ offset_bottom = -67.0
 grow_horizontal = 0
 grow_vertical = 2
 theme = ExtResource("3_7nk56")
+shortcut = SubResource("Shortcut_3v4is")
 shortcut_in_tooltip = false
 text = "End turn"
 

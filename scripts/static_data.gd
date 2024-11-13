@@ -142,7 +142,9 @@ var move_animation_duration_per_tile: float:
 		Can open a backdoor to move friendly malware to the Trojan over long distances.
 		""" },
 	
-	"end_turn": { "text": """
+	"end_turn": { "text": """Shortcut: [color=green]Enter[/color]
+	
+	
 		Click to end your turn and start the enemy's turn.
 		
 		All friendly units will restore Action Points.
