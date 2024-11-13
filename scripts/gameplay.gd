@@ -542,8 +542,9 @@ func click_tile(tile_pos: Vector2i):
 						give_order("virus_attack", unit_at_pos) #result = order_ability_virus_attack(unit_at_pos)
 					elif selected_unit.type == UnitTypes.TOWER_NODE:
 						give_order("tower_attack", unit_at_pos) #result = order_ability_tower_attack(unit_at_pos)
-					
 					#battle_ui._on_order_processed(result, selected_unit)
+				elif selected_unit != null && selected_unit.type == UnitTypes.TROJAN && unit_at_pos.group == HackingGroups.NEUTRAL:
+					give_order("capture_tower", unit_at_pos)
 
 func click_unit(unit_to_select: Unit):
 	if unit_to_select.group == current_turn_group && !is_ai_turn():

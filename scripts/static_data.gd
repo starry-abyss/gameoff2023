@@ -191,7 +191,7 @@ var move_animation_duration_per_tile: float:
 		
 		It's impossible to walk through other units or through enemy firewalls.
 		
-		[color=green]For this action it's not required to click the action button first - you can click the target on the battle field right away.[/color]
+		[color=green]For this action it's not required to click the action button first - you can click the target tile right away, given there are enough Action Points to reach there.[/color]
 		
 		To move malware instantly at long distances use Trojan's 'open_backdoor' action instead.
 		""" },
@@ -201,7 +201,7 @@ var move_animation_duration_per_tile: float:
 		
 		This action won't work through enemy firewalls, so attack Anti-malware nodes first.
 		
-		[color=green]For this action it's not required to click the action button first - you can click the target on the battle field right away.[/color]
+		[color=green]For this action it's not required to click the action button first - you can click the target on a neighbor tile right away.[/color]
 		
 		Possible damage amount is shown on the button.
 		""" },
@@ -210,7 +210,7 @@ var move_animation_duration_per_tile: float:
 		
 		Note that there are enough Action Points (AP) for every Anti-malware to perform this action 3 times each turn.
 		
-		[color=green]For this action it's not required to click the action button first - you can click the target on the battle field right away.[/color]
+		[color=green]For this action it's not required to click the action button first - you can click the target within the distance of 2 tiles right away.[/color]
 		
 		Possible damage amount is shown on the button.
 		""" },
@@ -255,14 +255,14 @@ var move_animation_duration_per_tile: float:
 		""" },
 	
 	"repair": { "text": """
-		Restores a few Hit Points of the chosen friendly unit, except itself.
+		Restores a few Hit Points of the chosen friendly unit (malware or node), except itself.
 		
-		The target unit must be located on the territory marked with the Kernel group's color.
-		
-		The Kernel's own Hit Points are partially restored at the beginning of every turn with 'maintain'.
+		The target unit must be located within the radius of 3 tiles (such tiles are marked with the Kernel group's color).
 		
 		The amount of Hit Points restored is shown on the button.
-		""" },
+		
+		The Kernel's own Hit Points are partially restored at the beginning of every turn with the 'maintain' auto-action instead.
+	""" },
 	"reset": { "text": """
 		Performs a reset on 7 selected tiles eliminating all malware there regardless of their group.
 		
@@ -284,20 +284,22 @@ var move_animation_duration_per_tile: float:
 		""" },
 	
 	"capture_tower": { "text": """
-		To capture an enemy Anti-malware node, firstly damage it down to 0 HP.
+		To capture an enemy Anti-malware node, firstly damage it down to 0 HP, so it changes its group to neutral.
 		
-		Secondly, move the Trojan near the node (then of the neutral group) and use this action on it.
+		Secondly, move the Trojan close to the node and use this action on it.
+		
+		[color=green]For this action it's not required to click the action button first - you can click the neutral Anti-malware node on a neighbor tile right away.[/color]
 	""" },
 	"backdoor": { "text": """
 		Allows to teleport up to 6 friendly malware to the Trojan. The Trojan cannot teleport itself.
 		
-		Teleported units will preserve their relative position to the center of target tile, 
-		but with the Trojan's tile instead of that tile.
+		Teleported units will preserve their relative position to the center of target tile, but with the Trojan's tile as the center instead.
 		
 		But if any of the Trojan neighbor tiles is occupied, no malware is teleported in that particular tile.
+		
 		Unlike other actions it's possible to teleport through any firewalls.
 		
-		All teleported units' Action Points are reduced to 1 (at maximum) until the next turn.
+		All teleported units' Action Points are reduced to 1 (or kept at zero) until the next turn.
 		""" },
 	
 	}
